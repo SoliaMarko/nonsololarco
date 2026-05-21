@@ -7,30 +7,30 @@
   /* === DARK THEME (default) === */
 
   /* Backgrounds */
-  --bg-base: #1A1713;
-  --bg-surface: #221E19;
-  --bg-card: #2A2520;
-  --bg-elevated: #3A3228;
-  --border: #3A3228;
+  --bg-base: #1a1713;
+  --bg-surface: #221e19;
+  --bg-card: #2a2520;
+  --bg-elevated: #3a3228;
+  --border: #3a3228;
 
   /* Emerald — primary accent */
-  --emerald-subtle: #1C3828;
-  --emerald-deep: #2A5C44;
-  --emerald-main: #3D9B72;
-  --emerald-light: #A8DCC0;
+  --emerald-subtle: #1c3828;
+  --emerald-deep: #2a5c44;
+  --emerald-main: #3d9b72;
+  --emerald-light: #a8dcc0;
 
   /* Text — warm cream */
-  --text-primary: #F0E8D8;
-  --text-secondary: #C8BEA8;
-  --text-tertiary: #8A8078;
-  --text-disabled: #6A5E50;
+  --text-primary: #f0e8d8;
+  --text-secondary: #c8bea8;
+  --text-tertiary: #8a8078;
+  --text-disabled: #6a5e50;
 
   /* Status colors */
-  --status-online: #3D9B72;
-  --status-pause: #E8C97A;
-  --status-away: #E8933A;
-  --status-long: #8A8078;
-  --status-inactive: #5A5248;
+  --status-online: #3d9b72;
+  --status-pause: #e8c97a;
+  --status-away: #e8933a;
+  --status-long: #8a8078;
+  --status-inactive: #5a5248;
 
   /* Typography */
   --text-display: 32px;
@@ -63,30 +63,30 @@
 /* === LIGHT THEME === */
 [data-theme="light"] {
   /* Backgrounds */
-  --bg-base: #F7F4EF;
-  --bg-surface: #EDE8E2;
-  --bg-card: #FFFFFF;
-  --bg-elevated: #E4DED6;
-  --border: #D4CEC6;
+  --bg-base: #f7f4ef;
+  --bg-surface: #ede8e2;
+  --bg-card: #ffffff;
+  --bg-elevated: #e4ded6;
+  --border: #d4cec6;
 
   /* Emerald — darker for light bg */
-  --emerald-subtle: #D8EFE6;
-  --emerald-deep: #1C5A3E;
-  --emerald-main: #2A7A58;
-  --emerald-light: #A8DCC0;
+  --emerald-subtle: #d8efe6;
+  --emerald-deep: #1c5a3e;
+  --emerald-main: #2a7a58;
+  --emerald-light: #a8dcc0;
 
   /* Text */
-  --text-primary: #1C1A18;
-  --text-secondary: #4A4540;
-  --text-tertiary: #7A7268;
-  --text-disabled: #B0A898;
+  --text-primary: #1c1a18;
+  --text-secondary: #4a4540;
+  --text-tertiary: #7a7268;
+  --text-disabled: #b0a898;
 
   /* Status colors */
-  --status-online: #2A7A58;
-  --status-pause: #B8860B;
-  --status-away: #C06010;
-  --status-long: #7A7268;
-  --status-inactive: #B0A898;
+  --status-online: #2a7a58;
+  --status-pause: #b8860b;
+  --status-away: #c06010;
+  --status-long: #7a7268;
+  --status-inactive: #b0a898;
 }
 
 /* === DOTTED DIVIDER — Arco signature === */
