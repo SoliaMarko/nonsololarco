@@ -29,6 +29,9 @@ jobs:
       - name: Lint
         run: pnpm lint
 
+      - name: Stylelint
+        run: cd apps/web && pnpm stylelint "src/**/*.css" "app/**/*.css"
+
       - name: Type check
         run: pnpm typecheck
 
