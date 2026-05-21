@@ -28,4 +28,38 @@
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-pill: 999px;
+
+  /* === BREAKPOINTS === */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+  --breakpoint-2xl: 96rem; /* 1536px */
+
+  /* === SPACING (rem) === */
+  --spacing-1: 0.25rem; /* 4px */
+  --spacing-2: 0.5rem; /* 8px */
+  --spacing-3: 0.75rem; /* 12px */
+  --spacing-4: 1rem; /* 16px */
+  --spacing-6: 1.5rem; /* 24px */
+  --spacing-8: 2rem; /* 32px */
+  --spacing-12: 3rem; /* 48px */
+  --spacing-16: 4rem; /* 64px */
+
+  /* === TYPOGRAPHY === */
+  --font-size-display: 2rem; /* 32px */
+  --font-size-h1: 1.5rem; /* 24px */
+  --font-size-h2: 1.25rem; /* 20px */
+  --font-size-h3: 1rem; /* 16px */
+  --font-size-body: 0.9375rem; /* 15px */
+  --font-size-caption: 0.8125rem; /* 13px */
+  --font-size-label: 0.6875rem; /* 11px */
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
 }
