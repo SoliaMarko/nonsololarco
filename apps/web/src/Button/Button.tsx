@@ -28,14 +28,10 @@ export interface IButtonProps
   children: ReactNode;
   className?: string;
   contentClassName?: string;
-  disabled?: boolean;
   icon?: ElementType;
-  iconAction?: () => void;
   iconPosition?: IconPositionType;
   isLoading?: boolean;
-  onClick?: () => void;
-  size?: VariantProps<typeof buttonVariants>['size'];
-  variant: VariantProps<typeof buttonVariants>['variant'];
+  variant?: VariantProps<typeof buttonVariants>['variant'];
 }
 
 function Button(
@@ -45,13 +41,12 @@ function Button(
     contentClassName,
     disabled,
     icon,
-    iconAction,
     iconPosition,
     isLoading,
     onClick,
     size,
     type = 'button',
-    variant,
+    variant = 'primary',
     ...rest
   }: IButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
@@ -72,7 +67,6 @@ function Button(
 
     return createElement(icon, {
       className: cn(marginClass, 'shrink-0'),
-      onClick: iconAction,
       size: iconSize,
       'aria-hidden': true,
     });

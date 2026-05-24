@@ -161,6 +161,12 @@ export const LoadingVariants: Story = {
       <Button variant="primary" isLoading>
         Primary
       </Button>
+      <Button variant="secondary" isLoading>
+        Secondary
+      </Button>
+      <Button variant="ghost" isLoading>
+        Ghost
+      </Button>
       <Button variant="outline" isLoading>
         Outline
       </Button>
@@ -187,6 +193,9 @@ export const DisabledVariants: Story = {
     <div className="flex flex-wrap items-center gap-3">
       <Button variant="primary" disabled>
         Primary
+      </Button>
+      <Button variant="secondary" disabled>
+        Secondary
       </Button>
       <Button variant="outline" disabled>
         Outline

@@ -1,7 +1,11 @@
-import { nextJsConfig } from '@repo/eslint-config/next-js'
-import importPlugin from 'eslint-plugin-import'
-import storybook from 'eslint-plugin-storybook'
-import typescriptSortKeys from 'eslint-plugin-typescript-sort-keys'
+import { nextJsConfig } from '@repo/eslint-config/next-js';
+import importPlugin from 'eslint-plugin-import';
+import storybook from 'eslint-plugin-storybook';
+import typescriptSortKeys from 'eslint-plugin-typescript-sort-keys';
+import { resolve } from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = fileURLToPath(new URL('.', import.meta.url));
 
 /** @type {import("eslint").Linter.Config[]} */
 export default [
@@ -38,5 +42,12 @@ export default [
       'typescript-sort-keys/interface': 'error',
       'typescript-sort-keys/string-enum': 'error',
     },
+    settings: {
+      'import/resolver': {
+        typescript: {
+          project: resolve(__dirname, './tsconfig.json'),
+        },
+      },
+    },
   },
-]
+];
