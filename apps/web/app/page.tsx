@@ -1,7 +1,11 @@
+'use client';
+
+import Button from '@/src/Button';
+
 export default function Home() {
   return (
-    <div className="bg-bg-card text-text-primary rounded-md p-4">
-      <h1 className="text-display font-semibold text-text-primary">Arco</h1>
+    <div className="bg-card rounded-md p-4 h-[50vh]">
+      <Button variant="primary">Primary</Button>
     </div>
   );
 }
