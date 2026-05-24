@@ -12,17 +12,11 @@
       "@/*": ["./*"],
       "@/components/*": ["./components/*"],
       "@/styles/*": ["./src/styles/*"],
-      "@/lib/*": ["./lib/*"],
+      "@/lib/*": ["src/lib/*"],
       "@/hooks/*": ["./hooks/*"],
       "@/types/*": ["./types/*"]
     }
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx",
-    "next-env.d.ts",
-    "next.config.js",
-    ".next/types/**/*.ts"
-  ],
+  "include": ["**/*.ts", "**/*.tsx", "next-env.d.ts", "next.config.js", ".next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

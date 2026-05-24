@@ -1,65 +1,92 @@
-@import "tailwindcss";
+@import 'tailwindcss';
+@import '../src/styles/tokens.css';
+@plugin 'tailwindcss-logical';
 
 @theme {
-  --color-bg-base: var(--bg-base);
-  --color-bg-surface: var(--bg-surface);
-  --color-bg-card: var(--bg-card);
-  --color-bg-elevated: var(--bg-elevated);
-  --color-border: var(--border);
+  /* --- Border radius --- */
+  --radius-xs: var(--radius-xs);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-xl: var(--radius-xl);
+  --radius-pill: var(--radius-pill);
 
+  /* --- Spacing --- */
+  --spacing-1: var(--space-1);
+  --spacing-2: var(--space-2);
+  --spacing-3: var(--space-3);
+  --spacing-4: var(--space-4);
+  --spacing-6: var(--space-6);
+  --spacing-8: var(--space-8);
+  --spacing-12: var(--space-12);
+  --spacing-16: var(--space-16);
+
+  /* --- Typography: sizes --- */
+  --font-size-display: var(--text-size-display);
+  --font-size-h1: var(--text-size-h1);
+  --font-size-h2: var(--text-size-h2);
+  --font-size-h3: var(--text-size-h3);
+  --font-size-body: var(--text-size-body);
+  --font-size-caption: var(--text-size-caption);
+  --font-size-label: var(--text-size-label);
+
+  /* --- Typography: weights --- */
+  --font-weight-regular: var(--text-weight-regular);
+  --font-weight-medium: var(--text-weight-medium);
+  --font-weight-semibold: var(--text-weight-semibold);
+
+  /* --- Typography: line heights --- */
+  --leading-tight: var(--text-leading-tight);
+  --leading-normal: var(--text-leading-normal);
+  --leading-relaxed: var(--text-leading-relaxed);
+
+  /* --- Breakpoints --- */
+  --breakpoint-xs: var(--screen-xs);
+  --breakpoint-sm: var(--screen-sm);
+  --breakpoint-md: var(--screen-md);
+  --breakpoint-lg: var(--screen-lg);
+  --breakpoint-xl: var(--screen-xl);
+  --breakpoint-2xl: var(--screen-2xl);
+}
+
+@theme inline {
+  /* --- Colors: backgrounds --- */
+  --color-base: var(--bg-base);
+  --color-surface: var(--bg-surface);
+  --color-card: var(--bg-card);
+  --color-elevated: var(--bg-elevated);
+  --color-edge: var(--bg-edge);
+  --color-contrast: var(--bg-contrast);
+
+  /* --- Colors: emerald accent --- */
   --color-emerald-subtle: var(--emerald-subtle);
   --color-emerald-deep: var(--emerald-deep);
   --color-emerald-main: var(--emerald-main);
   --color-emerald-light: var(--emerald-light);
 
-  --color-text-primary: var(--text-primary);
-  --color-text-secondary: var(--text-secondary);
-  --color-text-tertiary: var(--text-tertiary);
-  --color-text-disabled: var(--text-disabled);
+  /* --- Colors: text (fg = foreground, avoids clash with Tailwind's "primary") --- */
+  --color-fg-primary: var(--text-primary);
+  --color-fg-secondary: var(--text-secondary);
+  --color-fg-tertiary: var(--text-tertiary);
+  --color-fg-disabled: var(--text-disabled);
 
+  /* --- Colors: status --- */
   --color-status-online: var(--status-online);
   --color-status-pause: var(--status-pause);
   --color-status-away: var(--status-away);
   --color-status-long: var(--status-long);
   --color-status-inactive: var(--status-inactive);
 
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 16px;
-  --radius-xl: 24px;
-  --radius-pill: 999px;
+  /* --- Colors: yellow accent --- */
+  --color-yellow-subtle: var(--yellow-subtle);
+  --color-yellow-muted: var(--yellow-muted);
+  --color-yellow-deep: var(--yellow-deep);
+  --color-yellow-main: var(--yellow-main);
+  --color-yellow-light: var(--yellow-light);
 
-  /* === BREAKPOINTS === */
-  --breakpoint-sm: 40rem; /* 640px */
-  --breakpoint-md: 48rem; /* 768px */
-  --breakpoint-lg: 64rem; /* 1024px */
-  --breakpoint-xl: 80rem; /* 1280px */
-  --breakpoint-2xl: 96rem; /* 1536px */
-
-  /* === SPACING (rem) === */
-  --spacing-1: 0.25rem; /* 4px */
-  --spacing-2: 0.5rem; /* 8px */
-  --spacing-3: 0.75rem; /* 12px */
-  --spacing-4: 1rem; /* 16px */
-  --spacing-6: 1.5rem; /* 24px */
-  --spacing-8: 2rem; /* 32px */
-  --spacing-12: 3rem; /* 48px */
-  --spacing-16: 4rem; /* 64px */
-
-  /* === TYPOGRAPHY === */
-  --font-size-display: 2rem; /* 32px */
-  --font-size-h1: 1.5rem; /* 24px */
-  --font-size-h2: 1.25rem; /* 20px */
-  --font-size-h3: 1rem; /* 16px */
-  --font-size-body: 0.9375rem; /* 15px */
-  --font-size-caption: 0.8125rem; /* 13px */
-  --font-size-label: 0.6875rem; /* 11px */
-
-  --font-weight-regular: 400;
-  --font-weight-medium: 500;
-  --font-weight-semibold: 600;
-
-  --line-height-tight: 1.2;
-  --line-height-normal: 1.5;
-  --line-height-relaxed: 1.6;
+  /* --- Colors: danger --- */
+  --color-danger: var(--danger);
+  --color-danger-deep: var(--danger-deep);
+  --color-danger-subtle: var(--danger-subtle);
+  --color-danger-contrast: var(--danger-contrast);
 }

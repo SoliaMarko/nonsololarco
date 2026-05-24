@@ -1,22 +1,22 @@
 /** @type {import("prettier").Config} */
 const config = {
-  semi: false,
+  semi: true,
   singleQuote: true,
-  trailingComma: "all",
+  trailingComma: 'all',
   printWidth: 100,
   tabWidth: 2,
-  plugins: ["@trivago/prettier-plugin-sort-imports"],
+  plugins: ['@trivago/prettier-plugin-sort-imports'],
   importOrder: [
-    "^react(.*)$",
-    "^next(.*)$",
-    "<THIRD_PARTY_MODULES>",
-    "^@arco/(.*)$",
-    "^@/(.*)$",
-    "^[./]",
-    "^.+\\.css$"
+    '^react(.*)$',
+    '^next(.*)$',
+    '<THIRD_PARTY_MODULES>',
+    '^@arco/(.*)$',
+    '^@/(.*)$',
+    '^[./]',
+    '^.+\\.css$',
   ],
   importOrderSeparation: true,
   importOrderSortSpecifiers: true,
-};
+}
 
-export default config;
+export default config
