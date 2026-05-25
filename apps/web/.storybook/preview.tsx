@@ -1,3 +1,5 @@
+import { useEffect } from 'react';
+
 import type { Preview } from '@storybook/nextjs-vite';
 
 import '../app/globals.css';
@@ -17,6 +19,39 @@ const preview: Preview = {
       // 'error' - fail CI on a11y violations
       // 'off' - skip a11y checks entirely
       test: 'todo',
+    },
+  },
+
+  decorators: [
+    (Story, context) => {
+      const theme = context.globals.theme || 'dark';
+
+      useEffect(() => {
+        document.documentElement.setAttribute('data-theme', theme);
+      }, [theme]);
+
+      const bg = theme === 'dark' ? '#1a1713' : '#f7f4ef';
+
+      return (
+        <div style={{ background: bg, width: '100%', minWidth: '900px', padding: '2rem' }}>
+          <Story />
+        </div>
+      );
+    },
+  ],
+
+  globalTypes: {
+    theme: {
+      name: 'Theme',
+      defaultValue: 'dark',
+      toolbar: {
+        icon: 'paintbrush',
+        items: [
+          { value: 'dark', title: 'Dark' },
+          { value: 'light', title: 'Light' },
+        ],
+        dynamicTitle: true,
+      },
     },
   },
 };
