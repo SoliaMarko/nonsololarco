@@ -1,44 +1,4 @@
 :root {
-  /* --- DARK (default): Basic Backgrounds --- */
-  --bg-base: #1a1713;
-  --bg-surface: #221e19;
-  --bg-card: #2a2520;
-  --bg-elevated: #3a3228;
-  --bg-edge: #3a3228;
-  --bg-contrast: #f0e8d8;
-
-  /* --- DARK: Emerald accent --- */
-  --emerald-subtle: #1c3828;
-  --emerald-deep: #2a5c44;
-  --emerald-main: #3d9b72;
-  --emerald-light: #a8dcc0;
-
-  /* --- DARK: Yellow accent --- */
-  --yellow-subtle: #2a2808;
-  --yellow-muted: #c8c04a;
-  --yellow-deep: #b8b040;
-  --yellow-main: #e8e07a;
-  --yellow-light: #f5f2c0;
-
-  /* --- DARK: Danger --- */
-  --danger: #d94040;
-  --danger-deep: #b03030;
-  --danger-subtle: #2a0a0a;
-  --danger-contrast: #fceaea;
-
-  /* --- DARK: Text --- */
-  --text-primary: #f0e8d8;
-  --text-secondary: #c8bea8;
-  --text-tertiary: #8a8078;
-  --text-disabled: #6a5e50;
-
-  /* --- DARK: Status --- */
-  --status-online: #3d9b72;
-  --status-pause: #e8c97a;
-  --status-away: #e8933a;
-  --status-long: #8a8078;
-  --status-inactive: #5a5248;
-
   /* --- Border radius --- */
   --radius-xs: 2px;
   --radius-sm: 6px;
@@ -83,6 +43,50 @@
   --screen-lg: 64rem; /* 1024px */
   --screen-xl: 80rem; /* 1280px */
   --screen-2xl: 96rem; /* 1536px */
+
+  /* --- Shared across DARK & LIGHT--- */
+  --danger: #d94040;
+  --danger-deep: #b03030;
+  --emerald-light: #a8dcc0;
+  --primary-light: #f0e8d8;
+  --primary-dark: #1c1a18;
+
+  /* --- DARK (default): Basic Backgrounds --- */
+  --bg-base: #1a1713;
+  --bg-surface: #221e19;
+  --bg-card: #2a2520;
+  --bg-elevated: #3a3228;
+  --bg-edge: #3a3228;
+  --bg-contrast: #f0e8d8;
+
+  /* --- DARK: Emerald accent --- */
+  --emerald-subtle: #1c3828;
+  --emerald-deep: #2a5c44;
+  --emerald-main: #3d9b72;
+
+  /* --- DARK: Yellow accent --- */
+  --yellow-subtle: #2a2808;
+  --yellow-muted: #c8c04a;
+  --yellow-deep: #cdc86a;
+  --yellow-main: #e8e07a;
+  --yellow-light: #f5f2c0;
+
+  /* --- DARK: Danger --- */
+  --danger-subtle: #2a0a0a;
+  --danger-contrast: #fceaea;
+
+  /* --- DARK: Text --- */
+  --text-primary: #f0e8d8;
+  --text-secondary: #c8bea8;
+  --text-tertiary: #8a8078;
+  --text-disabled: #6a5e50;
+
+  /* --- DARK: Status --- */
+  --status-online: #3d9b72;
+  --status-pause: #e8c97a;
+  --status-away: #e8933a;
+  --status-long: #8a8078;
+  --status-inactive: #5a5248;
 }
 
 /* --- LIGHT THEME --- */
@@ -99,18 +103,15 @@
   --emerald-subtle: #d8efe6;
   --emerald-deep: #1c5a3e;
   --emerald-main: #2a7a58;
-  --emerald-light: #a8dcc0;
 
   /* --- LIGHT: Yellow accent --- */
   --yellow-subtle: #f8f6e4;
-  --yellow-deep: #b8b040;
+  --yellow-deep: #d9ab00;
   --yellow-muted: #8a8020;
-  --yellow-main: #c8c04a;
+  --yellow-main: #f5c842;
   --yellow-light: #fdfbe8;
 
   /* --- LIGHT: Danger --- */
-  --danger: #d94040;
-  --danger-deep: #b03030;
   --danger-subtle: #fceaea;
   --danger-contrast: #2a0a0a;
 

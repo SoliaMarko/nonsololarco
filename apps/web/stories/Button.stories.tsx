@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import Button from '@/src/Button';
+import Button from '@/src/components/Button';
 
 // Minimal local icon example — replace with your actual icon component
 const ChevronIcon = ({ size = 16, className = '' }: { className?: string; size?: number }) => (
@@ -148,9 +148,10 @@ export const IconSizes: Story = {
 
 export const Loading: Story = {
   args: {
-    variant: 'primary',
     children: 'Saving',
+    className: 'w-24',
     isLoading: true,
+    variant: 'primary',
   },
 };
 
@@ -158,19 +159,19 @@ export const LoadingVariants: Story = {
   args: { children: '', variant: 'primary' },
   render: () => (
     <div className="flex flex-wrap items-center gap-3">
-      <Button variant="primary" isLoading>
+      <Button className="w-24" variant="primary" isLoading>
         Primary
       </Button>
-      <Button variant="secondary" isLoading>
+      <Button className="w-24" variant="secondary" isLoading>
         Secondary
       </Button>
-      <Button variant="ghost" isLoading>
+      <Button className="w-24" variant="ghost" isLoading>
         Ghost
       </Button>
-      <Button variant="outline" isLoading>
+      <Button className="w-24" variant="outline" isLoading>
         Outline
       </Button>
-      <Button variant="destructive" isLoading>
+      <Button className="w-24" variant="destructive" isLoading>
         Destructive
       </Button>
     </div>
@@ -215,7 +216,7 @@ export const DisabledVariants: Story = {
 export const FullWidth: Story = {
   args: { children: '', variant: 'primary' },
   render: () => (
-    <div className="w-72 flex flex-col gap-3">
+    <div className="flex w-72 flex-col gap-3">
       <Button variant="primary" className="w-full">
         Full Width Primary
       </Button>

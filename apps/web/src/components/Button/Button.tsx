@@ -11,10 +11,10 @@ import {
 
 import { VariantProps } from 'class-variance-authority';
 
-import { ValuesType } from '../lib/types';
-import { cn } from '../lib/ui/utils/cn';
-import { buttonVariants } from '../lib/ui/variants/button.variants';
-import { iconSizes } from '../lib/ui/variants/icon.variants';
+import { ValuesType } from '@/lib/types';
+import { cn } from '@/lib/ui/utils/cn';
+import { buttonVariants } from '@/lib/ui/variants/button.variants';
+import { iconSizes } from '@/lib/ui/variants/icon.variants';
 
 export const IconPosition = {
   end: 'end',
