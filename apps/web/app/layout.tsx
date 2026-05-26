@@ -25,10 +25,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
-        <div className="bg-card text-fg-primary rounded-md"></div>
-        {children}
-      </body>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
     </html>
   );
 }

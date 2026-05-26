@@ -12,13 +12,13 @@ import {
 } from '@/src/lib/ui/variants/divider.variants';
 
 export interface IDividerProps {
-  className: string;
-  color: DividerVariantType;
+  className?: string;
+  color?: DividerVariantType;
   // works only for horizontal dividers
-  label: string;
-  labelClassName: string;
-  orientation: OrientationType;
-  thickness: DividerThicknessType;
+  label?: string;
+  labelClassName?: string;
+  orientation?: OrientationType;
+  thickness?: DividerThicknessType;
   wrapperClassName?: string;
 }
 
@@ -44,7 +44,7 @@ function Divider({
   orientation = Orientation.vertical,
   thickness = 4,
   wrapperClassName,
-}: Partial<IDividerProps>) {
+}: IDividerProps) {
   const base = cn(dividerVariants({ color }), 'border-dotted', className);
 
   if (orientation === Orientation.horizontal && label) {
