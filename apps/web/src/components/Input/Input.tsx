@@ -11,6 +11,7 @@ export interface IInputProps extends Omit<
   error?: string;
   hint?: string;
   label?: string;
+  name: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   value: string;
   wrapperClassName?: string;
@@ -33,13 +34,15 @@ function Input(
   }: IInputProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) {
+  const errorId = error ? `${name}-error` : undefined;
+  const hintId = hint ? `${name}-hint` : undefined;
+  const describedBy = [errorId, hintId].filter(Boolean).join(' ') || undefined;
+
   return (
     <div className={cn('flex w-[20rem] flex-col items-start gap-0.5', wrapperClassName)}>
       {label ? (
         <label
-          className={cn(
-            'font-regular text-fg-secondary pointer-events-none flex items-center text-[1rem]',
-          )}
+          className={cn('text-fg-secondary flex items-center text-[1.1rem] font-medium')}
           htmlFor={name}
         >
           {label}
@@ -55,13 +58,16 @@ function Input(
         )}
       >
         <input
+          aria-describedby={describedBy}
+          aria-invalid={error && !disabled ? true : undefined}
           className={cn(
             'text-fg-primary font-size-label plb-2 pli-3 h-14 flex-auto self-stretch overflow-hidden bg-transparent text-[1.2rem] outline-none',
             'placeholder:text-fg-disabled',
-            { 'cursor-not-allowed opacity-40': disabled },
+            { 'cursor-not-allowed': disabled },
             className,
           )}
           disabled={disabled}
+          id={name}
           name={name}
           onChange={onChange}
           placeholder={placeholder}
@@ -71,8 +77,16 @@ function Input(
           {...rest}
         />
       </div>
-      {error ? <span className="text-danger">{error}</span> : null}
-      {hint ? <span className="text-fg-secondary">{hint}</span> : null}
+      {error ? (
+        <span className="text-danger" id={errorId}>
+          {error}
+        </span>
+      ) : null}
+      {hint ? (
+        <span className="text-fg-secondary" id={hintId}>
+          {hint}
+        </span>
+      ) : null}
     </div>
   );
 }
