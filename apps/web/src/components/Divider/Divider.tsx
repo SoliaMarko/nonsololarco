@@ -49,8 +49,15 @@ function Divider({
 
   if (orientation === Orientation.horizontal && label) {
     return (
-      <div className={cn('flex w-full flex-row items-center gap-1', wrapperClassName)}>
-        <hr className={cn(base, 'mlb-2 flex-1 border-0', horizontalThicknessMap[thickness])} />
+      <div
+        aria-orientation="horizontal"
+        className={cn('flex w-full flex-row items-center gap-1', wrapperClassName)}
+        role="separator"
+      >
+        <hr
+          aria-hidden="true"
+          className={cn(base, 'mlb-2 flex-1 border-0', horizontalThicknessMap[thickness])}
+        />
         <span
           className={cn(
             color ? labelColorMap[color] : labelColorMap[LABEL_COLOR_DEFAULT],
@@ -61,18 +68,31 @@ function Divider({
         >
           {label}
         </span>
-        <hr className={cn(base, 'mlb-2 flex-1 border-0', horizontalThicknessMap[thickness])} />
+        <hr
+          aria-hidden="true"
+          className={cn(base, 'mlb-2 flex-1 border-0', horizontalThicknessMap[thickness])}
+        />
       </div>
     );
   }
 
   if (orientation === Orientation.horizontal) {
-    return <hr className={cn(base, 'mlb-2 border-0', horizontalThicknessMap[thickness])} />;
+    return (
+      <hr
+        aria-orientation="horizontal"
+        className={cn(base, 'mlb-2 border-0', horizontalThicknessMap[thickness])}
+        role="separator"
+      />
+    );
   }
 
   return (
-    <div className={cn('mli-2 flex self-stretch', wrapperClassName)}>
-      <div className={cn(base, 'border-0', verticalThicknessMap[thickness])} />
+    <div
+      aria-orientation="vertical"
+      className={cn('mli-2 flex self-stretch', wrapperClassName)}
+      role="separator"
+    >
+      <div aria-hidden="true" className={cn(base, 'border-0', verticalThicknessMap[thickness])} />
     </div>
   );
 }
