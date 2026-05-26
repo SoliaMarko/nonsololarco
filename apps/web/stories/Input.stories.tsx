@@ -29,7 +29,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Baseline
+function StoryWrapper({ children }: { children: React.ReactNode }) {
+  return <div className="mli-auto flex w-80 flex-col gap-4">{children}</div>;
+}
 
 export const Default: Story = {
   args: {
@@ -40,11 +42,13 @@ export const Default: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
-
-// With Label
 
 export const WithLabel: Story = {
   args: {
@@ -56,11 +60,13 @@ export const WithLabel: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
-
-// With Value
 
 export const WithValue: Story = {
   args: {
@@ -71,11 +77,13 @@ export const WithValue: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
-
-// With Hint
 
 export const WithHint: Story = {
   args: {
@@ -88,11 +96,13 @@ export const WithHint: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
-
-// With Error
 
 export const WithError: Story = {
   args: {
@@ -105,11 +115,13 @@ export const WithError: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
-
-// Error clears on input
 
 export const ErrorClearsOnInput: Story = {
   args: { value: '', name: 'email', onChange: () => {} },
@@ -117,22 +129,22 @@ export const ErrorClearsOnInput: Story = {
     const [value, setValue] = useState('bad@@input');
     const [error, setError] = useState('Invalid email address.');
     return (
-      <Input
-        error={error}
-        label="Email"
-        name="email"
-        placeholder="you@arco.music"
-        value={value}
-        onChange={(e) => {
-          setValue(e.target.value);
-          setError('');
-        }}
-      />
+      <StoryWrapper>
+        <Input
+          error={error}
+          label="Email"
+          name="email"
+          placeholder="you@arco.music"
+          value={value}
+          onChange={(e) => {
+            setValue(e.target.value);
+            setError('');
+          }}
+        />
+      </StoryWrapper>
     );
   },
 };
-
-// Disabled
 
 export const Disabled: Story = {
   args: {
@@ -144,7 +156,11 @@ export const Disabled: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
 
@@ -159,11 +175,13 @@ export const DisabledEmpty: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
-
-// All states
 
 export const AllStates: Story = {
   args: { value: '', name: 'genres', onChange: () => {} },
@@ -179,7 +197,7 @@ export const AllStates: Story = {
       setValues((prev) => ({ ...prev, [key]: e.target.value }));
 
     return (
-      <div className="flex w-80 flex-col gap-4">
+      <StoryWrapper>
         <Input
           label="Search"
           name="musician"
@@ -210,12 +228,10 @@ export const AllStates: Story = {
           disabled
           onChange={() => {}}
         />
-      </div>
+      </StoryWrapper>
     );
   },
 };
-
-// Interactive validation
 
 export const Interactive: Story = {
   args: { value: '', name: 'artist', onChange: () => {} },
@@ -224,20 +240,20 @@ export const Interactive: Story = {
     const error = value.length > 0 && value.length < 3 ? 'Minimum 3 characters.' : '';
 
     return (
-      <Input
-        error={error}
-        hint="Enter your musician name."
-        label="Artist name"
-        name="artist"
-        placeholder="e.g. David Garett"
-        value={value}
-        onChange={(e) => setValue(e.target.value)}
-      />
+      <StoryWrapper>
+        <Input
+          error={error}
+          hint="Enter your musician name."
+          label="Artist name"
+          name="artist"
+          placeholder="e.g. David Garett"
+          value={value}
+          onChange={(e) => setValue(e.target.value)}
+        />
+      </StoryWrapper>
     );
   },
 };
-
-// Input types
 
 export const Password: Story = {
   args: {
@@ -250,7 +266,11 @@ export const Password: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };
 
@@ -265,6 +285,10 @@ export const NumberInput: Story = {
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
-    return <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />;
+    return (
+      <StoryWrapper>
+        <Input {...args} value={value} onChange={(e) => setValue(e.target.value)} />
+      </StoryWrapper>
+    );
   },
 };

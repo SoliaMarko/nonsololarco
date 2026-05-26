@@ -11,17 +11,10 @@ import {
 
 import { VariantProps } from 'class-variance-authority';
 
-import { ValuesType } from '@/lib/types';
 import { cn } from '@/lib/ui/utils/cn';
 import { buttonVariants } from '@/lib/ui/variants/button.variants';
 import { iconSizes } from '@/lib/ui/variants/icon.variants';
-
-export const IconPosition = {
-  end: 'end',
-  start: 'start',
-} as const;
-
-type IconPositionType = ValuesType<typeof IconPosition>;
+import { IconPositionType } from '@/src/lib/types/common.types';
 
 export interface IButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
@@ -96,7 +89,7 @@ function Button(
       <span
         className={cn(
           'inline-flex items-center gap-[inherit] transition-opacity',
-          isLoading && 'opacity-0 pointer-events-none',
+          isLoading && 'pointer-events-none opacity-0',
           contentClassName,
         )}
       >
