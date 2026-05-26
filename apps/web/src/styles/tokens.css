@@ -1,87 +1,127 @@
-/* ============================================
-   Arco Design Tokens
-   nonsololarco — a social platform for musicians
-   ============================================ */
-
 :root {
-  /* === DARK THEME (default) === */
-
-  /* Backgrounds */
-  --bg-base: #1a1713;
-  --bg-surface: #221e19;
-  --bg-card: #2a2520;
-  --bg-elevated: #3a3228;
-  --border: #3a3228;
-
-  /* Emerald — primary accent */
-  --emerald-subtle: #1c3828;
-  --emerald-deep: #2a5c44;
-  --emerald-main: #3d9b72;
-  --emerald-light: #a8dcc0;
-
-  /* Text — warm cream */
-  --text-primary: #f0e8d8;
-  --text-secondary: #c8bea8;
-  --text-tertiary: #8a8078;
-  --text-disabled: #6a5e50;
-
-  /* Status colors */
-  --status-online: #3d9b72;
-  --status-pause: #e8c97a;
-  --status-away: #e8933a;
-  --status-long: #8a8078;
-  --status-inactive: #5a5248;
-
-  /* Typography */
-  --text-display: 32px;
-  --text-h1: 24px;
-  --text-h2: 20px;
-  --text-h3: 16px;
-  --text-body: 15px;
-  --text-caption: 13px;
-  --text-label: 11px;
-
-  /* Spacing */
-  --space-1: 4px;
-  --space-2: 8px;
-  --space-3: 12px;
-  --space-4: 16px;
-  --space-6: 24px;
-  --space-8: 32px;
-  --space-12: 48px;
-  --space-16: 64px;
-
-  /* Border radius */
+  /* --- Border radius --- */
   --radius-xs: 2px;
   --radius-sm: 6px;
   --radius-md: 10px;
   --radius-lg: 16px;
   --radius-xl: 24px;
   --radius-pill: 999px;
+
+  /* --- Spacing --- */
+  --space-1: 0.25rem; /* 4px */
+  --space-2: 0.5rem; /* 8px */
+  --space-3: 0.75rem; /* 12px */
+  --space-4: 1rem; /* 16px */
+  --space-6: 1.5rem; /* 24px */
+  --space-8: 2rem; /* 32px */
+  --space-12: 3rem; /* 48px */
+  --space-16: 4rem; /* 64px */
+
+  /* --- Typography: sizes --- */
+  --text-size-display: 2rem; /* 32px */
+  --text-size-h1: 1.5rem; /* 24px */
+  --text-size-h2: 1.25rem; /* 20px */
+  --text-size-h3: 1rem; /* 16px */
+  --text-size-body: 0.9375rem; /* 15px */
+  --text-size-caption: 0.8125rem; /* 13px */
+  --text-size-label: 0.6875rem; /* 11px */
+
+  /* --- Typography: weights --- */
+  --text-weight-regular: 400;
+  --text-weight-medium: 500;
+  --text-weight-semibold: 600;
+
+  /* --- Typography: line heights --- */
+  --text-leading-tight: 1.2;
+  --text-leading-normal: 1.5;
+  --text-leading-relaxed: 1.6;
+
+  /* --- Breakpoints --- */
+  --screen-xs: 20rem; /* 320px */
+  --screen-sm: 40rem; /* 640px */
+  --screen-md: 48rem; /* 768px */
+  --screen-lg: 64rem; /* 1024px */
+  --screen-xl: 80rem; /* 1280px */
+  --screen-2xl: 96rem; /* 1536px */
+
+  /* --- Shared across DARK & LIGHT--- */
+  --danger: #d94040;
+  --danger-deep: #b03030;
+  --emerald-light: #a8dcc0;
+  --primary-light: #f0e8d8;
+  --primary-dark: #1c1a18;
+
+  /* --- DARK (default): Basic Backgrounds --- */
+  --bg-base: #1a1713;
+  --bg-surface: #221e19;
+  --bg-card: #2a2520;
+  --bg-elevated: #3a3228;
+  --bg-edge: #3a3228;
+  --bg-contrast: #f0e8d8;
+
+  /* --- DARK: Emerald accent --- */
+  --emerald-subtle: #1c3828;
+  --emerald-deep: #2a5c44;
+  --emerald-main: #3d9b72;
+
+  /* --- DARK: Yellow accent --- */
+  --yellow-subtle: #2a2808;
+  --yellow-muted: #c8c04a;
+  --yellow-deep: #cdc86a;
+  --yellow-main: #e8e07a;
+  --yellow-light: #f5f2c0;
+
+  /* --- DARK: Danger --- */
+  --danger-subtle: #2a0a0a;
+  --danger-contrast: #fceaea;
+
+  /* --- DARK: Text --- */
+  --text-primary: #f0e8d8;
+  --text-secondary: #c8bea8;
+  --text-tertiary: #8a8078;
+  --text-disabled: #6a5e50;
+
+  /* --- DARK: Status --- */
+  --status-online: #3d9b72;
+  --status-pause: #e8c97a;
+  --status-away: #e8933a;
+  --status-long: #8a8078;
+  --status-inactive: #5a5248;
 }
 
-/* === LIGHT THEME === */
-[data-theme="light"] {
-  /* Backgrounds */
+/* --- LIGHT THEME --- */
+[data-theme='light'] {
+  /* --- LIGHT: Basic Backgrounds --- */
   --bg-base: #f7f4ef;
   --bg-surface: #ede8e2;
-  --bg-card: #ffffff;
+  --bg-card: #fff;
   --bg-elevated: #e4ded6;
-  --border: #d4cec6;
+  --bg-edge: #d4cec6;
+  --bg-contrast: #1c1a18;
 
-  /* Emerald — darker for light bg */
+  /* --- LIGHT: Emerald accent --- */
   --emerald-subtle: #d8efe6;
   --emerald-deep: #1c5a3e;
   --emerald-main: #2a7a58;
-  --emerald-light: #a8dcc0;
 
-  /* Text */
+  /* --- LIGHT: Yellow accent --- */
+  --yellow-subtle: #f8f6e4;
+  --yellow-deep: #d9ab00;
+  --yellow-muted: #8a8020;
+  --yellow-main: #f5c842;
+  --yellow-light: #fdfbe8;
+
+  /* --- LIGHT: Danger --- */
+  --danger-subtle: #fceaea;
+  --danger-contrast: #2a0a0a;
+
+  /* --- LIGHT: Text --- */
   --text-primary: #1c1a18;
   --text-secondary: #4a4540;
   --text-tertiary: #7a7268;
   --text-disabled: #b0a898;
 
-  /* Status colors */
+  /* --- LIGHT: Status --- */
   --status-online: #2a7a58;
   --status-pause: #b8860b;
   --status-away: #c06010;
@@ -89,9 +129,9 @@
   --status-inactive: #b0a898;
 }
 
-/* === DOTTED DIVIDER — Arco signature === */
+/* --- Dotted divider --- */
 .arco-divider {
   border: none;
-  border-top: 1px dotted var(--border);
+  border-top: 1px dotted var(--bg-edge);
   margin: var(--space-4) 0;
 }
