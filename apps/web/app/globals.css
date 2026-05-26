@@ -48,9 +48,11 @@
   --breakpoint-lg: var(--screen-lg);
   --breakpoint-xl: var(--screen-xl);
   --breakpoint-2xl: var(--screen-2xl);
-}
 
-@theme inline {
+  /* --- Colors: common shared --- */
+  --color-primary-light: var(--primary-light);
+  --color-primary-dark: var(--primary-dark);
+
   /* --- Colors: backgrounds --- */
   --color-base: var(--bg-base);
   --color-surface: var(--bg-surface);

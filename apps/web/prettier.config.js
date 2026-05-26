@@ -5,7 +5,7 @@ const config = {
   trailingComma: 'all',
   printWidth: 100,
   tabWidth: 2,
-  plugins: ['@trivago/prettier-plugin-sort-imports'],
+  plugins: ['@trivago/prettier-plugin-sort-imports', 'prettier-plugin-tailwindcss'],
   importOrder: [
     '^react(.*)$',
     '^next(.*)$',
