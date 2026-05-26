@@ -35,6 +35,7 @@ export const Default: Story = {
   args: {
     value: '',
     onChange: () => {},
+    name: 'musician',
     placeholder: 'Search for a musician...',
   },
   render: function Render(args) {
@@ -50,6 +51,7 @@ export const WithLabel: Story = {
     value: '',
     onChange: () => {},
     label: 'Artist name',
+    name: 'artist',
     placeholder: 'e.g. Lindsey Stirling',
   },
   render: function Render(args) {
@@ -62,9 +64,10 @@ export const WithLabel: Story = {
 
 export const WithValue: Story = {
   args: {
-    value: 'Solomia Marko',
+    value: 'Niccolò Paganini',
     onChange: () => {},
     label: 'Full name',
+    name: 'full_name',
   },
   render: function Render(args) {
     const [value, setValue] = useState(args.value);
@@ -79,6 +82,7 @@ export const WithHint: Story = {
     value: '',
     onChange: () => {},
     label: 'Username',
+    name: 'username',
     placeholder: 'jazz_guitarist_42',
     hint: 'Only letters, numbers and underscores.',
   },
@@ -95,6 +99,7 @@ export const WithError: Story = {
     value: 'not-an-email',
     onChange: () => {},
     label: 'Email',
+    name: 'email',
     placeholder: 'you@arco.music',
     error: 'Please enter a valid email address.',
   },
@@ -107,7 +112,7 @@ export const WithError: Story = {
 // Error clears on input
 
 export const ErrorClearsOnInput: Story = {
-  args: { value: '', onChange: () => {} },
+  args: { value: '', name: 'email', onChange: () => {} },
   render: function Render() {
     const [value, setValue] = useState('bad@@input');
     const [error, setError] = useState('Invalid email address.');
@@ -115,6 +120,7 @@ export const ErrorClearsOnInput: Story = {
       <Input
         error={error}
         label="Email"
+        name="email"
         placeholder="you@arco.music"
         value={value}
         onChange={(e) => {
@@ -132,6 +138,7 @@ export const Disabled: Story = {
   args: {
     value: 'Piano, Guitar, Violin',
     onChange: () => {},
+    name: 'instruments',
     label: 'Instruments',
     disabled: true,
   },
@@ -146,6 +153,7 @@ export const DisabledEmpty: Story = {
     value: '',
     onChange: () => {},
     label: 'Genre',
+    name: 'genre',
     placeholder: 'Not available',
     disabled: true,
   },
@@ -158,7 +166,7 @@ export const DisabledEmpty: Story = {
 // All states
 
 export const AllStates: Story = {
-  args: { value: '', onChange: () => {} },
+  args: { value: '', name: 'genres', onChange: () => {} },
   render: function Render() {
     const [values, setValues] = useState({
       default: '',
@@ -174,13 +182,15 @@ export const AllStates: Story = {
       <div className="flex w-80 flex-col gap-4">
         <Input
           label="Search"
+          name="musician"
           placeholder="Search for a musician..."
           value={values.default}
           onChange={update('default')}
         />
-        <Input label="Genres" value={values.genres} onChange={update('genres')} />
+        <Input label="Genres" name="genres" value={values.genres} onChange={update('genres')} />
         <Input
           label="Username"
+          name="username"
           placeholder="jazz_guitarist_42"
           hint="Only letters, numbers and underscores."
           value={values.username}
@@ -188,11 +198,18 @@ export const AllStates: Story = {
         />
         <Input
           label="Email"
+          name="email"
           value={values.email}
           error="Please enter a valid email address."
           onChange={update('email')}
         />
-        <Input label="Instruments" value="Piano, Guitar, Violin" disabled onChange={() => {}} />
+        <Input
+          label="Instruments"
+          name="instruments"
+          value="Piano, Guitar, Violin"
+          disabled
+          onChange={() => {}}
+        />
       </div>
     );
   },
@@ -201,7 +218,7 @@ export const AllStates: Story = {
 // Interactive validation
 
 export const Interactive: Story = {
-  args: { value: '', onChange: () => {} },
+  args: { value: '', name: 'artist', onChange: () => {} },
   render: function Render() {
     const [value, setValue] = useState('');
     const error = value.length > 0 && value.length < 3 ? 'Minimum 3 characters.' : '';
@@ -211,6 +228,7 @@ export const Interactive: Story = {
         error={error}
         hint="Enter your musician name."
         label="Artist name"
+        name="artist"
         placeholder="e.g. David Garett"
         value={value}
         onChange={(e) => setValue(e.target.value)}
@@ -226,6 +244,7 @@ export const Password: Story = {
     value: '',
     onChange: () => {},
     label: 'Password',
+    name: 'password',
     placeholder: '••••••••',
     type: 'password',
   },
@@ -240,6 +259,7 @@ export const NumberInput: Story = {
     value: '',
     onChange: () => {},
     label: 'Years of experience',
+    name: 'experience',
     placeholder: '5',
     type: 'number',
   },
