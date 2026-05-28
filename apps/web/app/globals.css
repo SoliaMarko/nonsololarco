@@ -3,6 +3,8 @@
 
 @plugin 'tailwindcss-logical';
 
+@source '../**/*.stories.{ts,tsx}';
+
 @theme {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);
