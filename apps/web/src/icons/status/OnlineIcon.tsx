@@ -1,4 +1,4 @@
-import { Ref, SVGProps, forwardRef } from 'react';
+import { Ref, SVGProps, forwardRef, useId } from 'react';
 
 import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
@@ -12,9 +12,12 @@ function OnlineIcon(
   }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
+  const generatedId = useId();
+  const resolvedTitleId = titleId ?? (title ? generatedId : undefined);
+
   return (
     <svg
-      aria-labelledby={titleId}
+      {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       className={className}
       fill="none"
       height={props.size || '36'}

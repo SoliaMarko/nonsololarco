@@ -120,10 +120,14 @@ function Section({ title, children }: SectionProps) {
 function IconGallery({ size, color }: { color: string; size: string }) {
   const [copiedLabel, setCopiedLabel] = useState<string | null>(null);
 
-  const handleCopy = (label: string) => {
-    navigator.clipboard.writeText(label);
-    setCopiedLabel(label);
-    setTimeout(() => setCopiedLabel(null), 1500);
+  const handleCopy = async (label: string) => {
+    try {
+      await navigator.clipboard.writeText(label);
+      setCopiedLabel(label);
+      setTimeout(() => setCopiedLabel(null), 1500);
+    } catch {
+      // clipboard not available — silently ignore in Storybook context
+    }
   };
 
   const cardProps = { size, color, copiedLabel, onCopy: handleCopy };

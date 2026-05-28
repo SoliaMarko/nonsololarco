@@ -1,4 +1,4 @@
-import { Ref, SVGProps, forwardRef } from 'react';
+import { CSSProperties, Ref, SVGProps, forwardRef, useId } from 'react';
 
 import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
@@ -23,16 +23,20 @@ import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
  */
 function ChatSolidIcon(
   {
+    contentColor,
+    style,
     title,
     titleId,
-    contentColor,
     ...props
   }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps> & { contentColor?: string },
   ref: Ref<SVGSVGElement>,
 ) {
+  const generatedId = useId();
+  const resolvedTitleId = titleId ?? (title ? generatedId : undefined);
+
   return (
     <svg
-      aria-labelledby={titleId}
+      {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
       height={props.size || '24'}
       width={props.size || '24'}
@@ -40,7 +44,12 @@ function ChatSolidIcon(
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"
-      style={{ '--icon-content-color': contentColor } as React.CSSProperties}
+      style={
+        {
+          ...style,
+          ...(contentColor ? { '--icon-content-color': contentColor } : {}),
+        } as CSSProperties
+      }
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
