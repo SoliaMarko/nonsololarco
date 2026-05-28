@@ -10,7 +10,7 @@
     "at-rule-no-unknown": [
       true,
       {
-        "ignoreAtRules": ["theme", "tailwind", "layer", "apply", "config", "plugin"]
+        "ignoreAtRules": ["theme", "tailwind", "layer", "apply", "config", "plugin", "source"]
       }
     ],
     "custom-property-empty-line-before": null,
