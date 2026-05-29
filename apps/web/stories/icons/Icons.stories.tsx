@@ -24,7 +24,7 @@ import SunOutlineIcon from '@/src/icons/base/SunOutlineIcon';
 // colorful
 import BouquetIcon from '@/src/icons/colorful/BouquetIcon';
 import FireIcon from '@/src/icons/colorful/FireIcon';
-import MusicPlant from '@/src/icons/colorful/MusicPlant';
+import MusicPlantIcon from '@/src/icons/colorful/MusicPlantIcon';
 import PianoKeysIcon from '@/src/icons/colorful/PianoKeysIcon';
 // status
 import OnlineIcon from '@/src/icons/status/OnlineIcon';
@@ -166,7 +166,7 @@ function IconGallery({ size, color }: { color: string; size: string }) {
           <ArrowRightSolidIcon size={size} />
         </IconCard>
         <IconCard label="ChatSolidIcon" {...cardProps}>
-          <ChatSolidIcon size={size} />
+          <ChatSolidIcon className="[--icon-content-color:var(--color-danger)]" size={size} />
         </IconCard>
         <IconCard label="CheckSolidIcon" {...cardProps}>
           <CheckSolidIcon size={size} />
@@ -198,8 +198,8 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         <IconCard label="FireIcon" {...cardProps} size="64">
           <FireIcon size="64" />
         </IconCard>
-        <IconCard label="MusicPlant" {...cardProps} size="64">
-          <MusicPlant size="64" />
+        <IconCard label="MusicPlantIcon" {...cardProps} size="64">
+          <MusicPlantIcon size="64" />
         </IconCard>
         <IconCard label="PianoKeysIcon" {...cardProps} size="64">
           <PianoKeysIcon size="64" />

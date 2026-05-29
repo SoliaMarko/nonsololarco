@@ -22,7 +22,7 @@ function MoonOutlineIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <path
         d="M15 10.5C15 13.538 12.538 16 9.5 16C7.2 16 5.2 14.6 4.3 12.6C5 12.9 5.7 13 6.5 13C9.538 13 12 10.538 12 7.5C12 6.7 11.9 6 11.6 5.3C13.6 6.2 15 8.2 15 10.5Z"
         fillRule="evenodd"

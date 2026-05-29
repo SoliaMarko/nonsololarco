@@ -22,7 +22,7 @@ function HomeSolidIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <path
         d="M3 8.5L10 3L17 8.5V17H13V13H7V17H3V8.5Z"
         fill="currentColor"

@@ -22,7 +22,7 @@ function CheckSolidIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <path
         d="M4 10L8 14L16 6"
         stroke="currentColor"

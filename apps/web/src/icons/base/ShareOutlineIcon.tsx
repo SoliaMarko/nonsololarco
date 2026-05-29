@@ -22,7 +22,7 @@ function ShareOutlineIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <circle cx="5" cy="10" r="2.5" stroke="currentColor" strokeWidth="1.3" />
       <circle cx="15" cy="5" r="2.5" stroke="currentColor" strokeWidth="1.3" />
       <circle cx="15" cy="15" r="2.5" stroke="currentColor" strokeWidth="1.3" />

@@ -22,7 +22,7 @@ function SearchOutlineIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.3" />
       <line
         x1="13"

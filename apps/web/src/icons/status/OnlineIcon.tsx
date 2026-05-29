@@ -28,7 +28,7 @@ function OnlineIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <circle cx="18" cy="18" r="7" fill="currentColor" />
       <circle cx="18" cy="18" r="12" stroke="currentColor" strokeWidth="1" opacity="0.25" />
     </svg>

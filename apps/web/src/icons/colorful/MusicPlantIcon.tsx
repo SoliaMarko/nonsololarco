@@ -22,7 +22,7 @@ function MusicPlant(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       {/* note */}
       <g fill="currentColor">
         <ellipse cx="61.2" cy="27.6" rx="4.4" ry="3.4" transform="rotate(-22 61.2 27.6)" />
