@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import Divider from '@/src/components/Divider';
+import { ORIENTATION } from '@/src/lib/constants/common.const';
 
 const meta: Meta<typeof Divider> = {
   title: 'UI/Divider',
@@ -25,7 +26,7 @@ const meta: Meta<typeof Divider> = {
   argTypes: {
     orientation: {
       control: 'select',
-      options: ['horizontal', 'vertical'],
+      options: [ORIENTATION.horizontal, ORIENTATION.vertical],
       description: 'Divider orientation',
     },
     color: {
@@ -52,7 +53,7 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {
   args: {
-    orientation: 'horizontal',
+    orientation: ORIENTATION.horizontal,
     color: 'secondary',
   },
 };
@@ -60,15 +61,15 @@ export const Default: Story = {
 // Orientations
 
 export const Horizontal: Story = {
-  args: { orientation: 'horizontal' },
+  args: { orientation: ORIENTATION.horizontal },
 };
 
 export const Vertical: Story = {
-  args: { orientation: 'vertical' },
+  args: { orientation: ORIENTATION.vertical },
   render: () => (
     <div className="flex h-16 items-stretch">
       <span className="text-fg-secondary">Left</span>
-      <Divider orientation="vertical" />
+      <Divider orientation={ORIENTATION.vertical} />
       <span className="text-fg-secondary">Right</span>
     </div>
   ),
@@ -78,7 +79,7 @@ export const Vertical: Story = {
 
 export const WithLabel: Story = {
   args: {
-    orientation: 'horizontal',
+    orientation: ORIENTATION.horizontal,
     label: 'or',
   },
 };
@@ -86,14 +87,14 @@ export const WithLabel: Story = {
 // All Colors
 
 export const AllColors: Story = {
-  args: { orientation: 'horizontal' },
+  args: { orientation: ORIENTATION.horizontal },
   render: () => (
     <div className="flex flex-col gap-4">
-      <Divider orientation="horizontal" color="primary" label="primary" />
-      <Divider orientation="horizontal" color="secondary" label="secondary" />
-      <Divider orientation="horizontal" color="tertiary" label="tertiary" />
-      <Divider orientation="horizontal" color="emerald" label="emerald" />
-      <Divider orientation="horizontal" color="danger" label="danger" />
+      <Divider orientation={ORIENTATION.horizontal} color="primary" label="primary" />
+      <Divider orientation={ORIENTATION.horizontal} color="secondary" label="secondary" />
+      <Divider orientation={ORIENTATION.horizontal} color="tertiary" label="tertiary" />
+      <Divider orientation={ORIENTATION.horizontal} color="emerald" label="emerald" />
+      <Divider orientation={ORIENTATION.horizontal} color="danger" label="danger" />
     </div>
   ),
 };
@@ -101,13 +102,13 @@ export const AllColors: Story = {
 // All Thicknesses
 
 export const AllThicknesses: Story = {
-  args: { orientation: 'horizontal' },
+  args: { orientation: ORIENTATION.horizontal },
   render: () => (
     <div className="flex flex-col gap-4">
-      <Divider orientation="horizontal" thickness={1} label="thickness 1" />
-      <Divider orientation="horizontal" thickness={2} label="thickness 2" />
-      <Divider orientation="horizontal" thickness={4} label="thickness 4" />
-      <Divider orientation="horizontal" thickness={8} label="thickness 8" />
+      <Divider orientation={ORIENTATION.horizontal} thickness={1} label="thickness 1" />
+      <Divider orientation={ORIENTATION.horizontal} thickness={2} label="thickness 2" />
+      <Divider orientation={ORIENTATION.horizontal} thickness={4} label="thickness 4" />
+      <Divider orientation={ORIENTATION.horizontal} thickness={8} label="thickness 8" />
     </div>
   ),
 };
@@ -115,13 +116,13 @@ export const AllThicknesses: Story = {
 // Vertical All Thicknesses
 
 export const VerticalAllThicknesses: Story = {
-  args: { orientation: 'vertical' },
+  args: { orientation: ORIENTATION.vertical },
   render: () => (
     <div className="flex h-16 items-stretch gap-4">
-      <Divider orientation="vertical" thickness={1} />
-      <Divider orientation="vertical" thickness={2} />
-      <Divider orientation="vertical" thickness={4} />
-      <Divider orientation="vertical" thickness={8} />
+      <Divider orientation={ORIENTATION.vertical} thickness={1} />
+      <Divider orientation={ORIENTATION.vertical} thickness={2} />
+      <Divider orientation={ORIENTATION.vertical} thickness={4} />
+      <Divider orientation={ORIENTATION.vertical} thickness={8} />
     </div>
   ),
 };
@@ -130,7 +131,7 @@ export const VerticalAllThicknesses: Story = {
 
 export const Danger: Story = {
   args: {
-    orientation: 'horizontal',
+    orientation: ORIENTATION.horizontal,
     color: 'danger',
     label: 'dangerous',
   },

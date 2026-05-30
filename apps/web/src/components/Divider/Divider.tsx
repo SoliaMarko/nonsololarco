@@ -1,6 +1,6 @@
 'use client';
 
-import { Orientation } from '@/src/lib/constants/common.const';
+import { ORIENTATION } from '@/src/lib/constants/common.const';
 import { OrientationType } from '@/src/lib/types/common.types';
 import { DividerThicknessType, DividerVariantType } from '@/src/lib/types/divider.types';
 import { cn } from '@/src/lib/ui/utils/cn';
@@ -41,13 +41,13 @@ function Divider({
   color,
   label,
   labelClassName,
-  orientation = Orientation.vertical,
+  orientation = ORIENTATION.vertical,
   thickness = 4,
   wrapperClassName,
 }: IDividerProps) {
   const base = cn(dividerVariants({ color }), 'border-dotted', className);
 
-  if (orientation === Orientation.horizontal && label) {
+  if (orientation === ORIENTATION.horizontal && label) {
     return (
       <div
         aria-orientation="horizontal"
@@ -76,7 +76,7 @@ function Divider({
     );
   }
 
-  if (orientation === Orientation.horizontal) {
+  if (orientation === ORIENTATION.horizontal) {
     return (
       <hr
         aria-orientation="horizontal"

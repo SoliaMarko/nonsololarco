@@ -1,9 +1,9 @@
-export const IconPosition = {
+export const ICON_POSITION = {
   end: 'end',
   start: 'start',
 } as const;
 
-export const Orientation = {
+export const ORIENTATION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
 } as const;
