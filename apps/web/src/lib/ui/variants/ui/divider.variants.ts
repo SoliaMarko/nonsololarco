@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-import { DividerThicknessType, DividerVariantType } from '../../types/divider.types';
+import { DividerThicknessType, DividerVariantType } from '../../../types/ui/divider.types';
 
 export const dividerVariants = cva('border-dotted', {
   variants: {
