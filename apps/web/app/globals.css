@@ -5,7 +5,7 @@
 
 @source '../**/*.stories.{ts,tsx}';
 
-@theme {
+@theme inline {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);
@@ -74,11 +74,14 @@
   --color-fg-secondary: var(--text-secondary);
   --color-fg-tertiary: var(--text-tertiary);
   --color-fg-disabled: var(--text-disabled);
+  --color-yellow-contrast: var(--text-yellow-contrast);
 
   /* --- Colors: status --- */
   --color-status-online: var(--status-online);
   --color-status-pause: var(--status-pause);
+  --color-status-pause-solid: var(--status-pause-solid);
   --color-status-away: var(--status-away);
+  --color-status-away-subtle: var(--status-away-subtle);
   --color-status-long: var(--status-long);
   --color-status-inactive: var(--status-inactive);
 

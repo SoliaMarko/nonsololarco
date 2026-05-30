@@ -18,13 +18,13 @@
   --space-16: 4rem; /* 64px */
 
   /* --- Typography: sizes --- */
-  --text-size-display: 2rem; /* 32px */
-  --text-size-h1: 1.5rem; /* 24px */
-  --text-size-h2: 1.25rem; /* 20px */
-  --text-size-h3: 1rem; /* 16px */
-  --text-size-body: 0.9375rem; /* 15px */
-  --text-size-caption: 0.8125rem; /* 13px */
   --text-size-label: 0.6875rem; /* 11px */
+  --text-size-caption: 0.8125rem; /* 13px */
+  --text-size-body: 0.9375rem; /* 15px */
+  --text-size-h3: 1rem; /* 16px */
+  --text-size-h2: 1.25rem; /* 20px */
+  --text-size-h1: 1.5rem; /* 24px */
+  --text-size-display: 2rem; /* 32px */
 
   /* --- Typography: weights --- */
   --text-weight-regular: 400;
@@ -80,11 +80,14 @@
   --text-secondary: #c8bea8;
   --text-tertiary: #8a8078;
   --text-disabled: #6a5e50;
+  --text-yellow-contrast: #2a2808;
 
   /* --- DARK: Status --- */
   --status-online: #3d9b72;
   --status-pause: #e8c97a;
+  --status-pause-solid: #f0d060;
   --status-away: #e8933a;
+  --status-away-subtle: #331800;
   --status-long: #8a8078;
   --status-inactive: #5a5248;
 }
@@ -124,6 +127,7 @@
   /* --- LIGHT: Status --- */
   --status-online: #2a7a58;
   --status-pause: #b8860b;
+  --status-pause-contrast: #2a2808;
   --status-away: #c06010;
   --status-long: #7a7268;
   --status-inactive: #b0a898;
