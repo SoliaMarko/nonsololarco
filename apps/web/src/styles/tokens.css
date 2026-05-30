@@ -123,12 +123,14 @@
   --text-secondary: #4a4540;
   --text-tertiary: #7a7268;
   --text-disabled: #b0a898;
+  --text-yellow-contrast: #2a2808;
 
   /* --- LIGHT: Status --- */
   --status-online: #2a7a58;
   --status-pause: #b8860b;
-  --status-pause-contrast: #2a2808;
+  --status-pause-solid: #f0d060;
   --status-away: #c06010;
+  --status-away-subtle: #331800;
   --status-long: #7a7268;
   --status-inactive: #b0a898;
 }

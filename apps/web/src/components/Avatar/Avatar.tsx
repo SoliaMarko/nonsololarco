@@ -1,6 +1,6 @@
 'use client';
 
-import { ForwardedRef, HTMLAttributes, forwardRef, useState } from 'react';
+import { ForwardedRef, HTMLAttributes, forwardRef, useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
@@ -24,6 +24,11 @@ function Avatar(
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   const [imgError, setImgError] = useState(false);
+
+  useEffect(() => {
+    setImgError(false);
+  }, [src]);
+
   const showImage = src && !imgError;
 
   const StatusIcon = status ? STATUS_ICON[status] : null;
