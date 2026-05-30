@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import Button from '@/src/components/Button';
+import Button from '@/src/components/ui/Button';
 import { ICON_POSITION } from '@/src/lib/constants/common.const';
 
 // Minimal local icon example — replace with your actual icon component

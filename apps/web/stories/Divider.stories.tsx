@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import Divider from '@/src/components/Divider';
+import Divider from '@/src/components/ui/Divider';
 import { ORIENTATION } from '@/src/lib/constants/common.const';
 
 const meta: Meta<typeof Divider> = {

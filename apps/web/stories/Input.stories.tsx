@@ -2,7 +2,7 @@ import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import Input from '@/src/components/Input';
+import Input from '@/src/components/ui/Input';
 
 const meta = {
   title: 'UI/Input',
