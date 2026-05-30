@@ -24,8 +24,9 @@ import SunOutlineIcon from '@/src/icons/base/SunOutlineIcon';
 // colorful
 import BouquetIcon from '@/src/icons/colorful/BouquetIcon';
 import FireIcon from '@/src/icons/colorful/FireIcon';
-import MusicPlant from '@/src/icons/colorful/MusicPlant';
+import MusicPlantIcon from '@/src/icons/colorful/MusicPlantIcon';
 import PianoKeysIcon from '@/src/icons/colorful/PianoKeysIcon';
+import { EighthRestIcon, HalfRestIcon, QuarterRestIcon, WholeRestIcon } from '@/src/icons/status';
 // status
 import OnlineIcon from '@/src/icons/status/OnlineIcon';
 
@@ -166,7 +167,7 @@ function IconGallery({ size, color }: { color: string; size: string }) {
           <ArrowRightSolidIcon size={size} />
         </IconCard>
         <IconCard label="ChatSolidIcon" {...cardProps}>
-          <ChatSolidIcon size={size} />
+          <ChatSolidIcon className="[--icon-content-color:var(--color-danger)]" size={size} />
         </IconCard>
         <IconCard label="CheckSolidIcon" {...cardProps}>
           <CheckSolidIcon size={size} />
@@ -198,8 +199,8 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         <IconCard label="FireIcon" {...cardProps} size="64">
           <FireIcon size="64" />
         </IconCard>
-        <IconCard label="MusicPlant" {...cardProps} size="64">
-          <MusicPlant size="64" />
+        <IconCard label="MusicPlantIcon" {...cardProps} size="64">
+          <MusicPlantIcon size="64" />
         </IconCard>
         <IconCard label="PianoKeysIcon" {...cardProps} size="64">
           <PianoKeysIcon size="64" />
@@ -209,6 +210,18 @@ function IconGallery({ size, color }: { color: string; size: string }) {
       <Section title="Status">
         <IconCard label="OnlineIcon" {...cardProps} size="36">
           <OnlineIcon size="36" />
+        </IconCard>
+        <IconCard label="EighthRestIcon" {...cardProps} size="36">
+          <EighthRestIcon size="36" />
+        </IconCard>
+        <IconCard label="QuarterRestIcon" {...cardProps} size="36">
+          <QuarterRestIcon size="36" />
+        </IconCard>
+        <IconCard label="HalfRestIcon" {...cardProps} size="36">
+          <HalfRestIcon size="36" />
+        </IconCard>
+        <IconCard label="WholeRestIcon" {...cardProps} size="36">
+          <WholeRestIcon size="36" />
         </IconCard>
       </Section>
     </div>

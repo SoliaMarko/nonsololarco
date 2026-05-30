@@ -3,8 +3,9 @@ import { Ref, SVGProps, forwardRef, useId } from 'react';
 import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
-function CheckSolidIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+function HalfRestIcon(
+  // TODO:
+  { className = '', title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -13,26 +14,22 @@ function CheckSolidIcon(
   return (
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
+      className={className}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
-      viewBox={calcViewBox({ x1: 4, y1: 6, x2: 16, y2: 14 })}
+      height={props.size || '36'}
+      width={props.size || '36'}
+      viewBox={calcViewBox({ x1: 34, y1: 60, x2: 146, y2: 94 }, 4)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
-      <path
-        d="M4 10L8 14L16 6"
-        stroke="currentColor"
-        strokeWidth="1.3"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
+      <rect x="58" y="60" width="64" height="30" rx="4" fill="currentColor" />
+      <rect x="34" y="86" width="112" height="8" rx="3" fill="currentColor" />
     </svg>
   );
 }
 
-const ForwardRef = forwardRef(CheckSolidIcon);
+const ForwardRef = forwardRef(HalfRestIcon);
 export default ForwardRef;

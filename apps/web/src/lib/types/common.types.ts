@@ -1,4 +1,4 @@
-import { IconPosition, Orientation } from '../constants/common.const';
+import { ICON_POSITION, ORIENTATION } from '../constants/common.const';
 
 export interface SVGCustomProps {
   size?: string;
@@ -8,5 +8,5 @@ export interface SVGCustomProps {
 
 export type ValuesType<T> = T[keyof T];
 
-export type IconPositionType = ValuesType<typeof IconPosition>;
-export type OrientationType = ValuesType<typeof Orientation>;
+export type IconPositionType = ValuesType<typeof ICON_POSITION>;
+export type OrientationType = ValuesType<typeof ORIENTATION>;

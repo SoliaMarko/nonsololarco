@@ -22,7 +22,7 @@ function FireIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <g style={{ transformOrigin: '50% 90%' }}>
         <path
           d="M32 8 C 26 18 22 22 22 32 C 22 38 24 42 28 44 C 26 40 28 36 32 32 C 34 38 38 38 38 32 C 42 36 44 40 44 44 C 48 42 50 38 50 32 C 50 26 46 22 42 16 C 40 22 36 22 36 18 C 36 14 34 10 32 8 Z"

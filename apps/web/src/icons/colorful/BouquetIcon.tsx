@@ -22,7 +22,7 @@ function BouquetIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <g stroke="#4ABE7C" strokeWidth="1.6" strokeLinecap="round" fill="none">
         <path d="M 22 30 Q 26 40 30 50" />
         <path d="M 32 28 L 32 52" />

@@ -22,7 +22,7 @@ function ProfileSolidIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <circle cx="10" cy="7" r="3.5" fill="currentColor" stroke="currentColor" strokeWidth="1.3" />
       <path
         d="M3 18C3 14.686 6.134 12 10 12C13.866 12 17 14.686 17 18"

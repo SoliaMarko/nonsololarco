@@ -44,15 +44,15 @@ function ChatSolidIcon(
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"
+      {...props}
       style={
         {
           ...style,
           ...(contentColor ? { '--icon-content-color': contentColor } : {}),
         } as CSSProperties
       }
-      {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <path
         d="M3 4H17V14H11L7 17V14H3V4Z"
         fill="currentColor"

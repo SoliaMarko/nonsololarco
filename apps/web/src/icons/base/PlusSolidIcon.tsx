@@ -22,7 +22,7 @@ function PlusSolidIcon(
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
-      {title ? <title id={titleId}>{title}</title> : null}
+      {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <line
         x1="10"
         y1="4"

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import Button from '@/src/components/Button';
+import { ICON_POSITION } from '@/src/lib/constants/common.const';
 
 // Minimal local icon example — replace with your actual icon component
 const ChevronIcon = ({ size = 16, className = '' }: { className?: string; size?: number }) => (
@@ -108,7 +109,7 @@ export const WithIconStart: Story = {
     variant: 'primary',
     children: 'Continue',
     icon: ChevronIcon,
-    iconPosition: 'start',
+    iconPosition: ICON_POSITION.start,
   },
 };
 
@@ -125,19 +126,19 @@ export const IconSizes: Story = {
   args: { children: '', variant: 'primary' },
   render: () => (
     <div className="flex flex-wrap items-end gap-3">
-      <Button variant="primary" icon={ChevronIcon} iconPosition="end" size="xs">
+      <Button variant="primary" icon={ChevronIcon} iconPosition={ICON_POSITION.end} size="xs">
         XS
       </Button>
-      <Button variant="primary" icon={ChevronIcon} iconPosition="end" size="sm">
+      <Button variant="primary" icon={ChevronIcon} iconPosition={ICON_POSITION.end} size="sm">
         SM
       </Button>
-      <Button variant="primary" icon={ChevronIcon} iconPosition="end" size="md">
+      <Button variant="primary" icon={ChevronIcon} iconPosition={ICON_POSITION.end} size="md">
         MD
       </Button>
-      <Button variant="primary" icon={ChevronIcon} iconPosition="end" size="lg">
+      <Button variant="primary" icon={ChevronIcon} iconPosition={ICON_POSITION.end} size="lg">
         LG
       </Button>
-      <Button variant="primary" icon={ChevronIcon} iconPosition="end" size="xl">
+      <Button variant="primary" icon={ChevronIcon} iconPosition={ICON_POSITION.end} size="xl">
         XL
       </Button>
     </div>
@@ -220,7 +221,12 @@ export const FullWidth: Story = {
       <Button variant="primary" className="w-full">
         Full Width Primary
       </Button>
-      <Button variant="outline" icon={ChevronIcon} iconPosition="end" className="w-full">
+      <Button
+        variant="outline"
+        icon={ChevronIcon}
+        iconPosition={ICON_POSITION.end}
+        className="w-full"
+      >
         Full Width Outline
       </Button>
     </div>
