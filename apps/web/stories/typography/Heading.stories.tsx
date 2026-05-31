@@ -1,31 +1,37 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import Heading from '@/src/components/typography/Heading';
+import { TAG_DEFAULT_SIZE } from '@/src/lib/types/typography/heading.types';
 
 const meta = {
-  title: 'UI/Heading',
+  title: 'Typography/Heading',
   component: Heading,
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
     docs: {
       description: {
-        component: 'Heading component for h1-h6 elements with color and truncate support.',
+        component:
+          'Heading component for h1-h6 elements with color, alignment and truncate support.',
       },
     },
   },
   argTypes: {
-    as: {
+    tag: {
       control: 'select',
       options: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
-    level: {
+    size: {
       control: 'select',
-      options: [undefined, 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
+      options: [undefined, 'xs', 'sm', 'base', 'lg', 'xl', '2xl', '3xl'],
     },
     color: {
       control: 'select',
       options: [undefined, 'primary', 'secondary', 'tertiary', 'accent', 'highlight', 'danger'],
+    },
+    align: {
+      control: 'select',
+      options: [undefined, 'start', 'center', 'end'],
     },
     isTruncated: { control: 'boolean' },
     children: { control: 'text' },
@@ -38,7 +44,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     children: 'Heading',
-    as: 'h2',
+    tag: 'h2',
   },
 };
 
@@ -46,9 +52,9 @@ export const AllLevels: Story = {
   args: { children: '' },
   render: () => (
     <div className="flex flex-col gap-3">
-      {(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const).map((level) => (
-        <Heading key={level} as={level}>
-          {level.toUpperCase()} — Heading {level.slice(1)}
+      {(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const).map((tag) => (
+        <Heading key={tag} tag={tag}>
+          {tag.toUpperCase()} — {TAG_DEFAULT_SIZE[tag]}
         </Heading>
       ))}
     </div>
@@ -60,7 +66,7 @@ export const AllColorVariant: Story = {
     <div className="flex flex-col gap-3">
       {(['primary', 'secondary', 'tertiary', 'accent', 'highlight', 'danger'] as const).map(
         (color) => (
-          <Heading key={color} as="h2" color={color}>
+          <Heading key={color} tag="h2" color={color}>
             Color — {color}
           </Heading>
         ),
@@ -68,16 +74,30 @@ export const AllColorVariant: Story = {
     </div>
   ),
 };
-export const LevelOverride: Story = {
+
+export const SizeOverride: Story = {
   args: { children: '' },
   render: () => (
     <div className="flex flex-col gap-2">
-      <Heading as="h1" level="h3">
-        Semantic h1, visual h3
+      <Heading tag="h1" size="lg">
+        Semantic h1, visual lg
       </Heading>
-      <Heading as="h2" level="h1">
-        Semantic h2, visual h1
+      <Heading tag="h2" size="2xl">
+        Semantic h2, visual 2xl
       </Heading>
+    </div>
+  ),
+};
+
+export const Alignment: Story = {
+  args: { children: '' },
+  render: () => (
+    <div className="flex w-full flex-col gap-2">
+      {(['start', 'center', 'end'] as const).map((align) => (
+        <Heading key={align} tag="h2" align={align}>
+          Align — {align}
+        </Heading>
+      ))}
     </div>
   ),
 };
@@ -85,9 +105,10 @@ export const LevelOverride: Story = {
 export const Truncated: Story = {
   args: { children: '' },
   render: () => (
-    <div className="w-48">
-      <Heading as="h2" isTruncated>
-        This is a very long heading that will be truncated
+    <div className="w-205">
+      <Heading tag="h2" isTruncated>
+        This is a very long heading that will be truncated this is a very long heading that will be
+        truncated
       </Heading>
     </div>
   ),

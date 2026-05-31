@@ -25,6 +25,15 @@
   --spacing-12: var(--space-12);
   --spacing-16: var(--space-16);
 
+  /* --- Typography: sizes --- */
+  --text-xs: var(--text-size-xs);
+  --text-sm: var(--text-size-sm);
+  --text-base: var(--text-size-base);
+  --text-lg: var(--text-size-lg);
+  --text-xl: var(--text-size-xl);
+  --text-2xl: var(--text-size-2xl);
+  --text-3xl: var(--text-size-3xl);
+
   /* --- Typography: weights --- */
   --font-weight-regular: var(--text-weight-regular);
   --font-weight-medium: var(--text-weight-medium);
@@ -89,38 +98,4 @@
   --color-danger-deep: var(--danger-deep);
   --color-danger-subtle: var(--danger-subtle);
   --color-danger-contrast: var(--danger-contrast);
-}
-
-@layer utilities {
-  .text-display {
-    font-size: var(--text-size-display);
-  }
-
-  .text-h1 {
-    font-size: var(--text-size-h1);
-  }
-
-  .text-h2 {
-    font-size: var(--text-size-h2);
-  }
-
-  .text-h3 {
-    font-size: var(--text-size-h3);
-  }
-
-  .text-body {
-    font-size: var(--text-size-body);
-  }
-
-  .text-h4 {
-    font-size: var(--text-size-h4);
-  }
-
-  .text-caption {
-    font-size: var(--text-size-caption);
-  }
-
-  .text-label {
-    font-size: var(--text-size-label);
-  }
 }

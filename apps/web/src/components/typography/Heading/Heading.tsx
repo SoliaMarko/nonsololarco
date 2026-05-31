@@ -1,23 +1,30 @@
 import { ForwardedRef, HTMLAttributes, forwardRef } from 'react';
 
-import { HeadingLevel, HeadingVariantProps } from '@/src/lib/types/typography/heading.types';
+import {
+  HeadingTag,
+  HeadingVariantProps,
+  TAG_DEFAULT_SIZE,
+} from '@/src/lib/types/typography/heading.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 import { headingVariants } from '@/src/lib/ui/variants/typography/heading.variants';
 
 export interface HeadingProps
   extends Omit<HTMLAttributes<HTMLHeadingElement>, 'color'>, HeadingVariantProps {
-  as?: HeadingLevel;
   className?: string;
   isTruncated?: boolean;
+  tag?: HeadingTag;
 }
 
 function Heading(
-  { as: Component = 'h2', className, color, isTruncated, level, ...rest }: HeadingProps,
+  { tag: Component = 'h2', className, color, align, isTruncated, size, ...rest }: HeadingProps,
   ref: ForwardedRef<HTMLHeadingElement>,
 ) {
   return (
     <Component
-      className={cn(headingVariants({ level: level ?? Component, color, isTruncated }), className)}
+      className={cn(
+        headingVariants({ size: size ?? TAG_DEFAULT_SIZE[Component], color, align, isTruncated }),
+        className,
+      )}
       ref={ref}
       {...rest}
     />
