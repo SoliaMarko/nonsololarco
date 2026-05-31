@@ -8,7 +8,7 @@ import {
   WholeRestIcon,
 } from '@/src/icons/status';
 
-import { avatarVariants } from '../../ui/variants/ui/avatar.variants';
+import { avatarVariants } from '../../ui/variants/avatar.variants';
 
 export const STATUS_ICON = {
   online: OnlineIcon,

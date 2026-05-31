@@ -1,29 +1,16 @@
 import { cva } from 'class-variance-authority';
 
+import { alignVariants, colorVariants, sizeVariants, truncateVariant } from './common.variant';
+
 export const headingVariants = cva('font-medium leading-tight', {
   variants: {
-    size: {
-      h1: 'text-h1',
-      h2: 'text-h2',
-      h3: 'text-h3',
-      h4: 'text-h4',
-      h5: 'text-caption',
-      h6: 'text-label',
-    },
-    color: {
-      primary: 'text-fg-primary',
-      secondary: 'text-fg-secondary',
-      tertiary: 'text-fg-tertiary',
-      accent: 'text-emerald-main',
-      highlight: 'text-yellow-main',
-      danger: 'text-danger',
-    },
-    isTruncated: {
-      true: 'truncate',
-    },
+    size: sizeVariants,
+    color: colorVariants,
+    align: alignVariants,
+    isTruncated: truncateVariant,
   },
   defaultVariants: {
-    size: 'h2',
+    size: 'xl',
     color: 'primary',
   },
 });

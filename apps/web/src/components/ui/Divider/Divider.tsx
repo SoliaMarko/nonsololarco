@@ -9,7 +9,7 @@ import {
   dividerVariants,
   labelColorMap,
   labelSizeMap,
-} from '@/src/lib/ui/variants/ui/divider.variants';
+} from '@/src/lib/ui/variants/divider.variants';
 
 export interface IDividerProps {
   className?: string;

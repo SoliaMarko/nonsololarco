@@ -13,8 +13,8 @@ import { VariantProps } from 'class-variance-authority';
 
 import { IconPositionType } from '@/src/lib/types/common.types';
 import { cn } from '@/src/lib/ui/utils/cn';
-import { buttonVariants } from '@/src/lib/ui/variants/ui/button.variants';
-import { iconSizes } from '@/src/lib/ui/variants/ui/icon.variants';
+import { buttonVariants } from '@/src/lib/ui/variants/button.variants';
+import { iconSizes } from '@/src/lib/ui/variants/icon.variants';
 
 export interface IButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
