@@ -2,7 +2,6 @@ import { ReactNode, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { cn } from '@/lib/ui/utils/cn';
 // base
 import ArrowLeftSolidIcon from '@/src/icons/base/ArrowLeftSolidIcon';
 import ArrowRightSolidIcon from '@/src/icons/base/ArrowRightSolidIcon';
@@ -29,6 +28,7 @@ import PianoKeysIcon from '@/src/icons/colorful/PianoKeysIcon';
 import { EighthRestIcon, HalfRestIcon, QuarterRestIcon, WholeRestIcon } from '@/src/icons/status';
 // status
 import OnlineIcon from '@/src/icons/status/OnlineIcon';
+import { cn } from '@/src/lib/ui/utils/cn';
 
 const meta: Meta = {
   title: 'Components/Icons',

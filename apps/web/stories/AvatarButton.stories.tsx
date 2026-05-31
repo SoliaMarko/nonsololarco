@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import AvatarButton from '@/src/components/AvatarButton';
+import AvatarButton from '@/src/components/ui/AvatarButton';
 
 const meta = {
   title: 'UI/AvatarButton',
