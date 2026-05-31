@@ -4,8 +4,9 @@
 @plugin 'tailwindcss-logical';
 
 @source '../**/*.stories.{ts,tsx}';
+@source '../**/*.{ts,tsx}';
 
-@theme inline {
+@theme {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);
   --radius-sm: var(--radius-sm);
@@ -23,15 +24,6 @@
   --spacing-8: var(--space-8);
   --spacing-12: var(--space-12);
   --spacing-16: var(--space-16);
-
-  /* --- Typography: sizes --- */
-  --font-size-display: var(--text-size-display);
-  --font-size-h1: var(--text-size-h1);
-  --font-size-h2: var(--text-size-h2);
-  --font-size-h3: var(--text-size-h3);
-  --font-size-body: var(--text-size-body);
-  --font-size-caption: var(--text-size-caption);
-  --font-size-label: var(--text-size-label);
 
   /* --- Typography: weights --- */
   --font-weight-regular: var(--text-weight-regular);
@@ -97,4 +89,31 @@
   --color-danger-deep: var(--danger-deep);
   --color-danger-subtle: var(--danger-subtle);
   --color-danger-contrast: var(--danger-contrast);
+}
+
+@layer utilities {
+  .text-display {
+    font-size: 2rem;
+  }
+  .text-h1 {
+    font-size: 1.5rem;
+  }
+  .text-h2 {
+    font-size: 1.25rem;
+  }
+  .text-h3 {
+    font-size: 1rem;
+  }
+  .text-body {
+    font-size: 0.9375rem;
+  }
+  .text-h4 {
+    font-size: 0.875rem;
+  }
+  .text-caption {
+    font-size: 0.8125rem;
+  }
+  .text-label {
+    font-size: 0.6875rem;
+  }
 }
