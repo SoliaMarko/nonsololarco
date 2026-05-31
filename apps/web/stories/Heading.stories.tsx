@@ -25,7 +25,7 @@ const meta = {
     },
     color: {
       control: 'select',
-      options: [undefined, 'primary', 'secondary', 'tertiary', 'accent', 'danger'],
+      options: [undefined, 'primary', 'secondary', 'tertiary', 'accent', 'highlight', 'danger'],
     },
     isTruncated: { control: 'boolean' },
     children: { control: 'text' },

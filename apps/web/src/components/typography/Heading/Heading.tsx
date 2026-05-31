@@ -1,7 +1,7 @@
 import { ForwardedRef, HTMLAttributes, forwardRef } from 'react';
 
-import { cn } from '@/lib/ui/utils/cn';
 import { HeadingLevel, HeadingVariantProps } from '@/src/lib/types/typography/heading.types';
+import { cn } from '@/src/lib/ui/utils/cn';
 import { headingVariants } from '@/src/lib/ui/variants/typography/heading.variants';
 
 export interface HeadingProps

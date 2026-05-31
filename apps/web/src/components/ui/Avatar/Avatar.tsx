@@ -4,9 +4,9 @@ import { ForwardedRef, HTMLAttributes, forwardRef, useEffect, useState } from 'r
 
 import Image from 'next/image';
 
-import { cn } from '@/lib/ui/utils/cn';
 import { STATUS_ICON, STATUS_ICON_SIZE } from '@/src/lib/constants/ui/avatar.const';
 import { AvatarSize, AvatarStatus } from '@/src/lib/types/ui/avatar.types';
+import { cn } from '@/src/lib/ui/utils/cn';
 import { avatarVariants } from '@/src/lib/ui/variants/ui/avatar.variants';
 import { badgeVariants } from '@/src/lib/ui/variants/ui/badge.variants';
 

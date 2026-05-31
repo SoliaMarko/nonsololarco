@@ -93,34 +93,34 @@
 
 @layer utilities {
   .text-display {
-    font-size: 2rem;
+    font-size: var(--text-size-display);
   }
 
   .text-h1 {
-    font-size: 1.5rem;
+    font-size: var(--text-size-h1);
   }
 
   .text-h2 {
-    font-size: 1.25rem;
+    font-size: var(--text-size-h2);
   }
 
   .text-h3 {
-    font-size: 1rem;
+    font-size: var(--text-size-h3);
   }
 
   .text-body {
-    font-size: 0.9375rem;
+    font-size: var(--text-size-body);
   }
 
   .text-h4 {
-    font-size: 0.875rem;
+    font-size: var(--text-size-h4);
   }
 
   .text-caption {
-    font-size: 0.8125rem;
+    font-size: var(--text-size-caption);
   }
 
   .text-label {
-    font-size: 0.6875rem;
+    font-size: var(--text-size-label);
   }
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import Heading from '@/src/components/typography/Heading';
 import Button from '@/src/components/ui/Button';
 import {
   ArrowRightSolidIcon,
@@ -35,7 +36,9 @@ export default function Home() {
       <div className="flex flex-col gap-2">
         <Button variant="outline">Primary</Button>
 
-        <p className="text-ds-h1 text-yellow-200">NonSoloLarco</p>
+        <Heading as="h1" color="highlight">
+          NonSoloLarco
+        </Heading>
 
         <div className="flex gap-2">
           <Button variant="primary" size="xl">
