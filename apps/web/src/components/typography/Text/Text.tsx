@@ -6,7 +6,6 @@ import { textVariants } from '@/src/lib/ui/variants/typography/text.variants';
 
 export interface TextProps extends Omit<HTMLAttributes<HTMLElement>, 'color'>, TextVariantProps {
   className?: string;
-  isTruncated?: boolean;
   tag?: TextElement;
 }
 
