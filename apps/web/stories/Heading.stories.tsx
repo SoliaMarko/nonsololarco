@@ -19,7 +19,7 @@ const meta = {
       control: 'select',
       options: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
-    level: {
+    size: {
       control: 'select',
       options: [undefined, 'h1', 'h2', 'h3', 'h4', 'h5', 'h6'],
     },
@@ -46,9 +46,9 @@ export const AllLevels: Story = {
   args: { children: '' },
   render: () => (
     <div className="flex flex-col gap-3">
-      {(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const).map((level) => (
-        <Heading key={level} as={level}>
-          {level.toUpperCase()} — Heading {level.slice(1)}
+      {(['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] as const).map((size) => (
+        <Heading key={size} as={size}>
+          {size.toUpperCase()} — Heading {size.slice(1)}
         </Heading>
       ))}
     </div>
@@ -72,10 +72,10 @@ export const LevelOverride: Story = {
   args: { children: '' },
   render: () => (
     <div className="flex flex-col gap-2">
-      <Heading as="h1" level="h3">
+      <Heading as="h1" size="h3">
         Semantic h1, visual h3
       </Heading>
-      <Heading as="h2" level="h1">
+      <Heading as="h2" size="h1">
         Semantic h2, visual h1
       </Heading>
     </div>

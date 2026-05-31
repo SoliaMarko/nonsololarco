@@ -12,12 +12,12 @@ export interface HeadingProps
 }
 
 function Heading(
-  { as: Component = 'h2', className, color, isTruncated, level, ...rest }: HeadingProps,
+  { as: Component = 'h2', className, color, isTruncated, size, ...rest }: HeadingProps,
   ref: ForwardedRef<HTMLHeadingElement>,
 ) {
   return (
     <Component
-      className={cn(headingVariants({ level: level ?? Component, color, isTruncated }), className)}
+      className={cn(headingVariants({ size: size ?? Component, color, isTruncated }), className)}
       ref={ref}
       {...rest}
     />

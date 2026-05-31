@@ -36,7 +36,7 @@ export default function Home() {
       <div className="flex flex-col gap-2">
         <Button variant="outline">Primary</Button>
 
-        <Heading as="h1" color="highlight">
+        <Heading as="h1" color="highlight" size="h1">
           NonSoloLarco
         </Heading>
 

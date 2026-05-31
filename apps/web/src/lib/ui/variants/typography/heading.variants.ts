@@ -2,7 +2,7 @@ import { cva } from 'class-variance-authority';
 
 export const headingVariants = cva('font-medium leading-tight', {
   variants: {
-    level: {
+    size: {
       h1: 'text-h1',
       h2: 'text-h2',
       h3: 'text-h3',
@@ -23,7 +23,7 @@ export const headingVariants = cva('font-medium leading-tight', {
     },
   },
   defaultVariants: {
-    level: 'h2',
+    size: 'h2',
     color: 'primary',
   },
 });
