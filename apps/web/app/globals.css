@@ -3,6 +3,9 @@
 
 @plugin 'tailwindcss-logical';
 
+@source '../**/*.stories.{ts,tsx}';
+@source '../**/*.{ts,tsx}';
+
 @theme {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);
@@ -23,13 +26,13 @@
   --spacing-16: var(--space-16);
 
   /* --- Typography: sizes --- */
-  --font-size-display: var(--text-size-display);
-  --font-size-h1: var(--text-size-h1);
-  --font-size-h2: var(--text-size-h2);
-  --font-size-h3: var(--text-size-h3);
-  --font-size-body: var(--text-size-body);
-  --font-size-caption: var(--text-size-caption);
-  --font-size-label: var(--text-size-label);
+  --text-xs: var(--text-size-xs);
+  --text-sm: var(--text-size-sm);
+  --text-base: var(--text-size-base);
+  --text-lg: var(--text-size-lg);
+  --text-xl: var(--text-size-xl);
+  --text-2xl: var(--text-size-2xl);
+  --text-3xl: var(--text-size-3xl);
 
   /* --- Typography: weights --- */
   --font-weight-regular: var(--text-weight-regular);
@@ -72,11 +75,14 @@
   --color-fg-secondary: var(--text-secondary);
   --color-fg-tertiary: var(--text-tertiary);
   --color-fg-disabled: var(--text-disabled);
+  --color-yellow-contrast: var(--text-yellow-contrast);
 
   /* --- Colors: status --- */
   --color-status-online: var(--status-online);
   --color-status-pause: var(--status-pause);
+  --color-status-pause-solid: var(--status-pause-solid);
   --color-status-away: var(--status-away);
+  --color-status-away-subtle: var(--status-away-subtle);
   --color-status-long: var(--status-long);
   --color-status-inactive: var(--status-inactive);
 

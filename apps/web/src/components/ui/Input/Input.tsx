@@ -42,7 +42,7 @@ function Input(
     <div className={cn('flex w-[20rem] flex-col items-start gap-0.5', wrapperClassName)}>
       {label ? (
         <label
-          className={cn('text-fg-secondary flex items-center text-[1.1rem] font-medium')}
+          className={cn('text-fg-secondary flex items-center text-lg font-medium')}
           htmlFor={name}
         >
           {label}
@@ -61,7 +61,7 @@ function Input(
           aria-describedby={describedBy}
           aria-invalid={error && !disabled ? true : undefined}
           className={cn(
-            'text-fg-primary font-size-label plb-2 pli-3 h-14 flex-auto self-stretch overflow-hidden bg-transparent text-[1.2rem] outline-none',
+            'text-fg-primary font-size-label plb-2 pli-3 h-14 flex-auto self-stretch overflow-hidden bg-transparent text-xl outline-none',
             'placeholder:text-fg-disabled',
             { 'cursor-not-allowed': disabled },
             className,
