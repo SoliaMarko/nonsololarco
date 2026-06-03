@@ -1,9 +1,16 @@
 import { cva } from 'class-variance-authority';
 
 export const standaloneBadgeVariants = cva(
-  'inline-flex items-center gap-1 rounded-pill pli-2.5 plb-0.5 text-base font-medium',
+  'inline-flex items-center gap-1 rounded-pill font-medium',
   {
     variants: {
+      size: {
+        xs: 'pli-2 plb-0.5 text-[10px]',
+        sm: 'pli-2 plb-0.5 text-[11px]',
+        md: 'pli-2.5 plb-0.5 text-[13px]',
+        lg: 'pli-3 plb-1 text-[15px]',
+        xl: 'pli-4 plb-1 text-[16px]',
+      },
       variant: {
         online: 'bg-emerald-subtle text-status-online',
         pause: 'bg-yellow-subtle text-status-pause border border-edge',
@@ -16,6 +23,7 @@ export const standaloneBadgeVariants = cva(
       },
     },
     defaultVariants: {
+      size: 'md',
       variant: 'neutral',
     },
   },
