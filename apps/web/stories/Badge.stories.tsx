@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import Badge from '@/src/components/ui/Badge';
-import { PlusSolidIcon, ShareSolidIcon } from '@/src/icons/base';
+import { CloseSolidIcon, PlusSolidIcon, ShareSolidIcon } from '@/src/icons/base';
 
 const meta = {
   title: 'UI/Badge',
@@ -19,17 +19,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: [
-        undefined,
-        'online',
-        'pause',
-        'away',
-        'long',
-        'inactive',
-        'emerald',
-        'yellow',
-        'neutral',
-      ],
+      options: [undefined, 'emerald', 'yellow', 'neutral', 'danger'],
     },
     status: {
       control: 'select',
@@ -85,6 +75,9 @@ export const AllSizes: Story = {
           <Badge size={size} variant="neutral">
             Classical
           </Badge>
+          <Badge size={size} variant="danger">
+            Jazz
+          </Badge>
         </div>
       ))}
     </div>
@@ -103,9 +96,9 @@ export const AllVariants: Story = {
         ))}
       </div>
       <div className="flex flex-wrap gap-2">
-        {(['emerald', 'yellow', 'neutral'] as const).map((value) => (
-          <Badge key={value} variant={value}>
-            {value.charAt(0).toUpperCase() + value.slice(1)}
+        {(['emerald', 'yellow', 'neutral', 'danger'] as const).map((variant) => (
+          <Badge key={variant} variant={variant}>
+            {variant.charAt(0).toUpperCase() + variant.slice(1)}
           </Badge>
         ))}
       </div>
@@ -128,6 +121,9 @@ export const IconPositions: Story = {
         <Badge variant="yellow" icon={ShareSolidIcon} iconPosition="start">
           Share
         </Badge>
+        <Badge variant="danger" icon={CloseSolidIcon} iconPosition="start">
+          Jazz
+        </Badge>
       </div>
       <div className="flex flex-wrap items-center gap-3">
         <span className="text-label text-fg-tertiary w-16">end</span>
@@ -139,6 +135,9 @@ export const IconPositions: Story = {
         </Badge>
         <Badge variant="yellow" icon={ShareSolidIcon} iconPosition="end">
           Share
+        </Badge>
+        <Badge variant="danger" icon={CloseSolidIcon} iconPosition="end">
+          Jazz
         </Badge>
       </div>
     </div>

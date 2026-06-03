@@ -12,14 +12,17 @@ export const standaloneBadgeVariants = cva(
         xl: 'pli-4 plb-1 text-[16px]',
       },
       variant: {
+        emerald: 'bg-emerald-subtle text-emerald-main',
+        yellow: 'bg-yellow-subtle text-yellow-muted border border-yellow-muted',
+        neutral: 'bg-card text-fg-secondary border border-edge',
+        danger: 'bg-danger-subtle text-danger border border-danger',
+      },
+      status: {
         online: 'bg-emerald-subtle text-status-online',
         pause: 'bg-yellow-subtle text-status-pause border border-edge',
         away: 'bg-status-away-subtle text-status-away border border-edge',
         long: 'bg-surface text-status-long border border-edge',
         inactive: 'bg-surface text-status-inactive border border-edge',
-        emerald: 'bg-emerald-subtle text-emerald-main',
-        yellow: 'bg-yellow-subtle text-yellow-muted border border-yellow-muted',
-        neutral: 'bg-card text-fg-secondary border border-edge',
       },
     },
     defaultVariants: {
