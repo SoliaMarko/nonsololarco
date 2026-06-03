@@ -19,17 +19,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: [
-        undefined,
-        'online',
-        'pause',
-        'away',
-        'long',
-        'inactive',
-        'emerald',
-        'yellow',
-        'neutral',
-      ],
+      options: [undefined, 'emerald', 'yellow', 'neutral', 'danger'],
     },
     status: {
       control: 'select',
@@ -103,9 +93,9 @@ export const AllVariants: Story = {
         ))}
       </div>
       <div className="flex flex-wrap gap-2">
-        {(['emerald', 'yellow', 'neutral'] as const).map((value) => (
-          <Badge key={value} variant={value}>
-            {value.charAt(0).toUpperCase() + value.slice(1)}
+        {(['emerald', 'yellow', 'neutral', 'danger'] as const).map((variant) => (
+          <Badge key={variant} variant={variant}>
+            {variant.charAt(0).toUpperCase() + variant.slice(1)}
           </Badge>
         ))}
       </div>

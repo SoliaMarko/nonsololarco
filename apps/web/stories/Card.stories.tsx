@@ -23,7 +23,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['default', 'elevated', 'outlined'],
+      options: ['default', 'elevated', 'outlined', 'emerald', 'yellow', 'danger', 'ghost'],
     },
   },
 } satisfies Meta<typeof Card>;
@@ -98,10 +98,10 @@ export const MusicianCard: Story = {
         <Badge variant="yellow" size="sm">
           Classical
         </Badge>
-        <Badge variant="away" size="sm">
+        <Badge variant="neutral" size="sm">
           Folk
         </Badge>
-        <Badge variant="neutral" size="sm">
+        <Badge variant="danger" size="sm">
           Jazz
         </Badge>
       </div>
@@ -120,28 +120,5 @@ export const MusicianCard: Story = {
   ),
 };
 
-// export const Loading: Story = {
-//   args: { children: '' },
-//   render: () => (
-//     <Card className="w-72">
-//       <div className="mb-3 flex items-start gap-3">
-//         <Skeleton width={48} height={48} rounded="full" />
-//         <div className="flex flex-1 flex-col gap-2">
-//           <Skeleton width="60%" height={14} />
-//           <Skeleton width="40%" height={12} />
-//           <Skeleton width={64} height={20} rounded="full" />
-//         </div>
-//       </div>
-//       <div className="mb-3 flex gap-2">
-//         <Skeleton width={64} height={22} rounded="full" />
-//         <Skeleton width={56} height={22} rounded="full" />
-//         <Skeleton width={48} height={22} rounded="full" />
-//       </div>
-//       <Skeleton width="100%" height={1} className="mb-3" />
-//       <div className="flex gap-2">
-//         <Skeleton width="50%" height={32} rounded="md" />
-//         <Skeleton width="50%" height={32} rounded="md" />
-//       </div>
-//     </Card>
-//   ),
-// };
+// TODO: once Skeleton is ready
+// export const Loading: Story = {}

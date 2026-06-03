@@ -36,7 +36,6 @@ function Badge(
 ) {
   const StatusIcon = status ? STATUS_ICON[status] : null;
   const iconSize = BADGE_STATUS_ICON_SIZE[size];
-  const resolvedVariant = status ?? variant;
 
   const resolvedIcon = StatusIcon ? (
     <StatusIcon size={String(iconSize)} aria-hidden="true" />
@@ -46,7 +45,7 @@ function Badge(
 
   return (
     <span
-      className={cn(standaloneBadgeVariants({ size, variant: resolvedVariant }), className)}
+      className={cn(standaloneBadgeVariants({ size, variant, status }), className)}
       ref={ref}
       {...rest}
     >
