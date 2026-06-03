@@ -5,11 +5,11 @@ export const badgeVariants = cva(
   {
     variants: {
       size: {
-        xs: 'w-1.5 h-1.5 text-[5px]', // 6px
-        sm: 'w-2 h-2 text-[6px]', // 8px
-        md: 'w-3 h-3 text-[8px]', // 12px
-        lg: 'w-3.5 h-3.5 text-[9px]', // 14px
-        xl: 'w-4 h-4 text-[10px]', // 16px
+        xs: 'w-1.5 h-1.5 text-[5px]',
+        sm: 'w-2 h-2 text-[6px]',
+        md: 'w-3 h-3 text-[8px]',
+        lg: 'w-3.5 h-3.5 text-[9px]',
+        xl: 'w-4 h-4 text-[10px]',
       },
       status: {
         online: 'bg-status-online',

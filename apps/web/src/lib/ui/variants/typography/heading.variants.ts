@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-import { alignVariants, colorVariants, sizeVariants, truncateVariant } from './common.variant';
+import { alignVariants, colorVariants, sizeVariants, truncateVariant } from './common.variants';
 
 export const headingVariants = cva('font-medium leading-tight', {
   variants: {
