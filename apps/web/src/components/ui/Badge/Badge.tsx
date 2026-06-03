@@ -5,7 +5,7 @@ import { VariantProps } from 'class-variance-authority';
 import { ICON_POSITION, STATUS_ICON } from '@/src/lib/constants/common.const';
 import { BADGE_STATUS_ICON_SIZE } from '@/src/lib/constants/ui/badge.const';
 import { IconPositionType } from '@/src/lib/types/common.types';
-import { BadgeStatus } from '@/src/lib/types/ui/badge.types';
+import { BadgeSize, BadgeStatus } from '@/src/lib/types/ui/badge.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 import { standaloneBadgeVariants } from '@/src/lib/ui/variants/standalone-badge.variants';
 
@@ -17,6 +17,7 @@ export interface BadgeProps
   className?: string;
   icon?: ElementType;
   iconPosition?: IconPositionType;
+  size?: BadgeSize;
   status?: BadgeStatus;
 }
 
@@ -34,7 +35,7 @@ function Badge(
   ref: ForwardedRef<HTMLSpanElement>,
 ) {
   const StatusIcon = status ? STATUS_ICON[status] : null;
-  const iconSize = BADGE_STATUS_ICON_SIZE[size ?? 'md'];
+  const iconSize = BADGE_STATUS_ICON_SIZE[size];
   const resolvedVariant = status ?? variant;
 
   const resolvedIcon = StatusIcon ? (
