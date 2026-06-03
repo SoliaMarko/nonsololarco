@@ -1,6 +1,6 @@
 import { cva } from 'class-variance-authority';
 
-import { alignVariants, colorVariants, sizeVariants, truncateVariant } from './common.variants';
+import { alignVariants, colorVariants, sizeVariants, truncateVariant } from '../common.variants';
 
 export const textVariants = cva('leading-normal', {
   variants: {
