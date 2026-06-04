@@ -34,7 +34,6 @@ export const Default: Story = {
 };
 
 export const Text: Story = {
-  args: { children: '' },
   render: () => (
     <div className="flex w-64 flex-col gap-2">
       <Skeleton height={16} width="100%" />
@@ -45,7 +44,6 @@ export const Text: Story = {
 };
 
 export const Avatar: Story = {
-  args: { children: '' },
   render: () => (
     <div className="flex items-center gap-3">
       <Skeleton width={48} height={48} rounded="full" />
@@ -58,7 +56,6 @@ export const Avatar: Story = {
 };
 
 export const CardComposition: Story = {
-  args: { children: '' },
   render: () => (
     <Card className="w-72 p-5">
       <div className="mb-3 flex items-start gap-3">

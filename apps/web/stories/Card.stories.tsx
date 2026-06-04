@@ -84,18 +84,18 @@ export const MusicianCard: Story = {
   args: { children: '' },
   render: () => (
     <Card className="w-72 p-5">
-      <div className="mb-3 flex items-start gap-3">
+      <div className="mbe-3 flex items-start gap-3">
         <AvatarButton initials="ОК" size="lg" status="online" aria-label="View Oleksiy profile" />
         <div className="min-w-0 flex-1">
           <p className="text-body text-fg-primary truncate font-medium">Oleksa K.</p>
           <p className="text-caption text-fg-tertiary">Piano · Lviv</p>
-          <Badge status="online" size="sm" className="mt-1">
+          <Badge status="online" size="sm" className="mbs-1">
             Online
           </Badge>
         </div>
       </div>
 
-      <div className="mb-3 flex flex-wrap gap-1.5">
+      <div className="mbe-3 flex flex-wrap gap-1.5">
         <Badge variant="yellow" size="sm">
           Classical
         </Badge>
@@ -109,7 +109,7 @@ export const MusicianCard: Story = {
 
       <Divider />
 
-      <div className="mt-3 flex gap-2">
+      <div className="mbs-3 flex gap-2">
         <Button variant="primary" size="sm" className="flex-1">
           Connect
         </Button>
@@ -125,22 +125,22 @@ export const Loading: Story = {
   args: { children: '' },
   render: () => (
     <Card className="w-72 p-5">
-      <div className="mb-3 flex items-start gap-3">
+      <div className="mbe-3 flex items-start gap-3">
         <Skeleton width={48} height={48} rounded="full" />
-        <div className="flex flex-1 flex-col gap-2 pt-1">
+        <div className="flex flex-1 flex-col gap-2 pbs-1">
           <Skeleton width={120} height={14} />
           <Skeleton width={80} height={12} />
           <Skeleton width={64} height={20} rounded="full" />
         </div>
       </div>
 
-      <div className="mb-3 flex gap-2">
+      <div className="mbe-3 flex gap-2">
         <Skeleton width={72} height={22} rounded="full" />
         <Skeleton width={56} height={22} rounded="full" />
         <Skeleton width={48} height={22} rounded="full" />
       </div>
 
-      <Skeleton width="100%" height={1} className="mb-3" />
+      <Skeleton width="100%" height={1} className="mbe-3" />
 
       <div className="flex gap-2">
         <Skeleton width="50%" height={32} rounded="md" />

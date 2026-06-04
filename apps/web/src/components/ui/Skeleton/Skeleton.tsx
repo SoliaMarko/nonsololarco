@@ -6,10 +6,16 @@ import { roundedMap } from '@/src/lib/ui/variants/skeleton.variants';
 
 interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;
-  /** Accepts px number (e.g. 48) or CSS string (e.g. '100%', '3rem') */
+  /**
+   * Accepts px number (e.g. 48) or CSS string (e.g. '100%', '3rem').
+   * Can be overridden via the `style` prop.
+   */
   height?: string | number;
   rounded?: SkeletonRounded;
-  /** Accepts px number (e.g. 200) or CSS string (e.g. '100%', '3rem') */
+  /**
+   * Accepts px number (e.g. 200) or CSS string (e.g. '100%', '3rem').
+   * Can be overridden via the `style` prop.
+   */
   width?: string | number;
 }
 
@@ -18,11 +24,13 @@ function Skeleton({
   height = '1rem',
   rounded = 'md',
   width = '100%',
+  style: styleProp,
   ...rest
 }: SkeletonProps) {
   const style: CSSProperties = {
     width: typeof width === 'number' ? `${width / 16}rem` : width,
     height: typeof height === 'number' ? `${height / 16}rem` : height,
+    ...styleProp,
   };
 
   return (
