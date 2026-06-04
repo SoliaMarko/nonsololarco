@@ -6,6 +6,7 @@ import Badge from '@/src/components/ui/Badge';
 import Button from '@/src/components/ui/Button/Button';
 import Card from '@/src/components/ui/Card/Card';
 import Divider from '@/src/components/ui/Divider/Divider';
+import Skeleton from '@/src/components/ui/Skeleton';
 
 const meta = {
   title: 'UI/Card',
@@ -120,5 +121,31 @@ export const MusicianCard: Story = {
   ),
 };
 
-// TODO: once Skeleton is ready
-// export const Loading: Story = {}
+export const Loading: Story = {
+  args: { children: '' },
+  render: () => (
+    <Card className="w-72 p-5">
+      <div className="mb-3 flex items-start gap-3">
+        <Skeleton width={48} height={48} rounded="full" />
+        <div className="flex flex-1 flex-col gap-2 pt-1">
+          <Skeleton width={120} height={14} />
+          <Skeleton width={80} height={12} />
+          <Skeleton width={64} height={20} rounded="full" />
+        </div>
+      </div>
+
+      <div className="mb-3 flex gap-2">
+        <Skeleton width={72} height={22} rounded="full" />
+        <Skeleton width={56} height={22} rounded="full" />
+        <Skeleton width={48} height={22} rounded="full" />
+      </div>
+
+      <Skeleton width="100%" height={1} className="mb-3" />
+
+      <div className="flex gap-2">
+        <Skeleton width="50%" height={32} rounded="md" />
+        <Skeleton width="50%" height={32} rounded="md" />
+      </div>
+    </Card>
+  ),
+};
