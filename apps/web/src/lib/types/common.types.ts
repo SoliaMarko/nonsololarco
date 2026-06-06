@@ -1,5 +1,7 @@
 import { ICON_POSITION, ORIENTATION } from '../constants/common.const';
 
+export type Locale = 'en' | 'it' | 'ua';
+
 export interface SVGCustomProps {
   size?: string;
   title?: string;
