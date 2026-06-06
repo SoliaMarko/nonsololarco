@@ -16,6 +16,8 @@ import { cn } from '@/src/lib/ui/utils/cn';
 import { buttonVariants } from '@/src/lib/ui/variants/button.variants';
 import { iconSizes } from '@/src/lib/ui/variants/icon.variants';
 
+import Spinner from '../Spinner';
+
 export interface IButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   children: ReactNode;
@@ -77,12 +79,11 @@ function Button(
       {...rest}
     >
       {isLoading ? (
-        <span
-          aria-label="Loading"
-          className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-inherit"
-        >
-          {/* TODO */}
-          Loading...
+        <span className="absolute inset-0 flex items-center justify-center rounded-[inherit] bg-inherit">
+          <Spinner
+            size="sm"
+            color={variant === 'primary' || variant === 'destructive' ? 'primaryLight' : 'emerald'}
+          />
         </span>
       ) : null}
 

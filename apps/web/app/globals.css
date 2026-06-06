@@ -120,3 +120,20 @@
     background-position: -200% 0;
   }
 }
+
+@utility spinner-wave {
+  display: inline-flex;
+  align-items: flex-end;
+}
+
+@keyframes note-wave {
+  0%,
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(var(--wave-height, -8px));
+    opacity: 0.5;
+  }
+}

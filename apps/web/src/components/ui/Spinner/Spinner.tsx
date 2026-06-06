@@ -1,0 +1,42 @@
+import { CSSProperties, HTMLAttributes } from 'react';
+
+import { VariantProps } from 'class-variance-authority';
+
+import { DELAYS, NOTES, WAVE_HEIGHT } from '@/src/lib/constants/ui/spinner.const';
+import { cn } from '@/src/lib/ui/utils/cn';
+import { spinnerVariants } from '@/src/lib/ui/variants/spinner.variants';
+
+export interface SpinnerProps
+  extends Omit<HTMLAttributes<HTMLSpanElement>, 'color'>, VariantProps<typeof spinnerVariants> {
+  className?: string;
+  label?: string;
+}
+
+function Spinner({ className, color, label = 'Loading', size = 'md', ...rest }: SpinnerProps) {
+  return (
+    <span
+      aria-label={label}
+      role="status"
+      className={cn(spinnerVariants({ size, color }), className)}
+      {...rest}
+    >
+      {NOTES.map((note, index) => (
+        <span
+          key={index}
+          aria-hidden="true"
+          style={
+            {
+              display: 'inline-block',
+              animation: `note-wave 1.2s ease-in-out ${DELAYS[index]} infinite`,
+              '--wave-height': WAVE_HEIGHT[size ?? 'md'],
+            } as CSSProperties
+          }
+        >
+          {note}
+        </span>
+      ))}
+    </span>
+  );
+}
+
+export default Spinner;
