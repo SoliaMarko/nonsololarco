@@ -31,7 +31,7 @@ import OnlineIcon from '@/src/icons/status/OnlineIcon';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 const meta: Meta = {
-  title: 'Components/Icons',
+  title: 'Icons',
   parameters: {
     layout: 'padded',
   },
