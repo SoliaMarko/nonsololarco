@@ -120,3 +120,16 @@
     background-position: -200% 0;
   }
 }
+
+@keyframes note-wave {
+  0%,
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.5;
+    transform: translateY(var(--wave-height, -8px));
+  }
+}
