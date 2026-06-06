@@ -6,6 +6,24 @@ import { DELAYS, NOTES, WAVE_HEIGHT } from '@/src/lib/constants/ui/spinner.const
 import { cn } from '@/src/lib/ui/utils/cn';
 import { spinnerVariants } from '@/src/lib/ui/variants/spinner.variants';
 
+/**
+ * nonsololarco signature loading indicator — 4 musical notes bouncing in a wave.
+ *
+ * Uses pure CSS animation via `note-wave` keyframes defined in globals.css.
+ * Accessible: announces loading state to screen readers via `role="status"`
+ * and `aria-live="polite"` — screen reader waits for a pause then reads the label.
+ *
+ * @example
+ * // Default
+ * <Spinner />
+ *
+ * // Inside a button (isLoading)
+ * <Spinner size="sm" color="white" />
+ *
+ * // Page-level loading
+ * <Spinner size="lg" label="Loading musicians..." />
+ */
+
 export interface SpinnerProps
   extends Omit<HTMLAttributes<HTMLSpanElement>, 'color'>, VariantProps<typeof spinnerVariants> {
   className?: string;
