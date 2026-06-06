@@ -16,6 +16,7 @@ function Spinner({ className, color, label = 'Loading', size = 'md', ...rest }: 
   return (
     <span
       aria-label={label}
+      aria-live="polite"
       role="status"
       className={cn(spinnerVariants({ size, color }), className)}
       {...rest}

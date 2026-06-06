@@ -121,11 +121,6 @@
   }
 }
 
-@utility spinner-wave {
-  align-items: flex-end;
-  display: inline-flex;
-}
-
 @keyframes note-wave {
   0%,
   100% {

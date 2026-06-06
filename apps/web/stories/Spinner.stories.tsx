@@ -23,7 +23,7 @@ const meta = {
     },
     color: {
       control: 'select',
-      options: [undefined, 'emerald', 'yellow', 'white', 'muted'],
+      options: [undefined, 'emerald', 'muted', 'primaryLight', 'yellow'],
     },
     label: { control: 'text' },
   },
