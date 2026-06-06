@@ -122,18 +122,19 @@
 }
 
 @utility spinner-wave {
-  display: inline-flex;
   align-items: flex-end;
+  display: inline-flex;
 }
 
 @keyframes note-wave {
   0%,
   100% {
-    transform: translateY(0);
     opacity: 1;
+    transform: translateY(0);
   }
+
   50% {
-    transform: translateY(var(--wave-height, -8px));
     opacity: 0.5;
+    transform: translateY(var(--wave-height, -8px));
   }
 }
