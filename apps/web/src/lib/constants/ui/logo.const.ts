@@ -1,6 +1,7 @@
-import { LogoLocale, LogoSize } from '../../types/ui/logo.types';
+import { Locale } from '../../types/common.types';
+import { LogoSize } from '../../types/ui/logo.types';
 
-export const LOGO_SUBTITLE: Record<LogoLocale, string> = {
+export const LOGO_SUBTITLE: Record<Locale, string> = {
   en: 'MUSIC COMMUNITY',
   it: 'COMUNITÀ MUSICALE',
   ua: 'МУЗИЧНА СПІЛЬНОТА',
