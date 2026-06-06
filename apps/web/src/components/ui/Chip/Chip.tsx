@@ -6,7 +6,7 @@ import { CloseSolidIcon } from '@/src/icons/base';
 import { cn } from '@/src/lib/ui/utils/cn';
 import { chipVariants } from '@/src/lib/ui/variants/chip.variants';
 
-type ChipVariantProps = Omit<VariantProps<typeof chipVariants>, 'isClickable'>;
+type ChipVariantProps = Omit<VariantProps<typeof chipVariants>, 'isInteractive'>;
 
 /**
  * Interactive tag for instruments, genres, and search filters.
