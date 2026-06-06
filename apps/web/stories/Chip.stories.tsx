@@ -20,7 +20,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: [undefined, 'emerald', 'yellow', 'neutral', 'dangerous'],
+      options: [undefined, 'emerald', 'yellow', 'neutral', 'danger'],
     },
     isSelected: { control: 'boolean' },
     disabled: { control: 'boolean' },

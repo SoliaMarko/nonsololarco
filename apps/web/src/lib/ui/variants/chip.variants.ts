@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const chipVariants = cva(
-  'inline-flex items-center gap-1 rounded-pill pli-2.5 plb-1 text-sm font-medium transition-all duration-150 select-none',
+  'inline-flex items-center gap-1 rounded-pill pli-2.5 plb-1 text-sm font-medium transition-all duration-150 select-none w-fit',
   {
     variants: {
       variant: {

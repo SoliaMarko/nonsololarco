@@ -6,16 +6,40 @@ import { CloseSolidIcon } from '@/src/icons/base';
 import { cn } from '@/src/lib/ui/utils/cn';
 import { chipVariants } from '@/src/lib/ui/variants/chip.variants';
 
-type ChipVariantProps = Omit<VariantProps<typeof chipVariants>, 'isInteractive'>;
+type ChipVariantProps = Omit<VariantProps<typeof chipVariants>, 'isClickable'>;
 
-export interface ChipProps extends Omit<HTMLAttributes<HTMLElement>, 'color'>, ChipVariantProps {
+/**
+ * Interactive tag for instruments, genres, and search filters.
+ *
+ * Supports three mutually exclusive interaction modes:
+ * - `onClick` — the entire chip is clickable (renders as `<button>`)
+ * - `onRemove` — chip has a remove button (renders as `<span>` with nested `<button>`)
+ * - neither — static display only
+ *
+ * @example
+ * // Static
+ * <Chip label="Violin" variant="emerald" />
+ *
+ * // Clickable (filter)
+ * <Chip label="Classical" isSelected onClick={() => toggleFilter('classical')} />
+ *
+ * // Removable
+ * <Chip label="Folk" onRemove={() => removeTag('folk')} />
+ */
+export interface ChipProps
+  extends Omit<HTMLAttributes<HTMLElement>, 'color' | 'onClick'>, ChipVariantProps {
   className?: string;
   disabled?: boolean;
   isSelected?: boolean;
   label: string;
-  onClick?: () => void;
-  onRemove?: () => void;
 }
+
+type ChipInteractiveProps =
+  | { onClick: () => void; onRemove?: never }
+  | { onClick?: never; onRemove: () => void }
+  | { onClick?: never; onRemove?: never };
+
+type ChipComponentProps = ChipProps & ChipInteractiveProps;
 
 function Chip(
   {
@@ -27,19 +51,22 @@ function Chip(
     onRemove,
     variant,
     ...rest
-  }: ChipProps,
-  ref: ForwardedRef<HTMLButtonElement & HTMLSpanElement>,
+  }: ChipComponentProps,
+  ref: ForwardedRef<HTMLButtonElement | HTMLSpanElement>,
 ) {
-  const isInteractive = Boolean(onClick);
-  const Tag = isInteractive ? 'button' : 'span';
+  const isClickable = Boolean(onClick);
+  const Tag = isClickable ? 'button' : 'span';
 
   return (
     <Tag
-      className={cn(chipVariants({ variant, isSelected, isInteractive, disabled }), className)}
-      disabled={isInteractive ? disabled : undefined}
+      className={cn(
+        chipVariants({ variant, isSelected, isInteractive: isClickable, disabled }),
+        className,
+      )}
+      disabled={isClickable ? disabled : undefined}
       onClick={onClick}
-      ref={ref}
-      type={isInteractive ? 'button' : undefined}
+      ref={ref as ForwardedRef<HTMLButtonElement & HTMLSpanElement>}
+      type={isClickable ? 'button' : undefined}
       {...rest}
     >
       <span>{label}</span>
@@ -62,4 +89,4 @@ function Chip(
   );
 }
 
-export default forwardRef<HTMLButtonElement & HTMLSpanElement, ChipProps>(Chip);
+export default forwardRef<HTMLButtonElement | HTMLSpanElement, ChipComponentProps>(Chip);
