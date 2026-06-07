@@ -25,8 +25,8 @@ function ChevronIcon(
     <svg
       aria-labelledby={titleId}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 3, y1: 3, x2: 17, y2: 17 })}
       preserveAspectRatio="xMidYMid meet"
       style={{ transform: `rotate(${ROTATION[direction]}deg)`, ...styleProp }}

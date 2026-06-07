@@ -40,7 +40,7 @@ const meta: Meta = {
   argTypes: {
     size: {
       control: { type: 'select' },
-      options: ['16', '20', '24', '32', '48', '64'],
+      options: [16, 20, 24, 32, 48, 64],
       description: 'Icon size in px',
     },
     color: {

@@ -11,8 +11,8 @@ function DisconnectOutlineIcon(
     <svg
       aria-labelledby={titleId}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 2, y1: 2, x2: 18, y2: 18 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
