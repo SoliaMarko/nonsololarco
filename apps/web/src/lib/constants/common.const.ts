@@ -11,6 +11,12 @@ export const ICON_POSITION = {
   start: 'start',
 } as const;
 
+export const OPTIONS_POSITION = {
+  end: 'end',
+  center: 'center',
+  start: 'start',
+} as const;
+
 export const ORIENTATION = {
   horizontal: 'horizontal',
   vertical: 'vertical',
