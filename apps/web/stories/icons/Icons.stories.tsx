@@ -49,7 +49,7 @@ const meta: Meta = {
     },
   },
   args: {
-    size: '24',
+    size: 24,
     color: 'var(--text-primary)',
   },
 };

@@ -105,7 +105,7 @@ function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className }: 
                     disabled={item.disabled}
                     onSelect={item.onClick}
                   >
-                    {Icon ? <Icon size="15" aria-hidden="true" /> : null}
+                    {Icon ? <Icon size={15} aria-hidden="true" /> : null}
                     {item.label}
                   </RadixDropdown.Item>
                 );
