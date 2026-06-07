@@ -65,7 +65,7 @@ function ChatSolidIcon(
         y1="8"
         x2="14"
         y2="8"
-        stroke="var(--icon-content-color, white)"
+        stroke="var(--icon-content-color, var(--bg-base))"
         strokeWidth="1.3"
         strokeLinecap="round"
       />
@@ -74,7 +74,7 @@ function ChatSolidIcon(
         y1="11"
         x2="11"
         y2="11"
-        stroke="var(--icon-content-color, white)"
+        stroke="var(--icon-content-color, var(--bg-base))"
         strokeWidth="1.3"
         strokeLinecap="round"
       />
