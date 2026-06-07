@@ -34,10 +34,10 @@ export interface ChipProps
   label: string;
 }
 
-type ChipInteractiveProps =
-  | { onClick: () => void; onRemove?: never }
-  | { onClick?: never; onRemove: () => void }
-  | { onClick?: never; onRemove?: never };
+type ChipWithClick = { onClick: () => void; onRemove?: never };
+type ChipWithRemove = { onClick?: never; onRemove: () => void };
+type ChipStatic = { onClick?: never; onRemove?: never };
+type ChipInteractiveProps = ChipWithClick | ChipWithRemove | ChipStatic;
 
 type ChipComponentProps = ChipProps & ChipInteractiveProps;
 

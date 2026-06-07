@@ -38,8 +38,8 @@ function ChatSolidIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 3, y1: 4, x2: 17, y2: 17 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
@@ -65,7 +65,7 @@ function ChatSolidIcon(
         y1="8"
         x2="14"
         y2="8"
-        stroke="var(--icon-content-color, white)"
+        stroke="var(--icon-content-color, var(--bg-base))"
         strokeWidth="1.3"
         strokeLinecap="round"
       />
@@ -74,7 +74,7 @@ function ChatSolidIcon(
         y1="11"
         x2="11"
         y2="11"
-        stroke="var(--icon-content-color, white)"
+        stroke="var(--icon-content-color, var(--bg-base))"
         strokeWidth="1.3"
         strokeLinecap="round"
       />

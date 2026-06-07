@@ -2,10 +2,10 @@ import { useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import Input from '@/src/components/ui/Input';
+import Input from '@/src/components/form/Input';
 
 const meta = {
-  title: 'UI/Input',
+  title: 'FORM/Input',
   component: Input,
   tags: ['autodocs'],
   parameters: {

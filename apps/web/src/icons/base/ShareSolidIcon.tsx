@@ -14,8 +14,8 @@ function ShareSolidIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 2.5, y1: 2.5, x2: 17.5, y2: 17.5 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
