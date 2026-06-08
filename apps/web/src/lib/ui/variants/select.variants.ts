@@ -5,7 +5,7 @@ export const selectTriggerVariants = cva(
   {
     variants: {
       state: {
-        default: 'border-edge bg-surface text-fg-primary data-highlighted:border-fg-disabled',
+        default: 'border-edge bg-surface text-fg-primary',
         open: 'border-emerald-main bg-surface text-fg-primary',
         error: 'border-danger bg-surface text-fg-primary',
         disabled:
