@@ -4,7 +4,7 @@ import { ChangeEventHandler, ForwardedRef, InputHTMLAttributes, forwardRef } fro
 
 import { cn } from '@/src/lib/ui/utils/cn';
 
-export interface IInputProps extends Omit<
+export interface InputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'value' | 'onChange' | 'defaultValue'
 > {
@@ -31,7 +31,7 @@ function Input(
     value,
     wrapperClassName,
     ...rest
-  }: IInputProps,
+  }: InputProps,
   ref: ForwardedRef<HTMLInputElement>,
 ) {
   const errorId = error ? `${name}-error` : undefined;
@@ -91,4 +91,4 @@ function Input(
   );
 }
 
-export default forwardRef<HTMLInputElement, IInputProps>(Input);
+export default forwardRef<HTMLInputElement, InputProps>(Input);

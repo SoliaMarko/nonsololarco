@@ -18,7 +18,7 @@ import { iconSizes } from '@/src/lib/ui/variants/icon.variants';
 
 import Spinner from '../Spinner';
 
-export interface IButtonProps
+export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   children: ReactNode;
   className?: string;
@@ -43,7 +43,7 @@ function Button(
     type = 'button',
     variant = 'primary',
     ...rest
-  }: IButtonProps,
+  }: ButtonProps,
   ref: ForwardedRef<HTMLButtonElement>,
 ) {
   const iconSize = iconSizes[size ?? 'md'];
@@ -102,4 +102,4 @@ function Button(
   );
 }
 
-export default forwardRef<HTMLButtonElement, IButtonProps>(Button);
+export default forwardRef<HTMLButtonElement, ButtonProps>(Button);
