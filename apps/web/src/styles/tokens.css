@@ -80,7 +80,6 @@
   --text-primary: #f0e8d8;
   --text-secondary: #c8bea8;
   --text-tertiary: #8a8078;
-  /* --text-disabled: #6a5e50; */
   --text-yellow-contrast: #2a2808;
   --text-muted: #c8bca8;
   --text-disabled: #4a4238;
@@ -102,9 +101,7 @@
 /* --- LIGHT THEME --- */
 [data-theme='light'] {
   /* --- LIGHT: Basic Backgrounds --- */
-  /* --bg-base: #f7f4ef; */
   --bg-surface: #ede8e2;
-  /* --bg-card: #fff; */
   --bg-elevated: #e4ded6;
   --bg-edge: #d4cec6;
   --bg-contrast: #1c1a18;
@@ -130,10 +127,8 @@
   --danger-contrast: #2a0a0a;
 
   /* --- LIGHT: Text --- */
-  /* --text-primary: #1c1a18; */
   --text-secondary: #4a4540;
   --text-tertiary: #7a7268;
-  /* --text-disabled: #b0a898; */
   --text-yellow-contrast: #2a2808;
 
   --text-primary: #1a1410;
