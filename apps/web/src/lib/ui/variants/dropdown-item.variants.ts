@@ -5,8 +5,8 @@ export const dropdownItemVariants = cva(
   {
     variants: {
       variant: {
-        default: 'text-fg-secondary data-[highlighted]:text-fg-primary data-[highlighted]:bg-base',
-        danger: 'text-danger data-[highlighted]:bg-danger-subtle',
+        default: 'text-fg-secondary data-highlighted:text-fg-primary data-highlighted:bg-base',
+        danger: 'text-danger data-highlighted:bg-danger-subtle',
       },
     },
     defaultVariants: {

@@ -11,7 +11,7 @@ import {
   labelSizeMap,
 } from '@/src/lib/ui/variants/divider.variants';
 
-export interface IDividerProps {
+export interface DividerProps {
   className?: string;
   color?: DividerVariantType;
   // works only for horizontal dividers
@@ -44,7 +44,7 @@ function Divider({
   orientation = ORIENTATION.vertical,
   thickness = 4,
   wrapperClassName,
-}: IDividerProps) {
+}: DividerProps) {
   const base = cn(dividerVariants({ color }), 'border-dotted', className);
 
   if (orientation === ORIENTATION.horizontal && label) {
