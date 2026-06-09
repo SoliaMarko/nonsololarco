@@ -2,7 +2,7 @@ import { ReactNode, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { LogOutIcon } from '@/src/icons/base';
+import { CalendarIcon, LogOutIcon, RepertoireIcon } from '@/src/icons/base';
 import ArrowLeftSolidIcon from '@/src/icons/base/ArrowLeftSolidIcon';
 import ArrowRightSolidIcon from '@/src/icons/base/ArrowRightSolidIcon';
 import ChatOutlineIcon from '@/src/icons/base/ChatOutlineIcon';
@@ -158,6 +158,12 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="SearchSolidIcon" copyText={toJsx('SearchSolidIcon')} {...cardProps}>
           <SearchSolidIcon size={size} />
+        </IconCard>
+        <IconCard label="RepertoireIcon" copyText={toJsx('RepertoireIcon')} {...cardProps}>
+          <RepertoireIcon size={size} />
+        </IconCard>
+        <IconCard label="CalendarIcon" copyText={toJsx('CalendarIcon')} {...cardProps}>
+          <CalendarIcon size={size} />
         </IconCard>
       </Section>
 
