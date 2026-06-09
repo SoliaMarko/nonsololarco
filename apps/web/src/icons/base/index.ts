@@ -1,5 +1,6 @@
 export { default as ArrowLeftSolidIcon } from './ArrowLeftSolidIcon';
 export { default as ArrowRightSolidIcon } from './ArrowRightSolidIcon';
+export { default as CalendarIcon } from './CalendarIcon';
 export { default as ChatOutlineIcon } from './ChatOutlineIcon';
 export { default as ChatSolidIcon } from './ChatSolidIcon';
 export { default as CheckSolidIcon } from './CheckSolidIcon';
@@ -15,6 +16,7 @@ export { default as MoonOutlineIcon } from './MoonOutlineIcon';
 export { default as PlusSolidIcon } from './PlusSolidIcon';
 export { default as ProfileOutlineIcon } from './ProfileOutlineIcon';
 export { default as ProfileSolidIcon } from './ProfileSolidIcon';
+export { default as RepertoireIcon } from './RepertoireIcon';
 export { default as SearchOutlineIcon } from './SearchOutlineIcon';
 export { default as SearchSolidIcon } from './SearchSolidIcon';
 export { default as SettingsOutlineIcon } from './SettingsOutlineIcon';
