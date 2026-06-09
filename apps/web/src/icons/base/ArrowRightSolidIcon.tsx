@@ -14,8 +14,8 @@ function ArrowRightSolidIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 4, y1: 5, x2: 16, y2: 15 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

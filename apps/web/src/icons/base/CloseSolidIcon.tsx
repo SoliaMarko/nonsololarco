@@ -14,8 +14,8 @@ function CloseSolidIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 5, y1: 5, x2: 15, y2: 15 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
