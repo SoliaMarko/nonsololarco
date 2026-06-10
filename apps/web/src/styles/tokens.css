@@ -101,13 +101,12 @@
 /* --- LIGHT THEME --- */
 [data-theme='light'] {
   /* --- LIGHT: Basic Backgrounds --- */
-  --bg-surface: #ede8e2;
+  --bg-surface: #ede8dc;
   --bg-elevated: #e4ded6;
   --bg-edge: #d4cec6;
   --bg-contrast: #1c1a18;
 
   --bg-base: #f5f0e8;
-  --bg-surface: #ede8dc;
   --bg-card: #e8e2d4;
 
   /* --- LIGHT: Emerald accent --- */
