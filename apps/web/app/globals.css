@@ -76,6 +76,7 @@
   --color-fg-tertiary: var(--text-tertiary);
   --color-fg-disabled: var(--text-disabled);
   --color-yellow-contrast: var(--text-yellow-contrast);
+  --color-fg-muted: var(--text-muted);
 
   /* --- Colors: status --- */
   --color-status-online: var(--status-online);
@@ -98,6 +99,10 @@
   --color-danger-deep: var(--danger-deep);
   --color-danger-subtle: var(--danger-subtle);
   --color-danger-contrast: var(--danger-contrast);
+  --color-accent-red: var(--accent-red);
+  --color-accent-green: var(--accent-green);
+
+  --color-border-primary: var(--border-primary);
 }
 
 @utility skeleton-shimmer {
