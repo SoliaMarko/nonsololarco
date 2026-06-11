@@ -9,7 +9,12 @@ export function useTheme() {
       return THEME.dark;
     }
 
-    return (localStorage.getItem('theme') as ThemeType) ?? THEME.dark;
+    try {
+      const stored = localStorage.getItem('theme') as ThemeType;
+      return Object.values(THEME).includes(stored) ? stored : THEME.dark;
+    } catch {
+      return THEME.dark;
+    }
   });
 
   useEffect(() => {

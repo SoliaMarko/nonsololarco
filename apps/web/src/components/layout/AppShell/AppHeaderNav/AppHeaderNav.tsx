@@ -71,7 +71,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
             variant="press"
           >
             {mounted ? (
-              theme === 'dark' ? (
+              theme === THEME.dark ? (
                 <SunOutlineIcon size={20} />
               ) : (
                 <MoonOutlineIcon size={20} />

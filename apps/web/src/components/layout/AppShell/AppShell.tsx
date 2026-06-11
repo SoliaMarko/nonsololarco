@@ -20,7 +20,7 @@ export interface AppShellProps {
  * - AppBottomNav (fixed bottom, mobile only)
  *
  * @example
- * <AppShell navItems={NAV_ITEMS} activePath="/repertoire" picks={42}>
+ * <AppShell activePath="/repertoire">
  *   <RepertoirePage />
  * </AppShell>
  */
