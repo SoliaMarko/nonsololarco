@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 
 export const navLinkVariants = cva(
-  'inline-flex items-center gap-2 transition-colors duration-150 select-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent-primary/50 rounded-sm text-fg-muted leading-none',
+  'inline-flex items-center gap-2 transition-colors duration-150 select-none focus-visible:outline-none rounded-sm text-fg-muted leading-none',
   {
     variants: {
       variant: {

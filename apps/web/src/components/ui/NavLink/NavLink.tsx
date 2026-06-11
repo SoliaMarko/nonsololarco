@@ -44,8 +44,7 @@ export default function NavLink({
       <span className="relative shrink-0">
         <Icon
           className={cn(
-            'transition-colors',
-            variant === 'desktop' ? 'size-4' : 'size-5',
+            'size-5 transition-colors',
             variant === 'mobile' && isActive ? 'text-accent-red' : '',
           )}
           aria-hidden="true"
@@ -53,14 +52,14 @@ export default function NavLink({
         {badge !== undefined && badge > 0 && (
           <span
             className="bg-accent-red pli-0.5 absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full text-[9px] leading-none font-bold text-white"
-            aria-label={`${badge} непрочитаних`}
+            aria-label={`${badge} unread`}
           >
             {badge > 99 ? '99+' : badge}
           </span>
         )}
       </span>
 
-      <span className={cn(variant === 'mobile' && 'leading-none')}>{label}</span>
+      <span className={cn(variant === 'mobile' ? 'leading-none' : '')}>{label}</span>
     </Link>
   );
 }
