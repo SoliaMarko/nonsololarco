@@ -3,10 +3,10 @@
 import AppShell from '@/src/components/layout/AppShell';
 import Text from '@/src/components/typography/Text';
 
-export default function Home() {
+export default function ProfilePage() {
   return (
-    <AppShell activePath={'/'}>
-      <Text>Home Page Content</Text>
+    <AppShell activePath={'/profile'}>
+      <Text>Profile Page Content</Text>
     </AppShell>
   );
 }

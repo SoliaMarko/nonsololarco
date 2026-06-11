@@ -3,10 +3,10 @@
 import AppShell from '@/src/components/layout/AppShell';
 import Text from '@/src/components/typography/Text';
 
-export default function Home() {
+export default function ChatPage() {
   return (
-    <AppShell activePath={'/'}>
-      <Text>Home Page Content</Text>
+    <AppShell activePath={'/chat'}>
+      <Text>Chat Page Content</Text>
     </AppShell>
   );
 }

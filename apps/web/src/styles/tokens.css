@@ -36,14 +36,6 @@
   --text-leading-normal: 1.5;
   --text-leading-relaxed: 1.6;
 
-  /* --- Breakpoints --- */
-  --screen-xs: 20rem; /* 320px */
-  --screen-sm: 40rem; /* 640px */
-  --screen-md: 48rem; /* 768px */
-  --screen-lg: 64rem; /* 1024px */
-  --screen-xl: 80rem; /* 1280px */
-  --screen-2xl: 96rem; /* 1536px */
-
   /* --- Shared across DARK & LIGHT--- */
   --danger: #d94040;
   --danger-deep: #b03030;

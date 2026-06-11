@@ -16,19 +16,20 @@ function ProfileSolidIcon(
       fill="none"
       height={props.size || 24}
       width={props.size || 24}
-      viewBox={calcViewBox({ x1: 3, y1: 3.5, x2: 17, y2: 18 })}
+      viewBox={calcViewBox({ x1: 4, y1: 3, x2: 20, y2: 21 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
-      <circle cx="10" cy="7" r="3.5" fill="currentColor" stroke="currentColor" strokeWidth="1.3" />
       <path
-        d="M3 18C3 14.686 6.134 12 10 12C13.866 12 17 14.686 17 18"
+        d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"
+        fill="currentColor"
         stroke="currentColor"
-        strokeWidth="1.8"
+        strokeWidth="2"
         strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

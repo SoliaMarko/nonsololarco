@@ -3,12 +3,10 @@ import { Ref, SVGProps, forwardRef, useId } from 'react';
 import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
-function RepertoireIcon({
-  title,
-  titleId,
-  ref,
-  ...props
-}: Partial<SVGProps<SVGSVGElement> & SVGCustomProps & { ref?: Ref<SVGSVGElement> }>) {
+function RepertoireIcon(
+  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  ref: Ref<SVGSVGElement>,
+) {
   const generatedId = useId();
   const resolvedTitleId = titleId ?? (title ? generatedId : undefined);
 

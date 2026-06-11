@@ -113,7 +113,7 @@ export const Fallback: Story = {
         <span className="text-body text-fg-secondary">Broken image: initials fallback</span>
       </div>
       <div className="flex items-center gap-3">
-        <Avatar initials="ОК" size="lg" />
+        <Avatar initials="OK" size="lg" />
         <span className="text-body text-fg-secondary">No src: initials fallback</span>
       </div>
     </div>

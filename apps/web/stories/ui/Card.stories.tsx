@@ -85,7 +85,7 @@ export const MusicianCard: Story = {
   render: () => (
     <Card className="w-72 p-5">
       <div className="mbe-3 flex items-start gap-3">
-        <AvatarButton initials="ОК" size="lg" status="online" aria-label="View Oleksiy profile" />
+        <AvatarButton initials="OK" size="lg" status="online" aria-label="View Oleksiy profile" />
         <div className="min-w-0 flex-1">
           <p className="text-body text-fg-primary truncate font-medium">Oleksa K.</p>
           <p className="text-caption text-fg-tertiary">Piano · Lviv</p>

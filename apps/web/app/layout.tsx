@@ -26,7 +26,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-theme="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+      <body className={`bg-edge box-border ${geistSans.variable} ${geistMono.variable}`}>
+        <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>
+      </body>
     </html>
   );
 }
