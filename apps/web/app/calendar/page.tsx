@@ -3,10 +3,10 @@
 import AppShell from '@/src/components/layout/AppShell';
 import Text from '@/src/components/typography/Text';
 
-export default function Home() {
+export default function CalendarPage() {
   return (
-    <AppShell activePath={'/'}>
-      <Text>Home Page Content</Text>
+    <AppShell activePath={'/calendar'}>
+      <Text>Calendar Page Content</Text>
     </AppShell>
   );
 }

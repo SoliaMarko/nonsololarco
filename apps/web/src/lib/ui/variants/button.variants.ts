@@ -11,6 +11,30 @@ export const buttonVariants = cva(
           'bg-transparent text-emerald-main border border-emerald-main hover:bg-emerald-main hover:text-primary-light',
         outline: 'border border-contrast bg-transparent text-contrast hover:bg-surface',
         destructive: 'bg-danger text-white hover:bg-danger-deep',
+
+        /**
+         * press — physical 3D button with push-down effect on hover/active.
+         * Uses box-shadow to simulate depth; translates on interaction.
+         *
+         * Best used as a circular action button (rounded-full + fixed w/h).
+         *
+         * @example
+         * <Button variant="press" className="rounded-full w-16 h-16 p-0">
+         *   <RepertoireIcon />
+         * </Button>
+         */
+        press: [
+          'bg-bg-base text-fg-muted',
+          'border-[3px] border-fg-muted',
+          'rounded-full',
+          'hover:text-fg-primary hover:border-fg-primary',
+          'hover:shadow-[2px_2px_0px_0px_var(--color-fg-primary)]',
+          'hover:translate-x-[-2px] hover:translate-y-[-2px]',
+          'active:shadow-none',
+          'active:translate-x-[0px] active:translate-y-[0px]',
+          'transition-[transform,box-shadow] duration-100 ease-out',
+          'focus-visible:ring-fg-primary',
+        ],
       },
       size: {
         xs: 'h-6 pli-2 text-xs gap-1',

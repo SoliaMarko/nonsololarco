@@ -1,3 +1,5 @@
+import { ReactNode } from 'react';
+
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
@@ -19,14 +21,24 @@ export const metadata: Metadata = {
   description: 'A social platform for musicians',
 };
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" data-theme="dark">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                const theme = localStorage.getItem('theme');
+                document.documentElement.setAttribute('data-theme', theme === 'light' ? 'light' : 'dark');
+              } catch {}
+            `,
+          }}
+        />
+      </head>
+      <body className={`bg-edge box-border ${geistSans.variable} ${geistMono.variable}`}>
+        <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>
+      </body>
     </html>
   );
 }

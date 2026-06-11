@@ -1,5 +1,6 @@
 export { default as ArrowLeftSolidIcon } from './ArrowLeftSolidIcon';
 export { default as ArrowRightSolidIcon } from './ArrowRightSolidIcon';
+export { default as BellIcon } from './BellIcon';
 export { default as CalendarIcon } from './CalendarIcon';
 export { default as ChatOutlineIcon } from './ChatOutlineIcon';
 export { default as ChatSolidIcon } from './ChatSolidIcon';
