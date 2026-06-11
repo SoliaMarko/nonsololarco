@@ -2,36 +2,43 @@ import { ReactNode, useState } from 'react';
 
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
-import { CalendarIcon, LogOutIcon, RepertoireIcon } from '@/src/icons/base';
-import ArrowLeftSolidIcon from '@/src/icons/base/ArrowLeftSolidIcon';
-import ArrowRightSolidIcon from '@/src/icons/base/ArrowRightSolidIcon';
-import ChatOutlineIcon from '@/src/icons/base/ChatOutlineIcon';
-import ChatSolidIcon from '@/src/icons/base/ChatSolidIcon';
-import CheckSolidIcon from '@/src/icons/base/CheckSolidIcon';
-import ChevronIcon from '@/src/icons/base/ChevronIcon';
-import CloseSolidIcon from '@/src/icons/base/CloseSolidIcon';
-import DisconnectOutlineIcon from '@/src/icons/base/DisconnectOutlineIcon';
-import DisconnectSolidIcon from '@/src/icons/base/DisconnectSolidIcon';
-import DotsIcon from '@/src/icons/base/DotsIcon';
-import HomeOutlineIcon from '@/src/icons/base/HomeOutlineIcon';
-import HomeSolidIcon from '@/src/icons/base/HomeSolidIcon';
-import MoonOutlineIcon from '@/src/icons/base/MoonOutlineIcon';
-import PlusSolidIcon from '@/src/icons/base/PlusSolidIcon';
-import ProfileOutlineIcon from '@/src/icons/base/ProfileOutlineIcon';
-import ProfileSolidIcon from '@/src/icons/base/ProfileSolidIcon';
-import SearchOutlineIcon from '@/src/icons/base/SearchOutlineIcon';
-import SearchSolidIcon from '@/src/icons/base/SearchSolidIcon';
-import SettingsOutlineIcon from '@/src/icons/base/SettingsOutlineIcon';
-import SettingsSolidIcon from '@/src/icons/base/SettingsSolidIcon';
-import ShareOutlineIcon from '@/src/icons/base/ShareOutlineIcon';
-import ShareSolidIcon from '@/src/icons/base/ShareSolidIcon';
-import SunOutlineIcon from '@/src/icons/base/SunOutlineIcon';
-import BouquetIcon from '@/src/icons/colorful/BouquetIcon';
-import FireIcon from '@/src/icons/colorful/FireIcon';
-import MusicPlantIcon from '@/src/icons/colorful/MusicPlantIcon';
-import PianoKeysIcon from '@/src/icons/colorful/PianoKeysIcon';
-import { EighthRestIcon, HalfRestIcon, QuarterRestIcon, WholeRestIcon } from '@/src/icons/status';
-import OnlineIcon from '@/src/icons/status/OnlineIcon';
+import {
+  ArrowLeftSolidIcon,
+  ArrowRightSolidIcon,
+  BellIcon,
+  CalendarIcon,
+  ChatOutlineIcon,
+  ChatSolidIcon,
+  CheckSolidIcon,
+  ChevronIcon,
+  CloseSolidIcon,
+  DisconnectOutlineIcon,
+  DisconnectSolidIcon,
+  DotsIcon,
+  HomeOutlineIcon,
+  HomeSolidIcon,
+  LogOutIcon,
+  MoonOutlineIcon,
+  PlusSolidIcon,
+  ProfileOutlineIcon,
+  ProfileSolidIcon,
+  RepertoireIcon,
+  SearchOutlineIcon,
+  SearchSolidIcon,
+  SettingsOutlineIcon,
+  SettingsSolidIcon,
+  ShareOutlineIcon,
+  ShareSolidIcon,
+  SunOutlineIcon,
+} from '@/src/icons/base';
+import { BouquetIcon, FireIcon, MusicPlantIcon, PianoKeysIcon } from '@/src/icons/colorful';
+import {
+  EighthRestIcon,
+  HalfRestIcon,
+  OnlineIcon,
+  QuarterRestIcon,
+  WholeRestIcon,
+} from '@/src/icons/status';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 const meta: Meta = {
@@ -164,6 +171,9 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="CalendarIcon" copyText={toJsx('CalendarIcon')} {...cardProps}>
           <CalendarIcon size={size} />
+        </IconCard>
+        <IconCard label="BellIcon" copyText={toJsx('BellIcon')} {...cardProps}>
+          <BellIcon size={size} />
         </IconCard>
       </Section>
 

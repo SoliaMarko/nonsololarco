@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import Button from '@/src/components/ui/Button';
+import { ProfileOutlineIcon } from '@/src/icons/base';
 import { ICON_POSITION } from '@/src/lib/constants/common.const';
 
 // Minimal local icon example — replace with your actual icon component
@@ -73,6 +74,9 @@ export const AllVariants: Story = {
       <Button variant="ghost">Ghost</Button>
       <Button variant="outline">Outline</Button>
       <Button variant="destructive">Destructive</Button>
+      <Button variant="press" className="h-12 w-12 rounded-full p-0 text-lg">
+        ♪
+      </Button>
     </div>
   ),
 };
@@ -228,6 +232,34 @@ export const FullWidth: Story = {
         className="w-full"
       >
         Full Width Outline
+      </Button>
+    </div>
+  ),
+};
+
+export const PressVariant: Story = {
+  name: 'Press — basic',
+  args: {
+    variant: 'press',
+    size: 'xl',
+    children: '▶',
+    className: 'rounded-full w-16 h-16 p-0',
+  },
+};
+
+export const PressSizes: Story = {
+  name: 'Press — sizes',
+  args: { children: '', variant: 'press' },
+  render: () => (
+    <div className="flex items-center gap-8 p-8">
+      <Button variant="press" size="sm" className="h-10 w-10 rounded-full p-0">
+        <ProfileOutlineIcon size={14} />
+      </Button>
+      <Button variant="press" size="md" className="h-14 w-14 rounded-full p-0">
+        <ProfileOutlineIcon size={18} />
+      </Button>
+      <Button variant="press" size="xl" className="h-20 w-20 rounded-full p-0">
+        <ProfileOutlineIcon size={24} />
       </Button>
     </div>
   ),

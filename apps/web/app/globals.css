@@ -45,12 +45,12 @@
   --leading-relaxed: var(--text-leading-relaxed);
 
   /* --- Breakpoints --- */
-  --breakpoint-xs: var(--screen-xs);
-  --breakpoint-sm: var(--screen-sm);
-  --breakpoint-md: var(--screen-md);
-  --breakpoint-lg: var(--screen-lg);
-  --breakpoint-xl: var(--screen-xl);
-  --breakpoint-2xl: var(--screen-2xl);
+  --breakpoint-xs: 20rem; /* 320px */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+  --breakpoint-2xl: 96rem; /* 1536px */
 
   /* --- Colors: common shared --- */
   --color-primary-light: var(--primary-light);

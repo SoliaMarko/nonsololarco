@@ -1,4 +1,11 @@
 import {
+  CalendarIcon,
+  ChatOutlineIcon,
+  HomeOutlineIcon,
+  ProfileOutlineIcon,
+  RepertoireIcon,
+} from '@/src/icons/base';
+import {
   EighthRestIcon,
   HalfRestIcon,
   OnlineIcon,
@@ -22,6 +29,8 @@ export const ORIENTATION = {
   vertical: 'vertical',
 } as const;
 
+export const THEME = { dark: 'dark', light: 'light' } as const;
+
 export const STATUS_ICON = {
   online: OnlineIcon,
   pause: EighthRestIcon,
@@ -29,3 +38,11 @@ export const STATUS_ICON = {
   long: HalfRestIcon,
   inactive: WholeRestIcon,
 } as const;
+
+export const NAV_ITEMS = [
+  { href: '/', icon: HomeOutlineIcon, label: 'Feed' },
+  { href: '/repertoire', icon: RepertoireIcon, label: 'Repertoire' },
+  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
+  { href: '/chat', icon: ChatOutlineIcon, label: 'Chats', badge: 3 },
+  { href: '/profile', icon: ProfileOutlineIcon, label: 'Profile' },
+];
