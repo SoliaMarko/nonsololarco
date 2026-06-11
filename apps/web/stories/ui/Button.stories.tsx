@@ -37,7 +37,7 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'ghost', 'outline', 'destructive'],
+      options: ['primary', 'secondary', 'ghost', 'outline', 'destructive', 'press'],
       description: 'Visual style variant',
     },
     size: {
