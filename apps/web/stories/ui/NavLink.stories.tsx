@@ -29,7 +29,7 @@ const meta: Meta<typeof NavLink> = {
       options: ['desktop', 'mobile'],
     },
     isActive: { control: 'boolean' },
-    badge: { control: { type: 'number', min: 0, max: 99 } },
+    badge: { control: { type: 'number', min: 0, max: 1000 } },
   },
 };
 
