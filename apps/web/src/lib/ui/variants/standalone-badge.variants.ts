@@ -16,6 +16,12 @@ export const standaloneBadgeVariants = cva(
         yellow: 'bg-yellow-subtle text-yellow-muted border border-yellow-muted',
         neutral: 'bg-card text-fg-secondary border border-edge',
         danger: 'bg-danger-subtle text-danger border border-danger',
+        'stamp-ready':
+          'uppercase tracking-widest font-bold rounded-sm bg-transparent text-emerald-main border border-emerald-main',
+        'stamp-learning':
+          'uppercase tracking-widest font-bold rounded-sm bg-transparent text-yellow-muted border border-yellow-muted',
+        'stamp-new':
+          'uppercase tracking-widest font-bold rounded-sm bg-transparent text-danger border border-danger',
       },
       status: {
         online: 'bg-emerald-subtle text-status-online',
