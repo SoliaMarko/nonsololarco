@@ -19,7 +19,16 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: [undefined, 'emerald', 'yellow', 'neutral', 'danger'],
+      options: [
+        undefined,
+        'emerald',
+        'yellow',
+        'neutral',
+        'danger',
+        'stamp-ready',
+        'stamp-learning',
+        'stamp-new',
+      ],
     },
     status: {
       control: 'select',
@@ -140,6 +149,18 @@ export const IconPositions: Story = {
           Jazz
         </Badge>
       </div>
+    </div>
+  ),
+};
+
+export const TrackStatuses: Story = {
+  name: 'Track statuses — stamp style',
+  args: { children: '' },
+  render: () => (
+    <div className="flex flex-wrap items-center gap-3 p-6">
+      <Badge variant="stamp-ready">Ready</Badge>
+      <Badge variant="stamp-learning">Learning</Badge>
+      <Badge variant="stamp-new">New</Badge>
     </div>
   ),
 };
