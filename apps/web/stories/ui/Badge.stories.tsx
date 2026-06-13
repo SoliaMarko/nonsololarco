@@ -87,6 +87,15 @@ export const AllSizes: Story = {
           <Badge size={size} variant="danger">
             Jazz
           </Badge>
+          <Badge size={size} variant="stamp-ready">
+            Ready
+          </Badge>
+          <Badge size={size} variant="stamp-learning">
+            Learning
+          </Badge>
+          <Badge size={size} variant="stamp-new">
+            New
+          </Badge>
         </div>
       ))}
     </div>
@@ -105,7 +114,17 @@ export const AllVariants: Story = {
         ))}
       </div>
       <div className="flex flex-wrap gap-2">
-        {(['emerald', 'yellow', 'neutral', 'danger'] as const).map((variant) => (
+        {(
+          [
+            'emerald',
+            'yellow',
+            'neutral',
+            'danger',
+            'stamp-ready',
+            'stamp-learning',
+            'stamp-new',
+          ] as const
+        ).map((variant) => (
           <Badge key={variant} variant={variant}>
             {variant.charAt(0).toUpperCase() + variant.slice(1)}
           </Badge>
@@ -149,18 +168,6 @@ export const IconPositions: Story = {
           Jazz
         </Badge>
       </div>
-    </div>
-  ),
-};
-
-export const TrackStatuses: Story = {
-  name: 'Track statuses — stamp style',
-  args: { children: '' },
-  render: () => (
-    <div className="flex flex-wrap items-center gap-3 p-6">
-      <Badge variant="stamp-ready">Ready</Badge>
-      <Badge variant="stamp-learning">Learning</Badge>
-      <Badge variant="stamp-new">New</Badge>
     </div>
   ),
 };
