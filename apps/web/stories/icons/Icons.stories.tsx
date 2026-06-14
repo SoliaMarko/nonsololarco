@@ -25,6 +25,7 @@ import {
   LogOutIcon,
   MicrophoneIcon,
   MoonOutlineIcon,
+  PickIcon,
   PlusSolidIcon,
   ProfileOutlineIcon,
   ProfileSolidIcon,
@@ -260,6 +261,9 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="LogOutIcon" copyText={toJsx('LogOutIcon')} {...cardProps}>
           <LogOutIcon size={size} />
+        </IconCard>
+        <IconCard label="PickIcon" copyText={toJsx('PickIcon')} {...cardProps}>
+          <PickIcon size={size} />
         </IconCard>
       </Section>
 

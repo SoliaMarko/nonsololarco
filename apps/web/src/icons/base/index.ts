@@ -20,6 +20,7 @@ export { default as LocationPinIcon } from './LocationPinIcon';
 export { default as LogOutIcon } from './LogOutIcon';
 export { default as MicrophoneIcon } from './MicrophoneIcon';
 export { default as MoonOutlineIcon } from './MoonOutlineIcon';
+export { default as PickIcon } from './PickIcon';
 export { default as PlusSolidIcon } from './PlusSolidIcon';
 export { default as ProfileOutlineIcon } from './ProfileOutlineIcon';
 export { default as ProfileSolidIcon } from './ProfileSolidIcon';

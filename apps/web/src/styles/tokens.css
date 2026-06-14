@@ -69,6 +69,10 @@
   --danger-subtle: #2a0a0a;
   --danger-contrast: #fceaea;
 
+  /* --- DARK: Icons --- */
+  --icon-accent-yellow: #e8e07a;
+  --icon-accent-green: #a8dcc0;
+
   /* --- DARK: Text --- */
   --text-primary: #f0e8d8;
   --text-secondary: #c8bea8;
@@ -117,6 +121,10 @@
   /* --- LIGHT: Danger --- */
   --danger-subtle: #fceaea;
   --danger-contrast: #2a0a0a;
+
+  /* --- LIGHT: Icons --- */
+  --icon-accent-yellow: #8a8020;
+  --icon-accent-green: #2a7a58;
 
   /* --- LIGHT: Text --- */
   --text-primary: #1a1410;

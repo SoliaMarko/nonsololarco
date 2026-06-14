@@ -1,11 +1,11 @@
-import { MOCK_PROFILE } from '@/src/data/profile.mock';
 import DownloadIcon from '@/src/icons/base/DownloadIcon';
 import EditIcon from '@/src/icons/base/EditIcon';
 import LocationPinIcon from '@/src/icons/base/LocationPinIcon';
 import MicrophoneIcon from '@/src/icons/base/MicrophoneIcon';
 import UploadIcon from '@/src/icons/base/UploadIcon';
-import { ProfileTag } from '@/src/lib/types/profile.types';
+import { ProfileTag, ProfileType } from '@/src/lib/types/profile.types';
 
+import Heading from '../../typography/Heading';
 import Text from '../../typography/Text';
 import Avatar from '../../ui/Avatar';
 import Button from '../../ui/Button';
@@ -15,9 +15,11 @@ const TAG_ICON: Record<ProfileTag['icon'], React.ElementType> = {
   location: LocationPinIcon,
 };
 
-export default function ProfileHero() {
-  const profile = MOCK_PROFILE;
+interface ProfileHeroProps {
+  profile: ProfileType;
+}
 
+export default function ProfileHero({ profile }: ProfileHeroProps) {
   return (
     <div className="bg-accent-dark-green bg-dots plb-8 pli-9 flex min-h-80 w-full flex-col items-center justify-center gap-6 text-white md:flex-row md:justify-between">
       <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:justify-start">
@@ -28,7 +30,9 @@ export default function ProfileHero() {
         />
         <div className="flex flex-col items-center gap-4 md:items-start">
           <Text className="text-yellow-main">MUSICIAN PROFILE · PORTFOLIO</Text>
-          <Text className="text-primary-light text-3xl md:text-5xl">{profile.name}</Text>
+          <Heading tag="h1" className="text-primary-light text-3xl md:text-5xl">
+            {profile.name}
+          </Heading>
 
           <div className="flex flex-row gap-3">
             {profile.tags.map((tag, index) => {
@@ -65,21 +69,27 @@ export default function ProfileHero() {
         <Button variant="retro-primary">
           <div className="flex flex-row items-center gap-2">
             <DownloadIcon className="text-primary-dark" size={16} />
-            <Text className="text-primary-dark text-sm sm:text-[1rem]">Export portfolio</Text>
+            <Text className="text-primary-dark text-xs uppercase sm:text-[0.8rem]">
+              Export portfolio
+            </Text>
           </div>
         </Button>
 
         <Button variant="retro-outline">
           <div className="flex flex-row items-center gap-2">
             <UploadIcon className="text-primary-dark" size={16} />
-            <Text className="text-primary-dark hidden capitalize sm:block">Share</Text>
+            <Text className="text-primary-dark hidden uppercase sm:block sm:text-[0.8rem]">
+              Share
+            </Text>
           </div>
         </Button>
 
         <Button variant="retro-outline">
           <div className="flex flex-row items-center gap-2">
             <EditIcon className="text-primary-dark" size={16} />
-            <Text className="text-primary-dark hidden capitalize sm:block">Edit</Text>
+            <Text className="text-primary-dark hidden uppercase sm:block sm:text-[0.8rem]">
+              Edit
+            </Text>
           </div>
         </Button>
       </div>
