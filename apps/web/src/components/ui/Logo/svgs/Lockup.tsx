@@ -2,16 +2,17 @@ import { LOGO_SUBTITLE } from '@/src/lib/constants/ui/logo.const';
 import { Locale } from '@/src/lib/types/common.types';
 
 export function LockupSvg({ locale, scale }: { locale: Locale; scale: number }) {
-  const width = Math.round(300 * scale);
+  const width = Math.round(200 * scale);
   const height = Math.round(56 * scale);
 
   return (
     <svg
       width={width}
       height={height}
-      viewBox="0 0 300 56"
+      viewBox="0 0 200 56"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
+      style={{ userSelect: 'none' }}
     >
       <g transform="translate(0, 14)">
         <path

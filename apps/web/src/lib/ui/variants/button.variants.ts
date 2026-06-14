@@ -37,11 +37,11 @@ export const buttonVariants = cva(
         ],
       },
       size: {
-        xs: 'h-6 pli-2 text-xs gap-1',
-        sm: 'h-8 pli-3 text-sm gap-1.5',
-        md: 'h-10 pli-4 text-md gap-2',
-        lg: 'h-12 pli-5 text-lg gap-2',
-        xl: 'h-16 pli-8 text-xl gap-3',
+        xs: 'min-h-6 pli-2 text-xs gap-1',
+        sm: 'min-h-8 pli-3 text-sm gap-1.5',
+        md: 'min-h-10 pli-4 text-md gap-2',
+        lg: 'min-h-12 pli-5 text-lg gap-2',
+        xl: 'min-h-16 pli-8 text-xl gap-3',
       },
     },
     defaultVariants: {

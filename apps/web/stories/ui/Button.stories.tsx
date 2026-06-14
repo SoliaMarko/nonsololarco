@@ -4,7 +4,6 @@ import Button from '@/src/components/ui/Button';
 import { ProfileOutlineIcon } from '@/src/icons/base';
 import { ICON_POSITION } from '@/src/lib/constants/common.const';
 
-// Minimal local icon example — replace with your actual icon component
 const ChevronIcon = ({ size = 16, className = '' }: { className?: string; size?: number }) => (
   <svg
     className={className}
