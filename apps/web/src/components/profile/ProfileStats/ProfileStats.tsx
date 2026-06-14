@@ -14,7 +14,7 @@ export default function ProfileStats({ className, profile }: ProfileStatsProps) 
     >
       {PROFILE_STATS.map((stat, index) => {
         const Icon = stat.icon;
-        const value = profile[stat.valueKey];
+        const value = profile[stat.valueKey] ?? 0;
 
         return (
           <div
