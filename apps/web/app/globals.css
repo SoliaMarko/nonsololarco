@@ -112,7 +112,7 @@
   .bg-dots {
     background-image: radial-gradient(
       circle,
-      color-mix(in srgb, currentColor 10%, transparent) 2px,
+      color-mix(in srgb, currentcolor 10%, transparent) 2px,
       transparent 2px
     );
     background-size: 16px 16px;
@@ -165,10 +165,12 @@
   0% {
     opacity: 0.4;
   }
+
   50% {
     opacity: 1;
-    text-shadow: 0 0 8px rgba(168, 220, 192, 0.6);
+    text-shadow: 0 0 8px rgb(168 220 192 / 60%);
   }
+
   100% {
     opacity: 1;
     text-shadow: none;
