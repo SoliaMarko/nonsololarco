@@ -125,7 +125,7 @@
   .bg-dots-subtle {
     background-image: radial-gradient(
       circle,
-      color-mix(in srgb, currentColor 6%, transparent) 1px,
+      color-mix(in srgb, currentcolor 6%, transparent) 1px,
       transparent 1px
     );
     background-size: 12px 12px;
