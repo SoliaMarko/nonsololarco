@@ -13,7 +13,7 @@ export default function AppBottomNav({ activePath, className }: AppBottomNavProp
       aria-label="Mobile nav"
       className={cn(
         'sticky inset-x-0 bottom-0 z-40 md:hidden',
-        'bg-bg-surface border-border-primary border-t',
+        'bg-surface border-border-primary border-t',
         // safe area for iPhone home indicator
         'pbe-safe',
         className,

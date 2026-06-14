@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/lib/ui/utils/svg.utils';
 
 function LogOutIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.5',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   return (
@@ -23,17 +28,17 @@ function LogOutIcon(
       <path
         d="M8 4H5C4.4 4 4 4.4 4 5V15C4 15.6 4.4 16 5 16H8"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <path
         d="M13 7L17 10L13 13"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <path d="M17 10H8" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+      <path d="M17 10H8" stroke="currentColor" strokeWidth={strokeWidth} strokeLinecap="round" />
     </svg>
   );
 }

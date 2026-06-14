@@ -1,11 +1,11 @@
 import { Ref, SVGProps, forwardRef, useId } from 'react';
 
 import { SVGCustomProps } from '@/lib/types/common.types';
-import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
+import { calcViewBox } from '@/lib/ui/utils/svg.utils';
 
-function CloseSolidIcon(
+function LocationPinIcon(
   {
-    strokeWidth = '1.3',
+    strokeWidth = '2',
     title,
     titleId,
     ...props
@@ -19,36 +19,24 @@ function CloseSolidIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || 24}
-      width={props.size || 24}
-      viewBox={calcViewBox({ x1: 5, y1: 5, x2: 15, y2: 15 })}
+      height={props.size || '24'}
+      width={props.size || '24'}
+      viewBox={calcViewBox({ x1: 3, y1: 1, x2: 21, y2: 23 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
-      <line
-        x1="5"
-        y1="5"
-        x2="15"
-        y2="15"
+      <path
+        d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0zM12 13a3 3 0 100-6 3 3 0 000 6z"
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-      />
-      <line
-        x1="15"
-        y1="5"
-        x2="5"
-        y2="15"
-        stroke="currentColor"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
 }
 
-const ForwardRef = forwardRef(CloseSolidIcon);
-export default ForwardRef;
+export default forwardRef(LocationPinIcon);

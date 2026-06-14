@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/lib/ui/utils/svg.utils';
 
 function DisconnectOutlineIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.3',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   return (
@@ -20,17 +25,17 @@ function DisconnectOutlineIcon(
       {...props}
     >
       {title ? <title id={titleId}>{title}</title> : null}
-      <circle cx="7" cy="7" r="3" stroke="currentColor" strokeWidth="1.3" />
+      <circle cx="7" cy="7" r="3" stroke="currentColor" strokeWidth={strokeWidth} />
       <path
         d="M2 17C2 14.2 4.2 12 7 12C8.3 12 9.4 12.5 10.3 13.2"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <path
         d="M13 13L17 17M17 13L13 17"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth={Number(strokeWidth) * 1.15}
         strokeLinecap="round"
       />
     </svg>

@@ -2,9 +2,11 @@ import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import Button from '@/src/components/ui/Button';
 import { ProfileOutlineIcon } from '@/src/icons/base';
+import DownloadIcon from '@/src/icons/base/DownloadIcon';
+import EditIcon from '@/src/icons/base/EditIcon';
+import UploadIcon from '@/src/icons/base/UploadIcon';
 import { ICON_POSITION } from '@/src/lib/constants/common.const';
 
-// Minimal local icon example — replace with your actual icon component
 const ChevronIcon = ({ size = 16, className = '' }: { className?: string; size?: number }) => (
   <svg
     className={className}
@@ -37,7 +39,16 @@ const meta = {
   argTypes: {
     variant: {
       control: 'select',
-      options: ['primary', 'secondary', 'ghost', 'outline', 'destructive', 'press'],
+      options: [
+        'primary',
+        'secondary',
+        'ghost',
+        'outline',
+        'destructive',
+        'press',
+        'retro-primary',
+        'retro-outline',
+      ],
       description: 'Visual style variant',
     },
     size: {
@@ -54,16 +65,12 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-// Baseline
-
 export const Default: Story = {
   args: {
     variant: 'primary',
     children: 'Button',
   },
 };
-
-// All Variants
 
 export const AllVariants: Story = {
   args: { children: '', variant: 'primary' },
@@ -77,11 +84,15 @@ export const AllVariants: Story = {
       <Button variant="press" className="h-12 w-12 rounded-full p-0 text-lg">
         ♪
       </Button>
+      <Button variant="retro-primary" size="md">
+        Export portfolio
+      </Button>
+      <Button variant="retro-outline" size="md">
+        Share
+      </Button>
     </div>
   ),
 };
-
-// All Sizes
 
 export const AllSizes: Story = {
   args: { children: '', variant: 'primary' },
@@ -105,8 +116,6 @@ export const AllSizes: Story = {
     </div>
   ),
 };
-
-// With Icons
 
 export const WithIconStart: Story = {
   args: {
@@ -149,8 +158,6 @@ export const IconSizes: Story = {
   ),
 };
 
-// Loading
-
 export const Loading: Story = {
   args: {
     children: 'Saving',
@@ -179,11 +186,15 @@ export const LoadingVariants: Story = {
       <Button className="w-24" variant="destructive" isLoading>
         Destructive
       </Button>
+      <Button variant="retro-primary" size="md" isLoading>
+        Export portfolio
+      </Button>
+      <Button variant="retro-outline" size="md" isLoading>
+        Share
+      </Button>
     </div>
   ),
 };
-
-// Disabled
 
 export const Disabled: Story = {
   args: {
@@ -212,11 +223,15 @@ export const DisabledVariants: Story = {
       <Button variant="destructive" disabled>
         Destructive
       </Button>
+      <Button variant="retro-primary" size="md" disabled>
+        Export portfolio
+      </Button>
+      <Button variant="retro-outline" size="md" disabled>
+        Share
+      </Button>
     </div>
   ),
 };
-
-// Full Width
 
 export const FullWidth: Story = {
   args: { children: '', variant: 'primary' },
@@ -261,6 +276,53 @@ export const PressSizes: Story = {
       <Button variant="press" size="xl" className="h-20 w-20 rounded-full p-0">
         <ProfileOutlineIcon size={24} />
       </Button>
+    </div>
+  ),
+};
+
+export const RetroVariants: Story = {
+  name: 'Retro — all variants',
+  args: { children: '', variant: 'retro-primary' },
+  render: () => (
+    <div className="flex flex-col gap-3 rounded-lg p-8">
+      <Button variant="retro-primary" size="md">
+        <div className="flex flex-row items-center gap-3">
+          <DownloadIcon size={16} />
+          Export portfolio
+        </div>
+      </Button>
+      <Button variant="retro-outline" size="md">
+        <div className="flex flex-row items-center gap-3">
+          <UploadIcon size={16} />
+          Share
+        </div>
+      </Button>
+      <Button variant="retro-outline" size="md">
+        <div className="flex flex-row items-center gap-3">
+          <EditIcon size={16} />
+          Edit
+        </div>
+      </Button>
+    </div>
+  ),
+};
+
+export const RetroSizes: Story = {
+  name: 'Retro — sizes',
+  args: { children: '', variant: 'retro-primary' },
+  render: () => (
+    <div className="flex flex-col gap-3 rounded-lg p-8" style={{ backgroundColor: '#1c5a3e' }}>
+      {(['xs', 'sm', 'md', 'lg'] as const).map((size) => (
+        <div key={size} className="flex items-center gap-3">
+          <span className="w-6 text-xs text-white">{size}</span>
+          <Button variant="retro-primary" size={size}>
+            Export
+          </Button>
+          <Button variant="retro-outline" size={size}>
+            Share
+          </Button>
+        </div>
+      ))}
     </div>
   ),
 };

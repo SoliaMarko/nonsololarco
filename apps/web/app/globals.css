@@ -101,8 +101,30 @@
   --color-danger-contrast: var(--danger-contrast);
   --color-accent-red: var(--accent-red);
   --color-accent-green: var(--accent-green);
+  --color-accent-dark-green: var(--accent-dark-green);
 
   --color-border-primary: var(--border-primary);
+
+  --animate-text-glow: text-glow 0.6s ease-out both;
+}
+
+@layer utilities {
+  .bg-dots {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, currentcolor 10%, transparent) 2px,
+      transparent 2px
+    );
+    background-size: 16px 16px;
+  }
+
+  .hover-fade {
+    transition: opacity 0.3s ease;
+  }
+
+  .hover-fade:hover {
+    opacity: 0.6;
+  }
 }
 
 @utility skeleton-shimmer {
@@ -136,5 +158,21 @@
   50% {
     opacity: 0.5;
     transform: translateY(var(--wave-height, -8px));
+  }
+}
+
+@keyframes text-glow {
+  0% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgb(168 220 192 / 60%);
+  }
+
+  100% {
+    opacity: 1;
+    text-shadow: none;
   }
 }

@@ -5,6 +5,7 @@ import AvatarButton from '@/src/components/ui/AvatarButton';
 import Button from '@/src/components/ui/Button';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
+import { MOCK_PROFILE } from '@/src/data/profile.mock';
 import { useTheme } from '@/src/hooks/global/useTheme';
 import {
   BellIcon,
@@ -23,6 +24,8 @@ export interface AppHeaderNavProps {
 }
 
 export default function AppHeader({ activePath, className }: AppHeaderNavProps) {
+  const profile = MOCK_PROFILE;
+
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -30,20 +33,20 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
   return (
     <header
       className={cn(
-        'sticky top-0 z-100 w-full',
-        'bg-bg-surface border-border-primary border-b',
+        'top-0 z-100 w-full md:sticky',
+        'bg-surface border-border-primary border-b',
         className,
       )}
     >
-      <div className="mli-auto pli-4 flex h-14 items-center">
-        <div className="hidden shrink-0 items-center md:flex">
+      <div className="mli-auto pli-4 flex h-14 items-center gap-10">
+        <div className="hidden shrink-0 items-center lg:flex">
           <Logo variant="wordmark" size="md" />
         </div>
-        <div className="flex shrink-0 items-center md:hidden">
+        <div className="flex shrink-0 items-center lg:hidden">
           <Logo variant="mark" size="sm" />
         </div>
 
-        <nav className="hidden flex-1 items-end gap-1 self-end md:block" aria-label="Main Nav">
+        <nav className="hidden flex-1 items-end gap-1 self-end md:flex" aria-label="Main Nav">
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.href}
@@ -96,7 +99,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
                 ],
               },
             ]}
-            trigger={<AvatarButton initials="SM" />}
+            trigger={<AvatarButton initials={profile.initials} />}
           />
         </div>
       </div>

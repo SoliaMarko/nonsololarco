@@ -35,7 +35,7 @@ export default function AppShell({ activePath, children, className }: AppShellPr
     >
       <AppHeaderNav activePath={activePath} />
 
-      <main className="mli-auto pli-4 plb-6 relative w-full flex-1">{children}</main>
+      <main className="mli-auto relative w-full flex-1">{children}</main>
 
       <AppBottomNav activePath={activePath} />
     </div>

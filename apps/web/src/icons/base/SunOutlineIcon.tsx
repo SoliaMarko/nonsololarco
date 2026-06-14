@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function SunOutlineIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '2',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -23,11 +28,11 @@ function SunOutlineIcon(
       {...props}
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
-      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth="1.5" />
+      <circle cx="12" cy="12" r="3" stroke="currentColor" strokeWidth={strokeWidth} />
       <path
         d="M12 2.5V4.5 M12 19.5V21.5 M2.5 12H4.5 M19.5 12H21.5 M5.1 5.1L6.5 6.5 M17.5 17.5L18.9 18.9 M5.1 18.9L6.5 17.5 M17.5 6.5L18.9 5.1"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>
