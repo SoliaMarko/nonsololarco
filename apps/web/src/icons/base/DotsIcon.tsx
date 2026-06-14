@@ -11,7 +11,7 @@ export interface DotsIconProps extends Partial<SVGProps<SVGSVGElement> & SVGCust
 }
 
 function DotsIcon(
-  { title, titleId, direction = 'vertical', style: styleProp, ...props }: DotsIconProps,
+  { direction = 'vertical', style: styleProp, title, titleId, ...props }: DotsIconProps,
   ref: Ref<SVGSVGElement>,
 ) {
   const isVertical = direction === 'vertical';

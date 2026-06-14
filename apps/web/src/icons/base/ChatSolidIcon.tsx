@@ -25,6 +25,7 @@ function ChatSolidIcon(
   {
     contentColor,
     style,
+    strokeWidth = '1.3',
     title,
     titleId,
     ...props
@@ -57,7 +58,7 @@ function ChatSolidIcon(
         d="M3 4H17V14H11L7 17V14H3V4Z"
         fill="currentColor"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinejoin="round"
       />
       <line
@@ -66,7 +67,7 @@ function ChatSolidIcon(
         x2="14"
         y2="8"
         stroke="var(--icon-content-color, var(--bg-base))"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <line
@@ -75,7 +76,7 @@ function ChatSolidIcon(
         x2="11"
         y2="11"
         stroke="var(--icon-content-color, var(--bg-base))"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>

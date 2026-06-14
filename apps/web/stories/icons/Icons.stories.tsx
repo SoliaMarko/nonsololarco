@@ -15,9 +15,15 @@ import {
   DisconnectOutlineIcon,
   DisconnectSolidIcon,
   DotsIcon,
+  DownloadIcon,
+  EditIcon,
+  GlobeOutlineIcon,
   HomeOutlineIcon,
   HomeSolidIcon,
+  LinkIcon,
+  LocationPinIcon,
   LogOutIcon,
+  MicrophoneIcon,
   MoonOutlineIcon,
   PlusSolidIcon,
   ProfileOutlineIcon,
@@ -30,6 +36,7 @@ import {
   ShareOutlineIcon,
   ShareSolidIcon,
   SunOutlineIcon,
+  UploadIcon,
 } from '@/src/icons/base';
 import { BouquetIcon, FireIcon, MusicPlantIcon, PianoKeysIcon } from '@/src/icons/colorful';
 import {
@@ -202,6 +209,27 @@ function IconGallery({ size, color }: { color: string; size: string }) {
           {...cardProps}
         >
           <ArrowRightSolidIcon size={size} />
+        </IconCard>
+        <IconCard label="DownloadIcon" copyText={toJsx('DownloadIcon')} {...cardProps}>
+          <DownloadIcon size={size} />
+        </IconCard>
+        <IconCard label="EditIcon" copyText={toJsx('EditIcon')} {...cardProps}>
+          <EditIcon size={size} />
+        </IconCard>
+        <IconCard label="GlobeOutlineIcon" copyText={toJsx('GlobeOutlineIcon')} {...cardProps}>
+          <GlobeOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="LinkIcon" copyText={toJsx('LinkIcon')} {...cardProps}>
+          <LinkIcon size={size} />
+        </IconCard>
+        <IconCard label="LocationPinIcon" copyText={toJsx('LocationPinIcon')} {...cardProps}>
+          <LocationPinIcon size={size} />
+        </IconCard>
+        <IconCard label="MicrophoneIcon" copyText={toJsx('MicrophoneIcon')} {...cardProps}>
+          <MicrophoneIcon size={size} />
+        </IconCard>
+        <IconCard label="UploadIcon" copyText={toJsx('UploadIcon')} {...cardProps}>
+          <UploadIcon size={size} />
         </IconCard>
       </Section>
 

@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function ChatOutlineIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.5',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -26,7 +31,7 @@ function ChatOutlineIcon(
       <path
         d="M3 4H17V14H11L7 17V14H3V4Z"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinejoin="round"
       />
       <line
@@ -35,7 +40,7 @@ function ChatOutlineIcon(
         x2="14"
         y2="8"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <line
@@ -44,7 +49,7 @@ function ChatOutlineIcon(
         x2="11"
         y2="11"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>

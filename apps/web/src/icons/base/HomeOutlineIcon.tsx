@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function HomeOutlineIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.5',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -28,7 +33,7 @@ function HomeOutlineIcon(
         fillRule="evenodd"
         clipRule="evenodd"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinejoin="round"
       />
     </svg>
