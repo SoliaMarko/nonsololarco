@@ -1,5 +1,5 @@
 export interface ProfileTag {
-  icon: 'microphone' | 'location' | 'instrument' | 'genre';
+  icon: 'microphone' | 'location';
   labels: string[];
 }
 

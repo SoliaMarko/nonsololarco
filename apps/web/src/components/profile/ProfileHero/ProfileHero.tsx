@@ -13,8 +13,6 @@ import Button from '../../ui/Button';
 const TAG_ICON: Record<ProfileTag['icon'], React.ElementType> = {
   microphone: MicrophoneIcon,
   location: LocationPinIcon,
-  instrument: MicrophoneIcon,
-  genre: MicrophoneIcon,
 };
 
 export default function ProfileHero() {
@@ -33,11 +31,11 @@ export default function ProfileHero() {
           <Text className="text-primary-light text-3xl md:text-5xl">{profile.name}</Text>
 
           <div className="flex flex-row gap-3">
-            {profile.tags.map((tag) => {
+            {profile.tags.map((tag, index) => {
               const Icon = TAG_ICON[tag.icon];
               return (
                 <div
-                  key={tag.labels.join()}
+                  key={index}
                   className="border-emerald-light pli-2 flex flex-row items-center gap-1 border-2 border-solid"
                 >
                   <Icon size={16} />
@@ -64,30 +62,21 @@ export default function ProfileHero() {
       </div>
 
       <div className="flex min-w-45 flex-row gap-4 md:flex-col">
-        <Button
-          className="plb-1 md:plb-3 bg-yellow-main text-primary-dark border-primary-dark -translate-x-0.5 -translate-y-0.5 justify-start rounded-none shadow-[2px_2px_0px_0px_var(--color-primary-dark)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_var(--color-primary-dark)] active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--color-primary-dark)]"
-          variant="press"
-        >
+        <Button variant="retro-primary">
           <div className="flex flex-row items-center gap-2">
             <DownloadIcon className="text-primary-dark" size={16} />
             <Text className="text-primary-dark text-sm sm:text-[1rem]">Export portfolio</Text>
           </div>
         </Button>
 
-        <Button
-          className="plb-1 md:plb-3 bg-primary-light text-primary-dark border-primary-dark -translate-x-0.5 -translate-y-0.5 justify-start rounded-none shadow-[2px_2px_0px_0px_var(--color-primary-dark)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_var(--color-primary-dark)] active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--color-primary-dark)]"
-          variant="press"
-        >
+        <Button variant="retro-outline">
           <div className="flex flex-row items-center gap-2">
             <UploadIcon className="text-primary-dark" size={16} />
             <Text className="text-primary-dark hidden capitalize sm:block">Share</Text>
           </div>
         </Button>
 
-        <Button
-          className="plb-1 md:plb-3 bg-primary-light text-primary-dark border-primary-dark -translate-x-0.5 -translate-y-0.5 justify-start rounded-none shadow-[2px_2px_0px_0px_var(--color-primary-dark)] hover:translate-x-[-4px] hover:translate-y-[-4px] hover:shadow-[4px_4px_0px_0px_var(--color-primary-dark)] active:-translate-x-0.5 active:-translate-y-0.5 active:shadow-[2px_2px_0px_0px_var(--color-primary-dark)]"
-          variant="press"
-        >
+        <Button variant="retro-outline">
           <div className="flex flex-row items-center gap-2">
             <EditIcon className="text-primary-dark" size={16} />
             <Text className="text-primary-dark hidden capitalize sm:block">Edit</Text>

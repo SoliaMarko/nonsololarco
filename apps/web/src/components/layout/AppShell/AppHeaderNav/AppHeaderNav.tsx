@@ -99,7 +99,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
                 ],
               },
             ]}
-            trigger={<AvatarButton initials={MOCK_PROFILE.initials} />}
+            trigger={<AvatarButton initials={profile.initials} />}
           />
         </div>
       </div>

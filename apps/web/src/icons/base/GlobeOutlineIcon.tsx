@@ -1,7 +1,7 @@
 import { Ref, SVGProps, forwardRef, useId } from 'react';
 
 import { SVGCustomProps } from '@/lib/types/common.types';
-import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
+import { calcViewBox } from '@/lib/ui/utils/svg.utils';
 
 function GlobeOutlineIcon(
   {
