@@ -1,12 +1,12 @@
 'use client';
 
 import AppShell from '@/src/components/layout/AppShell';
-import ProfileHero from '@/src/components/profile/ProfileHero';
+import Profile from '@/src/components/profile';
 
 export default function ProfilePage() {
   return (
     <AppShell activePath={'/profile'}>
-      <ProfileHero />
+      <Profile />
     </AppShell>
   );
 }
