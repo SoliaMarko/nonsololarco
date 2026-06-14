@@ -70,6 +70,10 @@
   --color-emerald-main: var(--emerald-main);
   --color-emerald-light: var(--emerald-light);
 
+  /* --- Colors: icons --- */
+  --color-icon-accent-yellow: var(--icon-accent-yellow);
+  --color-icon-accent-green: var(--icon-accent-green);
+
   /* --- Colors: text (fg = foreground, avoids clash with Tailwind's "primary") --- */
   --color-fg-primary: var(--text-primary);
   --color-fg-secondary: var(--text-secondary);
@@ -116,6 +120,15 @@
       transparent 2px
     );
     background-size: 16px 16px;
+  }
+
+  .bg-dots-subtle {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, currentcolor 6%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 12px 12px;
   }
 
   .hover-fade {
