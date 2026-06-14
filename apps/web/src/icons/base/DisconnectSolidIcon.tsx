@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/lib/ui/utils/svg.utils';
 
 function DisconnectSolidIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.5',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   return (
@@ -24,13 +29,13 @@ function DisconnectSolidIcon(
       <path
         d="M2 17C2 14.2 4.2 12 7 12C8.3 12 9.4 12.5 10.3 13.2"
         stroke="currentColor"
-        strokeWidth="2.5"
+        strokeWidth={Number(strokeWidth) * 1.67}
         strokeLinecap="round"
       />
       <path
         d="M13 13L17 17M17 13L13 17"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>

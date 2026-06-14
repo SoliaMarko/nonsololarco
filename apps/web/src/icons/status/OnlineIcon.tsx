@@ -6,6 +6,7 @@ import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 function OnlineIcon(
   {
     className = 'text-status-online',
+    strokeWidth = '1',
     title,
     titleId,
     ...props
@@ -30,7 +31,14 @@ function OnlineIcon(
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <circle cx="18" cy="18" r="7" fill="currentColor" />
-      <circle cx="18" cy="18" r="12" stroke="currentColor" strokeWidth="1" opacity="0.25" />
+      <circle
+        cx="18"
+        cy="18"
+        r="12"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        opacity="0.25"
+      />
     </svg>
   );
 }

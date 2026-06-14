@@ -1,11 +1,11 @@
 import { Ref, SVGProps, forwardRef, useId } from 'react';
 
 import { SVGCustomProps } from '@/lib/types/common.types';
-import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
+import { calcViewBox } from '@/lib/ui/utils/svg.utils';
 
-function CloseSolidIcon(
+function MicrophoneIcon(
   {
-    strokeWidth = '1.3',
+    strokeWidth = '2',
     title,
     titleId,
     ...props
@@ -19,36 +19,24 @@ function CloseSolidIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || 24}
-      width={props.size || 24}
-      viewBox={calcViewBox({ x1: 5, y1: 5, x2: 15, y2: 15 })}
+      height={props.size || '24'}
+      width={props.size || '24'}
+      viewBox={calcViewBox({ x1: 5, y1: 2, x2: 19, y2: 22 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"
       {...props}
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
-      <line
-        x1="5"
-        y1="5"
-        x2="15"
-        y2="15"
+      <path
+        d="M12 2a3 3 0 00-3 3v6a3 3 0 006 0V5a3 3 0 00-3-3zM5 10v1a7 7 0 0014 0v-1M12 18v4M8 22h8"
         stroke="currentColor"
         strokeWidth={strokeWidth}
         strokeLinecap="round"
-      />
-      <line
-        x1="15"
-        y1="5"
-        x2="5"
-        y2="15"
-        stroke="currentColor"
-        strokeWidth={strokeWidth}
-        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
 }
 
-const ForwardRef = forwardRef(CloseSolidIcon);
-export default ForwardRef;
+export default forwardRef(MicrophoneIcon);

@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function ProfileSolidIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '2',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -27,7 +32,7 @@ function ProfileSolidIcon(
         d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2M12 11a4 4 0 100-8 4 4 0 000 8z"
         fill="currentColor"
         stroke="currentColor"
-        strokeWidth="2"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

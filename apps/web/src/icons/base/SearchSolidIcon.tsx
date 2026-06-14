@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function SearchSolidIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.8',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -29,7 +34,12 @@ function SearchSolidIcon(
         clipRule="evenodd"
         d="M9 3.5a5.5 5.5 0 1 1 0 11a5.5 5.5 0 0 1 0-11M9 6a3 3 0 1 0 0 6a3 3 0 0 0 0-6"
       />
-      <path d="M13 13L17 17" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" />
+      <path
+        d="M13 13L17 17"
+        stroke="currentColor"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function ShareSolidIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '1.5',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -32,7 +37,7 @@ function ShareSolidIcon(
         x2="12.5"
         y2="6"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
       <line
@@ -41,7 +46,7 @@ function ShareSolidIcon(
         x2="12.5"
         y2="14"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>
