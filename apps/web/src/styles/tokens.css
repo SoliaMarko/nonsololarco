@@ -43,6 +43,7 @@
   --primary-light: #f0e8d8;
   --primary-dark: #1c1a18;
   --accent-red: #c0392b;
+  --accent-dark-green: #1c5a3e;
 
   /* --- DARK (default): Basic Backgrounds --- */
   --bg-base: #1a1713;
@@ -118,11 +119,10 @@
   --danger-contrast: #2a0a0a;
 
   /* --- LIGHT: Text --- */
+  --text-primary: #1a1410;
   --text-secondary: #4a4540;
   --text-tertiary: #7a7268;
   --text-yellow-contrast: #2a2808;
-
-  --text-primary: #1a1410;
   --text-muted: #6b5e4e;
   --text-disabled: #a89880;
 

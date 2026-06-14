@@ -1,14 +1,15 @@
 export function WordmarkSvg({ scale }: { scale: number }) {
-  const width = Math.round(290 * scale);
+  const width = Math.round(194 * scale);
   const height = Math.round(42 * scale);
 
   return (
     <svg
       width={width}
       height={height}
-      viewBox="0 0 290 42"
+      viewBox="0 0 194 42"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden="true"
+      style={{ userSelect: 'none' }}
     >
       <path
         d="M4 34 C10 18, 18 18, 26 34 C29 40, 32 40, 35 34"
