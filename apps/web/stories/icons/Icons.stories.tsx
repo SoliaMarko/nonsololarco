@@ -20,12 +20,14 @@ import {
   GlobeOutlineIcon,
   HomeOutlineIcon,
   HomeSolidIcon,
+  ImageIcon,
   LinkIcon,
   LocationPinIcon,
   LogOutIcon,
   MicrophoneIcon,
   MoonOutlineIcon,
   PickIcon,
+  PlayIcon,
   PlusSolidIcon,
   ProfileOutlineIcon,
   ProfileSolidIcon,
@@ -231,6 +233,12 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="UploadIcon" copyText={toJsx('UploadIcon')} {...cardProps}>
           <UploadIcon size={size} />
+        </IconCard>
+        <IconCard label="ImageIcon" copyText={toJsx('ImageIcon')} {...cardProps}>
+          <ImageIcon size={size} />
+        </IconCard>
+        <IconCard label="PlayIcon" copyText={toJsx('PlayIcon')} {...cardProps}>
+          <PlayIcon size={size} />
         </IconCard>
       </Section>
 

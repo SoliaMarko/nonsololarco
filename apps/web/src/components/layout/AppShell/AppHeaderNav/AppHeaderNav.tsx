@@ -33,10 +33,11 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
   return (
     <header
       className={cn(
-        'top-0 z-100 w-full md:sticky',
-        'bg-surface border-border-primary bg-dots-subtle border-b',
+        'z-header top-0 w-full md:sticky',
+        'border-border-primary bg-dots-subtle border-b',
         className,
       )}
+      style={{ backgroundColor: 'var(--bg-surface)' }}
     >
       <div className="mli-auto pli-4 flex h-14 items-center gap-10">
         <div className="hidden shrink-0 items-center lg:flex">

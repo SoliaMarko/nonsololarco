@@ -110,6 +110,9 @@
   --color-border-primary: var(--border-primary);
 
   --animate-text-glow: text-glow 0.6s ease-out both;
+
+  --z-index-header: 100;
+  --z-index-dropdown: 150;
 }
 
 @layer utilities {
@@ -125,7 +128,7 @@
   .bg-dots-subtle {
     background-image: radial-gradient(
       circle,
-      color-mix(in srgb, currentcolor 6%, transparent) 1px,
+      color-mix(in srgb, currentcolor 7%, transparent) 1px,
       transparent 1px
     );
     background-size: 12px 12px;
