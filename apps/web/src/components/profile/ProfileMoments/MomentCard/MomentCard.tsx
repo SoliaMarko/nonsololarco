@@ -21,6 +21,13 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
     }
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (isVideo && moment.videoUrl && (e.key === 'Enter' || e.key === ' ')) {
+      e.preventDefault();
+      window.open(moment.videoUrl, '_blank', 'noopener,noreferrer');
+    }
+  };
+
   return (
     <div
       className={cn(
@@ -30,7 +37,8 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
         isVideo && 'cursor-pointer',
         className,
       )}
-      onClick={handleClick}
+      onClick={isVideo ? handleClick : () => {}}
+      onKeyDown={isVideo ? handleKeyDown : () => {}}
       role={isVideo ? 'button' : undefined}
       tabIndex={isVideo ? 0 : undefined}
     >
