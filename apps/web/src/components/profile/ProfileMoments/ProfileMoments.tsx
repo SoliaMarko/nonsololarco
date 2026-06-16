@@ -15,7 +15,15 @@ export interface ProfileMomentsProps {
 
 export default function ProfileMoments({ moments, isOwnProfile, className }: ProfileMomentsProps) {
   const featured = moments.find((m) => m.isFeatured);
-  const rest = moments.filter((m) => !m.isFeatured);
+  const rest = moments.filter((m) => m !== featured);
+
+  const featuredCount = moments.filter((m) => m.isFeatured).length;
+
+  if (featuredCount > 1) {
+    console.warn(
+      `ProfileMoments: ${featuredCount} featured moments found, only the first will be displayed.`,
+    );
+  }
 
   return (
     <section className={cn('w-full p-6', className)}>
@@ -33,7 +41,12 @@ export default function ProfileMoments({ moments, isOwnProfile, className }: Pro
         photos and videos · drag your
       </Text>
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-[1.4fr_1fr]">
+      <div
+        className={cn(
+          'grid grid-cols-1 gap-4',
+          featured ? 'md:grid-cols-2 lg:grid-cols-[1.4fr_1fr]' : 'md:grid-cols-2',
+        )}
+      >
         {featured ? (
           <MomentCard
             moment={featured}
