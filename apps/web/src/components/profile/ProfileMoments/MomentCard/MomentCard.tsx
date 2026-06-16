@@ -61,7 +61,7 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
           </div>
         ) : (
           <Image
-            src={moment.thumbnailUrl ?? ''}
+            src={String(moment.thumbnailUrl)}
             alt={moment.caption}
             fill
             className="object-cover"
