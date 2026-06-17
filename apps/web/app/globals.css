@@ -110,9 +110,6 @@
   --color-border-primary: var(--border-primary);
 
   --animate-text-glow: text-glow 0.6s ease-out both;
-
-  --z-index-header: 100;
-  --z-index-dropdown: 150;
 }
 
 @layer utilities {
@@ -152,6 +149,14 @@
     var(--bg-elevated) 75%
   );
   background-size: 200% 100%;
+}
+
+@utility z-header {
+  z-index: 100;
+}
+
+@utility z-dropdown {
+  z-index: 150;
 }
 
 @keyframes shimmer {
