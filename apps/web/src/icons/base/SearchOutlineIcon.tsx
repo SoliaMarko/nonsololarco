@@ -4,7 +4,12 @@ import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/lib/ui/utils/svg.utils';
 
 function SearchOutlineIcon(
-  { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
+  {
+    strokeWidth = '2',
+    title,
+    titleId,
+    ...props
+  }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,
 ) {
   const generatedId = useId();
@@ -23,14 +28,14 @@ function SearchOutlineIcon(
       {...props}
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
-      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth="1.3" />
+      <circle cx="9" cy="9" r="5.5" stroke="currentColor" strokeWidth={strokeWidth} />
       <line
         x1="13"
         y1="13"
         x2="17"
         y2="17"
         stroke="currentColor"
-        strokeWidth="1.3"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
       />
     </svg>

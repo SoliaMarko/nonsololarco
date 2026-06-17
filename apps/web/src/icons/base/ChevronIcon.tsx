@@ -18,7 +18,14 @@ export interface ChevronIconProps extends Partial<SVGProps<SVGSVGElement> & SVGC
 }
 
 function ChevronIcon(
-  { title, titleId, direction = 'down', style: styleProp, ...props }: ChevronIconProps,
+  {
+    strokeWidth = '1.5',
+    title,
+    titleId,
+    direction = 'down',
+    style: styleProp,
+    ...props
+  }: ChevronIconProps,
   ref: Ref<SVGSVGElement>,
 ) {
   return (
@@ -38,7 +45,7 @@ function ChevronIcon(
       <path
         d="M5 7.5L10 12.5L15 7.5"
         stroke="currentColor"
-        strokeWidth="1.5"
+        strokeWidth={strokeWidth}
         strokeLinecap="round"
         strokeLinejoin="round"
       />

@@ -36,20 +36,14 @@
   --text-leading-normal: 1.5;
   --text-leading-relaxed: 1.6;
 
-  /* --- Breakpoints --- */
-  --screen-xs: 20rem; /* 320px */
-  --screen-sm: 40rem; /* 640px */
-  --screen-md: 48rem; /* 768px */
-  --screen-lg: 64rem; /* 1024px */
-  --screen-xl: 80rem; /* 1280px */
-  --screen-2xl: 96rem; /* 1536px */
-
   /* --- Shared across DARK & LIGHT--- */
   --danger: #d94040;
   --danger-deep: #b03030;
   --emerald-light: #a8dcc0;
   --primary-light: #f0e8d8;
   --primary-dark: #1c1a18;
+  --accent-red: #c0392b;
+  --accent-dark-green: #1c5a3e;
 
   /* --- DARK (default): Basic Backgrounds --- */
   --bg-base: #1a1713;
@@ -75,12 +69,21 @@
   --danger-subtle: #2a0a0a;
   --danger-contrast: #fceaea;
 
+  /* --- DARK: Icons --- */
+  --icon-accent-yellow: #e8e07a;
+  --icon-accent-green: #a8dcc0;
+
   /* --- DARK: Text --- */
   --text-primary: #f0e8d8;
   --text-secondary: #c8bea8;
   --text-tertiary: #8a8078;
-  --text-disabled: #6a5e50;
   --text-yellow-contrast: #2a2808;
+  --text-muted: #c8bca8;
+  --text-disabled: #4a4238;
+
+  --border-primary: #3a3228;
+
+  --accent-green: #3d9b72;
 
   /* --- DARK: Status --- */
   --status-online: #3d9b72;
@@ -95,12 +98,13 @@
 /* --- LIGHT THEME --- */
 [data-theme='light'] {
   /* --- LIGHT: Basic Backgrounds --- */
-  --bg-base: #f7f4ef;
-  --bg-surface: #ede8e2;
-  --bg-card: #fff;
+  --bg-surface: #ede8dc;
   --bg-elevated: #e4ded6;
   --bg-edge: #d4cec6;
   --bg-contrast: #1c1a18;
+
+  --bg-base: #f5f0e8;
+  --bg-card: #e8e2d4;
 
   /* --- LIGHT: Emerald accent --- */
   --emerald-subtle: #d8efe6;
@@ -118,12 +122,21 @@
   --danger-subtle: #fceaea;
   --danger-contrast: #2a0a0a;
 
+  /* --- LIGHT: Icons --- */
+  --icon-accent-yellow: #8a8020;
+  --icon-accent-green: #2a7a58;
+
   /* --- LIGHT: Text --- */
-  --text-primary: #1c1a18;
+  --text-primary: #1a1410;
   --text-secondary: #4a4540;
   --text-tertiary: #7a7268;
-  --text-disabled: #b0a898;
   --text-yellow-contrast: #2a2808;
+  --text-muted: #6b5e4e;
+  --text-disabled: #a89880;
+
+  --border-primary: #c8bfb0;
+
+  --accent-green: #1c5a3e;
 
   /* --- LIGHT: Status --- */
   --status-online: #2a7a58;

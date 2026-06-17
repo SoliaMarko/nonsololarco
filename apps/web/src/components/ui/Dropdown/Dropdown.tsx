@@ -70,7 +70,7 @@ function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className }: 
           align={align}
           sideOffset={6}
           className={cn(
-            'bg-card border-edge z-50 w-fit min-w-40 rounded-lg border',
+            'bg-card border-edge z-dropdown w-fit min-w-40 rounded-lg border',
             'shadow-[0_4px_16px_rgba(0,0,0,0.3)]',
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',

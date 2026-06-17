@@ -45,12 +45,12 @@
   --leading-relaxed: var(--text-leading-relaxed);
 
   /* --- Breakpoints --- */
-  --breakpoint-xs: var(--screen-xs);
-  --breakpoint-sm: var(--screen-sm);
-  --breakpoint-md: var(--screen-md);
-  --breakpoint-lg: var(--screen-lg);
-  --breakpoint-xl: var(--screen-xl);
-  --breakpoint-2xl: var(--screen-2xl);
+  --breakpoint-xs: 20rem; /* 320px */
+  --breakpoint-sm: 40rem; /* 640px */
+  --breakpoint-md: 48rem; /* 768px */
+  --breakpoint-lg: 64rem; /* 1024px */
+  --breakpoint-xl: 80rem; /* 1280px */
+  --breakpoint-2xl: 96rem; /* 1536px */
 
   /* --- Colors: common shared --- */
   --color-primary-light: var(--primary-light);
@@ -70,12 +70,17 @@
   --color-emerald-main: var(--emerald-main);
   --color-emerald-light: var(--emerald-light);
 
+  /* --- Colors: icons --- */
+  --color-icon-accent-yellow: var(--icon-accent-yellow);
+  --color-icon-accent-green: var(--icon-accent-green);
+
   /* --- Colors: text (fg = foreground, avoids clash with Tailwind's "primary") --- */
   --color-fg-primary: var(--text-primary);
   --color-fg-secondary: var(--text-secondary);
   --color-fg-tertiary: var(--text-tertiary);
   --color-fg-disabled: var(--text-disabled);
   --color-yellow-contrast: var(--text-yellow-contrast);
+  --color-fg-muted: var(--text-muted);
 
   /* --- Colors: status --- */
   --color-status-online: var(--status-online);
@@ -98,6 +103,41 @@
   --color-danger-deep: var(--danger-deep);
   --color-danger-subtle: var(--danger-subtle);
   --color-danger-contrast: var(--danger-contrast);
+  --color-accent-red: var(--accent-red);
+  --color-accent-green: var(--accent-green);
+  --color-accent-dark-green: var(--accent-dark-green);
+
+  --color-border-primary: var(--border-primary);
+
+  --animate-text-glow: text-glow 0.6s ease-out both;
+}
+
+@layer utilities {
+  .bg-dots {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, currentcolor 10%, transparent) 2px,
+      transparent 2px
+    );
+    background-size: 16px 16px;
+  }
+
+  .bg-dots-subtle {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, currentcolor 7%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 12px 12px;
+  }
+
+  .hover-fade {
+    transition: opacity 0.3s ease;
+  }
+
+  .hover-fade:hover {
+    opacity: 0.6;
+  }
 }
 
 @utility skeleton-shimmer {
@@ -109,6 +149,14 @@
     var(--bg-elevated) 75%
   );
   background-size: 200% 100%;
+}
+
+@utility z-header {
+  z-index: 100;
+}
+
+@utility z-dropdown {
+  z-index: 150;
 }
 
 @keyframes shimmer {
@@ -131,5 +179,21 @@
   50% {
     opacity: 0.5;
     transform: translateY(var(--wave-height, -8px));
+  }
+}
+
+@keyframes text-glow {
+  0% {
+    opacity: 0.4;
+  }
+
+  50% {
+    opacity: 1;
+    text-shadow: 0 0 8px rgb(168 220 192 / 60%);
+  }
+
+  100% {
+    opacity: 1;
+    text-shadow: none;
   }
 }
