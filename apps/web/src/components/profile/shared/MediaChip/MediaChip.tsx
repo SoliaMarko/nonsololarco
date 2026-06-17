@@ -21,7 +21,7 @@ export default function MediaChip({ kind, label, url }: MediaChipProps) {
 
   return (
     <Link
-      href={url ?? ''}
+      href={url}
       target="_blank"
       rel="noopener noreferrer"
       className={cn(

@@ -21,8 +21,13 @@ export default function WishlistRow({ hasMoreWishes, track }: WishlistRowProps) 
       </span>
       <Text className="text-fg-primary flex-1 font-black">{track.title}</Text>
       <div className="flex flex-wrap items-center gap-1.5">
-        {track.media.map((mediaItem, index) => (
-          <MediaChip key={index} kind={mediaItem.kind} label={mediaItem.label} url="#" />
+        {track.media.map((mediaItem) => (
+          <MediaChip
+            key={`${mediaItem.kind}-${mediaItem.label}`}
+            kind={mediaItem.kind}
+            label={mediaItem.label}
+            url="#"
+          />
         ))}
       </div>
     </div>
