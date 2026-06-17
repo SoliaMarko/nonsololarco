@@ -1,10 +1,8 @@
-import { ORIENTATION } from '@/src/lib/constants/common.const';
 import { MomentType } from '@/src/lib/types/profile/profile.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 
-import Heading from '../../typography/Heading';
 import Text from '../../typography/Text';
-import Divider from '../../ui/Divider';
+import SectionHeader from '../shared/SectionHeader';
 import MomentCard from './MomentCard';
 
 export interface ProfileMomentsProps {
@@ -14,8 +12,8 @@ export interface ProfileMomentsProps {
 }
 
 export default function ProfileMoments({ moments, isOwnProfile, className }: ProfileMomentsProps) {
-  const featured = moments.find((m) => m.isFeatured);
-  const rest = moments.filter((m) => m !== featured);
+  const featured = moments.find((moment) => moment.isFeatured);
+  const rest = moments.filter((moment) => moment !== featured);
 
   const featuredCount = moments.filter((m) => m.isFeatured).length;
 
@@ -27,16 +25,7 @@ export default function ProfileMoments({ moments, isOwnProfile, className }: Pro
 
   return (
     <section className={cn('w-full p-6', className)}>
-      {/* Section header */}
-      <div className="flex items-center gap-4 sm:mbe-6">
-        <Heading tag="h2" className="shrink-0">
-          Moments
-        </Heading>
-        <Divider className="w-full" orientation={ORIENTATION.horizontal} />
-        <Text className="text-fg-tertiary hidden shrink-0 text-xs tracking-widest uppercase sm:block">
-          photos and videos · drag your
-        </Text>
-      </div>
+      <SectionHeader title="Moments" meta="photos and videos · drag your" />
       <Text className="text-fg-tertiary mbe-4 shrink-0 text-xs tracking-widest uppercase sm:hidden">
         photos and videos · drag your
       </Text>

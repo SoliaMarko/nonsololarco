@@ -33,7 +33,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
   return (
     <header
       className={cn(
-        'z-header top-0 w-full md:sticky',
+        'md:z-header top-0 w-full md:sticky',
         'border-border-primary bg-dots-subtle border-b',
         className,
       )}
