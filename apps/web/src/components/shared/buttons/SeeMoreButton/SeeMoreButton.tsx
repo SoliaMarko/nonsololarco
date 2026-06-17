@@ -10,10 +10,7 @@ export interface SeeMoreButtonProps {
 
 export default function SeeMoreButton({ href }: SeeMoreButtonProps) {
   return (
-    <Link
-      href={href}
-      className="text-emerald-main hover:text-contrast mbs-3 gap-1 self-end text-sm font-medium"
-    >
+    <Link href={href} className="text-emerald-main self-end text-sm font-medium">
       <Button variant="ghost">
         <div className="flex items-center gap-1">
           <Text className="text-inherit">See all</Text>

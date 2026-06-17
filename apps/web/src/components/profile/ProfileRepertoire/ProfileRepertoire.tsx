@@ -33,9 +33,10 @@ export default function ProfileRepertoire({
 
   const visibleLeads = leads.slice(0, maxLeads);
   const hasMoreLeads = leads.length > maxLeads;
-  const hasMoreWishes = wishlist.length > maxWishes;
 
   const publicWishlist = wishlist.filter((wishlistItem) => wishlistItem.visibility === 'public');
+  const visibleWishlist = publicWishlist.slice(0, maxWishes);
+  const hasMoreWishes = publicWishlist.length > maxWishes;
   const showWishlist = publicWishlist.length > 0;
 
   return (
@@ -53,7 +54,7 @@ export default function ProfileRepertoire({
           ))}
         </div>
         {hasMoreLeads ? (
-          <div className="flex justify-end">
+          <div className="mbs-3 flex justify-end">
             <SeeMoreButton href={repertoireHref} />
           </div>
         ) : null}
@@ -64,12 +65,12 @@ export default function ProfileRepertoire({
         <section>
           <SectionHeader className="sm:mbe-3" title="Want to learn" />
           <div>
-            {publicWishlist.map((track) => (
+            {visibleWishlist.map((track) => (
               <WishlistRow key={track.id} hasMoreWishes={hasMoreWishes} track={track} />
             ))}
           </div>
           {hasMoreWishes ? (
-            <div className="flex justify-end">
+            <div className="mbs-3 flex justify-end">
               <SeeMoreButton href={wishlistHref} />
             </div>
           ) : null}
