@@ -5,7 +5,7 @@ import AvatarButton from '@/src/components/ui/AvatarButton';
 import Button from '@/src/components/ui/Button';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
-import { MOCK_PROFILE } from '@/src/data/profile.mock';
+import { MOCK_PROFILE } from '@/src/data/profile/profile.mock';
 import { useTheme } from '@/src/hooks/global/useTheme';
 import {
   BellIcon,

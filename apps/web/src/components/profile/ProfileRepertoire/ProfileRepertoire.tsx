@@ -1,4 +1,4 @@
-import { MOCK_LEAD_TRACKS, MOCK_WISHLIST } from '@/src/data/repertoire.mock';
+import { MOCK_LEAD_TRACKS, MOCK_WISHLIST } from '@/src/data/profile/repertoire.mock';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 import SeeMoreButton from '../../shared/buttons/SeeMoreButton';

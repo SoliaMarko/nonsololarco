@@ -29,3 +29,45 @@ export type MomentType = {
   /** Only for video: external link (YouTube/Vimeo) opened on click */
   videoUrl?: string;
 };
+
+export type InstrumentKind =
+  | 'vocal'
+  | 'violin'
+  | 'acoustic'
+  | 'keys'
+  | 'drums'
+  | 'bass'
+  | 'cello'
+  | 'flute'
+  | 'trumpet'
+  | 'saxophone'
+  | 'harp'
+  | 'ukulele';
+
+export interface Instrument {
+  kind: InstrumentKind;
+  label: string;
+}
+
+export interface Band {
+  avatarUrl?: string;
+  id: string;
+  name: string;
+  role: string;
+  since?: number;
+}
+
+export type AchievementKind = 'streak' | 'solo' | 'top3' | 'fire';
+
+export interface Achievement {
+  count?: number;
+  id: string;
+  kind: AchievementKind;
+  label: string;
+}
+
+export interface ProfileSidebar {
+  achievements: Achievement[];
+  bands: Band[];
+  instruments: Instrument[];
+}
