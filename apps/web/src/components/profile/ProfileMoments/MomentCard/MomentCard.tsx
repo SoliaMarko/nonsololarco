@@ -56,8 +56,10 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
       <div className="relative flex h-full min-h-46 w-full items-center justify-center">
         {isEmpty ? (
           <div className="text-fg-tertiary flex flex-col items-center gap-2">
-            <ImageIcon size={28} aria-hidden="true" />
-            <span className="text-sm">{isOwnProfile ? `↓ ${isVideo ? 'відео' : 'фото'}` : ''}</span>
+            {!isVideo ? <ImageIcon size={36} aria-hidden="true" /> : null}
+            <span className="text-sm">
+              {isOwnProfile ? `↓ ${isVideo ? 'video' : 'photo'}` : ''}
+            </span>
           </div>
         ) : (
           <Image
@@ -90,8 +92,14 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
         </div>
       ) : null}
 
-      <div className="plb-2 pli-3 from-fg-secondary/80 absolute inset-x-0 bottom-0 z-10 bg-linear-to-t to-transparent">
-        <span className="text-secondary-light text-xs font-medium tracking-wider uppercase">
+      <div
+        className="pli-3 absolute inset-x-0 bottom-0 z-10 flex h-[60%] items-end pbe-3"
+        style={{
+          background:
+            'linear-gradient(to top, var(--gradient-card-overlay) 0%, color-mix(in srgb, var(--gradient-card-overlay) 30%, transparent) 50%, transparent 100%)',
+        }}
+      >
+        <span className="text-fg-secondary text-xs font-medium tracking-wider uppercase">
           {moment.caption}
         </span>
       </div>

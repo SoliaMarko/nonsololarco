@@ -70,7 +70,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
                   : 'Switch to dark theme'
                 : 'Toggle theme'
             }
-            className="border-px bg-base size-10 rounded-full p-0"
+            className="bg-base size-10 rounded-full border-2 p-0"
             onClick={toggleTheme}
             variant="press"
           >
