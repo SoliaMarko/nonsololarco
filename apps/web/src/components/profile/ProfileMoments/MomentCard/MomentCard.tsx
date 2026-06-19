@@ -53,7 +53,7 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
         />
       ) : null}
 
-      <div className="relative flex h-full min-h-32 w-full items-center justify-center">
+      <div className="relative flex h-full min-h-46 w-full items-center justify-center">
         {isEmpty ? (
           <div className="text-fg-tertiary flex flex-col items-center gap-2">
             <ImageIcon size={28} aria-hidden="true" />
