@@ -3,6 +3,16 @@ import { ReactNode, useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/nextjs';
 
 import {
+  BoltOutlineIcon,
+  ClockOutlineIcon,
+  CrownOutlineIcon,
+  DiamondOutlineIcon,
+  FlameOutlineIcon,
+  HeartOutlineIcon,
+  StarOutlineIcon,
+  TeamOutlineIcon,
+} from '@/src/icons/achievements';
+import {
   ArrowLeftSolidIcon,
   ArrowRightSolidIcon,
   BellIcon,
@@ -374,6 +384,33 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="WholeRestIcon" copyText={toJsx('WholeRestIcon')} {...cardProps} size="36">
           <WholeRestIcon size="36" />
+        </IconCard>
+      </Section>
+
+      <Section title="Achievements">
+        <IconCard label="BoltOutlineIcon" copyText={toJsx('BoltOutlineIcon')} {...cardProps}>
+          <BoltOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="ClockOutlineIcon" copyText={toJsx('ClockOutlineIcon')} {...cardProps}>
+          <ClockOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="CrownOutlineIcon" copyText={toJsx('CrownOutlineIcon')} {...cardProps}>
+          <CrownOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="DiamondOutlineIcon" copyText={toJsx('DiamondOutlineIcon')} {...cardProps}>
+          <DiamondOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="FlameOutlineIcon" copyText={toJsx('FlameOutlineIcon')} {...cardProps}>
+          <FlameOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="HeartOutlineIcon" copyText={toJsx('HeartOutlineIcon')} {...cardProps}>
+          <HeartOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="StarOutlineIcon" copyText={toJsx('StarOutlineIcon')} {...cardProps}>
+          <StarOutlineIcon size={size} />
+        </IconCard>
+        <IconCard label="TeamOutlineIcon" copyText={toJsx('TeamOutlineIcon')} {...cardProps}>
+          <TeamOutlineIcon size={size} />
         </IconCard>
       </Section>
     </div>
