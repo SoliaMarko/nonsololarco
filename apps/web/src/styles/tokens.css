@@ -95,7 +95,7 @@
   --status-inactive: #5a5248;
 
   /* --- DARK: Gradient --- */
-  --gradient-card-overlay: rgba(10, 8, 6, 0.92);
+  --gradient-card-overlay: rgb(10 8 6 / 92%);
 }
 
 /* --- LIGHT THEME --- */
@@ -151,7 +151,7 @@
   --status-inactive: #b0a898;
 
   /* --- LIGHT: Gradient --- */
-  --gradient-card-overlay: rgba(22, 20, 14, 0.45);
+  --gradient-card-overlay: rgb(22 20 14 / 45%);
 }
 
 /* --- Dotted divider --- */
