@@ -14,8 +14,8 @@ function PianoKeysIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '64'}
-      width={props.size || '64'}
+      height={props.size || 64}
+      width={props.size || 64}
       viewBox={calcViewBox({ x1: 24, y1: 24, x2: 656, y2: 396 }, 8)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

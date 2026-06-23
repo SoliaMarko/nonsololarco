@@ -23,8 +23,8 @@ function ClockOutlineIcon(
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 3.8, y1: 3.8, x2: 20.2, y2: 20.2 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

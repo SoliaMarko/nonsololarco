@@ -21,8 +21,8 @@ function OnlineIcon(
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       className={className}
       fill="none"
-      height={props.size || '36'}
-      width={props.size || '36'}
+      height={props.size || 36}
+      width={props.size || 36}
       viewBox={calcViewBox({ x1: 6, y1: 6, x2: 30, y2: 30 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

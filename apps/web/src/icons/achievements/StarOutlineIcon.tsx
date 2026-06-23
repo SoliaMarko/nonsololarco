@@ -23,8 +23,8 @@ function StarOutlineIcon(
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 3.4, y1: 3.6, x2: 20.6, y2: 19.9 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

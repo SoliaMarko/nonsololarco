@@ -23,8 +23,8 @@ function DiamondOutlineIcon(
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 4, y1: 3, x2: 20, y2: 21 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

@@ -16,8 +16,8 @@ function WholeRestIcon(
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       className={className}
       fill="none"
-      height={props.size || '36'}
-      width={props.size || '36'}
+      height={props.size || 36}
+      width={props.size || 36}
       viewBox={calcViewBox({ x1: 34, y1: 86, x2: 146, y2: 120 }, 4)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

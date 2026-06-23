@@ -19,8 +19,8 @@ function DownloadIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 5, y1: 3, x2: 19, y2: 21 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

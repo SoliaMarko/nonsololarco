@@ -16,8 +16,8 @@ function QuarterRestIcon(
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       className={className}
       fill="none"
-      height={props.size || '36'}
-      width={props.size || '36'}
+      height={props.size || 36}
+      width={props.size || 36}
       viewBox={calcViewBox({ x1: 229, y1: 177, x2: 306, y2: 392 }, 4)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

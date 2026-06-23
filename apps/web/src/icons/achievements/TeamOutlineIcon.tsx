@@ -23,8 +23,8 @@ function TeamOutlineIcon(
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 3.6, y1: 5.5, x2: 20.4, y2: 19 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

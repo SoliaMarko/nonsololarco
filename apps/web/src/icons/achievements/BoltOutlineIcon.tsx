@@ -23,9 +23,9 @@ function BoltOutlineIcon(
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      height={props.size || '24'}
-      width={props.size || '24'}
-      viewBox={calcViewBox({ x1: 6, y1: 3, x2: 14, y2: 21 })}
+      height={props.size || 24}
+      width={props.size || 24}
+      viewBox={calcViewBox({ x1: 6, y1: 3, x2: 18, y2: 21 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
       xmlns="http://www.w3.org/2000/svg"

@@ -14,8 +14,8 @@ function FireIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '64'}
-      width={props.size || '64'}
+      height={props.size || 64}
+      width={props.size || 64}
       viewBox={calcViewBox({ x1: 22, y1: 8, x2: 50, y2: 44 }, 2)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

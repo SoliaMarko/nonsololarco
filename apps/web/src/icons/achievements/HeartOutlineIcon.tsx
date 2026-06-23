@@ -23,8 +23,8 @@ function HeartOutlineIcon(
       strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 3, y1: 3.9, x2: 21, y2: 20.5 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
