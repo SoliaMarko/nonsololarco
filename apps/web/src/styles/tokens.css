@@ -53,6 +53,9 @@
   --bg-edge: #4a4038;
   --bg-contrast: #f0e8d8;
 
+  /* --- DARK: Blue accent --- */
+  --blue-subtle: #7fb2f5;
+
   /* --- DARK: Emerald accent --- */
   --emerald-subtle: #1c3828;
   --emerald-deep: #2a5c44;
@@ -108,6 +111,9 @@
 
   --bg-base: #f5f0e8;
   --bg-card: #e8e2d4;
+
+  /* --- LIGHT: Blue accent --- */
+  --blue-subtle: #3b82e0;
 
   /* --- LIGHT: Emerald accent --- */
   --emerald-subtle: #d8efe6;

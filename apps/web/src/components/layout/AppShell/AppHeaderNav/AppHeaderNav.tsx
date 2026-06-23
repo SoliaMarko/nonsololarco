@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 
+import Link from 'next/link';
+
 import Logo from '@/components/ui/Logo';
 import AvatarButton from '@/src/components/ui/AvatarButton';
 import Button from '@/src/components/ui/Button';
@@ -40,12 +42,14 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
       <div className="mli-auto pli-4 flex h-14 items-center gap-10">
-        <div className="hidden shrink-0 items-center lg:flex">
-          <Logo variant="wordmark" size="md" />
-        </div>
-        <div className="flex shrink-0 items-center lg:hidden">
-          <Logo variant="mark" size="sm" />
-        </div>
+        <Link href="/">
+          <div className="hidden shrink-0 items-center lg:flex">
+            <Logo variant="wordmark" size="md" />
+          </div>
+          <div className="flex shrink-0 items-center lg:hidden">
+            <Logo variant="mark" size="sm" />
+          </div>
+        </Link>
 
         <nav className="hidden flex-1 items-end gap-1 self-end md:flex" aria-label="Main Nav">
           {NAV_ITEMS.map((item) => (

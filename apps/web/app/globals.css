@@ -65,6 +65,9 @@
   --color-edge: var(--bg-edge);
   --color-contrast: var(--bg-contrast);
 
+  /* --- Colors: blue --- */
+  --color-blue-subtle: var(--blue-subtle);
+
   /* --- Colors: emerald accent --- */
   --color-emerald-subtle: var(--emerald-subtle);
   --color-emerald-deep: var(--emerald-deep);

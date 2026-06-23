@@ -1,4 +1,4 @@
-import { CalendarIcon, RepertoireIcon } from '@/src/icons/base';
+import { CalendarIcon, MicrophoneIcon, RepertoireIcon } from '@/src/icons/base';
 import { BouquetIcon } from '@/src/icons/colorful';
 import MediatorBadge from '@/src/illustrations/picks/MediatorBadge';
 
@@ -25,7 +25,8 @@ export const PROFILE_STATS: ProfileStatsConfig[] = [
     valueKey: 'tracksCount',
   },
   {
-    icon: BouquetIcon,
+    color: 'text-blue-subtle',
+    icon: MicrophoneIcon,
     label: 'Performances',
     valueKey: 'performancesCount',
   },
