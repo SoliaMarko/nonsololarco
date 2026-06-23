@@ -32,7 +32,7 @@ export default function MediatorBadge({
       style={{
         width: size,
         height: height,
-        perspective: 600,
+        perspective: '600px',
       }}
     >
       <div

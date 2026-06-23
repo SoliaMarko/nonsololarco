@@ -36,13 +36,13 @@ export default function AchievementBadge({
   progress = 1,
   size = 80,
 }: AchievementBadgeProps) {
-  const id = useId().replace(/:/g, 'ab');
+  const id = useId().replace(/:/g, '_');
   const colorConfig = COLOR_CONFIG[color];
-  const arc = Math.min(progress, 1) * CIRCUMFERENCE;
-  const resolvedIconSize = String(iconSize ?? Math.round(size * 0.32));
+  const arc = Math.max(0, Math.min(progress, 1)) * CIRCUMFERENCE;
+  const resolvedIconSize = iconSize ?? Math.round(size * 0.32);
 
   const scaledIcon = isValidElement(icon)
-    ? cloneElement(icon as React.ReactElement<{ size?: string }>, { size: resolvedIconSize })
+    ? cloneElement(icon as React.ReactElement<{ size?: number }>, { size: resolvedIconSize })
     : icon;
 
   return (
@@ -108,7 +108,7 @@ export default function AchievementBadge({
             stroke={colorConfig.stroke}
             strokeWidth="4"
             strokeLinecap="round"
-            strokeDasharray={`${arc} 282.2`}
+            strokeDasharray={`${arc} ${CIRCUMFERENCE}`}
             transform="rotate(-90 60 60)"
           />
           <circle

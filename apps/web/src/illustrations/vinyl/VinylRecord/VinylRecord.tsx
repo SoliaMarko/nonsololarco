@@ -1,6 +1,6 @@
 'use client';
 
-import { useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
 import { cn } from '@/src/lib/ui/utils/cn';
@@ -31,6 +31,15 @@ export default function VinylRecord({
   const angleRef = useRef(0);
   const rafRef = useRef<number | null>(null);
   const lastTimeRef = useRef<number | null>(null);
+
+  // Cleanup RAF on unmount
+  useEffect(() => {
+    return () => {
+      if (rafRef.current !== null) {
+        cancelAnimationFrame(rafRef.current);
+      }
+    };
+  }, []);
 
   const startSpin = () => {
     const spin = (time: number) => {
