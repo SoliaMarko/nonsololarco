@@ -1,10 +1,9 @@
 import { MOCK_SIDEBAR } from '@/src/data/profile/sidebar.mock';
 import { cn } from '@/src/lib/ui/utils/cn';
 
-import InstrumentChip from '../../shared/InstrumentChip';
-import SectionHeader from '../shared/SectionHeader';
-import AchievementBadge from './AchievementBadge';
-import BandRow from './BandRow';
+import AchievementsSection from './AchievementsSection';
+import BandsSection from './BandsSection';
+import InstrumentsSection from './InstrumentsSection/InstrumentsSection';
 
 interface ProfileSidebarProps {
   className?: string;
@@ -16,38 +15,13 @@ export default function ProfileSidebar({ className }: ProfileSidebarProps) {
   return (
     <div className={cn('flex flex-col gap-6 p-6', className)}>
       {/* Instruments */}
-      <section>
-        <SectionHeader className="mbe-3" title="Instruments" />
-        <div className="flex flex-wrap gap-2">
-          {instruments.map((instrument) => (
-            <InstrumentChip key={instrument.kind} instrument={instrument} />
-          ))}
-        </div>
-      </section>
+      <InstrumentsSection instruments={instruments} />
 
       {/* Bands */}
-      {bands.length > 0 ? (
-        <section>
-          <SectionHeader className="mbe-3" title="Bands" />
-          <div className="flex flex-col gap-4">
-            {bands.map((band) => (
-              <BandRow key={band.id} band={band} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      {bands.length > 0 ? <BandsSection bands={bands} /> : null}
 
       {/* Achievements */}
-      {achievements.length > 0 ? (
-        <section>
-          <SectionHeader className="mbe-3" title="Achievements" />
-          <div className="flex flex-wrap gap-4">
-            {achievements.map((achievement) => (
-              <AchievementBadge key={achievement.id} achievement={achievement} />
-            ))}
-          </div>
-        </section>
-      ) : null}
+      {achievements.length > 0 ? <AchievementsSection achievements={achievements} /> : null}
     </div>
   );
 }

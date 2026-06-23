@@ -1,4 +1,4 @@
-import { ElementType } from 'react';
+import { ElementType, ReactNode } from 'react';
 
 import { ProfileType } from '../profile.types';
 
@@ -61,9 +61,10 @@ export type AchievementKind = 'streak' | 'solo' | 'top3' | 'fire';
 
 export interface Achievement {
   count?: number;
+  icon: ReactNode;
   id: string;
   kind: AchievementKind;
-  label: string;
+  label: string | [string, string?];
 }
 
 export interface ProfileSidebar {

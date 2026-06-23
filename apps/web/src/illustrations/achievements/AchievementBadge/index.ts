@@ -1,1 +1,1 @@
-export { default as AchievementNew } from './AchievementBadge';
+export { default } from './AchievementBadge';

@@ -1,12 +1,13 @@
-import { CalendarIcon, PickIcon, RepertoireIcon } from '@/src/icons/base';
+import { CalendarIcon, RepertoireIcon } from '@/src/icons/base';
 import { BouquetIcon } from '@/src/icons/colorful';
+import MediatorBadge from '@/src/illustrations/picks/MediatorBadge';
 
 import { ProfileStatsConfig } from '../../types/profile/profile.types';
 
 export const PROFILE_STATS: ProfileStatsConfig[] = [
   {
     color: 'text-icon-accent-yellow',
-    icon: PickIcon,
+    icon: MediatorBadge,
     label: 'Picks',
     isPicks: true,
     valueKey: 'picks',

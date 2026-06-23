@@ -15,7 +15,7 @@ export interface AchievementBadgeProps {
   icon: ReactNode;
   /** Override auto-calculated icon size (default: size × 0.42) */
   iconSize?: number;
-  label: [string, string?];
+  label: string | [string, string?];
   levitate?: boolean;
   levitateDelay?: number;
   locked?: boolean;
@@ -191,9 +191,9 @@ export default function AchievementBadge({
         style={{ lineHeight: 1.3, fontFamily: 'monospace' }}
       >
         <div className="text-fg-tertiary text-[11px] font-black tracking-widest uppercase">
-          {label[0]}
+          {typeof label === 'string' ? label : label[0]}
         </div>
-        {label[1] ? (
+        {typeof label !== 'string' && label[1] ? (
           <div className="text-fg-tertiary text-[11px] font-black tracking-widest uppercase">
             {label[1]}
           </div>
