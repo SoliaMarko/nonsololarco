@@ -29,16 +29,13 @@ export default function MediatorBadge({
   return (
     <div
       className={cn('inline-flex items-center justify-center', className)}
-      style={{
-        width: size,
-        height: height,
-        perspective: '600px',
-      }}
+      style={{ width: size, height: height, perspective: '600px' }}
     >
       <div
         style={{
           transformStyle: 'preserve-3d',
           animation: isStatic ? undefined : 'pick-wobble 5s ease-in-out infinite',
+          willChange: 'transform',
         }}
       >
         <svg
@@ -92,7 +89,7 @@ export default function MediatorBadge({
               d={PICK_PATH}
               fill={`url(#${gradId})`}
               style={{
-                animation: `pick-hue-${gradId} 6s linear infinite`,
+                animation: `pick-hue 6s linear infinite`,
                 filter: 'drop-shadow(rgba(80,40,120,0.35) 0px -7px 13px)',
               }}
             />

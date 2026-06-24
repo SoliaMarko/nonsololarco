@@ -17,6 +17,7 @@ export default function Profile() {
       <div className="flex w-full flex-col-reverse md:flex-row md:items-start">
         <div className="border-border-primary bg-base flex flex-5 flex-col border-solid md:border-r-2">
           <ProfileMoments moments={profileMoments} />
+          {/* TODO: ProfileSounds */}
           <ProfileRepertoire profileId={profile.id} />
         </div>
         <ProfileSidebar className="bg-base border-border-primary flex-2 border-b-2 md:order-last md:w-64 md:border-none md:bg-inherit" />

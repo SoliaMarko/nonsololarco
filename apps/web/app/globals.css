@@ -222,3 +222,31 @@
     transform: rotate(360deg);
   }
 }
+
+@keyframes pick-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  25% {
+    transform: rotate(6deg) scale(1.03);
+  }
+
+  50% {
+    transform: rotate(0deg) scale(1.06);
+  }
+
+  75% {
+    transform: rotate(-6deg) scale(1.03);
+  }
+}
+
+@keyframes pick-hue {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+}
