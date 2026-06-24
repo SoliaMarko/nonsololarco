@@ -14,8 +14,8 @@ function PlayIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 7, y1: 4, x2: 20, y2: 20 })}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

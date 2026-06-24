@@ -1,11 +1,13 @@
 import { useEffect, useState } from 'react';
 
+import Link from 'next/link';
+
 import Logo from '@/components/ui/Logo';
 import AvatarButton from '@/src/components/ui/AvatarButton';
 import Button from '@/src/components/ui/Button';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
-import { MOCK_PROFILE } from '@/src/data/profile.mock';
+import { MOCK_PROFILE } from '@/src/data/profile/profile.mock';
 import { useTheme } from '@/src/hooks/global/useTheme';
 import {
   BellIcon,
@@ -40,12 +42,14 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
       <div className="mli-auto pli-4 flex h-14 items-center gap-10">
-        <div className="hidden shrink-0 items-center lg:flex">
-          <Logo variant="wordmark" size="md" />
-        </div>
-        <div className="flex shrink-0 items-center lg:hidden">
-          <Logo variant="mark" size="sm" />
-        </div>
+        <Link href="/">
+          <div className="hidden shrink-0 items-center lg:flex">
+            <Logo variant="wordmark" size="md" />
+          </div>
+          <div className="flex shrink-0 items-center lg:hidden">
+            <Logo variant="mark" size="sm" />
+          </div>
+        </Link>
 
         <nav className="hidden flex-1 items-end gap-1 self-end md:flex" aria-label="Main Nav">
           {NAV_ITEMS.map((item) => (
@@ -70,7 +74,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
                   : 'Switch to dark theme'
                 : 'Toggle theme'
             }
-            className="border-px bg-base size-10 rounded-full p-0"
+            className="bg-base size-10 rounded-full border-2 p-0"
             onClick={toggleTheme}
             variant="press"
           >

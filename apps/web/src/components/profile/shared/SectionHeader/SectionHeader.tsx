@@ -16,7 +16,7 @@ export default function SectionHeader({ className, meta, title }: SectionHeaderP
       <Heading tag="h2" className="shrink-0">
         {title}
       </Heading>
-      <Divider className="w-full" orientation={ORIENTATION.horizontal} />
+      <Divider className="border-fg-tertiary w-full" orientation={ORIENTATION.horizontal} />
       {meta ? (
         <Text className="text-fg-tertiary hidden shrink-0 text-xs tracking-widest uppercase sm:block">
           {meta}

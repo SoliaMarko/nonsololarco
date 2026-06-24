@@ -30,27 +30,22 @@ export default function ProfileMoments({ moments, isOwnProfile, className }: Pro
         photos and videos · drag your
       </Text>
 
-      <div
-        className={cn(
-          'grid grid-cols-1 gap-4',
-          featured ? 'md:grid-cols-2 lg:grid-cols-[1.4fr_1fr]' : 'md:grid-cols-2',
-        )}
-      >
+      <div className={cn('grid grid-cols-1 gap-4', featured ? '' : 'grid-cols-1')}>
         {featured ? (
           <MomentCard
             moment={featured}
             isOwnProfile={isOwnProfile}
-            className="min-h-46 sm:min-h-80"
+            className="xxs:min-h-46 xs:min-h-64 sm:min-h-80 lg:min-h-100"
           />
         ) : null}
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="xs:grid-cols-2 grid grid-cols-1 gap-4">
           {rest.map((moment) => (
             <MomentCard
               key={moment.id}
               moment={moment}
               isOwnProfile={isOwnProfile}
-              className="min-h-36"
+              className="min-h-48 lg:min-h-56"
             />
           ))}
         </div>

@@ -45,7 +45,8 @@
   --leading-relaxed: var(--text-leading-relaxed);
 
   /* --- Breakpoints --- */
-  --breakpoint-xs: 20rem; /* 320px */
+  --breakpoint-xxs: 20rem; /* 320px */
+  --breakpoint-xs: 30rem; /* 480px */
   --breakpoint-sm: 40rem; /* 640px */
   --breakpoint-md: 48rem; /* 768px */
   --breakpoint-lg: 64rem; /* 1024px */
@@ -63,6 +64,9 @@
   --color-elevated: var(--bg-elevated);
   --color-edge: var(--bg-edge);
   --color-contrast: var(--bg-contrast);
+
+  /* --- Colors: blue --- */
+  --color-blue-subtle: var(--blue-subtle);
 
   /* --- Colors: emerald accent --- */
   --color-emerald-subtle: var(--emerald-subtle);
@@ -195,5 +199,55 @@
   100% {
     opacity: 1;
     text-shadow: none;
+  }
+}
+
+@keyframes levitate {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-6px);
+  }
+}
+
+@keyframes vinyl-spin-continuous {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes pick-wobble {
+  0%,
+  100% {
+    transform: rotate(0deg) scale(1);
+  }
+
+  25% {
+    transform: rotate(6deg) scale(1.03);
+  }
+
+  50% {
+    transform: rotate(0deg) scale(1.06);
+  }
+
+  75% {
+    transform: rotate(-6deg) scale(1.03);
+  }
+}
+
+@keyframes pick-hue {
+  0% {
+    filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(360deg);
   }
 }

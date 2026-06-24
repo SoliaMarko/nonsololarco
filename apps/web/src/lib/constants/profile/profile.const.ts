@@ -1,12 +1,12 @@
-import { CalendarIcon, PickIcon, RepertoireIcon } from '@/src/icons/base';
-import { BouquetIcon } from '@/src/icons/colorful';
+import { CalendarIcon, MicrophoneIcon, RepertoireIcon } from '@/src/icons/base';
+import MediatorBadge from '@/src/illustrations/picks/MediatorBadge';
 
 import { ProfileStatsConfig } from '../../types/profile/profile.types';
 
 export const PROFILE_STATS: ProfileStatsConfig[] = [
   {
     color: 'text-icon-accent-yellow',
-    icon: PickIcon,
+    icon: MediatorBadge,
     label: 'Picks',
     isPicks: true,
     valueKey: 'picks',
@@ -18,13 +18,14 @@ export const PROFILE_STATS: ProfileStatsConfig[] = [
     valueKey: 'rehearsalsCount',
   },
   {
-    color: 'text-accent-red',
+    color: 'text-blue-subtle',
     icon: RepertoireIcon,
     label: 'Tracks',
     valueKey: 'tracksCount',
   },
   {
-    icon: BouquetIcon,
+    color: 'text-accent-red',
+    icon: MicrophoneIcon,
     label: 'Performances',
     valueKey: 'performancesCount',
   },

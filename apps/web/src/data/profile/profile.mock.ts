@@ -1,5 +1,5 @@
-import { ProfileType } from '../lib/types/profile.types';
-import { MomentType } from '../lib/types/profile/profile.types';
+import { ProfileType } from '../../lib/types/profile.types';
+import { MomentType } from '../../lib/types/profile/profile.types';
 
 export const MOCK_PROFILE: ProfileType = {
   id: 'user-1',

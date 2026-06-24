@@ -14,8 +14,8 @@ function BouquetIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '64'}
-      width={props.size || '64'}
+      height={props.size || 64}
+      width={props.size || 64}
       viewBox={calcViewBox({ x1: 16.5, y1: 10.5, x2: 47.5, y2: 62 }, 2)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
