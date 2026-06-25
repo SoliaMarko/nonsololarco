@@ -19,8 +19,8 @@ function LinkIcon(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '24'}
-      width={props.size || '24'}
+      height={props.size || 24}
+      width={props.size || 24}
       viewBox={calcViewBox({ x1: 2, y1: 2, x2: 22, y2: 22 }, 2)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}

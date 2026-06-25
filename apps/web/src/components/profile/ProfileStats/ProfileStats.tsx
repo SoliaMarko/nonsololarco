@@ -10,7 +10,11 @@ export interface ProfileStatsProps {
 export default function ProfileStats({ className, profile }: ProfileStatsProps) {
   return (
     <div
-      className={cn('grid grid-cols-2 md:grid-cols-4', 'border-border-primary border-b', className)}
+      className={cn(
+        'grid grid-cols-2 md:grid-cols-4',
+        'border-border-primary border-b-2',
+        className,
+      )}
     >
       {PROFILE_STATS.map((stat, index) => {
         const Icon = stat.icon;

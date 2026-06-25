@@ -14,8 +14,8 @@ function MusicPlant(
     <svg
       {...(title ? { role: 'img', 'aria-labelledby': resolvedTitleId } : { 'aria-hidden': true })}
       fill="none"
-      height={props.size || '120'}
-      width={props.size || '120'}
+      height={props.size || 120}
+      width={props.size || 120}
       viewBox={calcViewBox({ x1: 31, y1: 13.2, x2: 87, y2: 98.6 }, 2)}
       preserveAspectRatio="xMidYMid meet"
       ref={ref}
