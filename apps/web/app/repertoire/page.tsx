@@ -10,7 +10,7 @@ import Spinner from '@/src/components/ui/Spinner';
 import { MOCK_BANDS, MOCK_REPERTOIRE_STATS } from '@/src/data/repertoire/bands.mock';
 import { Band } from '@/src/lib/types/repertoire/band.types';
 
-export default function RepertoirePage() {
+function RepertoirePageContent() {
   const searchParams = useSearchParams();
 
   const stats = MOCK_REPERTOIRE_STATS;
@@ -31,6 +31,14 @@ export default function RepertoirePage() {
   const activeBand = bands.find((band) => band.id === activeBandId) ?? bands[0];
 
   return (
+    <AppShell activePath={'/repertoire'} activeTitle={activeBand?.name}>
+      <Repertoire bands={bands} stats={stats} />
+    </AppShell>
+  );
+}
+
+export default function RepertoirePage() {
+  return (
     <Suspense
       fallback={
         <div className="mli-auto flex h-full items-center justify-center">
@@ -38,9 +46,7 @@ export default function RepertoirePage() {
         </div>
       }
     >
-      <AppShell activePath={'/repertoire'} activeTitle={activeBand?.name}>
-        <Repertoire bands={bands} stats={stats} />
-      </AppShell>
+      <RepertoirePageContent />
     </Suspense>
   );
 }
