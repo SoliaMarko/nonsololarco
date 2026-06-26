@@ -17,7 +17,7 @@ export interface RepertoireHeaderProps {
   className?: string;
   // TODO: implement soon
   isAIOpen?: boolean;
-  onAIToggle: () => void;
+  onAIToggle?: () => void;
   stats: RepertoireStats;
 }
 

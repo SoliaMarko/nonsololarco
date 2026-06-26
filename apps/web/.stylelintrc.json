@@ -19,7 +19,7 @@
           "plugin",
           "source",
           "utility",
-          "variant"
+          "custom-variant"
         ]
       }
     ],

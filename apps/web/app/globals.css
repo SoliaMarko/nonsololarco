@@ -6,7 +6,7 @@
 @source '../**/*.stories.{ts,tsx}';
 @source '../**/*.{ts,tsx}';
 
-@variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 @theme {
   /* --- Border radius --- */

@@ -15,7 +15,8 @@ export default function BandTabs({ bands }: BandTabsProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const activeBandId = searchParams.get('band') ?? bands[0]?.id;
+  const rawBandId = searchParams.get('band');
+  const activeBandId = bands.some((b) => b.id === rawBandId) ? rawBandId : bands[0]?.id;
 
   function onBandChange(bandId: string) {
     const params = new URLSearchParams(searchParams.toString());
