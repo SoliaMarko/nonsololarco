@@ -36,6 +36,7 @@ import {
   LogOutIcon,
   MicrophoneIcon,
   MoonOutlineIcon,
+  NotesIcon,
   PickIcon,
   PlayIcon,
   PlusSolidIcon,
@@ -282,6 +283,9 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="PickIcon" copyText={toJsx('PickIcon')} {...cardProps}>
           <PickIcon size={size} />
+        </IconCard>
+        <IconCard label="NotesIcon" copyText={toJsx('NotesIcon')} {...cardProps}>
+          <NotesIcon size={size} />
         </IconCard>
       </Section>
 

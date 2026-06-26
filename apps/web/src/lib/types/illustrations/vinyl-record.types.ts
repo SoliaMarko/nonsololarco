@@ -1,1 +1,1 @@
-export type VinylColor = 'olive' | 'amber' | 'terracotta' | 'rust' | 'sage' | 'teal';
+export type VinylColor = 'olive' | 'rust' | 'sage' | 'amber' | 'teal' | 'terracotta';
