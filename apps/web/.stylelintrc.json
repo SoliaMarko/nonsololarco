@@ -18,7 +18,8 @@
           "config",
           "plugin",
           "source",
-          "utility"
+          "utility",
+          "variant"
         ]
       }
     ],

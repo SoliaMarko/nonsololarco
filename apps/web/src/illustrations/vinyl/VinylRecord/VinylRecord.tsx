@@ -41,6 +41,12 @@ export default function VinylRecord({
     };
   }, []);
 
+  useEffect(() => {
+    if (isPlaying) {
+      stopSpin();
+    }
+  }, [isPlaying]);
+
   const startSpin = () => {
     const spin = (time: number) => {
       if (lastTimeRef.current !== null) {
@@ -65,30 +71,17 @@ export default function VinylRecord({
     lastTimeRef.current = null;
   };
 
-  // continuous CSS spin
-  if (isPlaying) {
-    return (
-      <div
-        className={cn('vinyl-spin-continuous shrink-0', className)}
-        style={{
-          width: size,
-          height: size,
-          transformOrigin: '50% 50%',
-          animation: `vinyl-spin-continuous ${SPIN_PERIOD_MS}ms linear infinite`,
-        }}
-      >
-        <DiscIllustration color={color} size={size} />
-      </div>
-    );
-  }
-
-  // default: RAF spin on hover
   return (
     <div
-      className={cn('shrink-0 cursor-pointer', className)}
-      style={{ width: size, height: size }}
-      onMouseEnter={startSpin}
-      onMouseLeave={stopSpin}
+      className={cn('shrink-0', isPlaying ? 'vinyl-spin-continuous' : 'cursor-pointer', className)}
+      style={{
+        width: size,
+        height: size,
+        transformOrigin: '50% 50%',
+        animation: isPlaying ? `vinyl-spin-continuous ${SPIN_PERIOD_MS}ms linear infinite` : '',
+      }}
+      onMouseEnter={isPlaying ? undefined : startSpin}
+      onMouseLeave={isPlaying ? undefined : stopSpin}
     >
       <div ref={discRef} style={{ width: size, height: size }}>
         <DiscIllustration color={color} size={size} />
