@@ -38,6 +38,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
 
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => setMounted(true), []);
 
   return (

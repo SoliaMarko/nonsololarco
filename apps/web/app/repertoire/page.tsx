@@ -22,7 +22,6 @@ function RepertoirePageContent() {
       readyTracks: stats.readyTracks,
       totalTracks: stats.totalTracks,
       totalDuration: stats.totalDuration,
-      tracks: [],
     },
     ...MOCK_BANDS,
   ];
@@ -41,9 +40,11 @@ export default function RepertoirePage() {
   return (
     <Suspense
       fallback={
-        <div className="mli-auto flex h-full items-center justify-center">
-          <Spinner size="xl" />
-        </div>
+        <AppShell activePath={'/repertoire'} mainClassName="flex flex-col">
+          <div className="mli-auto flex min-h-full flex-1 flex-col items-center justify-center">
+            <Spinner size="xl" />
+          </div>
+        </AppShell>
       }
     >
       <RepertoirePageContent />
