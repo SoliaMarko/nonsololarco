@@ -1,24 +1,13 @@
-import { MOCK_BANDS, MOCK_REPERTOIRE_STATS } from '@/src/data/repertoire/bands.mock';
-import { Band } from '@/src/lib/types/repertoire/band.types';
+import { Band, RepertoireStats } from '@/src/lib/types/repertoire/band.types';
 
 import RepertoireHeader from './RepertoireHeader';
 
-export default function Repertoire() {
-  const stats = MOCK_REPERTOIRE_STATS;
+export interface RepertoireProps {
+  bands: Band[];
+  stats: RepertoireStats;
+}
 
-  const bands: Band[] = [
-    {
-      id: '',
-      name: 'All Repertoires',
-      vinylColor: 'olive',
-      readyTracks: stats.readyTracks,
-      totalTracks: stats.totalTracks,
-      totalDuration: stats.totalDuration,
-      tracks: [],
-    },
-    ...MOCK_BANDS,
-  ];
-
+export default function Repertoire({ bands, stats }: RepertoireProps) {
   return (
     <>
       <RepertoireHeader bands={bands} stats={stats} onAIToggle={() => {}} />

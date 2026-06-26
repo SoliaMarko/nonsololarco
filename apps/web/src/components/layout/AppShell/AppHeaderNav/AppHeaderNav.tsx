@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
-import { usePathname, useSearchParams } from 'next/navigation';
+import { usePathname } from 'next/navigation';
 
 import Logo from '@/components/ui/Logo';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
@@ -11,7 +11,6 @@ import Button from '@/src/components/ui/Button';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
 import { MOCK_PROFILE } from '@/src/data/profile/profile.mock';
-import { MOCK_BANDS } from '@/src/data/repertoire/bands.mock';
 import { useTheme } from '@/src/hooks/global/useTheme';
 import {
   BellIcon,
@@ -26,18 +25,14 @@ import { cn } from '@/src/lib/ui/utils/cn';
 
 export interface AppHeaderNavProps {
   activePath: string;
+  activeTitle?: string;
   className?: string;
 }
 
-export default function AppHeader({ activePath, className }: AppHeaderNavProps) {
+export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const profile = MOCK_PROFILE;
-  const bands = MOCK_BANDS;
 
-  const searchParams = useSearchParams();
   const pathname = usePathname();
-
-  const activeBandId = searchParams.get('band') ?? bands[0]?.id;
-  const activeBand = bands.find((band) => band.id === activeBandId) ?? bands[0];
 
   const isRepertoirePageActive = pathname === '/repertoire';
 
@@ -81,14 +76,12 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
         <div
           className={cn(
             'flex items-center gap-4',
-            isRepertoirePageActive && activeBand
-              ? 'xs:w-full flex-row justify-between md:w-auto'
-              : 'mis-auto',
+            activeTitle ? 'xs:w-full flex-row justify-between md:w-auto' : 'mis-auto',
           )}
         >
-          {isRepertoirePageActive && activeBand ? (
+          {activeTitle ? (
             <Heading className="xs:block hidden text-lg uppercase md:hidden" tag="h1">
-              {activeBand?.name}
+              {activeTitle}
             </Heading>
           ) : null}
 
