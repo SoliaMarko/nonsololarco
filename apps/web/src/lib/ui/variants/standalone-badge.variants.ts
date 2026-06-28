@@ -6,7 +6,7 @@ export const standaloneBadgeVariants = cva(
     variants: {
       size: {
         xs: 'pli-2 plb-0.5 text-[10px]',
-        sm: 'pli-2 plb-0.5 text-[11px]',
+        sm: 'pli-2 plb-0.5 text-[8px] sm:text-[11px]',
         md: 'pli-2.5 plb-0.5 text-[13px]',
         lg: 'pli-3 plb-1 text-[15px]',
         xl: 'pli-4 plb-1 text-[16px]',
@@ -22,6 +22,8 @@ export const standaloneBadgeVariants = cva(
           'uppercase tracking-widest font-bold rounded-sm bg-transparent text-yellow-muted border border-yellow-muted',
         'stamp-new':
           'uppercase tracking-widest font-bold rounded-sm bg-transparent text-danger border border-danger',
+        'stamp-archived':
+          'uppercase tracking-widest font-bold rounded-sm bg-transparent text-fg-tertiary border border-fg-disabled',
       },
       status: {
         online: 'bg-emerald-subtle text-status-online',

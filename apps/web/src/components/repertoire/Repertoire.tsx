@@ -1,6 +1,8 @@
+import { VINYL_COLORS } from '@/src/lib/constants/illustrations/vinyl-record.const';
 import { Band, RepertoireStats } from '@/src/lib/types/repertoire/band.types';
 
 import RepertoireHeader from './RepertoireHeader';
+import TracksTable from './TracksTable';
 
 export interface RepertoireProps {
   bands: Band[];
@@ -8,9 +10,15 @@ export interface RepertoireProps {
 }
 
 export default function Repertoire({ bands, stats }: RepertoireProps) {
+  const coloredBands = bands.map((band, index) => ({
+    ...band,
+    color: VINYL_COLORS[index % VINYL_COLORS.length],
+  }));
+
   return (
     <>
-      <RepertoireHeader bands={bands} stats={stats} onAIToggle={() => {}} />
+      <RepertoireHeader bands={coloredBands} stats={stats} onAIToggle={() => {}} />
+      <TracksTable bands={coloredBands} />
     </>
   );
 }

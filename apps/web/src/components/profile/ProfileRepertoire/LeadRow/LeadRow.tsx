@@ -1,12 +1,12 @@
 import Link from 'next/link';
 
 import Text from '@/src/components/typography/Text';
-import { LeadTrack } from '@/src/lib/types/repertoire/repertoire.types';
+import { TrackSummary } from '@/src/lib/types/repertoire/track.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 interface LeadRowProps {
   hasMoreLeads?: boolean;
-  track: LeadTrack;
+  track: TrackSummary;
 }
 
 export default function LeadRow({ hasMoreLeads, track }: LeadRowProps) {

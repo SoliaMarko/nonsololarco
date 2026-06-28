@@ -26,7 +26,7 @@ function RepertoirePageContent() {
     ...MOCK_BANDS,
   ];
 
-  const activeBandId = searchParams.get('band') ?? bands[0]?.id;
+  const activeBandId = searchParams.get('band') ?? '';
   const activeBand = bands.find((band) => band.id === activeBandId) ?? bands[0];
 
   return (
