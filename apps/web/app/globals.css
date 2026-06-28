@@ -142,7 +142,7 @@
   .bg-hatching {
     background-image: repeating-linear-gradient(
       -50deg,
-      color-mix(in srgb, currentcolor 3%, transparent) 0px,
+      color-mix(in srgb, currentcolor 3%, transparent) 0,
       color-mix(in srgb, currentcolor 3%, transparent) 4px,
       transparent 2px,
       transparent 10px
