@@ -1,7 +1,7 @@
 import { Controller, Get } from '@nestjs/common';
 import { MOCK_BANDS } from './bands.mock';
 
-@Controller('/bands')
+@Controller('users/me/bands')
 export class BandsController {
   @Get('')
   getAllBands() {
