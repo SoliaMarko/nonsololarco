@@ -25,6 +25,7 @@ export class RepertoireController {
     }
 
     return MOCK_ALL_REPERTOIRE.filter((track) => track.band?.id === bandId).map(
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       ({ band: _band, ...track }) => track,
     );
   }
