@@ -1,4 +1,4 @@
-import { Band, RepertoireStats } from '@/src/lib/types/repertoire/band.types';
+import { Band, RepertoireStats } from '@nonsololarco/types';
 
 import RepertoireHeader from './RepertoireHeader';
 

@@ -2,7 +2,7 @@
 
 import { useSearchParams } from 'next/navigation';
 
-import { Band, RepertoireStats } from '@/src/lib/types/repertoire/band.types';
+import { Band, RepertoireStats } from '@nonsololarco/types';
 
 export interface RepertoireHeaderProps {
   bands: Band[];

@@ -1,11 +1,10 @@
-import { ReactNode } from 'react';
-
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
 
 import '@/styles/tokens.css';
 
 import './globals.css';
+import { Providers } from './providers';
 
 const geistSans = localFont({
   src: './fonts/GeistVF.woff',
@@ -37,7 +36,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
         />
       </head>
       <body className={`bg-edge box-border ${geistSans.variable} ${geistMono.variable}`}>
-        <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>
+        <Providers>
+          <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>
+        </Providers>
       </body>
     </html>
   );
