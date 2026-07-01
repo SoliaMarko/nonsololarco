@@ -2,9 +2,10 @@
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { Band } from '@nonsololarco/types';
+
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
 import { VINYL_COLORS } from '@/src/lib/constants/illustrations/vinyl-record.const';
-import { Band } from '@/src/lib/types/repertoire/band.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 interface BandTabsProps {
