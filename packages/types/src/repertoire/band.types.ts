@@ -1,5 +1,3 @@
-import { VinylColor } from '../illustrations/vinyl-record.types';
-
 export interface RepertoireStats {
   readyTracks: number;
   totalDuration: string;
@@ -15,5 +13,4 @@ export interface Band extends RepertoireStats {
    * May be undefined or empty. Always use totalTracks for count display.
    */
   trackIds?: string[];
-  vinylColor?: VinylColor;
 }

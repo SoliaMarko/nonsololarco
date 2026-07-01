@@ -1,4 +1,4 @@
-import { Track, TrackSummary } from '@/src/lib/types/repertoire/track.types';
+import { Track, TrackSummary } from '@nonsololarco/types';
 
 export const MOCK_LEAD_TRACKS: TrackSummary[] = [
   { id: 'lt-1', order: 1, title: 'Smoke over the city', musicalKey: 'F', bpm: 96 },

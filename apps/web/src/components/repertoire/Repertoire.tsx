@@ -1,5 +1,6 @@
+import { Band, RepertoireStats } from '@nonsololarco/types';
+
 import { VINYL_COLORS } from '@/src/lib/constants/illustrations/vinyl-record.const';
-import { Band, RepertoireStats } from '@/src/lib/types/repertoire/band.types';
 
 import RepertoireHeader from './RepertoireHeader';
 import TracksTable from './TracksTable';
