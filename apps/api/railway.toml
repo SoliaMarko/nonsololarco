@@ -1,0 +1,6 @@
+[build]
+builder = "nixpacks"
+buildCommand = "pnpm --filter api build"
+
+[deploy]
+startCommand = "node apps/api/dist/main.js"
