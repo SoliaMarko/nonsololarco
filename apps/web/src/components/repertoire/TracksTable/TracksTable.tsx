@@ -1,11 +1,9 @@
 import { useSearchParams } from 'next/navigation';
 
-import {
-  MOCK_ALL_TRACKS,
-  MOCK_BAND_TRACKS,
-  MOCK_CURRENT_USER_ID,
-} from '@/src/data/repertoire/tracks.mock';
-import { Band } from '@/src/lib/types/repertoire/band.types';
+import { Band } from '@nonsololarco/types';
+
+import { MOCK_CURRENT_USER_ID } from '@/src/data/repertoire/tracks.mock';
+import { useBandRepertoire, useMyRepertoire } from '@/src/lib/hooks/useRepertoire';
 
 import TrackListHeader from './TrackListHeader';
 import TrackRow from './TrackListRow';
@@ -27,10 +25,16 @@ export default function TracksTable({ bands }: TracksTableProps) {
   const activeBandId = searchParams.get('band') ?? '';
   const isBandSelected = Boolean(activeBandId);
 
-  const tracks = isBandSelected ? MOCK_BAND_TRACKS : MOCK_ALL_TRACKS;
-  const sortedTracks = [...tracks].sort(
-    (a, b) => (a.status === 'archived' ? 1 : 0) - (b.status === 'archived' ? 1 : 0),
-  );
+  const { data: allMyTracks } = useMyRepertoire();
+  const { data: tracksByBand } = useBandRepertoire(activeBandId);
+
+  const tracks = isBandSelected ? tracksByBand : allMyTracks;
+  const sortedTracks = tracks
+    ? [...tracks].sort(
+        (a, b) => (a.status === 'archived' ? 1 : 0) - (b.status === 'archived' ? 1 : 0),
+      )
+    : [];
+
   return (
     <div role="table" aria-label="Band repertoire">
       <TrackListHeader />
@@ -38,7 +42,9 @@ export default function TracksTable({ bands }: TracksTableProps) {
         <TrackRow
           bands={bands}
           index={index}
-          isMyTrack={track.leadMember.id === MOCK_CURRENT_USER_ID}
+          isMyTrack={
+            !isBandSelected || (isBandSelected && track.leadMember.id === MOCK_CURRENT_USER_ID)
+          }
           key={track.id}
           track={track}
         />

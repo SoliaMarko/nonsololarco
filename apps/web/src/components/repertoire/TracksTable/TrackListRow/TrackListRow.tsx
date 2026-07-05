@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 
+import { Band } from '@nonsololarco/types';
+
 import Text from '@/src/components/typography/Text';
 import Badge from '@/src/components/ui/Badge';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
-import { Band } from '@/src/lib/types/repertoire/band.types';
 import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 
@@ -49,8 +50,6 @@ export default function TrackListRow({
   const isSpecificBandSelected = Boolean(activeBandId);
 
   const isArchived = track.status === 'archived';
-
-  const bandVinylColor = bands.find((band) => band.id === track.band?.id)?.vinylColor;
 
   return (
     <div
@@ -113,7 +112,7 @@ export default function TrackListRow({
           <div className="text-fg-tertiary xs:flex-row xs:items-center mbs-0.5 flex flex-col items-start gap-1 text-xs sm:hidden">
             {!isSpecificBandSelected ? (
               <div className="flex items-center gap-1" role="cell">
-                <VinylRecord color={bandVinylColor} size={16} />
+                <VinylRecord size={16} />
                 <span className="text-fg-secondary text-sm tabular-nums">{track.band?.name}</span>
                 <span className="text-fg-tertiary xs:inline hidden">{' · '}</span>
               </div>
@@ -134,7 +133,7 @@ export default function TrackListRow({
         {/* Band  */}
         {!isSpecificBandSelected ? (
           <div className="hidden items-center gap-2 sm:flex" role="cell">
-            <VinylRecord color={bandVinylColor} size={16} />
+            <VinylRecord size={16} />
             <span className="text-fg-secondary text-sm tabular-nums">{track.band?.name}</span>
           </div>
         ) : null}
