@@ -1,12 +1,10 @@
 import { useSearchParams } from 'next/navigation';
 
-import { Band } from '@nonsololarco/types';
-
 import { MOCK_CURRENT_USER_ID } from '@/src/data/repertoire/tracks.mock';
 import { useBandRepertoire, useMyRepertoire } from '@/src/lib/hooks/useRepertoire';
 
 import TrackListHeader from './TrackListHeader';
-import TrackRow from './TrackListRow';
+import TrackListRow from './TrackListRow';
 
 // Grid columns: # · title · key · bpm · status · duration · actions
 export const ALL_BANDS_ROW_GRID =
@@ -15,11 +13,7 @@ export const ALL_BANDS_ROW_GRID =
 export const SPECIFIC_BAND_ROW_GRID =
   'grid grid-cols-[16px_1fr_68px_24px] sm:grid-cols-[16px_32px_3fr_60px_40px_100px_auto_auto] items-center gap-3';
 
-interface TracksTableProps {
-  bands: Band[];
-}
-
-export default function TracksTable({ bands }: TracksTableProps) {
+export default function TracksTable() {
   const searchParams = useSearchParams();
 
   const activeBandId = searchParams.get('band') ?? '';
@@ -39,8 +33,7 @@ export default function TracksTable({ bands }: TracksTableProps) {
     <div role="table" aria-label="Band repertoire">
       <TrackListHeader />
       {sortedTracks.map((track, index) => (
-        <TrackRow
-          bands={bands}
+        <TrackListRow
           index={index}
           isMyTrack={
             !isBandSelected || (isBandSelected && track.leadMember.id === MOCK_CURRENT_USER_ID)

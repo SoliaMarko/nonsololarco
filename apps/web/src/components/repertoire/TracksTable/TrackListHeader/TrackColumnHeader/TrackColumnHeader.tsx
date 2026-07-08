@@ -56,31 +56,36 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   }
 
   if (isSortable) {
+    const isActive = sortField === props.field;
+    const ariaSortValue = isActive ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none';
+
     return (
-      <button
+      <div
         role="columnheader"
-        onClick={() => handleSort(props.field)}
-        className={cn(
-          'flex items-center gap-1 text-[10px] font-bold tracking-widest uppercase',
-          'cursor-pointer transition-colors',
-          sortField === props.field
-            ? 'text-fg-primary'
-            : 'text-fg-tertiary hover:text-fg-secondary',
-          className,
-        )}
+        aria-sort={ariaSortValue}
+        className={cn('text-[10px] font-bold tracking-widest uppercase', className)}
       >
-        {title}
-        <span className="text-[10px]">{getSortIcon(props.field)}</span>
-      </button>
+        <button
+          onClick={() => handleSort(props.field)}
+          className={cn(
+            'flex items-center gap-1',
+            'cursor-pointer transition-colors',
+            isActive ? 'text-fg-primary' : 'text-fg-tertiary hover:text-fg-secondary',
+          )}
+        >
+          {title}
+          <span className="text-[10px]">{getSortIcon(props.field)}</span>
+        </button>
+      </div>
     );
   }
 
   return (
-    <span
+    <div
       role="columnheader"
       className={cn('text-fg-tertiary text-[10px] font-bold tracking-widest uppercase', className)}
     >
       {title}
-    </span>
+    </div>
   );
 }

@@ -31,7 +31,6 @@ const STATUS_LABEL: Record<TrackStatus, string> = {
 };
 
 export interface TrackListRowProps {
-  bands: Band[];
   index?: number;
   /** Whether this track belongs to current user — shows ★ and green highlight */
   isMyTrack?: boolean;
@@ -39,7 +38,6 @@ export interface TrackListRowProps {
 }
 
 export default function TrackListRow({
-  bands,
   index = 0,
   isMyTrack = false,
   track,

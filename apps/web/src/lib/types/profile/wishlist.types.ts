@@ -2,6 +2,7 @@ export type WishlistMediaKind = 'video' | 'sheet' | 'link';
 export type WishlistVisibility = 'public' | 'private';
 
 export interface WishlistMedia {
+  id: string;
   kind: WishlistMediaKind;
   label?: string;
   url: string;
