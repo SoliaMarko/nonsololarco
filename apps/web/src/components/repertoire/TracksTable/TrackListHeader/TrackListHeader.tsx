@@ -1,0 +1,37 @@
+import { useSearchParams } from 'next/navigation';
+
+import { cn } from '@/src/lib/ui/utils/cn';
+
+import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../TracksTable';
+import TrackColumnHeader from './TrackColumnHeader';
+
+export default function TrackListHeader() {
+  const searchParams = useSearchParams();
+
+  const activeBandId = searchParams.get('band') ?? '';
+  const isSpecificBandSelected = Boolean(activeBandId);
+
+  return (
+    <div
+      role="row"
+      className={cn(
+        'bg-surface border-border-primary pli-4 plb-2 border-b',
+        isSpecificBandSelected ? SPECIFIC_BAND_ROW_GRID : ALL_BANDS_ROW_GRID,
+      )}
+    >
+      <span className="hidden sm:inline" role="columnheader" aria-hidden="true" />
+
+      <TrackColumnHeader field="trackOrder" title="#" isSortable={true} />
+      <TrackColumnHeader field="title" isSortable={true} title="Title" />
+      {!isSpecificBandSelected ? (
+        <TrackColumnHeader className="hidden sm:flex" title="Band" />
+      ) : null}
+      <TrackColumnHeader className="hidden sm:flex" title="Key" />
+      <TrackColumnHeader className="hidden sm:flex" field="bpm" isSortable={true} title="BPM" />
+      <TrackColumnHeader field="status" isSortable={true} title="Status" />
+      <TrackColumnHeader className="hidden sm:flex" field="time" isSortable={true} title="Time" />
+
+      <span role="columnheader" aria-hidden="true" />
+    </div>
+  );
+}

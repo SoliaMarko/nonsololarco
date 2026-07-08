@@ -1,5 +1,5 @@
 import Text from '@/src/components/typography/Text';
-import { WishlistTrack } from '@/src/lib/types/repertoire/repertoire.types';
+import { type WishlistTrack } from '@/src/lib/types/profile/wishlist.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 import MediaChip from '../../shared/MediaChip';

@@ -6,6 +6,8 @@
 @source '../**/*.stories.{ts,tsx}';
 @source '../**/*.{ts,tsx}';
 
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 @theme {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);
@@ -28,7 +30,7 @@
   /* --- Typography: sizes --- */
   --text-xs: var(--text-size-xs);
   --text-sm: var(--text-size-sm);
-  --text-base: var(--text-size-base);
+  --text-md: var(--text-size-md);
   --text-lg: var(--text-size-lg);
   --text-xl: var(--text-size-xl);
   --text-2xl: var(--text-size-2xl);
@@ -70,6 +72,8 @@
 
   /* --- Colors: emerald accent --- */
   --color-emerald-subtle: var(--emerald-subtle);
+  --color-emerald-subtle-70: var(--emerald-subtle-70);
+  --color-emerald-subtle-hover: var(--emerald-subtle-hover);
   --color-emerald-deep: var(--emerald-deep);
   --color-emerald-main: var(--emerald-main);
   --color-emerald-light: var(--emerald-light);
@@ -133,6 +137,16 @@
       transparent 1px
     );
     background-size: 12px 12px;
+  }
+
+  .bg-hatching {
+    background-image: repeating-linear-gradient(
+      -50deg,
+      color-mix(in srgb, currentcolor 3%, transparent) 0,
+      color-mix(in srgb, currentcolor 3%, transparent) 4px,
+      transparent 2px,
+      transparent 10px
+    );
   }
 
   .hover-fade {
@@ -226,19 +240,19 @@
 @keyframes pick-wobble {
   0%,
   100% {
-    transform: rotate(0deg) scale(1);
+    transform: rotateY(0deg) rotateX(0deg);
   }
 
   25% {
-    transform: rotate(6deg) scale(1.03);
+    transform: rotateY(20deg) rotateX(6deg);
   }
 
   50% {
-    transform: rotate(0deg) scale(1.06);
+    transform: rotateY(0deg) rotateX(12deg);
   }
 
   75% {
-    transform: rotate(-6deg) scale(1.03);
+    transform: rotateY(-20deg) rotateX(6deg);
   }
 }
 

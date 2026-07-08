@@ -7,8 +7,10 @@ import AppHeaderNav from './AppHeaderNav';
 
 export interface AppShellProps {
   activePath: string;
+  activeTitle?: string;
   children: ReactNode;
   className?: string;
+  mainClassName?: string;
 }
 
 /**
@@ -24,7 +26,13 @@ export interface AppShellProps {
  *   <RepertoirePage />
  * </AppShell>
  */
-export default function AppShell({ activePath, children, className }: AppShellProps) {
+export default function AppShell({
+  activePath,
+  activeTitle,
+  children,
+  className,
+  mainClassName,
+}: AppShellProps) {
   return (
     <div
       className={cn(
@@ -33,10 +41,8 @@ export default function AppShell({ activePath, children, className }: AppShellPr
         className,
       )}
     >
-      <AppHeaderNav activePath={activePath} />
-
-      <main className="mli-auto relative w-full flex-1">{children}</main>
-
+      <AppHeaderNav activePath={activePath} activeTitle={activeTitle} />
+      <main className={cn('mli-auto relative w-full flex-1', mainClassName)}>{children}</main>
       <AppBottomNav activePath={activePath} />
     </div>
   );

@@ -1,8 +1,11 @@
 import { useEffect, useState } from 'react';
 
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 
 import Logo from '@/components/ui/Logo';
+import AiButton from '@/src/components/repertoire/buttons/AiButton';
+import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
 import Button from '@/src/components/ui/Button';
 import Dropdown from '@/src/components/ui/Dropdown';
@@ -22,14 +25,20 @@ import { cn } from '@/src/lib/ui/utils/cn';
 
 export interface AppHeaderNavProps {
   activePath: string;
+  activeTitle?: string;
   className?: string;
 }
 
-export default function AppHeader({ activePath, className }: AppHeaderNavProps) {
+export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const profile = MOCK_PROFILE;
+
+  const pathname = usePathname();
+
+  const isRepertoirePageActive = pathname === '/repertoire';
 
   const { theme, toggleTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
+
   useEffect(() => setMounted(true), []);
 
   return (
@@ -41,7 +50,7 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
       )}
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
-      <div className="mli-auto pli-4 flex h-14 items-center gap-10">
+      <div className="mli-auto pli-4 flex h-14 items-center justify-between gap-6 sm:gap-10">
         <Link href="/">
           <div className="hidden shrink-0 items-center lg:flex">
             <Logo variant="wordmark" size="md" />
@@ -65,47 +74,64 @@ export default function AppHeader({ activePath, className }: AppHeaderNavProps) 
           ))}
         </nav>
 
-        <div className="mis-auto flex items-center gap-4">
-          <Button
-            aria-label={
-              mounted
-                ? theme === THEME.dark
-                  ? 'Switch to light theme'
-                  : 'Switch to dark theme'
-                : 'Toggle theme'
-            }
-            className="bg-base size-10 rounded-full border-2 p-0"
-            onClick={toggleTheme}
-            variant="press"
-          >
-            {mounted ? (
-              theme === THEME.dark ? (
-                <SunOutlineIcon size={20} />
+        <div
+          className={cn(
+            'flex items-center gap-4',
+            activeTitle ? 'xs:w-full flex-row justify-between md:w-auto' : 'mis-auto',
+          )}
+        >
+          {activeTitle ? (
+            <Heading className="xs:block hidden text-lg uppercase md:hidden" tag="h1">
+              {activeTitle}
+            </Heading>
+          ) : null}
+
+          <div className="flex gap-3 md:gap-4">
+            {isRepertoirePageActive ? (
+              <AiButton className="bg-yellow-main md:hidden" textClassName="text-primary-dark" />
+            ) : null}
+
+            <Button
+              aria-label={
+                mounted
+                  ? theme === THEME.dark
+                    ? 'Switch to light theme'
+                    : 'Switch to dark theme'
+                  : 'Toggle theme'
+              }
+              className="bg-base size-10 rounded-full border-2 p-0"
+              onClick={toggleTheme}
+              variant="press"
+            >
+              {mounted ? (
+                theme === THEME.dark ? (
+                  <SunOutlineIcon size={20} />
+                ) : (
+                  <MoonOutlineIcon size={20} />
+                )
               ) : (
-                <MoonOutlineIcon size={20} />
-              )
-            ) : (
-              <SunOutlineIcon size={20} aria-hidden />
-            )}
-          </Button>
-          <Dropdown
-            align={OPTIONS_POSITION.end}
-            groups={[
-              {
-                items: [
-                  { label: 'View profile', icon: ProfileOutlineIcon, href: '/profile' },
-                  { label: 'Settings', icon: SettingsOutlineIcon, href: '/settings' },
-                  { label: 'Notifications', icon: BellIcon, href: '/notifications' },
-                ],
-              },
-              {
-                items: [
-                  { label: 'Sign out', icon: LogOutIcon, onClick: () => {}, variant: 'danger' },
-                ],
-              },
-            ]}
-            trigger={<AvatarButton initials={profile.initials} />}
-          />
+                <SunOutlineIcon size={20} aria-hidden />
+              )}
+            </Button>
+            <Dropdown
+              align={OPTIONS_POSITION.end}
+              groups={[
+                {
+                  items: [
+                    { label: 'View profile', icon: ProfileOutlineIcon, href: '/profile' },
+                    { label: 'Settings', icon: SettingsOutlineIcon, href: '/settings' },
+                    { label: 'Notifications', icon: BellIcon, href: '/notifications' },
+                  ],
+                },
+                {
+                  items: [
+                    { label: 'Sign out', icon: LogOutIcon, onClick: () => {}, variant: 'danger' },
+                  ],
+                },
+              ]}
+              trigger={<AvatarButton initials={profile.initials} />}
+            />
+          </div>
         </div>
       </div>
     </header>
