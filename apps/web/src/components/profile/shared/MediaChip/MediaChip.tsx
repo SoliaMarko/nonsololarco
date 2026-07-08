@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import { ImageIcon, LinkIcon, PlayIcon } from '@/src/icons/base';
-import { WishlistMediaKind } from '@/src/lib/types/repertoire/repertoire.types';
+import { type WishlistMediaKind } from '@/src/lib/types/profile/wishlist.types';
 import { cn } from '@/src/lib/ui/utils/cn';
 
 const MEDIA_ICON: Record<WishlistMediaKind, typeof PlayIcon> = {

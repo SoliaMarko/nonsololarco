@@ -13,5 +13,6 @@ export function useBandRepertoire(bandId: string) {
   return useQuery({
     queryKey: ['repertoire', 'band', bandId],
     queryFn: () => fetchBandRepertoire(bandId),
+    enabled: Boolean(bandId),
   });
 }

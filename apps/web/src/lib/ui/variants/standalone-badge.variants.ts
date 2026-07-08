@@ -22,6 +22,8 @@ export const standaloneBadgeVariants = cva(
           'uppercase tracking-widest font-bold rounded-sm bg-transparent text-yellow-muted border border-yellow-muted',
         'stamp-new':
           'uppercase tracking-widest font-bold rounded-sm bg-transparent text-danger border border-danger',
+        'stamp-archived':
+          'uppercase tracking-widest font-bold rounded-sm bg-transparent text-fg-tertiary border border-fg-disabled',
       },
       status: {
         online: 'bg-emerald-subtle text-status-online',

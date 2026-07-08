@@ -72,6 +72,8 @@
 
   /* --- Colors: emerald accent --- */
   --color-emerald-subtle: var(--emerald-subtle);
+  --color-emerald-subtle-70: var(--emerald-subtle-70);
+  --color-emerald-subtle-hover: var(--emerald-subtle-hover);
   --color-emerald-deep: var(--emerald-deep);
   --color-emerald-main: var(--emerald-main);
   --color-emerald-light: var(--emerald-light);
@@ -135,6 +137,16 @@
       transparent 1px
     );
     background-size: 12px 12px;
+  }
+
+  .bg-hatching {
+    background-image: repeating-linear-gradient(
+      -50deg,
+      color-mix(in srgb, currentcolor 3%, transparent) 0,
+      color-mix(in srgb, currentcolor 3%, transparent) 4px,
+      transparent 2px,
+      transparent 10px
+    );
   }
 
   .hover-fade {

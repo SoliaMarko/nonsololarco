@@ -58,6 +58,8 @@
 
   /* --- DARK: Emerald accent --- */
   --emerald-subtle: #1c3828;
+  --emerald-subtle-70: color-mix(in srgb, var(--emerald-subtle) 70%, transparent);
+  --emerald-subtle-hover: #243f30;
   --emerald-deep: #2a5c44;
   --emerald-main: #3d9b72;
 
@@ -116,6 +118,8 @@
 
   /* --- LIGHT: Emerald accent --- */
   --emerald-subtle: #d8efe6;
+  --emerald-subtle-70: color-mix(in srgb, var(--emerald-subtle) 70%, transparent);
+  --emerald-subtle-hover: #d0ebdf;
   --emerald-deep: #1c5a3e;
   --emerald-main: #2a7a58;
 
