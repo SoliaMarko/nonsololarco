@@ -7,8 +7,8 @@ export const MOCK_WISHLIST: WishlistTrack[] = [
     title: 'Chaconne (Bach)',
     visibility: 'public',
     media: [
-      { kind: 'video', url: 'https://youtube.com/watch?v=x', label: 'reference' },
-      { kind: 'sheet', url: 'https://example.com/sheet.pdf', label: 'sheet music' },
+      { id: 'vi-1', kind: 'video', url: 'https://youtube.com/watch?v=x', label: 'reference' },
+      { id: 'sh-1', kind: 'sheet', url: 'https://example.com/sheet.pdf', label: 'sheet music' },
     ],
   },
   {
@@ -16,7 +16,7 @@ export const MOCK_WISHLIST: WishlistTrack[] = [
     order: 2,
     title: 'Méditation (Massenet)',
     visibility: 'public',
-    media: [{ kind: 'link', url: 'https://example.com', label: 'info' }],
+    media: [{ id: 'li-1', kind: 'link', url: 'https://example.com', label: 'info' }],
   },
   {
     id: 'wt-3',
