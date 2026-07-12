@@ -70,7 +70,8 @@ export const Sizes: Story = {
   parameters: {
     docs: {
       description: {
-        story: 'Scales proportionally — height is ~1.33× width to match the viewBox ratio.',
+        story:
+          'Scales proportionally — height is ~1.33× width to match the viewBox ratio (3-bar default).',
       },
     },
   },
@@ -129,7 +130,38 @@ export const CustomBars: Story = {
     docs: {
       description: {
         story:
-          'Custom bar colours and tall/short variants — the crate adapts to any number of records.',
+          'Custom bar colours and tall/short variants — the crate adapts to any number of records. The viewBox width is derived from `bars.length`, so extra bars are never clipped.',
+      },
+    },
+  },
+};
+
+export const ManyBars: Story = {
+  render: () => {
+    const PALETTE = ['#8aa06b', '#b24b3a', '#e0a92e', '#22B79a', '#3b82e0'] as const;
+
+    const makeBars = (count: number): VinylCrateBar[] =>
+      Array.from({ length: count }, (_, i) => ({
+        color: PALETTE[i % PALETTE.length] ?? PALETTE[0],
+        tall: i % 2 === 0,
+      }));
+
+    return (
+      <div className="flex flex-wrap items-end justify-center gap-8">
+        {([3, 4, 5, 6, 8] as const).map((count) => (
+          <div key={count} className="flex flex-col items-center gap-2">
+            <VinylCrate bars={makeBars(count)} width={64} height={42} isPlaying />
+            <span className="text-fg-tertiary font-mono text-[10px]">{count} bars</span>
+          </div>
+        ))}
+      </div>
+    );
+  },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'No bars are ever clipped regardless of count. With `width` fixed, individual bars get visually thinner as the count grows — pass a larger `width` if you want bars to stay a consistent thickness.',
       },
     },
   },
