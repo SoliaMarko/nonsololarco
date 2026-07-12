@@ -265,3 +265,25 @@
     filter: hue-rotate(360deg);
   }
 }
+
+@keyframes wave-scan-dot {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.55;
+    transform: translateY(calc(-1 * var(--travel)));
+  }
+
+  60% {
+    opacity: 0.45;
+    transform: translateY(calc(-1 * var(--travel)));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
