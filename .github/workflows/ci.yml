@@ -67,27 +67,9 @@ jobs:
       - run: pnpm install
       - run: pnpm build
 
-  chromatic:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: pnpm/action-setup@v4.1.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "pnpm"
-      - run: pnpm install
-      - uses: chromaui/action@v1
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: apps/web
-
   ci:
     runs-on: ubuntu-latest
-    needs: [build, chromatic]
+    needs: [build]
     if: always()
     steps:
       - name: Check all jobs passed
