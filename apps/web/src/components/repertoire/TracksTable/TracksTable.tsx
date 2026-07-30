@@ -1,4 +1,4 @@
-import { MOCK_CURRENT_USER_ID } from '@/src/data/repertoire/tracks.mock';
+import { MOCK_CURRENT_USER_ID } from '@/src/data/auth/auth.mock';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 
