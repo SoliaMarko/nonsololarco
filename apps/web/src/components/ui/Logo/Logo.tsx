@@ -3,7 +3,7 @@ import { HTMLAttributes } from 'react';
 import { MARK_SIZE, WORDMARK_SCALE } from '@/src/lib/constants/ui/logo.const';
 import { Locale } from '@/src/lib/types/common.types';
 import { LogoSize, LogoVariant } from '@/src/lib/types/ui/logo.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import { LockupSvg } from './svgs/Lockup';
 import { MarkSvg } from './svgs/Mark';

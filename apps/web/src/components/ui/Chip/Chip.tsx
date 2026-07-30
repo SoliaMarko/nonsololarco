@@ -3,8 +3,8 @@ import { ForwardedRef, HTMLAttributes, forwardRef } from 'react';
 import { VariantProps } from 'class-variance-authority';
 
 import { CloseSolidIcon } from '@/src/icons/base';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { chipVariants } from '@/src/lib/ui/variants/chip.variants';
+import { chipVariants } from '@/src/lib/variants/chip.variants';
+import { cn } from '@/src/utils/cn';
 
 type ChipVariantProps = Omit<VariantProps<typeof chipVariants>, 'isInteractive'>;
 

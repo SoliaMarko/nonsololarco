@@ -5,8 +5,8 @@ import {
   HeadingVariantProps,
   TAG_DEFAULT_SIZE,
 } from '@/src/lib/types/typography/heading.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { headingVariants } from '@/src/lib/ui/variants/typography/heading.variants';
+import { headingVariants } from '@/src/lib/variants/typography/heading.variants';
+import { cn } from '@/src/utils/cn';
 
 export interface HeadingProps
   extends Omit<HTMLAttributes<HTMLHeadingElement>, 'color'>, HeadingVariantProps {

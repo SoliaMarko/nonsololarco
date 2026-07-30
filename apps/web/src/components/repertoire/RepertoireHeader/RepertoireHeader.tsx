@@ -4,7 +4,7 @@ import { useSearchParams } from 'next/navigation';
 
 import { Band, RepertoireStats } from '@nonsololarco/types';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import Breadcrumb from '../../shared/Breadcrumb';
 import Heading from '../../typography/Heading';

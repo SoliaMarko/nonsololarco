@@ -5,8 +5,8 @@ import { VariantProps } from 'class-variance-authority';
 
 import { OPTIONS_POSITION } from '@/src/lib/constants/common.const';
 import { OptionsPositionType } from '@/src/lib/types/common.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { dropdownItemVariants } from '@/src/lib/ui/variants/dropdown-item.variants';
+import { dropdownItemVariants } from '@/src/lib/variants/dropdown-item.variants';
+import { cn } from '@/src/utils/cn';
 
 type DropdownVariantProps = VariantProps<typeof dropdownItemVariants>;
 

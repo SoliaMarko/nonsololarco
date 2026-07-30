@@ -60,7 +60,7 @@ import {
   QuarterRestIcon,
   WholeRestIcon,
 } from '@/src/icons/status';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 const meta: Meta = {
   title: 'Icons',

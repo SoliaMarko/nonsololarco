@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import Text from '@/src/components/typography/Text';
 import { TrackSummary } from '@/src/lib/types/repertoire/track.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface LeadRowProps {
   hasMoreLeads?: boolean;

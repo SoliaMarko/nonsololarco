@@ -6,7 +6,7 @@ import { Band } from '@nonsololarco/types';
 
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
 import { VINYL_COLORS } from '@/src/lib/constants/illustrations/vinyl-record.const';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface BandTabsProps {
   bands: Band[];

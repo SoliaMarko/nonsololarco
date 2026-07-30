@@ -1,8 +1,8 @@
 import { ElementType, ForwardedRef, HTMLAttributes, forwardRef } from 'react';
 
 import { TextElement, TextVariantProps } from '@/src/lib/types/typography/text.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { textVariants } from '@/src/lib/ui/variants/typography/text.variants';
+import { textVariants } from '@/src/lib/variants/typography/text.variants';
+import { cn } from '@/src/utils/cn';
 
 export interface TextProps extends Omit<HTMLAttributes<HTMLElement>, 'color'>, TextVariantProps {
   className?: string;

@@ -2,8 +2,8 @@ import { ForwardedRef, HTMLAttributes, ReactNode, forwardRef } from 'react';
 
 import { VariantProps } from 'class-variance-authority';
 
-import { cn } from '@/src/lib/ui/utils/cn';
-import { cardVariants } from '@/src/lib/ui/variants/card.variants';
+import { cardVariants } from '@/src/lib/variants/card.variants';
+import { cn } from '@/src/utils/cn';
 
 export interface CardProps
   extends HTMLAttributes<HTMLDivElement>, VariantProps<typeof cardVariants> {

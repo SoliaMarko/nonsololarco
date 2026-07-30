@@ -2,7 +2,7 @@
 
 import { CSSProperties, useState } from 'react';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface VinylCrateBar {
   color: string;

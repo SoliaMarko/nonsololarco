@@ -8,9 +8,9 @@ import { STATUS_ICON } from '@/src/lib/constants/common.const';
 import { STATUS_ICON_SIZE } from '@/src/lib/constants/ui/avatar.const';
 import { AvatarSize } from '@/src/lib/types/ui/avatar.types';
 import { BadgeStatus } from '@/src/lib/types/ui/badge.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { avatarVariants } from '@/src/lib/ui/variants/avatar.variants';
-import { badgeVariants } from '@/src/lib/ui/variants/badge.variants';
+import { avatarVariants } from '@/src/lib/variants/avatar.variants';
+import { badgeVariants } from '@/src/lib/variants/badge.variants';
+import { cn } from '@/src/utils/cn';
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   alt?: string;

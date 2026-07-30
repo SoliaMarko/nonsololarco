@@ -1,6 +1,6 @@
 import { useSearchParams } from 'next/navigation';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../TracksTable';
 import TrackColumnHeader from './TrackColumnHeader';

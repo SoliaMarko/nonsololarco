@@ -12,9 +12,9 @@ import {
 import { VariantProps } from 'class-variance-authority';
 
 import { IconPositionType } from '@/src/lib/types/common.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { buttonVariants } from '@/src/lib/ui/variants/button.variants';
-import { iconSizes } from '@/src/lib/ui/variants/icon.variants';
+import { buttonVariants } from '@/src/lib/variants/button.variants';
+import { iconSizes } from '@/src/lib/variants/icon.variants';
+import { cn } from '@/src/utils/cn';
 
 import Spinner from '../Spinner';
 
