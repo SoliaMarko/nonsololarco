@@ -2,7 +2,7 @@ import Image from 'next/image';
 
 import { ImageIcon, PlayIcon } from '@/src/icons/base';
 import { MomentType } from '@/src/lib/types/profile/profile.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface MomentCardProps {
   className?: string;

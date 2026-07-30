@@ -1,6 +1,6 @@
 import NavLink from '@/src/components/ui/NavLink';
 import { NAV_ITEMS } from '@/src/lib/constants/common.const';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface AppBottomNavProps {
   activePath: string;

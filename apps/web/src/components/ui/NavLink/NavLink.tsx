@@ -4,8 +4,8 @@ import Link from 'next/link';
 
 import { type VariantProps } from 'class-variance-authority';
 
-import { cn } from '@/src/lib/ui/utils/cn';
-import { navLinkVariants } from '@/src/lib/ui/variants/navlink.variants';
+import { navLinkVariants } from '@/src/lib/variants/navlink.variants';
+import { cn } from '@/src/utils/cn';
 
 export interface NavLinkProps
   extends

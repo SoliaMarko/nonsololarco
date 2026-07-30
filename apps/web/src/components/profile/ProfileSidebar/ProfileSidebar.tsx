@@ -1,5 +1,5 @@
 import { MOCK_SIDEBAR } from '@/src/data/profile/sidebar.mock';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import AchievementsSection from './AchievementsSection';
 import BandsSection from './BandsSection';

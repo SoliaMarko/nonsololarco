@@ -1,13 +1,7 @@
 import { Band } from '@nonsololarco/types';
 
-import { API_URL } from './repertoire.api';
+import { apiFetch } from './client';
 
 export async function fetchMyBands(): Promise<Band[]> {
-  const res = await fetch(`${API_URL}/users/me/bands`);
-
-  if (!res.ok) {
-    throw new Error('Failed to fetch bands');
-  }
-
-  return res.json();
+  return apiFetch<Band[]>('/users/me/bands');
 }

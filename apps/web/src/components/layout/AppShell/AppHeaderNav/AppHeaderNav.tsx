@@ -21,7 +21,7 @@ import {
   SunOutlineIcon,
 } from '@/src/icons/base';
 import { NAV_ITEMS, OPTIONS_POSITION, THEME } from '@/src/lib/constants/common.const';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface AppHeaderNavProps {
   activePath: string;

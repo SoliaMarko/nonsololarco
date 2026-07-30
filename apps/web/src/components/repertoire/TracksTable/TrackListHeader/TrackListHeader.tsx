@@ -1,15 +1,11 @@
-import { useSearchParams } from 'next/navigation';
+import { useActiveBand } from '@/src/hooks/global/useActiveBand';
+import { cn } from '@/src/utils/cn';
 
-import { cn } from '@/src/lib/ui/utils/cn';
-
-import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../TracksTable';
+import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 import TrackColumnHeader from './TrackColumnHeader';
 
 export default function TrackListHeader() {
-  const searchParams = useSearchParams();
-
-  const activeBandId = searchParams.get('band') ?? '';
-  const isSpecificBandSelected = Boolean(activeBandId);
+  const { isSpecificBandSelected } = useActiveBand();
 
   return (
     <div

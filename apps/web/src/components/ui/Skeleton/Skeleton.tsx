@@ -1,8 +1,8 @@
 import { CSSProperties, HTMLAttributes } from 'react';
 
 import { SkeletonRounded } from '@/src/lib/types/ui/skeleton.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { roundedMap } from '@/src/lib/ui/variants/skeleton.variants';
+import { roundedMap } from '@/src/lib/variants/skeleton.variants';
+import { cn } from '@/src/utils/cn';
 
 interface SkeletonProps extends HTMLAttributes<HTMLDivElement> {
   className?: string;

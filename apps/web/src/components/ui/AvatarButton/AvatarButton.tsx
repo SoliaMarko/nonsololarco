@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ForwardedRef, HTMLAttributes, forwardRef } from 'react';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import Avatar, { AvatarProps } from '../Avatar/Avatar';
 

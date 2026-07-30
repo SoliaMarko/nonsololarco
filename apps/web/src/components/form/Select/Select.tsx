@@ -4,8 +4,8 @@ import * as RadixSelect from '@radix-ui/react-select';
 
 import ChevronIcon from '@/src/icons/base/ChevronIcon';
 import CloseSolidIcon from '@/src/icons/base/CloseSolidIcon';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { selectTriggerVariants } from '@/src/lib/ui/variants/select.variants';
+import { selectTriggerVariants } from '@/src/lib/variants/select.variants';
+import { cn } from '@/src/utils/cn';
 
 import SelectItem from './SelectItem';
 

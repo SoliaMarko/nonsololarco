@@ -1,6 +1,6 @@
 import { MOCK_WISHLIST } from '@/src/data/profile/wishlist.mock';
 import { MOCK_LEAD_TRACKS } from '@/src/data/repertoire/tracks.mock';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import SeeMoreButton from '../../shared/buttons/SeeMoreButton';
 import SectionHeader from '../shared/SectionHeader';

@@ -2,7 +2,7 @@ import Link from 'next/link';
 
 import { ImageIcon, LinkIcon, PlayIcon } from '@/src/icons/base';
 import { type WishlistMediaKind } from '@/src/lib/types/profile/wishlist.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 const MEDIA_ICON: Record<WishlistMediaKind, typeof PlayIcon> = {
   video: PlayIcon,

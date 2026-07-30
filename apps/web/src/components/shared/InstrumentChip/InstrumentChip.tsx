@@ -1,6 +1,6 @@
 import Text from '@/src/components/typography/Text';
 import { Instrument } from '@/src/lib/types/profile/profile.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface InstrumentChipProps {
   className?: string;

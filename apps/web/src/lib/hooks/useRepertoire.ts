@@ -2,17 +2,16 @@ import { useQuery } from '@tanstack/react-query';
 
 import { fetchBandRepertoire, fetchMyRepertoire } from '../api/repertoire.api';
 
-export function useMyRepertoire() {
-  return useQuery({
-    queryKey: ['repertoire', 'me'],
-    queryFn: fetchMyRepertoire,
-  });
-}
+/**
+ * Fetches repertoire tracks based on context:
+ * - No bandId (or empty string) → fetches all user tracks
+ * - With bandId → fetches tracks for that specific band
+ */
+export function useRepertoireTracks(bandId: string) {
+  const isBandSelected = Boolean(bandId);
 
-export function useBandRepertoire(bandId: string) {
   return useQuery({
-    queryKey: ['repertoire', 'band', bandId],
-    queryFn: () => fetchBandRepertoire(bandId),
-    enabled: Boolean(bandId),
+    queryKey: isBandSelected ? ['repertoire', 'band', bandId] : ['repertoire', 'me'],
+    queryFn: () => (isBandSelected ? fetchBandRepertoire(bandId) : fetchMyRepertoire()),
   });
 }

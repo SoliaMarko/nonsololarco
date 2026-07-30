@@ -1,29 +1,18 @@
 'use client';
 
-import { useRouter, useSearchParams } from 'next/navigation';
-
 import { Band } from '@nonsololarco/types';
 
+import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
 import { VINYL_COLORS } from '@/src/lib/constants/illustrations/vinyl-record.const';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface BandTabsProps {
   bands: Band[];
 }
 
 export default function BandTabs({ bands }: BandTabsProps) {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-
-  const rawBandId = searchParams.get('band');
-  const activeBandId = bands.some((band) => band.id === rawBandId) ? rawBandId : bands[0]?.id;
-
-  function onBandChange(bandId: string) {
-    const params = new URLSearchParams(searchParams.toString());
-    params.set('band', bandId || '');
-    router.push(`?${params.toString()}`);
-  }
+  const { activeBandId, onBandChange } = useActiveBand();
 
   // TODO: Refactor, extract it to the Tab component for design system.
   return (

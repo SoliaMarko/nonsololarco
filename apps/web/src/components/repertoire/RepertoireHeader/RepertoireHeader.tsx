@@ -1,10 +1,9 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
-
 import { Band, RepertoireStats } from '@nonsololarco/types';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { useActiveBand } from '@/src/hooks/global/useActiveBand';
+import { cn } from '@/src/utils/cn';
 
 import Breadcrumb from '../../shared/Breadcrumb';
 import Heading from '../../typography/Heading';
@@ -29,10 +28,7 @@ export default function RepertoireHeader({
   // isAIOpen = false,
   className,
 }: RepertoireHeaderProps) {
-  const searchParams = useSearchParams();
-
-  const activeBandId = searchParams.get('band') ?? bands[0]?.id;
-  const activeBand = bands.find((band) => band.id === activeBandId) ?? bands[0];
+  const { activeBand } = useActiveBand();
 
   return (
     <div className={cn('border-border-primary border-b', className)}>
@@ -51,7 +47,7 @@ export default function RepertoireHeader({
 
       {/* up to sm screens */}
       <div className="pli-4 plb-3 bg-contrast bg-dots-subtle xs:flex-row flex flex-col items-center justify-between gap-4 md:hidden">
-        <BandStats bands={bands} stats={stats} />
+        <BandStats stats={stats} />
         <ActionButtons />
       </div>
 
@@ -69,7 +65,7 @@ export default function RepertoireHeader({
           </Heading>
         </div>
 
-        <BandStats bands={bands} stats={stats} />
+        <BandStats stats={stats} />
         <ActionButtons />
       </div>
     </div>

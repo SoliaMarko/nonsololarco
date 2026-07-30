@@ -1,5 +1,5 @@
 import { MomentType } from '@/src/lib/types/profile/profile.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import Text from '../../typography/Text';
 import SectionHeader from '../shared/SectionHeader';

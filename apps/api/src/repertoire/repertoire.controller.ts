@@ -1,32 +1,39 @@
-import { Controller, Get, NotFoundException, Param } from '@nestjs/common';
-import { MOCK_ALL_REPERTOIRE, MOCK_CURRENT_USER_ID } from './repertoire.mock';
+import { Controller, Get, Param } from '@nestjs/common';
+import {
+  ApiNotFoundResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiParam,
+  ApiTags,
+} from '@nestjs/swagger';
 import { Track } from '@nonsololarco/types';
 
+import { TrackDto } from './dto';
+import { MOCK_CURRENT_USER_ID } from 'src/mocks/repertoire.mock';
+import { RepertoireService } from './repertoire.service';
+
+@ApiTags('repertoire')
 @Controller()
 export class RepertoireController {
+  constructor(private readonly repertoireService: RepertoireService) {}
+
   @Get('users/me/repertoire')
+  @ApiOperation({ summary: 'Get all tracks for the current user' })
+  @ApiOkResponse({ type: [TrackDto], description: 'List of user tracks' })
   // TODO: Replace with real user ID once JWT authentication is implemented
-  getMyRepertoire() {
-    return MOCK_ALL_REPERTOIRE.filter(
-      (track) => track.leadMember?.id === MOCK_CURRENT_USER_ID,
-    );
+  getMyRepertoire(): Track[] {
+    return this.repertoireService.getByUser(MOCK_CURRENT_USER_ID);
   }
 
   @Get('bands/:id/repertoire')
+  @ApiOperation({ summary: 'Get all tracks for a specific band' })
+  @ApiParam({ name: 'id', description: 'Band ID', example: 'band-1' })
+  @ApiOkResponse({
+    type: [TrackDto],
+    description: 'List of band tracks (without band field)',
+  })
+  @ApiNotFoundResponse({ description: 'Band not found' })
   getBandRepertoire(@Param('id') bandId: string): Track[] {
-    const isBandExisting = MOCK_ALL_REPERTOIRE.some(
-      (track) => track.band?.id === bandId,
-    );
-
-    if (!isBandExisting) {
-      throw new NotFoundException(
-        `Band with id ${bandId} not found in repertoire`,
-      );
-    }
-
-    return MOCK_ALL_REPERTOIRE.filter((track) => track.band?.id === bandId).map(
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      ({ band: _band, ...track }) => track,
-    );
+    return this.repertoireService.getByBand(bandId);
   }
 }

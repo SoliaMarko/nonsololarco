@@ -2,7 +2,7 @@ import Heading from '@/src/components/typography/Heading';
 import Text from '@/src/components/typography/Text';
 import Divider from '@/src/components/ui/Divider';
 import { ORIENTATION } from '@/src/lib/constants/common.const';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface SectionHeaderProps {
   className?: string;

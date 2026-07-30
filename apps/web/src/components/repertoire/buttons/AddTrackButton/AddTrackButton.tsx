@@ -3,7 +3,7 @@
 import Text from '@/src/components/typography/Text';
 import Button from '@/src/components/ui/Button';
 import { PlusSolidIcon } from '@/src/icons/base';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface AddTrackButtonProps {
   className?: string;

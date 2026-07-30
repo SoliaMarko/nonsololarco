@@ -1,12 +1,15 @@
 'use client';
 
 import AppShell from '@/src/components/layout/AppShell';
-import Text from '@/src/components/typography/Text';
+import EmptyState from '@/src/components/shared/EmptyState';
 
 export default function SettingsPage() {
   return (
-    <AppShell activePath={'/settings'}>
-      <Text>Settings Page Content</Text>
+    <AppShell activePath="/settings" mainClassName="flex flex-col">
+      <EmptyState
+        title="Settings"
+        description="Theme, language, notification preferences, and account details. Coming soon."
+      />
     </AppShell>
   );
 }
