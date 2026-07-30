@@ -1,21 +1,17 @@
 'use client';
 
-import { useSearchParams } from 'next/navigation';
+import { RepertoireStats } from '@nonsololarco/types';
 
-import { Band, RepertoireStats } from '@nonsololarco/types';
+import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 
-export interface RepertoireHeaderProps {
-  bands: Band[];
+interface BandStatsProps {
   stats: RepertoireStats;
 }
 
-export default function BandStats({ bands, stats }: RepertoireHeaderProps) {
-  const searchParams = useSearchParams();
+export default function BandStats({ stats }: BandStatsProps) {
+  const { activeBand, isSpecificBandSelected } = useActiveBand();
 
-  const activeBandId = searchParams.get('band') ?? bands[0]?.id;
-  const activeBand = bands.find((band) => band.id === activeBandId) ?? bands[0];
-
-  const statsSource = activeBandId && activeBand ? activeBand : stats;
+  const statsSource = isSpecificBandSelected && activeBand ? activeBand : stats;
 
   return (
     <div className="md:text-fg-tertiary text-edge text-md xs:text-lg flex items-center gap-1 self-center md:gap-3 md:text-xl">

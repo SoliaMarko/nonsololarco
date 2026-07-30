@@ -1,0 +1,57 @@
+'use client';
+
+import { createContext, ReactNode, useContext, useMemo } from 'react';
+
+import { useRouter, useSearchParams } from 'next/navigation';
+
+import { Band } from '@nonsololarco/types';
+
+interface ActiveBandContextValue {
+  /** Full band object for the active tab */
+  activeBand: Band | undefined;
+  /** Band ID from URL, or fallback to first band's ID */
+  activeBandId: string;
+  /** Whether a specific band (not "All Repertoires") is selected */
+  isSpecificBandSelected: boolean;
+  /** Navigate to a different band tab */
+  onBandChange: (bandId: string) => void;
+}
+
+const ActiveBandContext = createContext<ActiveBandContextValue | null>(null);
+
+interface ActiveBandProviderProps {
+  bands: Band[];
+  children: ReactNode;
+}
+
+export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps) {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  const value = useMemo(() => {
+    const rawId = searchParams.get('band');
+    const activeBand = bands.find((b) => b.id === rawId) ?? bands[0];
+    const activeBandId = activeBand?.id ?? '';
+    const isSpecificBandSelected = Boolean(rawId && activeBand?.id === rawId);
+
+    function onBandChange(bandId: string) {
+      const params = new URLSearchParams(searchParams.toString());
+      params.set('band', bandId);
+      router.push(`?${params.toString()}`);
+    }
+
+    return { activeBand, activeBandId, isSpecificBandSelected, onBandChange };
+  }, [bands, searchParams, router]);
+
+  return <ActiveBandContext.Provider value={value}>{children}</ActiveBandContext.Provider>;
+}
+
+export function useActiveBand(): ActiveBandContextValue {
+  const context = useContext(ActiveBandContext);
+
+  if (!context) {
+    throw new Error('useActiveBand must be used within <ActiveBandProvider>');
+  }
+
+  return context;
+}

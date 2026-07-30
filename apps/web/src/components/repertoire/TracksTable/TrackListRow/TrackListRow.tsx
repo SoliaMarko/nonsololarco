@@ -1,10 +1,8 @@
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-
-import { Band } from '@nonsololarco/types';
 
 import Text from '@/src/components/typography/Text';
 import Badge from '@/src/components/ui/Badge';
+import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
@@ -38,10 +36,7 @@ export interface TrackListRowProps {
 }
 
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
-  const searchParams = useSearchParams();
-
-  const activeBandId = searchParams.get('band') ?? '';
-  const isSpecificBandSelected = Boolean(activeBandId);
+  const { isSpecificBandSelected } = useActiveBand();
 
   const isArchived = track.status === 'archived';
 
