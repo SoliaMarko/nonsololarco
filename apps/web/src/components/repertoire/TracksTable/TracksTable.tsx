@@ -1,6 +1,6 @@
 import { MOCK_CURRENT_USER_ID } from '@/src/data/repertoire/tracks.mock';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
-import { useBandRepertoire, useMyRepertoire } from '@/src/lib/hooks/useRepertoire';
+import { useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 
 import TrackListHeader from './TrackListHeader';
 import TrackListRow from './TrackListRow';
@@ -14,11 +14,7 @@ export const SPECIFIC_BAND_ROW_GRID =
 
 export default function TracksTable() {
   const { activeBandId, isSpecificBandSelected } = useActiveBand();
-
-  const { data: allMyTracks } = useMyRepertoire();
-  const { data: tracksByBand } = useBandRepertoire(activeBandId);
-
-  const tracks = isSpecificBandSelected ? tracksByBand : allMyTracks;
+  const { data: tracks } = useRepertoireTracks(activeBandId);
   const sortedTracks = tracks
     ? [...tracks].sort(
         (a, b) => (a.status === 'archived' ? 1 : 0) - (b.status === 'archived' ? 1 : 0),
