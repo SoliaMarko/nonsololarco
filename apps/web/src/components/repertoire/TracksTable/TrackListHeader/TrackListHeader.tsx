@@ -1,7 +1,7 @@
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { cn } from '@/src/utils/cn';
 
-import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../TracksTable';
+import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 import TrackColumnHeader from './TrackColumnHeader';
 
 export default function TrackListHeader() {

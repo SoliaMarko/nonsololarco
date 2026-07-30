@@ -9,7 +9,7 @@ import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
 import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
 import { cn } from '@/src/utils/cn';
 
-import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../TracksTable';
+import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 
 const STATUS_VARIANT: Record<
   TrackStatus,

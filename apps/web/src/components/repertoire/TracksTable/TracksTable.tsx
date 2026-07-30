@@ -5,13 +5,6 @@ import { useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 import TrackListHeader from './TrackListHeader';
 import TrackListRow from './TrackListRow';
 
-// Grid columns: # · title · key · bpm · status · duration · actions
-export const ALL_BANDS_ROW_GRID =
-  'grid grid-cols-[16px_1fr_68px_24px] sm:grid-cols-[16px_32px_3fr_2fr_60px_40px_100px_auto_auto] items-center gap-3';
-
-export const SPECIFIC_BAND_ROW_GRID =
-  'grid grid-cols-[16px_1fr_68px_24px] sm:grid-cols-[16px_32px_3fr_60px_40px_100px_auto_auto] items-center gap-3';
-
 export default function TracksTable() {
   const { activeBandId, isSpecificBandSelected } = useActiveBand();
   const { data: tracks } = useRepertoireTracks(activeBandId);
