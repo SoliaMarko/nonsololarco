@@ -1,10 +1,16 @@
 import { Controller, Get } from '@nestjs/common';
-import { MOCK_BANDS } from './bands.mock';
+import { Band } from '@nonsololarco/types';
+
+import { MOCK_CURRENT_USER_ID } from '../repertoire/repertoire.mock';
+import { BandsService } from './bands.service';
 
 @Controller('users/me/bands')
 export class BandsController {
-  @Get('')
-  getAllBands() {
-    return MOCK_BANDS;
+  constructor(private readonly bandsService: BandsService) {}
+
+  @Get()
+  // TODO: Replace with real user ID once JWT authentication is implemented
+  getMyBands(): Band[] {
+    return this.bandsService.getByUser(MOCK_CURRENT_USER_ID);
   }
 }
