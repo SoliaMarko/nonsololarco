@@ -1,6 +1,6 @@
 import { VariantProps } from 'class-variance-authority';
 
-import { standaloneBadgeVariants } from '../../ui/variants/standalone-badge.variants';
+import { standaloneBadgeVariants } from '../../variants/standalone-badge.variants';
 
 type BadgeSize = NonNullable<VariantProps<typeof standaloneBadgeVariants>['size']>;
 
