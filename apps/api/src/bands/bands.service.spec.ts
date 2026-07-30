@@ -1,6 +1,6 @@
-import { MOCK_ALL_REPERTOIRE } from '../mocks/repertoire.mock';
-import { sumDurations } from '../utils/duration.util';
-import { MOCK_BANDS } from '../mocks/bands.mock';
+import { MOCK_ALL_REPERTOIRE } from 'src/mocks/repertoire.mock';
+import { sumDurations } from 'src/utils/duration.util';
+import { MOCK_BANDS } from 'src/mocks/bands.mock';
 import { BandsService } from './bands.service';
 
 describe('BandsService', () => {
@@ -8,13 +8,13 @@ describe('BandsService', () => {
 
   describe('getByUser', () => {
     it('returns one entry per band seed', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
 
       expect(bands).toHaveLength(MOCK_BANDS.length);
     });
 
     it('preserves static band metadata', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
 
       bands.forEach((band, index) => {
         expect(band.id).toBe(MOCK_BANDS[index].id);
@@ -24,7 +24,7 @@ describe('BandsService', () => {
     });
 
     it('computes totalTracks from repertoire data', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
 
       bands.forEach((band) => {
         const expected = MOCK_ALL_REPERTOIRE.filter(
@@ -36,7 +36,7 @@ describe('BandsService', () => {
     });
 
     it('computes readyTracks from repertoire data', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
 
       bands.forEach((band) => {
         const expected = MOCK_ALL_REPERTOIRE.filter(
@@ -48,7 +48,7 @@ describe('BandsService', () => {
     });
 
     it('computes totalDuration from repertoire data', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
 
       bands.forEach((band) => {
         const durations = MOCK_ALL_REPERTOIRE.filter(
@@ -60,7 +60,7 @@ describe('BandsService', () => {
     });
 
     it('returns correct stats for Quiet Yard (band-1)', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
       const quietYard = bands.find((b) => b.id === 'band-1');
 
       expect(quietYard).toBeDefined();
@@ -70,7 +70,7 @@ describe('BandsService', () => {
     });
 
     it('returns correct stats for Jellyfish with zero ready tracks (band-6)', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
       const jellyfish = bands.find((b) => b.id === 'band-6');
 
       expect(jellyfish).toBeDefined();
@@ -79,7 +79,7 @@ describe('BandsService', () => {
     });
 
     it('returns all required Band fields', () => {
-      const bands = service.getByUser('any-user');
+      const bands = service.getAll();
 
       bands.forEach((band) => {
         expect(band).toHaveProperty('id');
