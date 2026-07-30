@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Track } from '@nonsololarco/types';
 
-import { MOCK_ALL_REPERTOIRE } from './repertoire.mock';
+import { MOCK_ALL_REPERTOIRE } from '../mocks/repertoire.mock';
 
 @Injectable()
 export class RepertoireService {

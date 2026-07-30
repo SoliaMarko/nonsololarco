@@ -1,9 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Band } from '@nonsololarco/types';
 
-import { MOCK_ALL_REPERTOIRE } from '../repertoire/repertoire.mock';
+import { MOCK_ALL_REPERTOIRE } from '../mocks/repertoire.mock';
 import { sumDurations } from 'src/utils/duration.util';
-import { MOCK_BANDS } from './bands.mock';
+import { MOCK_BANDS } from '../mocks/bands.mock';
 
 @Injectable()
 export class BandsService {

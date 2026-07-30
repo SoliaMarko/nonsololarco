@@ -1,6 +1,6 @@
-import { MOCK_ALL_REPERTOIRE } from '../repertoire/repertoire.mock';
+import { MOCK_ALL_REPERTOIRE } from '../mocks/repertoire.mock';
 import { sumDurations } from '../utils/duration.util';
-import { MOCK_BANDS } from './bands.mock';
+import { MOCK_BANDS } from '../mocks/bands.mock';
 import { BandsService } from './bands.service';
 
 describe('BandsService', () => {

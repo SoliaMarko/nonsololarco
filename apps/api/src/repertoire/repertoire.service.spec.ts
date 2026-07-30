@@ -1,6 +1,9 @@
 import { NotFoundException } from '@nestjs/common';
 
-import { MOCK_ALL_REPERTOIRE, MOCK_CURRENT_USER_ID } from './repertoire.mock';
+import {
+  MOCK_ALL_REPERTOIRE,
+  MOCK_CURRENT_USER_ID,
+} from '../mocks/repertoire.mock';
 import { RepertoireService } from './repertoire.service';
 
 describe('RepertoireService', () => {
