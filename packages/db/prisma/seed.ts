@@ -1,7 +1,7 @@
 import "dotenv/config";
 
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient, TrackStatus } from "../src/generated/prisma/client.js";
+import { PrismaClient, TrackStatus } from "../src/generated/prisma/client.ts";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL as string,
@@ -13,16 +13,16 @@ async function main() {
 
   // --- Users ---
   const solomiia = await prisma.user.create({
-    data: { name: "Solomiia" },
+    data: { email: "solomiia@example.com", name: "Solomiia" },
   });
   const anna = await prisma.user.create({
-    data: { name: "Anna" },
+    data: { email: "anna@example.com", name: "Anna" },
   });
   const jared = await prisma.user.create({
-    data: { name: "Jared" },
+    data: { email: "jared@example.com", name: "Jared" },
   });
   const artem = await prisma.user.create({
-    data: { name: "Artem" },
+    data: { email: "artem@example.com", name: "Artem" },
   });
 
   // --- Bands ---

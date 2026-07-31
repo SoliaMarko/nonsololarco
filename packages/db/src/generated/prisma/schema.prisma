@@ -1,6 +1,6 @@
 generator client {
-  provider     = "prisma-client-js"
-  output       = "../src/generated/prisma"
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -8,13 +8,13 @@ datasource db {
 }
 
 model User {
-  id        String   @id @default(cuid())
-  name      String
-  email     String   @unique
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
   // Null for OAuth-only users; set when custom email+password auth is added.
-  passwordHash String? @map("password_hash")
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
+  passwordHash String?  @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  updatedAt    DateTime @updatedAt @map("updated_at")
 
   memberships BandMember[]
   leadTracks  Track[]      @relation("LeadMember")
