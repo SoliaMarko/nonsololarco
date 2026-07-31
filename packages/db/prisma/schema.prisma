@@ -11,13 +11,38 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   name      String
+  email     String   @unique
+  // Null for OAuth-only users; set when custom email+password auth is added.
+  passwordHash String? @map("password_hash")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   memberships BandMember[]
   leadTracks  Track[]      @relation("LeadMember")
+  // One user can be linked to multiple OAuth providers (Google, GitHub, etc).
+  accounts    Account[]
 
   @@map("users")
+}
+
+/// Links a User to an external auth provider (Google, GitHub, ...).
+/// Kept separate from User so one person can sign in with multiple providers,
+/// and so adding new providers later doesn't require changing the User model.
+model Account {
+  id                String @id @default(cuid())
+  // "google" | "github" | ... — the auth provider name.
+  provider          String
+  // The user's unique id on the provider's side (e.g. Google's "sub" claim).
+  providerAccountId String @map("provider_account_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // A given provider account can only ever be linked to one user.
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Band {
