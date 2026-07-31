@@ -1,85 +1,128 @@
-import { MOCK_ALL_REPERTOIRE } from 'src/mocks/repertoire.mock';
-import { sumDurations } from 'src/utils/duration.util';
-import { MOCK_BANDS } from 'src/mocks/bands.mock';
+import { Test } from '@nestjs/testing';
+
+import { PrismaService } from '../prisma';
+import { createMockPrisma } from 'src/test/mocks/prisma.mock';
 import { BandsService } from './bands.service';
 
+const mockMemberships = [
+  {
+    role: 'back vocal',
+    band: {
+      id: 'band-1',
+      name: 'Quiet Yard',
+      tracks: [
+        { status: 'ready', duration: '3:10' },
+        { status: 'ready', duration: '2:55' },
+        { status: 'ready', duration: '3:05' },
+        { status: 'ready', duration: '3:40' },
+        { status: 'ready', duration: '3:15' },
+        { status: 'learning', duration: '3:00' },
+      ],
+    },
+  },
+  {
+    role: 'covers',
+    band: {
+      id: 'band-6',
+      name: 'Jellyfish',
+      tracks: [
+        { status: 'new', duration: '5:10' },
+        { status: 'learning', duration: '4:50' },
+      ],
+    },
+  },
+];
+
 describe('BandsService', () => {
-  const service = new BandsService();
+  let service: BandsService;
+  const mockPrisma = createMockPrisma();
 
-  describe('getByUser', () => {
-    it('returns one entry per band seed', () => {
-      const bands = service.getAll();
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        BandsService,
+        { provide: PrismaService, useValue: mockPrisma },
+      ],
+    }).compile();
 
-      expect(bands).toHaveLength(MOCK_BANDS.length);
+    service = module.get(BandsService);
+    vi.clearAllMocks();
+  });
+
+  describe('getAll', () => {
+    it('returns one entry per membership', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue(mockMemberships);
+
+      const bands = await service.getAll('user-1');
+
+      expect(bands).toHaveLength(2);
     });
 
-    it('preserves static band metadata', () => {
-      const bands = service.getAll();
+    it('uses role from membership, not from band', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue(mockMemberships);
 
-      bands.forEach((band, index) => {
-        expect(band.id).toBe(MOCK_BANDS[index].id);
-        expect(band.name).toBe(MOCK_BANDS[index].name);
-        expect(band.role).toBe(MOCK_BANDS[index].role);
+      const bands = await service.getAll('user-1');
+
+      expect(bands[0].role).toBe('back vocal');
+      expect(bands[1].role).toBe('covers');
+    });
+
+    it('computes totalTracks from band tracks', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue(mockMemberships);
+
+      const bands = await service.getAll('user-1');
+
+      expect(bands[0].totalTracks).toBe(6);
+      expect(bands[1].totalTracks).toBe(2);
+    });
+
+    it('computes readyTracks correctly', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue(mockMemberships);
+
+      const bands = await service.getAll('user-1');
+
+      expect(bands[0].readyTracks).toBe(5);
+      expect(bands[1].readyTracks).toBe(0);
+    });
+
+    it('computes totalDuration from track durations', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue(mockMemberships);
+
+      const bands = await service.getAll('user-1');
+
+      expect(bands[0].totalDuration).toBe('19 min');
+      expect(bands[1].totalDuration).toBe('10 min');
+    });
+
+    it('queries with correct where and include', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue([]);
+
+      await service.getAll('user-1');
+
+      expect(mockPrisma.bandMember.findMany).toHaveBeenCalledWith({
+        where: { userId: 'user-1' },
+        include: {
+          band: {
+            include: {
+              tracks: { select: { status: true, duration: true } },
+            },
+          },
+        },
       });
     });
 
-    it('computes totalTracks from repertoire data', () => {
-      const bands = service.getAll();
+    it('returns empty array when user has no bands', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue([]);
 
-      bands.forEach((band) => {
-        const expected = MOCK_ALL_REPERTOIRE.filter(
-          (t) => t.band?.id === band.id,
-        ).length;
+      const bands = await service.getAll('user-1');
 
-        expect(band.totalTracks).toBe(expected);
-      });
+      expect(bands).toEqual([]);
     });
 
-    it('computes readyTracks from repertoire data', () => {
-      const bands = service.getAll();
+    it('returns all required Band fields', async () => {
+      mockPrisma.bandMember.findMany.mockResolvedValue(mockMemberships);
 
-      bands.forEach((band) => {
-        const expected = MOCK_ALL_REPERTOIRE.filter(
-          (t) => t.band?.id === band.id && t.status === 'ready',
-        ).length;
-
-        expect(band.readyTracks).toBe(expected);
-      });
-    });
-
-    it('computes totalDuration from repertoire data', () => {
-      const bands = service.getAll();
-
-      bands.forEach((band) => {
-        const durations = MOCK_ALL_REPERTOIRE.filter(
-          (t) => t.band?.id === band.id,
-        ).map((t) => t.duration);
-
-        expect(band.totalDuration).toBe(sumDurations(durations));
-      });
-    });
-
-    it('returns correct stats for Quiet Yard (band-1)', () => {
-      const bands = service.getAll();
-      const quietYard = bands.find((b) => b.id === 'band-1');
-
-      expect(quietYard).toBeDefined();
-      expect(quietYard!.totalTracks).toBe(6);
-      expect(quietYard!.readyTracks).toBe(5);
-      expect(quietYard!.totalDuration).toBe('19 min');
-    });
-
-    it('returns correct stats for Jellyfish with zero ready tracks (band-6)', () => {
-      const bands = service.getAll();
-      const jellyfish = bands.find((b) => b.id === 'band-6');
-
-      expect(jellyfish).toBeDefined();
-      expect(jellyfish!.totalTracks).toBe(2);
-      expect(jellyfish!.readyTracks).toBe(0);
-    });
-
-    it('returns all required Band fields', () => {
-      const bands = service.getAll();
+      const bands = await service.getAll('user-1');
 
       bands.forEach((band) => {
         expect(band).toHaveProperty('id');

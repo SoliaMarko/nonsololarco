@@ -1,6 +1,6 @@
 import { Track } from '@nonsololarco/types';
 
-export const MOCK_CURRENT_USER_ID = 'mock-user-solomiia';
+import { MOCK_CURRENT_USER_ID } from 'src/constants/auth.const';
 
 export const MOCK_ALL_REPERTOIRE: Track[] = [
   // --- band-1 · Quiet Yard (6 tracks, 5 ready) ---

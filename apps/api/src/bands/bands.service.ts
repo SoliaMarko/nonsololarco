@@ -1,33 +1,32 @@
 import { Injectable } from '@nestjs/common';
 import { Band } from '@nonsololarco/types';
 
-import { MOCK_ALL_REPERTOIRE } from 'src/mocks/repertoire.mock';
+import { PrismaService } from '../prisma';
 import { sumDurations } from 'src/utils/duration.util';
-import { MOCK_BANDS } from 'src/mocks/bands.mock';
 
 @Injectable()
 export class BandsService {
-  // TODO: Add userId param and filter by membership once auth + DB are in place
-  getAll(): Band[] {
-    return MOCK_BANDS.map((band) => {
-      const bandTracks = MOCK_ALL_REPERTOIRE.filter(
-        (track) => track.band?.id === band.id,
-      );
+  constructor(private readonly prisma: PrismaService) {}
 
-      const readyTracks = bandTracks.filter(
-        (track) => track.status === 'ready',
-      ).length;
-
-      const totalDuration = sumDurations(
-        bandTracks.map((track) => track.duration),
-      );
-
-      return {
-        ...band,
-        totalTracks: bandTracks.length,
-        readyTracks,
-        totalDuration,
-      };
+  async getAll(userId: string): Promise<Band[]> {
+    const memberships = await this.prisma.bandMember.findMany({
+      where: { userId },
+      include: {
+        band: {
+          include: {
+            tracks: { select: { status: true, duration: true } },
+          },
+        },
+      },
     });
+
+    return memberships.map(({ role, band }) => ({
+      id: band.id,
+      name: band.name,
+      role,
+      totalTracks: band.tracks.length,
+      readyTracks: band.tracks.filter((t) => t.status === 'ready').length,
+      totalDuration: sumDurations(band.tracks.map((t) => t.duration)),
+    }));
   }
 }
