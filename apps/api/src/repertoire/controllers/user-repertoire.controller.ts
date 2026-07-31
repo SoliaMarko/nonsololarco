@@ -1,12 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Track } from '@nonsololarco/types';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import type { Track, User } from '@nonsololarco/types';
 
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { TrackDto } from '../dto';
-import { MOCK_CURRENT_USER_ID } from 'src/constants/auth.const';
 import { RepertoireService } from '../repertoire.service';
 
 @ApiTags('repertoire')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users/me/repertoire')
 export class UserRepertoireController {
   constructor(private readonly repertoireService: RepertoireService) {}
@@ -14,8 +22,7 @@ export class UserRepertoireController {
   @Get()
   @ApiOperation({ summary: 'Get all tracks for the current user' })
   @ApiOkResponse({ type: [TrackDto], description: 'List of user tracks' })
-  // TODO: Replace with real user ID once JWT authentication is implemented
-  getMyRepertoire(): Promise<Track[]> {
-    return this.repertoireService.getByUser(MOCK_CURRENT_USER_ID);
+  getMyRepertoire(@CurrentUser() user: User): Promise<Track[]> {
+    return this.repertoireService.getByUser(user.id);
   }
 }

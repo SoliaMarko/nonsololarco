@@ -1,12 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
-import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
-import { Band } from '@nonsololarco/types';
+import { Controller, Get, UseGuards } from '@nestjs/common';
+import {
+  ApiBearerAuth,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import type { Band, User } from '@nonsololarco/types';
 
-import { MOCK_CURRENT_USER_ID } from 'src/constants/auth.const';
+import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { BandDto } from './dto';
 import { BandsService } from './bands.service';
 
 @ApiTags('bands')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('users/me/bands')
 export class BandsController {
   constructor(private readonly bandsService: BandsService) {}
@@ -17,8 +25,7 @@ export class BandsController {
     type: [BandDto],
     description: 'List of user bands with computed stats',
   })
-  // TODO: Replace with real user ID once JWT authentication is implemented
-  getMyBands(): Promise<Band[]> {
-    return this.bandsService.getAll(MOCK_CURRENT_USER_ID);
+  getMyBands(@CurrentUser() user: User): Promise<Band[]> {
+    return this.bandsService.getAll(user.id);
   }
 }
