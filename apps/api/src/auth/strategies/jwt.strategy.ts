@@ -9,9 +9,17 @@ interface JwtPayload {
   sub: string; // userId
 }
 
+interface AuthCookies {
+  token?: string;
+}
+
+type AuthRequest = Request & {
+  cookies: AuthCookies;
+};
+
 // Extracts the JWT from the httpOnly "token" cookie instead of the
 // Authorization header, since we're using cookie-based auth.
-function extractJwtFromCookie(req: Request): string | null {
+function extractJwtFromCookie(req: AuthRequest): string | null {
   return req?.cookies?.token ?? null;
 }
 

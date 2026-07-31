@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
-import { Strategy, VerifyCallback } from 'passport-google-oauth20';
+import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -15,10 +15,10 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
 
   // Called by Passport after Google redirects back with a successful login.
   // Whatever we pass to `done()` becomes `request.user` in the callback route.
-  async validate(
+  validate(
     _accessToken: string,
     _refreshToken: string,
-    profile: any,
+    profile: Profile,
     done: VerifyCallback,
   ) {
     const email = profile.emails?.[0]?.value;

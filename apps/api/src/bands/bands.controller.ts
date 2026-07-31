@@ -5,7 +5,8 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import type { Band, User } from '@nonsololarco/types';
+import type { User } from '@nonsololarco/db';
+import type { Band } from '@nonsololarco/types';
 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';

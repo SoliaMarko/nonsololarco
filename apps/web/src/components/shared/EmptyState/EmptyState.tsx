@@ -24,7 +24,7 @@ export default function EmptyState({
     >
       <div className="relative">
         <VinylRecord size={80} color="olive" />
-        <div className="pli-2 plb-0.5 text-fg-tertiary absolute -end-3 -bottom-2 rotate-6 rounded-sm border-2 border-dashed border-current">
+        <div className="pli-2 plb-0.5 text-fg-tertiary absolute -inset-e-3 -bottom-2 rotate-6 rounded-sm border-2 border-dashed border-current">
           <span className="text-[10px] font-bold tracking-widest uppercase">idle</span>
         </div>
       </div>
