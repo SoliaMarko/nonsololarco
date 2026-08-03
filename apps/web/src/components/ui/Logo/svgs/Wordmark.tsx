@@ -1,4 +1,6 @@
-export function WordmarkSvg({ scale }: { scale: number }) {
+import { LogoColors } from '@/src/lib/types/ui/logo.types';
+
+export function WordmarkSvg({ colors, scale }: { colors: LogoColors; scale: number }) {
   const width = Math.round(194 * scale);
   const height = Math.round(42 * scale);
 
@@ -14,16 +16,16 @@ export function WordmarkSvg({ scale }: { scale: number }) {
       <path
         d="M4 34 C10 18, 18 18, 26 34 C29 40, 32 40, 35 34"
         fill="none"
-        stroke="var(--color-emerald-main)"
+        stroke={colors.squiggle}
         strokeWidth="2"
         strokeLinecap="round"
       />
-      <circle cx="20" cy="13" r="3.5" fill="var(--color-emerald-light)" />
+      <circle cx="20" cy="13" r="3.5" fill={colors.dot} />
       <text
         fontFamily="Georgia,serif"
         fontSize="22"
         fontWeight="400"
-        fill="var(--color-fg-tertiary)"
+        fill={colors.muted}
         y="34"
         x="50"
       >
@@ -33,7 +35,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         fontFamily="Georgia,serif"
         fontSize="22"
         fontWeight="400"
-        fill="var(--color-fg-primary)"
+        fill={colors.primary}
         y="34"
         x="91"
       >
@@ -44,7 +46,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         cy="34"
         rx="4.2"
         ry="3"
-        fill="var(--color-emerald-main)"
+        fill={colors.note}
         transform="rotate(-12,116,34)"
       />
       <line
@@ -52,7 +54,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         y1="33"
         x2="119.5"
         y2="10"
-        stroke="var(--color-emerald-main)"
+        stroke={colors.note}
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -60,7 +62,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         fontFamily="Georgia,serif"
         fontSize="22"
         fontWeight="400"
-        fill="var(--color-fg-primary)"
+        fill={colors.primary}
         y="34"
         x="124"
       >
@@ -71,7 +73,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         cy="34"
         rx="4.2"
         ry="3"
-        fill="var(--color-emerald-main)"
+        fill={colors.note}
         transform="rotate(-12,142,34)"
       />
       <line
@@ -79,7 +81,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         y1="33"
         x2="145.5"
         y2="19"
-        stroke="var(--color-emerald-main)"
+        stroke={colors.note}
         strokeWidth="1.5"
         strokeLinecap="round"
       />
@@ -88,7 +90,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         y1="10"
         x2="145"
         y2="19"
-        stroke="var(--color-emerald-main)"
+        stroke={colors.note}
         strokeWidth="2.2"
         strokeLinecap="round"
       />
@@ -96,7 +98,7 @@ export function WordmarkSvg({ scale }: { scale: number }) {
         fontFamily="Georgia,serif"
         fontSize="22"
         fontWeight="400"
-        fill="var(--color-fg-tertiary)"
+        fill={colors.muted}
         y="34"
         x="150"
       >
