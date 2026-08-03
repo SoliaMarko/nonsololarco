@@ -19,11 +19,19 @@ async function main() {
   // --- Users ---
   // Upserted by email (already @unique) so re-running the seed never
   // duplicates rows or errors on a second run.
-  const solomiia = await prisma.user.upsert({
-    where: { email: "solomiia@example.com" },
-    update: {},
-    create: { email: "solomiia@example.com", name: "Solomiia" },
+  // Use the real OAuth user if they already exist, otherwise create a seed user.
+  // This ensures tracks are linked to the actual logged-in account.
+  const existingUser = await prisma.user.findUnique({
+    where: { email: "soliamark25@gmail.com" },
   });
+
+  const solomiia = existingUser
+    ? existingUser
+    : await prisma.user.upsert({
+        where: { email: "solomiia@example.com" },
+        update: {},
+        create: { email: "solomiia@example.com", name: "Solomiia" },
+      });
   const anna = await prisma.user.upsert({
     where: { email: "anna@example.com" },
     update: {},
@@ -129,7 +137,7 @@ async function main() {
     order: number;
     title: string;
     leadMemberId: string;
-    bandId: string;
+    bandId?: string;
     side: TrackSide;
     musicalKey: MusicalKey;
     bpm: number;
@@ -208,7 +216,7 @@ async function main() {
       side: "b",
       musicalKey: "F",
       bpm: 88,
-      status: "learning",
+      status: "archived",
       duration: "3:00",
     },
 
@@ -306,7 +314,7 @@ async function main() {
       side: "b",
       musicalKey: "G",
       bpm: 88,
-      status: "learning",
+      status: "archived",
       duration: "4:15",
     },
 
@@ -514,7 +522,7 @@ async function main() {
       side: "b",
       musicalKey: "F",
       bpm: 62,
-      status: "learning",
+      status: "archived",
       duration: "4:15",
     },
     {
@@ -660,7 +668,7 @@ async function main() {
       side: "b",
       musicalKey: "B",
       bpm: 68,
-      status: "learning",
+      status: "archived",
       duration: "4:20",
     },
 
@@ -688,6 +696,52 @@ async function main() {
       bpm: 48,
       status: "learning",
       duration: "4:50",
+    },
+
+    // Solo tracks (no band) — Solomiia's personal repertoire
+    {
+      id: "track-solo-1",
+      order: 1,
+      title: "Alone on the rooftop",
+      leadMemberId: solomiia.id,
+      side: "a",
+      musicalKey: "Am",
+      bpm: 72,
+      status: "ready",
+      duration: "3:45",
+    },
+    {
+      id: "track-solo-2",
+      order: 2,
+      title: "Morning pages",
+      leadMemberId: solomiia.id,
+      side: "a",
+      musicalKey: "G",
+      bpm: 66,
+      status: "ready",
+      duration: "4:10",
+    },
+    {
+      id: "track-solo-3",
+      order: 3,
+      title: "Unfinished letter",
+      leadMemberId: solomiia.id,
+      side: "a",
+      musicalKey: "Dm",
+      bpm: 80,
+      status: "learning",
+      duration: "3:30",
+    },
+    {
+      id: "track-solo-4",
+      order: 4,
+      title: "Paper airplane",
+      leadMemberId: solomiia.id,
+      side: "b",
+      musicalKey: "C",
+      bpm: 94,
+      status: "new",
+      duration: "2:55",
     },
   ];
 

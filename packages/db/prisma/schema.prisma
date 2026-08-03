@@ -142,8 +142,8 @@ model Track {
   leadMemberId String @map("lead_member_id")
   leadMember   User   @relation("LeadMember", fields: [leadMemberId], references: [id])
 
-  bandId String @map("band_id")
-  band   Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
+  bandId String? @map("band_id")
+  band   Band?   @relation(fields: [bandId], references: [id], onDelete: Cascade)
 
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
@@ -152,6 +152,7 @@ model Track {
   // lets getByBand's `orderBy: order` return a deterministic sequence.
   // (bandId, order) also covers plain "filter by bandId" queries via the
   // leftmost-prefix rule, so no separate @@index([bandId]) is needed.
+  // Null bandId is excluded from the constraint (solo tracks have independent ordering).
   @@unique([bandId, order])
   @@index([leadMemberId])
   @@map("tracks")
