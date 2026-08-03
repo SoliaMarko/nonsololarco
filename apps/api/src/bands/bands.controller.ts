@@ -5,10 +5,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import type { User } from '@nonsololarco/db';
 import type { Band } from '@nonsololarco/types';
 
 import { CurrentUser } from '../auth/decorators/current-user.decorator';
+import type { SessionUser } from '../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../auth/guards/jwt-auth.guard';
 import { BandDto } from './dto';
 import { BandsService } from './bands.service';
@@ -26,7 +26,7 @@ export class BandsController {
     type: [BandDto],
     description: 'List of user bands with computed stats',
   })
-  getMyBands(@CurrentUser() user: User): Promise<Band[]> {
+  getMyBands(@CurrentUser() user: SessionUser): Promise<Band[]> {
     return this.bandsService.getAll(user.id);
   }
 }

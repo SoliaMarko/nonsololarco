@@ -35,9 +35,11 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
 
   // Runs after the JWT signature/expiry is verified.
   // Whatever we return here becomes `request.user`.
+  // Only select the fields the app actually needs — never expose passwordHash.
   async validate(payload: JwtPayload) {
     const user = await this.prisma.user.findUnique({
       where: { id: payload.sub },
+      select: { id: true, name: true, email: true, createdAt: true },
     });
 
     if (!user) {

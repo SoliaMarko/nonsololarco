@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github2';
 
@@ -17,12 +17,28 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
     _accessToken: string,
     _refreshToken: string,
     profile: Profile,
-    done: (err: any, user: any) => void,
+    done: (err: Error | null, user?: Record<string, string> | false) => void,
   ) {
     // GitHub doesn't always include email in the profile directly —
     // it can be private, so emails[0] may be undefined for some users.
     const email = profile.emails?.[0]?.value;
     const name = profile.displayName || profile.username;
+
+    if (!email) {
+      return done(
+        new UnauthorizedException(
+          'Your GitHub account has no public email. Please add one in GitHub settings and try again.',
+        ),
+        false,
+      );
+    }
+
+    if (!name) {
+      return done(
+        new UnauthorizedException('GitHub account has no display name'),
+        false,
+      );
+    }
 
     done(null, {
       provider: 'github',

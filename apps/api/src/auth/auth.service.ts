@@ -33,14 +33,19 @@ export class AuthService {
     // No account yet for this provider — check if a user with this email
     // already exists (e.g. they signed up with a different provider before),
     // otherwise create a brand new user.
-    const user = await this.prisma.user.upsert({
-      where: { email },
-      update: {},
-      create: { email, name },
-    });
+    // Both writes must succeed or fail together to avoid orphaned User rows.
+    const user = await this.prisma.$transaction(async (tx) => {
+      const u = await tx.user.upsert({
+        where: { email },
+        update: {},
+        create: { email, name },
+      });
 
-    await this.prisma.account.create({
-      data: { provider, providerAccountId, userId: user.id },
+      await tx.account.create({
+        data: { provider, providerAccountId, userId: u.id },
+      });
+
+      return u;
     });
 
     return user;

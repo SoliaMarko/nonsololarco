@@ -5,10 +5,10 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import type { User } from '@nonsololarco/db';
 import type { Track } from '@nonsololarco/types';
 
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import type { SessionUser } from '../../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
 import { TrackDto } from '../dto';
 import { RepertoireService } from '../repertoire.service';
@@ -23,7 +23,7 @@ export class UserRepertoireController {
   @Get()
   @ApiOperation({ summary: 'Get all tracks for the current user' })
   @ApiOkResponse({ type: [TrackDto], description: 'List of user tracks' })
-  getMyRepertoire(@CurrentUser() user: User): Promise<Track[]> {
+  getMyRepertoire(@CurrentUser() user: SessionUser): Promise<Track[]> {
     return this.repertoireService.getByUser(user.id);
   }
 }

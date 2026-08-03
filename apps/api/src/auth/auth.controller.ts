@@ -1,9 +1,9 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
-import type { Request, Response } from 'express';
-import type { User } from '@nonsololarco/db';
+import type { CookieOptions, Request, Response } from 'express';
 
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
+import type { SessionUser } from './decorators/current-user.decorator';
 import { GithubAuthGuard } from './guards/github-auth.guard';
 import { GoogleAuthGuard } from './guards/google-auth.guard';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
@@ -19,27 +19,31 @@ interface OAuthRequest extends Request {
   user: OAuthUser;
 }
 
+const isProduction = process.env.NODE_ENV === 'production';
+
+const TOKEN_COOKIE_OPTIONS: CookieOptions = {
+  httpOnly: true,
+  secure: isProduction,
+  sameSite: 'lax',
+  domain: isProduction ? '.nonsololarco.com' : undefined,
+  path: '/',
+};
+
+const TOKEN_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
+
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
-  getMe(@CurrentUser() user: User) {
+  getMe(@CurrentUser() user: SessionUser) {
     return { id: user.id, name: user.name, email: user.email };
   }
 
   @Post('logout')
   logout(@Res() res: Response) {
-    res.clearCookie('token', {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.nonsololarco.com' : undefined,
-      path: '/',
-    });
-
+    res.clearCookie('token', TOKEN_COOKIE_OPTIONS);
     res.json({ ok: true });
   }
 
@@ -78,15 +82,9 @@ export class AuthController {
     const token = this.authService.signJwt(user.id);
 
     res.cookie('token', token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      domain:
-        process.env.NODE_ENV === 'production' ? '.nonsololarco.com' : undefined,
-      path: '/',
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      ...TOKEN_COOKIE_OPTIONS,
+      maxAge: TOKEN_MAX_AGE,
     });
-
     res.redirect(process.env.FRONTEND_URL ?? 'http://localhost:3000');
   }
 }
