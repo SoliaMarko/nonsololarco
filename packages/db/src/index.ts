@@ -5,4 +5,4 @@ export type {
   BandMember,
   Track,
 } from "./generated/prisma/client.js";
-export { TrackStatus } from "./generated/prisma/client.js";
+export { TrackStatus, TrackSide, MusicalKey } from "./generated/prisma/client.js";

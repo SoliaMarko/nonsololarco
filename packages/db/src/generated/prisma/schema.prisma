@@ -69,6 +69,10 @@ model BandMember {
   band   Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
 
   @@unique([userId, bandId])
+  // The composite unique index above is keyed on (userId, bandId), so it
+  // doesn't help lookups that filter by bandId alone (e.g. "list this
+  // band's members") — a dedicated index covers that access pattern.
+  @@index([bandId])
   @@map("band_members")
 }
 
@@ -81,12 +85,53 @@ enum TrackStatus {
   @@map("track_status")
 }
 
+enum TrackSide {
+  a
+  b
+
+  @@map("track_side")
+}
+
+/// Musical key of a track. Prisma enum values must be valid identifiers, so
+/// sharps are spelled out ("CSharp") instead of using "#". The @map keeps the
+/// underlying Postgres enum label as the familiar "C#" notation; the API
+/// layer translates back to that notation for clients (see
+/// apps/api/src/utils/musical-key.util.ts).
+enum MusicalKey {
+  C
+  Cm
+  CSharp  @map("C#")
+  CSharpm @map("C#m")
+  D
+  Dm
+  DSharp  @map("D#")
+  DSharpm @map("D#m")
+  E
+  Em
+  F
+  Fm
+  FSharp  @map("F#")
+  FSharpm @map("F#m")
+  G
+  Gm
+  GSharp  @map("G#")
+  GSharpm @map("G#m")
+  A
+  Am
+  ASharp  @map("A#")
+  ASharpm @map("A#m")
+  B
+  Bm
+
+  @@map("musical_key")
+}
+
 model Track {
   id         String      @id @default(cuid())
   order      Int
   title      String
-  side       String
-  musicalKey String      @map("musical_key")
+  side       TrackSide
+  musicalKey MusicalKey  @map("musical_key")
   bpm        Int
   status     TrackStatus @default(new)
   duration   String
@@ -100,5 +145,7 @@ model Track {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  @@index([leadMemberId])
+  @@index([bandId])
   @@map("tracks")
 }

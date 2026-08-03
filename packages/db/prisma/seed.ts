@@ -1,7 +1,12 @@
 import "dotenv/config";
 
 import { PrismaPg } from "@prisma/adapter-pg";
-import { PrismaClient, TrackStatus } from "../src/generated/prisma/client.ts";
+import {
+  PrismaClient,
+  TrackStatus,
+  TrackSide,
+  MusicalKey,
+} from "../src/generated/prisma/client.js";
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL as string,
@@ -12,40 +17,67 @@ async function main() {
   console.log("Seeding database...");
 
   // --- Users ---
-  const solomiia = await prisma.user.create({
-    data: { email: "solomiia@example.com", name: "Solomiia" },
+  // Upserted by email (already @unique) so re-running the seed never
+  // duplicates rows or errors on a second run.
+  const solomiia = await prisma.user.upsert({
+    where: { email: "solomiia@example.com" },
+    update: {},
+    create: { email: "solomiia@example.com", name: "Solomiia" },
   });
-  const anna = await prisma.user.create({
-    data: { email: "anna@example.com", name: "Anna" },
+  const anna = await prisma.user.upsert({
+    where: { email: "anna@example.com" },
+    update: {},
+    create: { email: "anna@example.com", name: "Anna" },
   });
-  const jared = await prisma.user.create({
-    data: { email: "jared@example.com", name: "Jared" },
+  const jared = await prisma.user.upsert({
+    where: { email: "jared@example.com" },
+    update: {},
+    create: { email: "jared@example.com", name: "Jared" },
   });
-  const artem = await prisma.user.create({
-    data: { email: "artem@example.com", name: "Artem" },
+  const artem = await prisma.user.upsert({
+    where: { email: "artem@example.com" },
+    update: {},
+    create: { email: "artem@example.com", name: "Artem" },
   });
 
   // --- Bands ---
-  const quietYard = await prisma.band.create({
-    data: { name: "Quiet Yard" },
+  // Band has no natural unique field, so seed rows get fixed, readable ids
+  // and are upserted by id. Bands created through the app still get a
+  // random cuid() as usual — this fixed-id pattern is only for seed data.
+  const quietYard = await prisma.band.upsert({
+    where: { id: "band-quiet-yard" },
+    update: {},
+    create: { id: "band-quiet-yard", name: "Quiet Yard" },
   });
-  const nightShift = await prisma.band.create({
-    data: { name: "Night Shift" },
+  const nightShift = await prisma.band.upsert({
+    where: { id: "band-night-shift" },
+    update: {},
+    create: { id: "band-night-shift", name: "Night Shift" },
   });
-  const brokenGlass = await prisma.band.create({
-    data: { name: "Broken Glass" },
+  const brokenGlass = await prisma.band.upsert({
+    where: { id: "band-broken-glass" },
+    update: {},
+    create: { id: "band-broken-glass", name: "Broken Glass" },
   });
-  const dreamyGarden = await prisma.band.create({
-    data: { name: "Dreamy Garden" },
+  const dreamyGarden = await prisma.band.upsert({
+    where: { id: "band-dreamy-garden" },
+    update: {},
+    create: { id: "band-dreamy-garden", name: "Dreamy Garden" },
   });
-  const pumpkinSquare = await prisma.band.create({
-    data: { name: "Pumpkin Square" },
+  const pumpkinSquare = await prisma.band.upsert({
+    where: { id: "band-pumpkin-square" },
+    update: {},
+    create: { id: "band-pumpkin-square", name: "Pumpkin Square" },
   });
-  const jellyfish = await prisma.band.create({
-    data: { name: "Jellyfish" },
+  const jellyfish = await prisma.band.upsert({
+    where: { id: "band-jellyfish" },
+    update: {},
+    create: { id: "band-jellyfish", name: "Jellyfish" },
   });
 
   // --- Band memberships ---
+  // BandMember already has a @@unique([userId, bandId]), so upsert on that
+  // composite key is idempotent without needing a fixed id.
   const memberships = [
     { userId: solomiia.id, bandId: quietYard.id, role: "back vocal" },
     { userId: anna.id, bandId: quietYard.id, role: "keys" },
@@ -76,17 +108,30 @@ async function main() {
     { userId: artem.id, bandId: jellyfish.id, role: "keys" },
   ];
 
-  await prisma.bandMember.createMany({ data: memberships });
+  for (const membership of memberships) {
+    await prisma.bandMember.upsert({
+      where: {
+        userId_bandId: {
+          userId: membership.userId,
+          bandId: membership.bandId,
+        },
+      },
+      update: { role: membership.role },
+      create: membership,
+    });
+  }
 
   // --- Tracks ---
-  // Helper to keep track definitions compact
+  // Fixed ids (like bands above) so re-running the seed upserts in place
+  // instead of creating duplicates.
   type TrackSeed = {
+    id: string;
     order: number;
     title: string;
     leadMemberId: string;
     bandId: string;
-    side: string;
-    musicalKey: string;
+    side: TrackSide;
+    musicalKey: MusicalKey;
     bpm: number;
     status: TrackStatus;
     duration: string;
@@ -95,6 +140,7 @@ async function main() {
   const tracks: TrackSeed[] = [
     // Quiet Yard (6 tracks, 5 ready)
     {
+      id: "track-quiet-yard-1",
       order: 1,
       title: "Yard in the fog",
       leadMemberId: solomiia.id,
@@ -106,6 +152,7 @@ async function main() {
       duration: "3:10",
     },
     {
+      id: "track-quiet-yard-2",
       order: 2,
       title: "Walls of brick",
       leadMemberId: anna.id,
@@ -117,6 +164,7 @@ async function main() {
       duration: "2:55",
     },
     {
+      id: "track-quiet-yard-3",
       order: 3,
       title: "Lamps in the kitchen",
       leadMemberId: jared.id,
@@ -128,6 +176,7 @@ async function main() {
       duration: "3:05",
     },
     {
+      id: "track-quiet-yard-4",
       order: 4,
       title: "Outside of time",
       leadMemberId: artem.id,
@@ -139,6 +188,7 @@ async function main() {
       duration: "3:40",
     },
     {
+      id: "track-quiet-yard-5",
       order: 5,
       title: "First snow",
       leadMemberId: solomiia.id,
@@ -150,6 +200,7 @@ async function main() {
       duration: "3:15",
     },
     {
+      id: "track-quiet-yard-6",
       order: 6,
       title: "Yards of childhood",
       leadMemberId: anna.id,
@@ -163,6 +214,7 @@ async function main() {
 
     // Night Shift (8 tracks, 3 ready)
     {
+      id: "track-night-shift-1",
       order: 1,
       title: "Smoke over the city",
       leadMemberId: solomiia.id,
@@ -174,6 +226,7 @@ async function main() {
       duration: "4:05",
     },
     {
+      id: "track-night-shift-2",
       order: 2,
       title: "Falling stars",
       leadMemberId: solomiia.id,
@@ -185,6 +238,7 @@ async function main() {
       duration: "4:30",
     },
     {
+      id: "track-night-shift-3",
       order: 3,
       title: "Midnight bus",
       leadMemberId: anna.id,
@@ -196,6 +250,7 @@ async function main() {
       duration: "3:55",
     },
     {
+      id: "track-night-shift-4",
       order: 4,
       title: "Cold neon",
       leadMemberId: jared.id,
@@ -207,6 +262,7 @@ async function main() {
       duration: "3:40",
     },
     {
+      id: "track-night-shift-5",
       order: 5,
       title: "Echoes in the tunnel",
       leadMemberId: artem.id,
@@ -218,6 +274,7 @@ async function main() {
       duration: "4:10",
     },
     {
+      id: "track-night-shift-6",
       order: 6,
       title: "Paper lanterns",
       leadMemberId: jared.id,
@@ -229,6 +286,7 @@ async function main() {
       duration: "3:25",
     },
     {
+      id: "track-night-shift-7",
       order: 7,
       title: "Last ferry home",
       leadMemberId: anna.id,
@@ -240,6 +298,7 @@ async function main() {
       duration: "4:00",
     },
     {
+      id: "track-night-shift-8",
       order: 8,
       title: "Streetlight confessions",
       leadMemberId: artem.id,
@@ -253,6 +312,7 @@ async function main() {
 
     // Broken Glass (6 tracks, 5 ready)
     {
+      id: "track-broken-glass-1",
       order: 1,
       title: "Cracked windows",
       leadMemberId: solomiia.id,
@@ -264,17 +324,19 @@ async function main() {
       duration: "2:58",
     },
     {
+      id: "track-broken-glass-2",
       order: 2,
       title: "Glass hearts",
       leadMemberId: solomiia.id,
       bandId: brokenGlass.id,
       side: "a",
-      musicalKey: "G#",
+      musicalKey: "GSharp",
       bpm: 106,
       status: "ready",
       duration: "3:05",
     },
     {
+      id: "track-broken-glass-3",
       order: 3,
       title: "Shattered dawn",
       leadMemberId: anna.id,
@@ -286,6 +348,7 @@ async function main() {
       duration: "3:20",
     },
     {
+      id: "track-broken-glass-4",
       order: 4,
       title: "Splinters",
       leadMemberId: jared.id,
@@ -297,6 +360,7 @@ async function main() {
       duration: "2:45",
     },
     {
+      id: "track-broken-glass-5",
       order: 5,
       title: "Mirror fragments",
       leadMemberId: artem.id,
@@ -308,12 +372,13 @@ async function main() {
       duration: "3:30",
     },
     {
+      id: "track-broken-glass-6",
       order: 6,
       title: "Transparent walls",
       leadMemberId: anna.id,
       bandId: brokenGlass.id,
       side: "b",
-      musicalKey: "F#m",
+      musicalKey: "FSharpm",
       bpm: 86,
       status: "new",
       duration: "3:15",
@@ -321,6 +386,7 @@ async function main() {
 
     // Dreamy Garden (14 tracks, 5 ready)
     {
+      id: "track-dreamy-garden-1",
       order: 1,
       title: "Garden at dusk",
       leadMemberId: solomiia.id,
@@ -332,6 +398,7 @@ async function main() {
       duration: "3:41",
     },
     {
+      id: "track-dreamy-garden-2",
       order: 2,
       title: "Morning dew",
       leadMemberId: solomiia.id,
@@ -343,6 +410,7 @@ async function main() {
       duration: "4:20",
     },
     {
+      id: "track-dreamy-garden-3",
       order: 3,
       title: "Secret meadow",
       leadMemberId: anna.id,
@@ -354,6 +422,7 @@ async function main() {
       duration: "3:50",
     },
     {
+      id: "track-dreamy-garden-4",
       order: 4,
       title: "Petals in the wind",
       leadMemberId: jared.id,
@@ -365,6 +434,7 @@ async function main() {
       duration: "4:05",
     },
     {
+      id: "track-dreamy-garden-5",
       order: 5,
       title: "Overgrown path",
       leadMemberId: artem.id,
@@ -376,6 +446,7 @@ async function main() {
       duration: "3:55",
     },
     {
+      id: "track-dreamy-garden-6",
       order: 6,
       title: "Greenhouse waltz",
       leadMemberId: anna.id,
@@ -387,6 +458,7 @@ async function main() {
       duration: "4:30",
     },
     {
+      id: "track-dreamy-garden-7",
       order: 7,
       title: "Sunflower row",
       leadMemberId: jared.id,
@@ -398,6 +470,7 @@ async function main() {
       duration: "3:35",
     },
     {
+      id: "track-dreamy-garden-8",
       order: 8,
       title: "Willow shade",
       leadMemberId: solomiia.id,
@@ -409,6 +482,7 @@ async function main() {
       duration: "4:10",
     },
     {
+      id: "track-dreamy-garden-9",
       order: 9,
       title: "Rain on the roses",
       leadMemberId: artem.id,
@@ -420,6 +494,7 @@ async function main() {
       duration: "3:45",
     },
     {
+      id: "track-dreamy-garden-10",
       order: 10,
       title: "Ivy walls",
       leadMemberId: anna.id,
@@ -431,6 +506,7 @@ async function main() {
       duration: "3:20",
     },
     {
+      id: "track-dreamy-garden-11",
       order: 11,
       title: "Mossy stones",
       leadMemberId: jared.id,
@@ -442,6 +518,7 @@ async function main() {
       duration: "4:15",
     },
     {
+      id: "track-dreamy-garden-12",
       order: 12,
       title: "Firefly clearing",
       leadMemberId: artem.id,
@@ -453,6 +530,7 @@ async function main() {
       duration: "3:30",
     },
     {
+      id: "track-dreamy-garden-13",
       order: 13,
       title: "Late bloom",
       leadMemberId: solomiia.id,
@@ -464,6 +542,7 @@ async function main() {
       duration: "3:50",
     },
     {
+      id: "track-dreamy-garden-14",
       order: 14,
       title: "Frost on the leaves",
       leadMemberId: anna.id,
@@ -477,17 +556,19 @@ async function main() {
 
     // Pumpkin Square (9 tracks, 7 ready)
     {
+      id: "track-pumpkin-square-1",
       order: 1,
       title: "October wind",
       leadMemberId: solomiia.id,
       bandId: pumpkinSquare.id,
       side: "a",
-      musicalKey: "C#",
+      musicalKey: "CSharp",
       bpm: 100,
       status: "ready",
       duration: "3:19",
     },
     {
+      id: "track-pumpkin-square-2",
       order: 2,
       title: "Autumn leaves",
       leadMemberId: solomiia.id,
@@ -499,6 +580,7 @@ async function main() {
       duration: "3:25",
     },
     {
+      id: "track-pumpkin-square-3",
       order: 3,
       title: "Harvest moon",
       leadMemberId: anna.id,
@@ -510,6 +592,7 @@ async function main() {
       duration: "3:50",
     },
     {
+      id: "track-pumpkin-square-4",
       order: 4,
       title: "Scarecrow waltz",
       leadMemberId: jared.id,
@@ -521,6 +604,7 @@ async function main() {
       duration: "4:00",
     },
     {
+      id: "track-pumpkin-square-5",
       order: 5,
       title: "Cider press",
       leadMemberId: artem.id,
@@ -532,6 +616,7 @@ async function main() {
       duration: "3:10",
     },
     {
+      id: "track-pumpkin-square-6",
       order: 6,
       title: "Foggy orchard",
       leadMemberId: anna.id,
@@ -543,6 +628,7 @@ async function main() {
       duration: "3:35",
     },
     {
+      id: "track-pumpkin-square-7",
       order: 7,
       title: "Bonfire stories",
       leadMemberId: jared.id,
@@ -554,6 +640,7 @@ async function main() {
       duration: "3:45",
     },
     {
+      id: "track-pumpkin-square-8",
       order: 8,
       title: "Pumpkin lantern",
       leadMemberId: solomiia.id,
@@ -565,6 +652,7 @@ async function main() {
       duration: "2:55",
     },
     {
+      id: "track-pumpkin-square-9",
       order: 9,
       title: "First frost",
       leadMemberId: artem.id,
@@ -578,6 +666,7 @@ async function main() {
 
     // Jellyfish (2 tracks, 0 ready)
     {
+      id: "track-jellyfish-1",
       order: 1,
       title: "Deep current",
       leadMemberId: solomiia.id,
@@ -589,6 +678,7 @@ async function main() {
       duration: "5:10",
     },
     {
+      id: "track-jellyfish-2",
       order: 2,
       title: "Bioluminescence",
       leadMemberId: artem.id,
@@ -601,7 +691,13 @@ async function main() {
     },
   ];
 
-  await prisma.track.createMany({ data: tracks });
+  for (const { id, ...data } of tracks) {
+    await prisma.track.upsert({
+      where: { id },
+      update: data,
+      create: { id, ...data },
+    });
+  }
 
   const counts = await Promise.all([
     prisma.user.count(),
@@ -618,8 +714,8 @@ async function main() {
 main()
   .catch((e) => {
     console.error(e);
-    process.exit(1);
+    process.exitCode = 1;
   })
-  .finally(() => {
-    prisma.$disconnect();
+  .finally(async () => {
+    await prisma.$disconnect();
   });

@@ -54,11 +54,57 @@ export namespace $Enums {
 
 export type TrackStatus = (typeof TrackStatus)[keyof typeof TrackStatus]
 
+
+export const TrackSide: {
+  a: 'a',
+  b: 'b'
+};
+
+export type TrackSide = (typeof TrackSide)[keyof typeof TrackSide]
+
+
+export const MusicalKey: {
+  C: 'C',
+  Cm: 'Cm',
+  CSharp: 'CSharp',
+  CSharpm: 'CSharpm',
+  D: 'D',
+  Dm: 'Dm',
+  DSharp: 'DSharp',
+  DSharpm: 'DSharpm',
+  E: 'E',
+  Em: 'Em',
+  F: 'F',
+  Fm: 'Fm',
+  FSharp: 'FSharp',
+  FSharpm: 'FSharpm',
+  G: 'G',
+  Gm: 'Gm',
+  GSharp: 'GSharp',
+  GSharpm: 'GSharpm',
+  A: 'A',
+  Am: 'Am',
+  ASharp: 'ASharp',
+  ASharpm: 'ASharpm',
+  B: 'B',
+  Bm: 'Bm'
+};
+
+export type MusicalKey = (typeof MusicalKey)[keyof typeof MusicalKey]
+
 }
 
 export type TrackStatus = $Enums.TrackStatus
 
 export const TrackStatus: typeof $Enums.TrackStatus
+
+export type TrackSide = $Enums.TrackSide
+
+export const TrackSide: typeof $Enums.TrackSide
+
+export type MusicalKey = $Enums.MusicalKey
+
+export const MusicalKey: typeof $Enums.MusicalKey
 
 /**
  * ##  Prisma Client ʲˢ
@@ -5761,8 +5807,8 @@ export namespace Prisma {
     id: string | null
     order: number | null
     title: string | null
-    side: string | null
-    musicalKey: string | null
+    side: $Enums.TrackSide | null
+    musicalKey: $Enums.MusicalKey | null
     bpm: number | null
     status: $Enums.TrackStatus | null
     duration: string | null
@@ -5776,8 +5822,8 @@ export namespace Prisma {
     id: string | null
     order: number | null
     title: string | null
-    side: string | null
-    musicalKey: string | null
+    side: $Enums.TrackSide | null
+    musicalKey: $Enums.MusicalKey | null
     bpm: number | null
     status: $Enums.TrackStatus | null
     duration: string | null
@@ -5950,8 +5996,8 @@ export namespace Prisma {
     id: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status: $Enums.TrackStatus
     duration: string
@@ -6070,8 +6116,8 @@ export namespace Prisma {
       id: string
       order: number
       title: string
-      side: string
-      musicalKey: string
+      side: $Enums.TrackSide
+      musicalKey: $Enums.MusicalKey
       bpm: number
       status: $Enums.TrackStatus
       duration: string
@@ -6507,8 +6553,8 @@ export namespace Prisma {
     readonly id: FieldRef<"Track", 'String'>
     readonly order: FieldRef<"Track", 'Int'>
     readonly title: FieldRef<"Track", 'String'>
-    readonly side: FieldRef<"Track", 'String'>
-    readonly musicalKey: FieldRef<"Track", 'String'>
+    readonly side: FieldRef<"Track", 'TrackSide'>
+    readonly musicalKey: FieldRef<"Track", 'MusicalKey'>
     readonly bpm: FieldRef<"Track", 'Int'>
     readonly status: FieldRef<"Track", 'TrackStatus'>
     readonly duration: FieldRef<"Track", 'String'>
@@ -7083,6 +7129,34 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'TrackSide'
+   */
+  export type EnumTrackSideFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrackSide'>
+    
+
+
+  /**
+   * Reference to a field of type 'TrackSide[]'
+   */
+  export type ListEnumTrackSideFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrackSide[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'MusicalKey'
+   */
+  export type EnumMusicalKeyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MusicalKey'>
+    
+
+
+  /**
+   * Reference to a field of type 'MusicalKey[]'
+   */
+  export type ListEnumMusicalKeyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'MusicalKey[]'>
+    
+
+
+  /**
    * Reference to a field of type 'TrackStatus'
    */
   export type EnumTrackStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'TrackStatus'>
@@ -7354,8 +7428,8 @@ export namespace Prisma {
     id?: StringFilter<"Track"> | string
     order?: IntFilter<"Track"> | number
     title?: StringFilter<"Track"> | string
-    side?: StringFilter<"Track"> | string
-    musicalKey?: StringFilter<"Track"> | string
+    side?: EnumTrackSideFilter<"Track"> | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFilter<"Track"> | $Enums.MusicalKey
     bpm?: IntFilter<"Track"> | number
     status?: EnumTrackStatusFilter<"Track"> | $Enums.TrackStatus
     duration?: StringFilter<"Track"> | string
@@ -7391,8 +7465,8 @@ export namespace Prisma {
     NOT?: TrackWhereInput | TrackWhereInput[]
     order?: IntFilter<"Track"> | number
     title?: StringFilter<"Track"> | string
-    side?: StringFilter<"Track"> | string
-    musicalKey?: StringFilter<"Track"> | string
+    side?: EnumTrackSideFilter<"Track"> | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFilter<"Track"> | $Enums.MusicalKey
     bpm?: IntFilter<"Track"> | number
     status?: EnumTrackStatusFilter<"Track"> | $Enums.TrackStatus
     duration?: StringFilter<"Track"> | string
@@ -7431,8 +7505,8 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"Track"> | string
     order?: IntWithAggregatesFilter<"Track"> | number
     title?: StringWithAggregatesFilter<"Track"> | string
-    side?: StringWithAggregatesFilter<"Track"> | string
-    musicalKey?: StringWithAggregatesFilter<"Track"> | string
+    side?: EnumTrackSideWithAggregatesFilter<"Track"> | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyWithAggregatesFilter<"Track"> | $Enums.MusicalKey
     bpm?: IntWithAggregatesFilter<"Track"> | number
     status?: EnumTrackStatusWithAggregatesFilter<"Track"> | $Enums.TrackStatus
     duration?: StringWithAggregatesFilter<"Track"> | string
@@ -7687,8 +7761,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -7702,8 +7776,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -7717,8 +7791,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -7732,8 +7806,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -7747,8 +7821,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -7762,8 +7836,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -7775,8 +7849,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -8039,6 +8113,20 @@ export namespace Prisma {
     not?: NestedIntFilter<$PrismaModel> | number
   }
 
+  export type EnumTrackSideFilter<$PrismaModel = never> = {
+    equals?: $Enums.TrackSide | EnumTrackSideFieldRefInput<$PrismaModel>
+    in?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    not?: NestedEnumTrackSideFilter<$PrismaModel> | $Enums.TrackSide
+  }
+
+  export type EnumMusicalKeyFilter<$PrismaModel = never> = {
+    equals?: $Enums.MusicalKey | EnumMusicalKeyFieldRefInput<$PrismaModel>
+    in?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    not?: NestedEnumMusicalKeyFilter<$PrismaModel> | $Enums.MusicalKey
+  }
+
   export type EnumTrackStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TrackStatus | EnumTrackStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TrackStatus[] | ListEnumTrackStatusFieldRefInput<$PrismaModel>
@@ -8115,6 +8203,26 @@ export namespace Prisma {
     _sum?: NestedIntFilter<$PrismaModel>
     _min?: NestedIntFilter<$PrismaModel>
     _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type EnumTrackSideWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TrackSide | EnumTrackSideFieldRefInput<$PrismaModel>
+    in?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    not?: NestedEnumTrackSideWithAggregatesFilter<$PrismaModel> | $Enums.TrackSide
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTrackSideFilter<$PrismaModel>
+    _max?: NestedEnumTrackSideFilter<$PrismaModel>
+  }
+
+  export type EnumMusicalKeyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MusicalKey | EnumMusicalKeyFieldRefInput<$PrismaModel>
+    in?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    not?: NestedEnumMusicalKeyWithAggregatesFilter<$PrismaModel> | $Enums.MusicalKey
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMusicalKeyFilter<$PrismaModel>
+    _max?: NestedEnumMusicalKeyFilter<$PrismaModel>
   }
 
   export type EnumTrackStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -8411,6 +8519,14 @@ export namespace Prisma {
     divide?: number
   }
 
+  export type EnumTrackSideFieldUpdateOperationsInput = {
+    set?: $Enums.TrackSide
+  }
+
+  export type EnumMusicalKeyFieldUpdateOperationsInput = {
+    set?: $Enums.MusicalKey
+  }
+
   export type EnumTrackStatusFieldUpdateOperationsInput = {
     set?: $Enums.TrackStatus
   }
@@ -8540,6 +8656,20 @@ export namespace Prisma {
     _max?: NestedDateTimeFilter<$PrismaModel>
   }
 
+  export type NestedEnumTrackSideFilter<$PrismaModel = never> = {
+    equals?: $Enums.TrackSide | EnumTrackSideFieldRefInput<$PrismaModel>
+    in?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    not?: NestedEnumTrackSideFilter<$PrismaModel> | $Enums.TrackSide
+  }
+
+  export type NestedEnumMusicalKeyFilter<$PrismaModel = never> = {
+    equals?: $Enums.MusicalKey | EnumMusicalKeyFieldRefInput<$PrismaModel>
+    in?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    not?: NestedEnumMusicalKeyFilter<$PrismaModel> | $Enums.MusicalKey
+  }
+
   export type NestedEnumTrackStatusFilter<$PrismaModel = never> = {
     equals?: $Enums.TrackStatus | EnumTrackStatusFieldRefInput<$PrismaModel>
     in?: $Enums.TrackStatus[] | ListEnumTrackStatusFieldRefInput<$PrismaModel>
@@ -8572,6 +8702,26 @@ export namespace Prisma {
     gt?: number | FloatFieldRefInput<$PrismaModel>
     gte?: number | FloatFieldRefInput<$PrismaModel>
     not?: NestedFloatFilter<$PrismaModel> | number
+  }
+
+  export type NestedEnumTrackSideWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.TrackSide | EnumTrackSideFieldRefInput<$PrismaModel>
+    in?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    notIn?: $Enums.TrackSide[] | ListEnumTrackSideFieldRefInput<$PrismaModel>
+    not?: NestedEnumTrackSideWithAggregatesFilter<$PrismaModel> | $Enums.TrackSide
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumTrackSideFilter<$PrismaModel>
+    _max?: NestedEnumTrackSideFilter<$PrismaModel>
+  }
+
+  export type NestedEnumMusicalKeyWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.MusicalKey | EnumMusicalKeyFieldRefInput<$PrismaModel>
+    in?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    notIn?: $Enums.MusicalKey[] | ListEnumMusicalKeyFieldRefInput<$PrismaModel>
+    not?: NestedEnumMusicalKeyWithAggregatesFilter<$PrismaModel> | $Enums.MusicalKey
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumMusicalKeyFilter<$PrismaModel>
+    _max?: NestedEnumMusicalKeyFilter<$PrismaModel>
   }
 
   export type NestedEnumTrackStatusWithAggregatesFilter<$PrismaModel = never> = {
@@ -8612,8 +8762,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -8626,8 +8776,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -8720,8 +8870,8 @@ export namespace Prisma {
     id?: StringFilter<"Track"> | string
     order?: IntFilter<"Track"> | number
     title?: StringFilter<"Track"> | string
-    side?: StringFilter<"Track"> | string
-    musicalKey?: StringFilter<"Track"> | string
+    side?: EnumTrackSideFilter<"Track"> | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFilter<"Track"> | $Enums.MusicalKey
     bpm?: IntFilter<"Track"> | number
     status?: EnumTrackStatusFilter<"Track"> | $Enums.TrackStatus
     duration?: StringFilter<"Track"> | string
@@ -8846,8 +8996,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -8860,8 +9010,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -9139,8 +9289,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -9181,8 +9331,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -9195,8 +9345,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -9209,8 +9359,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -9251,8 +9401,8 @@ export namespace Prisma {
     id?: string
     order: number
     title: string
-    side: string
-    musicalKey: string
+    side: $Enums.TrackSide
+    musicalKey: $Enums.MusicalKey
     bpm: number
     status?: $Enums.TrackStatus
     duration: string
@@ -9286,8 +9436,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -9300,8 +9450,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string
@@ -9314,8 +9464,8 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     order?: IntFieldUpdateOperationsInput | number
     title?: StringFieldUpdateOperationsInput | string
-    side?: StringFieldUpdateOperationsInput | string
-    musicalKey?: StringFieldUpdateOperationsInput | string
+    side?: EnumTrackSideFieldUpdateOperationsInput | $Enums.TrackSide
+    musicalKey?: EnumMusicalKeyFieldUpdateOperationsInput | $Enums.MusicalKey
     bpm?: IntFieldUpdateOperationsInput | number
     status?: EnumTrackStatusFieldUpdateOperationsInput | $Enums.TrackStatus
     duration?: StringFieldUpdateOperationsInput | string

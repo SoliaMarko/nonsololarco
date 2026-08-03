@@ -181,6 +181,38 @@ exports.Prisma.NullsOrder = {
   first: 'first',
   last: 'last'
 };
+exports.TrackSide = exports.$Enums.TrackSide = {
+  a: 'a',
+  b: 'b'
+};
+
+exports.MusicalKey = exports.$Enums.MusicalKey = {
+  C: 'C',
+  Cm: 'Cm',
+  CSharp: 'CSharp',
+  CSharpm: 'CSharpm',
+  D: 'D',
+  Dm: 'Dm',
+  DSharp: 'DSharp',
+  DSharpm: 'DSharpm',
+  E: 'E',
+  Em: 'Em',
+  F: 'F',
+  Fm: 'Fm',
+  FSharp: 'FSharp',
+  FSharpm: 'FSharpm',
+  G: 'G',
+  Gm: 'Gm',
+  GSharp: 'GSharp',
+  GSharpm: 'GSharpm',
+  A: 'A',
+  Am: 'Am',
+  ASharp: 'ASharp',
+  ASharpm: 'ASharpm',
+  B: 'B',
+  Bm: 'Bm'
+};
+
 exports.TrackStatus = exports.$Enums.TrackStatus = {
   ready: 'ready',
   learning: 'learning',

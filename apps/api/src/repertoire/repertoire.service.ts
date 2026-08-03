@@ -1,7 +1,8 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Track, TrackSide, TrackStatus, MusicalKey } from '@nonsololarco/types';
+import { Track, TrackSide, TrackStatus } from '@nonsololarco/types';
 
 import { PrismaService } from '../prisma';
+import { toDisplayMusicalKey } from '../utils/musical-key.util';
 
 @Injectable()
 export class RepertoireService {
@@ -19,7 +20,7 @@ export class RepertoireService {
       order: track.order,
       title: track.title,
       side: track.side as TrackSide,
-      musicalKey: track.musicalKey as MusicalKey,
+      musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
       bpm: track.bpm,
       status: track.status as TrackStatus,
       duration: track.duration,
@@ -48,7 +49,7 @@ export class RepertoireService {
       order: track.order,
       title: track.title,
       side: track.side as TrackSide,
-      musicalKey: track.musicalKey as MusicalKey,
+      musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
       bpm: track.bpm,
       status: track.status as TrackStatus,
       duration: track.duration,
