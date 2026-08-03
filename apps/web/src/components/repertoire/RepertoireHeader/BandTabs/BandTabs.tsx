@@ -28,7 +28,7 @@ export default function BandTabs({ bands }: BandTabsProps) {
               key={band.id}
               onClick={() => onBandChange(band.id)}
               className={cn(
-                'plb-3 pli-4 border-edge flex items-center gap-3 border-r-2 border-solid transition-colors',
+                'plb-3 pli-4 border-edge flex w-48 items-center gap-3 border-r-2 border-solid transition-colors',
                 '-mbe-px border-b-4',
                 isActive
                   ? 'border-b-accent-red text-fg-primary bg-base'
@@ -40,9 +40,9 @@ export default function BandTabs({ bands }: BandTabsProps) {
               ) : (
                 <VinylRecord color={getVinylColor(band.id)} isPlaying={isActive} size={32} />
               )}
-              <div className="text-left">
-                <div className="text-sm leading-none font-semibold">{band.name}</div>
-                <div className="text-fg-tertiary mbs-0.5 text-xs">
+              <div className="min-w-0 text-left">
+                <div className="truncate text-sm font-semibold">{band.name}</div>
+                <div className="text-fg-tertiary mbs-0.5 truncate text-xs">
                   {band?.role ? [band.role, band.totalTracks].join(' · ') : band.totalTracks}
                 </div>
               </div>

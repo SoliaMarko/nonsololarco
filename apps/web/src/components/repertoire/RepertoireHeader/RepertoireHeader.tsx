@@ -30,6 +30,8 @@ export default function RepertoireHeader({
 }: RepertoireHeaderProps) {
   const { activeBand } = useActiveBand();
 
+  const isSpecificBandSelected = activeBand?.id && activeBand?.id !== 'solo';
+
   return (
     <div className={cn('border-border-primary border-b', className)}>
       <Breadcrumb />
@@ -55,7 +57,9 @@ export default function RepertoireHeader({
       <div className="pli-6 plb-5 bg-yellow-main bg-dots-subtle hidden items-center justify-between gap-4 md:flex">
         <div>
           <div className="mbe-1 tracking-widest">
-            <Text className="text-danger-deep text-xs font-medium uppercase">Band repertoire</Text>
+            <Text className="text-danger-deep text-xs font-medium uppercase">
+              {isSpecificBandSelected ? 'Band repertoire' : 'Repertoire'}
+            </Text>
           </div>
           <Heading
             className="text-primary-dark text-3xl leading-none font-bold tracking-tight uppercase"
