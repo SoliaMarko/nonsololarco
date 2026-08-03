@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
-import { RepertoireModule } from './repertoire/repertoire.module';
+
 import { BandsModule } from './bands/bands.module';
+import { PrismaModule } from './prisma';
+import { RepertoireModule } from './repertoire/repertoire.module';
 
 @Module({
-  imports: [BandsModule, RepertoireModule],
-  controllers: [],
-  providers: [],
+  imports: [PrismaModule, BandsModule, RepertoireModule],
 })
 export class AppModule {}

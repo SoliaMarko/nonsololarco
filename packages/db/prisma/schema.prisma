@@ -1,0 +1,80 @@
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  memberships BandMember[]
+  leadTracks  Track[]      @relation("LeadMember")
+
+  @@map("users")
+}
+
+model Band {
+  id        String   @id @default(cuid())
+  name      String
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  members BandMember[]
+  tracks  Track[]
+
+  @@map("bands")
+}
+
+/// Join table: which users belong to which bands, and what role they play.
+model BandMember {
+  id       String   @id @default(cuid())
+  role     String
+  joinedAt DateTime @default(now()) @map("joined_at")
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  bandId String @map("band_id")
+  band   Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, bandId])
+  @@map("band_members")
+}
+
+enum TrackStatus {
+  ready
+  learning
+  new
+  archived
+
+  @@map("track_status")
+}
+
+model Track {
+  id         String      @id @default(cuid())
+  order      Int
+  title      String
+  side       String
+  musicalKey String      @map("musical_key")
+  bpm        Int
+  status     TrackStatus @default(new)
+  duration   String
+
+  leadMemberId String @map("lead_member_id")
+  leadMember   User   @relation("LeadMember", fields: [leadMemberId], references: [id])
+
+  bandId String @map("band_id")
+  band   Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("tracks")
+}

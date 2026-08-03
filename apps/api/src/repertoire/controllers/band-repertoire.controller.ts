@@ -24,7 +24,7 @@ export class BandRepertoireController {
     description: 'List of band tracks (without band field)',
   })
   @ApiNotFoundResponse({ description: 'Band not found' })
-  getBandRepertoire(@Param('id') bandId: string): Track[] {
+  getBandRepertoire(@Param('id') bandId: string): Promise<Track[]> {
     return this.repertoireService.getByBand(bandId);
   }
 }

@@ -2,6 +2,7 @@ import { Controller, Get } from '@nestjs/common';
 import { ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Band } from '@nonsololarco/types';
 
+import { MOCK_CURRENT_USER_ID } from 'src/constants/auth.const';
 import { BandDto } from './dto';
 import { BandsService } from './bands.service';
 
@@ -17,7 +18,7 @@ export class BandsController {
     description: 'List of user bands with computed stats',
   })
   // TODO: Replace with real user ID once JWT authentication is implemented
-  getMyBands(): Band[] {
-    return this.bandsService.getAll();
+  getMyBands(): Promise<Band[]> {
+    return this.bandsService.getAll(MOCK_CURRENT_USER_ID);
   }
 }

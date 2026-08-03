@@ -9,7 +9,7 @@ import {
 import { Track } from '@nonsololarco/types';
 
 import { TrackDto } from './dto';
-import { MOCK_CURRENT_USER_ID } from 'src/mocks/repertoire.mock';
+import { MOCK_CURRENT_USER_ID } from 'src/constants/auth.const';
 import { RepertoireService } from './repertoire.service';
 
 @ApiTags('repertoire')
@@ -21,7 +21,7 @@ export class RepertoireController {
   @ApiOperation({ summary: 'Get all tracks for the current user' })
   @ApiOkResponse({ type: [TrackDto], description: 'List of user tracks' })
   // TODO: Replace with real user ID once JWT authentication is implemented
-  getMyRepertoire(): Track[] {
+  getMyRepertoire(): Promise<Track[]> {
     return this.repertoireService.getByUser(MOCK_CURRENT_USER_ID);
   }
 
@@ -33,7 +33,7 @@ export class RepertoireController {
     description: 'List of band tracks (without band field)',
   })
   @ApiNotFoundResponse({ description: 'Band not found' })
-  getBandRepertoire(@Param('id') bandId: string): Track[] {
+  getBandRepertoire(@Param('id') bandId: string): Promise<Track[]> {
     return this.repertoireService.getByBand(bandId);
   }
 }

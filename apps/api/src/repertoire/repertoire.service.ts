@@ -1,26 +1,58 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Track } from '@nonsololarco/types';
+import { Track, TrackSide, TrackStatus, MusicalKey } from '@nonsololarco/types';
 
-import { MOCK_ALL_REPERTOIRE } from '../mocks/repertoire.mock';
+import { PrismaService } from '../prisma';
 
 @Injectable()
 export class RepertoireService {
-  // TODO: Replace with Prisma repository once DB is connected
-  getByUser(userId: string): Track[] {
-    return MOCK_ALL_REPERTOIRE.filter(
-      (track) => track.leadMember?.id === userId,
-    );
+  constructor(private readonly prisma: PrismaService) {}
+
+  async getByUser(userId: string): Promise<Track[]> {
+    const tracks = await this.prisma.track.findMany({
+      where: { leadMemberId: userId },
+      include: { leadMember: true, band: true },
+      orderBy: { order: 'asc' },
+    });
+
+    return tracks.map((track) => ({
+      id: track.id,
+      order: track.order,
+      title: track.title,
+      side: track.side as TrackSide,
+      musicalKey: track.musicalKey as MusicalKey,
+      bpm: track.bpm,
+      status: track.status as TrackStatus,
+      duration: track.duration,
+      leadMember: { id: track.leadMember.id, name: track.leadMember.name },
+      band: { id: track.band.id, name: track.band.name },
+    }));
   }
 
-  getByBand(bandId: string): Track[] {
-    const tracks = MOCK_ALL_REPERTOIRE.filter(
-      (track) => track.band?.id === bandId,
-    );
+  async getByBand(bandId: string): Promise<Track[]> {
+    const band = await this.prisma.band.findUnique({
+      where: { id: bandId },
+    });
 
-    if (!tracks.length) {
+    if (!band) {
       throw new NotFoundException(`Band with id ${bandId} not found`);
     }
 
-    return tracks.map(({ band: _band, ...rest }) => rest);
+    const tracks = await this.prisma.track.findMany({
+      where: { bandId },
+      include: { leadMember: true },
+      orderBy: { order: 'asc' },
+    });
+
+    return tracks.map((track) => ({
+      id: track.id,
+      order: track.order,
+      title: track.title,
+      side: track.side as TrackSide,
+      musicalKey: track.musicalKey as MusicalKey,
+      bpm: track.bpm,
+      status: track.status as TrackStatus,
+      duration: track.duration,
+      leadMember: { id: track.leadMember.id, name: track.leadMember.name },
+    }));
   }
 }
