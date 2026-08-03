@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Text from '@/src/components/typography/Text';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
 import { Band } from '@/src/lib/types/profile/profile.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 interface BandRowProps {
   band: Band;

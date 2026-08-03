@@ -115,6 +115,9 @@
   --color-accent-green: var(--accent-green);
   --color-accent-dark-green: var(--accent-dark-green);
 
+  /* --- Colors: button fills --- */
+  --color-btn-fill: var(--bg-btn-fill);
+
   --color-border-primary: var(--border-primary);
 
   --animate-text-glow: text-glow 0.6s ease-out both;
@@ -137,6 +140,15 @@
       transparent 1px
     );
     background-size: 12px 12px;
+  }
+
+  .bg-dots-hero {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary-light) 12%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 14px 14px;
   }
 
   .bg-hatching {
@@ -263,5 +275,27 @@
 
   100% {
     filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes wave-scan-dot {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  50% {
+    opacity: 0.55;
+    transform: translateY(calc(-1 * var(--travel)));
+  }
+
+  60% {
+    opacity: 0.45;
+    transform: translateY(calc(-1 * var(--travel)));
+  }
+
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

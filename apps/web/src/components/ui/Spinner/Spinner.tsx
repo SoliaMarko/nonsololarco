@@ -3,8 +3,8 @@ import { CSSProperties, HTMLAttributes } from 'react';
 import { VariantProps } from 'class-variance-authority';
 
 import { DELAYS, NOTES, WAVE_HEIGHT } from '@/src/lib/constants/ui/spinner.const';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { spinnerVariants } from '@/src/lib/ui/variants/spinner.variants';
+import { spinnerVariants } from '@/src/lib/variants/spinner.variants';
+import { cn } from '@/src/utils/cn';
 
 /**
  * nonsololarco signature loading indicator — 4 musical notes bouncing in a wave.

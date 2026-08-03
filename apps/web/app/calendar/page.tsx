@@ -1,12 +1,15 @@
 'use client';
 
 import AppShell from '@/src/components/layout/AppShell';
-import Text from '@/src/components/typography/Text';
+import EmptyState from '@/src/components/shared/EmptyState';
 
 export default function CalendarPage() {
   return (
-    <AppShell activePath={'/calendar'}>
-      <Text>Calendar Page Content</Text>
+    <AppShell activePath="/calendar" mainClassName="flex flex-col">
+      <EmptyState
+        title="Calendar"
+        description="Rehearsals, gigs, and deadlines — all in one place. Coming soon."
+      />
     </AppShell>
   );
 }

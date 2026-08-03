@@ -1,7 +1,7 @@
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ChevronIcon } from '@/src/icons/base';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 type SortField = 'bpm' | 'status' | 'time' | 'title' | 'trackOrder';
 type SortOrder = 'asc' | 'desc';

@@ -1,6 +1,6 @@
 import { VariantProps } from 'class-variance-authority';
 
-import { avatarVariants } from '../../ui/variants/avatar.variants';
+import { avatarVariants } from '../../variants/avatar.variants';
 
 export const STATUS_ICON_SIZE: Record<
   NonNullable<VariantProps<typeof avatarVariants>['size']>,

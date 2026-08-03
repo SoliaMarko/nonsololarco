@@ -1,7 +1,7 @@
 import { Ref, SVGProps, forwardRef } from 'react';
 
 import { SVGCustomProps } from '@/lib/types/common.types';
-import { calcViewBox } from '@/lib/ui/utils/svg.utils';
+import { calcViewBox } from '@/src/utils/svg.utils';
 
 function SettingsSolidIcon(
   { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,

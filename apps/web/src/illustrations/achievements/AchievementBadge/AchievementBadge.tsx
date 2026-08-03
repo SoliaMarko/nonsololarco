@@ -5,7 +5,7 @@ import {
   COLOR_CONFIG,
 } from '@/src/lib/constants/illustrations/achievement-badge.const';
 import { AchievementBadgeColor } from '@/src/lib/types/illustrations/achievement-badge.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface AchievementBadgeProps {
   className?: string;

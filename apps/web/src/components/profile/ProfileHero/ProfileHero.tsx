@@ -24,8 +24,8 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
     <div className="bg-accent-dark-green bg-dots plb-8 pli-9 flex min-h-80 w-full flex-col items-center justify-center gap-6 text-white md:flex-row md:justify-between">
       <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:justify-start">
         <Avatar
-          className="border-emerald-light text-accent-dark-green size-21 border-4 text-3xl shadow-[6px_6px_0px_0px_var(--color-primary-dark)] md:size-42 md:text-6xl"
-          style={{ background: 'radial-gradient(circle at 30% 30%, #f5f0e8, #d8ede6)' }}
+          className="size-21 text-3xl shadow-[6px_6px_0px_0px_var(--color-primary-dark)] md:size-42 md:text-6xl"
+          frame="portrait"
           initials={profile.initials}
         />
         <div className="flex flex-col items-center gap-4 md:items-start">

@@ -27,6 +27,10 @@ out/
 build
 dist
 
+# Generated Prisma client (regenerated via `prisma generate`; platform-specific,
+# includes a large .wasm binary — shouldn't be committed)
+packages/db/generated/
+
 
 # Debug
 npm-debug.log*

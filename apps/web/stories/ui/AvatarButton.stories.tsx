@@ -23,6 +23,10 @@ const meta = {
       control: 'select',
       options: [undefined, 'online', 'pause', 'away', 'long', 'inactive'],
     },
+    frame: {
+      control: 'select',
+      options: [undefined, 'none', 'portrait'],
+    },
     initials: { control: 'text' },
     src: { control: 'text' },
     alt: { control: 'text' },
@@ -37,6 +41,14 @@ export const Default: Story = {
     initials: 'OW',
     size: 'md',
     status: 'online',
+    'aria-label': 'Open profile menu',
+  },
+};
+
+export const Portrait: Story = {
+  args: {
+    initials: 'OW',
+    frame: 'portrait',
     'aria-label': 'Open profile menu',
   },
 };

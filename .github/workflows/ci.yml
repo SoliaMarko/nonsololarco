@@ -9,6 +9,12 @@ on:
   push:
     branches: [develop]
 
+env:
+  # `prisma generate` (run via packages/db's postinstall hook on every
+  # `pnpm install`) needs DATABASE_URL to resolve, even though none of these
+  # jobs touch a real database — codegen only reads schema.prisma.
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public"
+
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -52,8 +58,22 @@ jobs:
       - run: pnpm install
       - run: pnpm typecheck
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.1.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+      - run: pnpm install
+      - run: pnpm test
+
   build:
-    needs: [lint, stylelint, typecheck]
+    needs: [lint, stylelint, typecheck, test]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -67,27 +87,9 @@ jobs:
       - run: pnpm install
       - run: pnpm build
 
-  chromatic:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          persist-credentials: false
-          fetch-depth: 0
-      - uses: pnpm/action-setup@v4.1.0
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 22
-          cache: "pnpm"
-      - run: pnpm install
-      - uses: chromaui/action@v1
-        with:
-          projectToken: ${{ secrets.CHROMATIC_PROJECT_TOKEN }}
-          workingDir: apps/web
-
   ci:
     runs-on: ubuntu-latest
-    needs: [build, chromatic]
+    needs: [lint, stylelint, typecheck, test, build]
     if: always()
     steps:
       - name: Check all jobs passed

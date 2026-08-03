@@ -1,6 +1,6 @@
 import { VariantProps } from 'class-variance-authority';
 
-import { spinnerVariants } from '../../ui/variants/spinner.variants';
+import { spinnerVariants } from '../../variants/spinner.variants';
 
 export const NOTES = ['♩', '♪', '♫', '♩'] as const;
 export const DELAYS = ['0s', '0.15s', '0.3s', '0.45s'] as const;

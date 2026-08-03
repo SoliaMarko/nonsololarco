@@ -6,8 +6,8 @@ import { ICON_POSITION, STATUS_ICON } from '@/src/lib/constants/common.const';
 import { BADGE_STATUS_ICON_SIZE } from '@/src/lib/constants/ui/badge.const';
 import { IconPositionType } from '@/src/lib/types/common.types';
 import { BadgeSize, BadgeStatus } from '@/src/lib/types/ui/badge.types';
-import { cn } from '@/src/lib/ui/utils/cn';
-import { standaloneBadgeVariants } from '@/src/lib/ui/variants/standalone-badge.variants';
+import { standaloneBadgeVariants } from '@/src/lib/variants/standalone-badge.variants';
+import { cn } from '@/src/utils/cn';
 
 type BadgeVariantProps = VariantProps<typeof standaloneBadgeVariants>;
 

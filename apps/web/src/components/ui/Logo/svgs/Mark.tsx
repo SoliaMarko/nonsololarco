@@ -1,4 +1,6 @@
-export function MarkSvg({ size }: { size: number }) {
+import { LogoColors } from '@/src/lib/types/ui/logo.types';
+
+export function MarkSvg({ colors, size }: { colors: LogoColors; size: number }) {
   const rx = Math.round(size * 0.22);
 
   return (
@@ -13,11 +15,11 @@ export function MarkSvg({ size }: { size: number }) {
       <path
         d="M10 42 C18 22, 28 22, 38 42 C42 50, 46 50, 50 42"
         fill="none"
-        stroke="var(--color-emerald-main)"
+        stroke={colors.squiggle}
         strokeWidth="2.4"
         strokeLinecap="round"
       />
-      <circle cx="28" cy="14" r="4.5" fill="var(--color-emerald-light)" />
+      <circle cx="28" cy="14" r="4.5" fill={colors.dot} />
     </svg>
   );
 }

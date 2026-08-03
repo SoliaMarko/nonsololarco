@@ -2,7 +2,7 @@
 
 import * as RadixSelect from '@radix-ui/react-select';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import { SelectOption } from '../Select';
 

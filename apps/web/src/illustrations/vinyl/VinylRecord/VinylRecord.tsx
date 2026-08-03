@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 
 import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import DiscIllustration from './DiscIllustration';
 

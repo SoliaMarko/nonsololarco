@@ -3,13 +3,13 @@
 import { ORIENTATION } from '@/src/lib/constants/common.const';
 import { OrientationType } from '@/src/lib/types/common.types';
 import { DividerThicknessType, DividerVariantType } from '@/src/lib/types/ui/divider.types';
-import { cn } from '@/src/lib/ui/utils/cn';
 import {
   LABEL_COLOR_DEFAULT,
   dividerVariants,
   labelColorMap,
   labelSizeMap,
-} from '@/src/lib/ui/variants/divider.variants';
+} from '@/src/lib/variants/divider.variants';
+import { cn } from '@/src/utils/cn';
 
 export interface DividerProps {
   className?: string;

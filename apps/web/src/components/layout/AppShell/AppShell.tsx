@@ -1,6 +1,6 @@
 import { ReactNode } from 'react';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import AppBottomNav from './AppBottomNav';
 import AppHeaderNav from './AppHeaderNav';

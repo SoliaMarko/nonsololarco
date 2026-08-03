@@ -4,7 +4,7 @@ import { useId } from 'react';
 
 import { PICK_PATH } from '@/src/lib/constants/illustrations/mediator-badge.const';
 import { PickVariant } from '@/src/lib/types/illustrations/mediator-badge.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface MediatorBadgeProps {
   className?: string;

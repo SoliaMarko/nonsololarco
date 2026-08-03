@@ -1,17 +1,15 @@
 import Link from 'next/link';
-import { useSearchParams } from 'next/navigation';
-
-import { Band } from '@nonsololarco/types';
 
 import Text from '@/src/components/typography/Text';
 import Badge from '@/src/components/ui/Badge';
+import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
 import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
-import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../TracksTable';
+import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 
 const STATUS_VARIANT: Record<
   TrackStatus,
@@ -37,15 +35,8 @@ export interface TrackListRowProps {
   track: Track;
 }
 
-export default function TrackListRow({
-  index = 0,
-  isMyTrack = false,
-  track,
-}: TrackListRowProps) {
-  const searchParams = useSearchParams();
-
-  const activeBandId = searchParams.get('band') ?? '';
-  const isSpecificBandSelected = Boolean(activeBandId);
+export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
+  const { isSpecificBandSelected } = useActiveBand();
 
   const isArchived = track.status === 'archived';
 

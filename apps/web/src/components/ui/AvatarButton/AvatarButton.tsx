@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ForwardedRef, HTMLAttributes, forwardRef } from 'react';
 
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 import Avatar, { AvatarProps } from '../Avatar/Avatar';
 
@@ -11,6 +11,7 @@ function AvatarButton(
   {
     className,
     alt,
+    frame,
     initials,
     size,
     src,
@@ -30,7 +31,7 @@ function AvatarButton(
         className,
       )}
     >
-      <Avatar alt={alt} initials={initials} size={size} src={src} status={status} />
+      <Avatar alt={alt} frame={frame} initials={initials} size={size} src={src} status={status} />
     </button>
   );
 }

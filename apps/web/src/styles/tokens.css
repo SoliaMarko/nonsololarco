@@ -50,7 +50,7 @@
   --bg-surface: #221e19;
   --bg-card: #2a2520;
   --bg-elevated: #3a3228;
-  --bg-edge: #4a4038;
+  --bg-edge: color-mix(in srgb, var(--bg-card) 85%, white 15%);
   --bg-contrast: #f0e8d8;
 
   /* --- DARK: Blue accent --- */
@@ -98,6 +98,9 @@
   --status-away-subtle: #331800;
   --status-long: #8a8078;
   --status-inactive: #5a5248;
+
+  /* --- DARK: Button fills --- */
+  --bg-btn-fill: #37312b;
 
   /* --- DARK: Gradient --- */
   --gradient-card-overlay: rgb(10 8 6 / 92%);
@@ -158,6 +161,9 @@
   --status-away-subtle: #331800;
   --status-long: #7a7268;
   --status-inactive: #b0a898;
+
+  /* --- LIGHT: Button fills --- */
+  --bg-btn-fill: #e8e0d0;
 
   /* --- LIGHT: Gradient --- */
   --gradient-card-overlay: rgb(22 20 14 / 45%);

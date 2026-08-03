@@ -1,6 +1,6 @@
 import { PROFILE_STATS } from '@/src/lib/constants/profile/profile.const';
 import { ProfileType } from '@/src/lib/types/profile.types';
-import { cn } from '@/src/lib/ui/utils/cn';
+import { cn } from '@/src/utils/cn';
 
 export interface ProfileStatsProps {
   className?: string;
