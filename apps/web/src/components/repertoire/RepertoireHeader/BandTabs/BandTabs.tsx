@@ -3,8 +3,9 @@
 import { Band } from '@nonsololarco/types';
 
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
+import VinylCrate from '@/src/illustrations/vinyl-crate/VinylCrate';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
-import { VINYL_COLORS } from '@/src/lib/constants/illustrations/vinyl-record.const';
+import { ALL_BANDS_ID } from '@/src/lib/constants/repertoire.const';
 import { cn } from '@/src/utils/cn';
 
 interface BandTabsProps {
@@ -12,14 +13,15 @@ interface BandTabsProps {
 }
 
 export default function BandTabs({ bands }: BandTabsProps) {
-  const { activeBandId, onBandChange } = useActiveBand();
+  const { activeBandId, getVinylColor, onBandChange } = useActiveBand();
 
   // TODO: Refactor, extract it to the Tab component for design system.
   return (
     <div className="bg-surface border-b-border-primary scrollbar-thumb-fg-tertiary scrollbar-track-edge scrollbar-thin overflow-x-auto overflow-y-hidden border-b">
       <div className="flex min-w-max items-center">
-        {bands.map((band, index) => {
-          const color = VINYL_COLORS[index % VINYL_COLORS.length];
+        {bands.map((band) => {
+          const isActive = activeBandId === band.id;
+          const isAllBands = band.id === ALL_BANDS_ID;
 
           return (
             <button
@@ -28,12 +30,16 @@ export default function BandTabs({ bands }: BandTabsProps) {
               className={cn(
                 'plb-3 pli-4 border-edge flex items-center gap-3 border-r-2 border-solid transition-colors',
                 '-mbe-px border-b-4',
-                activeBandId === band.id
+                isActive
                   ? 'border-b-accent-red text-fg-primary bg-base'
-                  : 'text-fg-tertiary hover:text-fg-secondary hover:bg-elevated cursor-pointer border-b-transparent',
+                  : 'text-fg-tertiary hover:text-fg-secondary hover:bg-elevated border-b-transparent',
               )}
             >
-              <VinylRecord color={color} size={32} isPlaying={activeBandId === band.id} />
+              {isAllBands ? (
+                <VinylCrate height={32} isPlaying={isActive} width={24} />
+              ) : (
+                <VinylRecord color={getVinylColor(band.id)} isPlaying={isActive} size={32} />
+              )}
               <div className="text-left">
                 <div className="text-sm leading-none font-semibold">{band.name}</div>
                 <div className="text-fg-tertiary mbs-0.5 text-xs">
