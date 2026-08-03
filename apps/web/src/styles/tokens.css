@@ -57,7 +57,7 @@
   --blue-subtle: #7fb2f5;
 
   /* --- DARK: Emerald accent --- */
-  --emerald-subtle: #1c3828;
+  --emerald-subtle: #243128;
   --emerald-subtle-70: color-mix(in srgb, var(--emerald-subtle) 70%, transparent);
   --emerald-subtle-hover: #243f30;
   --emerald-deep: #2a5c44;
