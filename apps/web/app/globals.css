@@ -115,6 +115,9 @@
   --color-accent-green: var(--accent-green);
   --color-accent-dark-green: var(--accent-dark-green);
 
+  /* --- Colors: button fills --- */
+  --color-btn-fill: var(--bg-btn-fill);
+
   --color-border-primary: var(--border-primary);
 
   --animate-text-glow: text-glow 0.6s ease-out both;
@@ -137,6 +140,15 @@
       transparent 1px
     );
     background-size: 12px 12px;
+  }
+
+  .bg-dots-hero {
+    background-image: radial-gradient(
+      circle,
+      color-mix(in srgb, var(--color-primary-light) 12%, transparent) 1px,
+      transparent 1px
+    );
+    background-size: 14px 14px;
   }
 
   .bg-hatching {

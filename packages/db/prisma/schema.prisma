@@ -1,7 +1,9 @@
 generator client {
-  provider     = "prisma-client"
-  output       = "../src/generated/prisma"
-  moduleFormat = "cjs"
+  provider     = "prisma-client-js"
+  // Lives outside src/ (a sibling of src/ and dist/) so the relative import
+  // in src/index.ts resolves the same way whether TypeScript is running the
+  // source directly or from the compiled dist/index.js — see that file.
+  output       = "../generated/prisma"
 }
 
 datasource db {
@@ -11,13 +13,38 @@ datasource db {
 model User {
   id        String   @id @default(cuid())
   name      String
+  email     String   @unique
+  // Null for OAuth-only users; set when custom email+password auth is added.
+  passwordHash String? @map("password_hash")
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
   memberships BandMember[]
   leadTracks  Track[]      @relation("LeadMember")
+  // One user can be linked to multiple OAuth providers (Google, GitHub, etc).
+  accounts    Account[]
 
   @@map("users")
+}
+
+/// Links a User to an external auth provider (Google, GitHub, ...).
+/// Kept separate from User so one person can sign in with multiple providers,
+/// and so adding new providers later doesn't require changing the User model.
+model Account {
+  id                String @id @default(cuid())
+  // "google" | "github" | ... — the auth provider name.
+  provider          String
+  // The user's unique id on the provider's side (e.g. Google's "sub" claim).
+  providerAccountId String @map("provider_account_id")
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  userId String @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // A given provider account can only ever be linked to one user.
+  @@unique([provider, providerAccountId])
+  @@map("accounts")
 }
 
 model Band {
@@ -45,6 +72,10 @@ model BandMember {
   band   Band   @relation(fields: [bandId], references: [id], onDelete: Cascade)
 
   @@unique([userId, bandId])
+  // The composite unique index above is keyed on (userId, bandId), so it
+  // doesn't help lookups that filter by bandId alone (e.g. "list this
+  // band's members") — a dedicated index covers that access pattern.
+  @@index([bandId])
   @@map("band_members")
 }
 
@@ -57,12 +88,53 @@ enum TrackStatus {
   @@map("track_status")
 }
 
+enum TrackSide {
+  a
+  b
+
+  @@map("track_side")
+}
+
+/// Musical key of a track. Prisma enum values must be valid identifiers, so
+/// sharps are spelled out ("CSharp") instead of using "#". The @map keeps the
+/// underlying Postgres enum label as the familiar "C#" notation; the API
+/// layer translates back to that notation for clients (see
+/// apps/api/src/utils/musical-key.util.ts).
+enum MusicalKey {
+  C
+  Cm
+  CSharp  @map("C#")
+  CSharpm @map("C#m")
+  D
+  Dm
+  DSharp  @map("D#")
+  DSharpm @map("D#m")
+  E
+  Em
+  F
+  Fm
+  FSharp  @map("F#")
+  FSharpm @map("F#m")
+  G
+  Gm
+  GSharp  @map("G#")
+  GSharpm @map("G#m")
+  A
+  Am
+  ASharp  @map("A#")
+  ASharpm @map("A#m")
+  B
+  Bm
+
+  @@map("musical_key")
+}
+
 model Track {
   id         String      @id @default(cuid())
   order      Int
   title      String
-  side       String
-  musicalKey String      @map("musical_key")
+  side       TrackSide
+  musicalKey MusicalKey  @map("musical_key")
   bpm        Int
   status     TrackStatus @default(new)
   duration   String
@@ -76,5 +148,11 @@ model Track {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  // Two tracks in the same band can't occupy the same position — this also
+  // lets getByBand's `orderBy: order` return a deterministic sequence.
+  // (bandId, order) also covers plain "filter by bandId" queries via the
+  // leftmost-prefix rule, so no separate @@index([bandId]) is needed.
+  @@unique([bandId, order])
+  @@index([leadMemberId])
   @@map("tracks")
 }

@@ -18,6 +18,7 @@ export class BandsService {
           },
         },
       },
+      orderBy: { band: { name: 'asc' } },
     });
 
     return memberships.map(({ role, band }) => ({
