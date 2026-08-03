@@ -12,7 +12,7 @@ export class RepertoireService {
     const tracks = await this.prisma.track.findMany({
       where: { leadMemberId: userId },
       include: { leadMember: true, band: true },
-      orderBy: { order: 'asc' },
+      orderBy: [{ bandId: 'asc' }, { order: 'asc' }],
     });
 
     return tracks.map((track) => ({

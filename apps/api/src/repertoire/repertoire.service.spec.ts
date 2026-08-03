@@ -87,7 +87,7 @@ describe('RepertoireService', () => {
       expect(mockPrisma.track.findMany).toHaveBeenCalledWith({
         where: { leadMemberId: 'user-1' },
         include: { leadMember: true, band: true },
-        orderBy: { order: 'asc' },
+        orderBy: [{ bandId: 'asc' }, { order: 'asc' }],
       });
     });
   });

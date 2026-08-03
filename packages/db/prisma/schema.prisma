@@ -1,6 +1,9 @@
 generator client {
   provider     = "prisma-client-js"
-  output       = "../src/generated/prisma"
+  // Lives outside src/ (a sibling of src/ and dist/) so the relative import
+  // in src/index.ts resolves the same way whether TypeScript is running the
+  // source directly or from the compiled dist/index.js — see that file.
+  output       = "../generated/prisma"
 }
 
 datasource db {
@@ -145,7 +148,11 @@ model Track {
   createdAt DateTime @default(now()) @map("created_at")
   updatedAt DateTime @updatedAt @map("updated_at")
 
+  // Two tracks in the same band can't occupy the same position — this also
+  // lets getByBand's `orderBy: order` return a deterministic sequence.
+  // (bandId, order) also covers plain "filter by bandId" queries via the
+  // leftmost-prefix rule, so no separate @@index([bandId]) is needed.
+  @@unique([bandId, order])
   @@index([leadMemberId])
-  @@index([bandId])
   @@map("tracks")
 }
