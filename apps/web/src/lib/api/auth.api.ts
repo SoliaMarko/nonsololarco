@@ -13,8 +13,15 @@ export async function fetchCurrentUser(): Promise<User> {
 }
 
 export async function logout(): Promise<void> {
-  await fetch(`${API_URL}/auth/logout`, {
+  const res = await fetch(`${API_URL}/auth/logout`, {
     method: 'POST',
     credentials: 'include',
   });
+
+  if (!res.ok) {
+    // If this fails, the token cookie is still active server-side (well,
+    // client-side — it's just not cleared) — don't let the caller clear
+    // local auth state and redirect as if logout succeeded.
+    throw new Error('Logout failed');
+  }
 }

@@ -9,7 +9,7 @@
     "start": "next start",
     "lint": "eslint",
     "check-types": "next typegen && tsc --noEmit",
-    "typecheck": "next typegen && tsc --noEmit",
+    "typecheck": "pnpm run check-types",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build",
     "chromatic": "npx chromatic",

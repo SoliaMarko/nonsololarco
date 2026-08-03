@@ -9,7 +9,7 @@
     "lint": "eslint .",
     "generate:component": "turbo gen react-component",
     "check-types": "tsc --noEmit",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "pnpm run check-types"
   },
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",

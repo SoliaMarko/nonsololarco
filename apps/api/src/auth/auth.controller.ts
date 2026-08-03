@@ -35,15 +35,20 @@ export class AuthController {
     this.frontendUrl =
       config.get('FRONTEND_URL', { infer: true }) ?? 'http://localhost:3000';
 
-    const isProduction =
-      config.get('NODE_ENV', { infer: true }) === 'production';
+    // Fail closed: only skip Secure for explicit local dev/test. Any unset
+    // or unrecognized NODE_ENV (e.g. a staging deploy someone forgot to
+    // configure) still gets Secure — better to break locally-over-HTTP than
+    // to silently ship a cookie that works over plain HTTP in the wild.
+    const nodeEnv = config.get('NODE_ENV', { infer: true });
+    const isLocalEnv = nodeEnv === 'development' || nodeEnv === 'test';
+    const isProduction = nodeEnv === 'production';
     const cookieDomain: string | undefined = config.get('COOKIE_DOMAIN', {
       infer: true,
     });
 
     this.cookieOptions = {
       httpOnly: true,
-      secure: isProduction,
+      secure: !isLocalEnv,
       sameSite: 'lax',
       domain: cookieDomain || (isProduction ? '.nonsololarco.com' : undefined),
       path: '/',

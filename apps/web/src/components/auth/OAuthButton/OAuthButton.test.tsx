@@ -40,9 +40,10 @@ describe('OAuthButton', () => {
     expect(screen.getByRole('link').getAttribute('aria-label')).toBe('Continue with Google');
   });
 
-  it('wraps a button inside the link', () => {
+  it('renders a single link with no nested interactive elements', () => {
     renderButton();
 
-    expect(screen.getByRole('button')).toBeDefined();
+    expect(screen.getByRole('link')).toBeDefined();
+    expect(screen.queryByRole('button')).toBeNull();
   });
 });

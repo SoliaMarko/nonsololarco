@@ -4,6 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github2';
 
 import type { EnvConfig } from '../../config/env.validation';
+import { OAuthStateStore } from '../oauth-state.store';
 
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
@@ -13,6 +14,7 @@ export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
       clientSecret: config.get('GITHUB_CLIENT_SECRET', { infer: true }),
       callbackURL: config.get('GITHUB_CALLBACK_URL', { infer: true }),
       scope: ['user:email'],
+      store: new OAuthStateStore(config.get('JWT_SECRET', { infer: true })),
     });
   }
 

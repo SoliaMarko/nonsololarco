@@ -4,6 +4,7 @@ import { PassportStrategy } from '@nestjs/passport';
 import { Profile, Strategy, VerifyCallback } from 'passport-google-oauth20';
 
 import type { EnvConfig } from '../../config/env.validation';
+import { OAuthStateStore } from '../oauth-state.store';
 
 @Injectable()
 export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
@@ -13,6 +14,7 @@ export class GoogleStrategy extends PassportStrategy(Strategy, 'google') {
       clientSecret: config.get('GOOGLE_CLIENT_SECRET', { infer: true }),
       callbackURL: config.get('GOOGLE_CALLBACK_URL', { infer: true }),
       scope: ['email', 'profile'],
+      store: new OAuthStateStore(config.get('JWT_SECRET', { infer: true })),
     });
   }
 

@@ -1,5 +1,14 @@
 import { plainToInstance, Type } from 'class-transformer';
-import { IsNotEmpty, IsNumber, IsOptional, IsString, validateSync } from 'class-validator';
+import {
+  IsInt,
+  IsNotEmpty,
+  IsOptional,
+  IsString,
+  Max,
+  Min,
+  MinLength,
+  validateSync,
+} from 'class-validator';
 
 /**
  * Plain interface for ConfigService type parameter.
@@ -28,6 +37,10 @@ export class EnvironmentVariables {
 
   @IsString()
   @IsNotEmpty()
+  // Signs auth JWTs and OAuth CSRF state tokens — a short secret makes both
+  // easier to forge via brute force. 32 chars is a conservative floor for
+  // an HMAC secret.
+  @MinLength(32)
   JWT_SECRET!: string;
 
   @IsString()
@@ -71,7 +84,9 @@ export class EnvironmentVariables {
   NODE_ENV?: string;
 
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
+  @Min(0)
+  @Max(65535)
   @IsOptional()
   PORT?: number;
 }
