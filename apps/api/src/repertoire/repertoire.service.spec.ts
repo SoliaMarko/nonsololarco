@@ -138,5 +138,18 @@ describe('RepertoireService', () => {
         'Band with id band-999 not found',
       );
     });
+
+    it('queries with correct where and include', async () => {
+      mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
+      mockPrisma.track.findMany.mockResolvedValue([]);
+
+      await service.getByBand('band-1');
+
+      expect(mockPrisma.track.findMany).toHaveBeenCalledWith({
+        where: { bandId: 'band-1' },
+        include: { leadMember: true },
+        orderBy: { order: 'asc' },
+      });
+    });
   });
 });
