@@ -1,26 +1,16 @@
-import { useEffect, useState } from 'react';
-
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 
 import Logo from '@/components/ui/Logo';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
+import ThemeToggle from '@/src/components/shared/ThemeToggle';
 import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
-import Button from '@/src/components/ui/Button';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
-import { MOCK_PROFILE } from '@/src/data/profile/profile.mock';
-import { useTheme } from '@/src/hooks/global/useTheme';
-import {
-  BellIcon,
-  LogOutIcon,
-  MoonOutlineIcon,
-  ProfileOutlineIcon,
-  SettingsOutlineIcon,
-  SunOutlineIcon,
-} from '@/src/icons/base';
-import { NAV_ITEMS, OPTIONS_POSITION, THEME } from '@/src/lib/constants/common.const';
+import { useAuth } from '@/src/hooks/global/useAuth';
+import { BellIcon, LogOutIcon, ProfileOutlineIcon, SettingsOutlineIcon } from '@/src/icons/base';
+import { NAV_ITEMS, OPTIONS_POSITION } from '@/src/lib/constants/common.const';
 import { cn } from '@/src/utils/cn';
 
 export interface AppHeaderNavProps {
@@ -30,22 +20,26 @@ export interface AppHeaderNavProps {
 }
 
 export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
-  const profile = MOCK_PROFILE;
+  const { user, logout } = useAuth();
+
+  const initials = user?.name
+    ? user.name
+        .split(' ')
+        .map((w) => w[0])
+        .join('')
+        .slice(0, 2)
+        .toUpperCase()
+    : '??';
 
   const pathname = usePathname();
 
   const isRepertoirePageActive = pathname === '/repertoire';
 
-  const { theme, toggleTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
   return (
     <header
       className={cn(
         'md:z-header top-0 w-full md:sticky',
-        'border-border-primary bg-dots-subtle border-b',
+        'border-border-primary bg-dots-subtle bg-surface border-b',
         className,
       )}
       style={{ backgroundColor: 'var(--bg-surface)' }}
@@ -91,28 +85,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               <AiButton className="bg-yellow-main md:hidden" textClassName="text-primary-dark" />
             ) : null}
 
-            <Button
-              aria-label={
-                mounted
-                  ? theme === THEME.dark
-                    ? 'Switch to light theme'
-                    : 'Switch to dark theme'
-                  : 'Toggle theme'
-              }
-              className="bg-base size-10 rounded-full border-2 p-0"
-              onClick={toggleTheme}
-              variant="press"
-            >
-              {mounted ? (
-                theme === THEME.dark ? (
-                  <SunOutlineIcon size={20} />
-                ) : (
-                  <MoonOutlineIcon size={20} />
-                )
-              ) : (
-                <SunOutlineIcon size={20} aria-hidden />
-              )}
-            </Button>
+            <ThemeToggle />
             <Dropdown
               align={OPTIONS_POSITION.end}
               groups={[
@@ -125,11 +98,11 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
                 },
                 {
                   items: [
-                    { label: 'Sign out', icon: LogOutIcon, onClick: () => {}, variant: 'danger' },
+                    { label: 'Sign out', icon: LogOutIcon, onClick: logout, variant: 'danger' },
                   ],
                 },
               ]}
-              trigger={<AvatarButton initials={profile.initials} />}
+              trigger={<AvatarButton initials={initials} />}
             />
           </div>
         </div>

@@ -14,7 +14,7 @@ async function bootstrap() {
     .map((s) => s.trim())
     .filter(Boolean);
 
-  app.enableCors({ origin: allowedOrigins });
+  app.enableCors({ origin: allowedOrigins, credentials: true });
   app.setGlobalPrefix('api');
 
   app.useGlobalPipes(

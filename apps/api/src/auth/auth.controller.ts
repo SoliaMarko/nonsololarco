@@ -1,9 +1,12 @@
-import { Controller, Get, Req, Res, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
 import type { Request, Response } from 'express';
+import type { User } from '@nonsololarco/db';
 
 import { AuthService } from './auth.service';
-import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { CurrentUser } from './decorators/current-user.decorator';
 import { GithubAuthGuard } from './guards/github-auth.guard';
+import { GoogleAuthGuard } from './guards/google-auth.guard';
+import { JwtAuthGuard } from './guards/jwt-auth.guard';
 
 interface OAuthUser {
   provider: string;
@@ -19,6 +22,26 @@ interface OAuthRequest extends Request {
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  getMe(@CurrentUser() user: User) {
+    return { id: user.id, name: user.name, email: user.email };
+  }
+
+  @Post('logout')
+  logout(@Res() res: Response) {
+    res.clearCookie('token', {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      domain:
+        process.env.NODE_ENV === 'production' ? '.nonsololarco.com' : undefined,
+      path: '/',
+    });
+
+    res.json({ ok: true });
+  }
 
   // Kicks off the Google OAuth flow — redirects the browser to Google's
   // consent screen. The guard handles the redirect, this method never runs.
@@ -58,7 +81,8 @@ export class AuthController {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
       sameSite: 'lax',
-      domain: process.env.NODE_ENV === 'production' ? '.x.com' : undefined,
+      domain:
+        process.env.NODE_ENV === 'production' ? '.nonsololarco.com' : undefined,
       path: '/',
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
     });
