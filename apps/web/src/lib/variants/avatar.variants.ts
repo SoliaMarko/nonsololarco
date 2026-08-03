@@ -18,10 +18,16 @@ export const avatarVariants = cva(
         long: 'bg-elevated text-fg-tertiary',
         inactive: 'bg-surface text-fg-disabled',
       },
+      frame: {
+        none: '',
+        portrait:
+          'border-4 border-emerald-light text-accent-dark-green bg-[radial-gradient(circle_at_30%_30%,#f5f0e8,#d8ede6)]',
+      },
     },
     defaultVariants: {
       size: 'md',
       status: null,
+      frame: 'none',
     },
   },
 );

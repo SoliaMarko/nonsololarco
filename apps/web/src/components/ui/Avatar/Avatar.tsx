@@ -6,7 +6,7 @@ import Image from 'next/image';
 
 import { STATUS_ICON } from '@/src/lib/constants/common.const';
 import { STATUS_ICON_SIZE } from '@/src/lib/constants/ui/avatar.const';
-import { AvatarSize } from '@/src/lib/types/ui/avatar.types';
+import { AvatarFrame, AvatarSize } from '@/src/lib/types/ui/avatar.types';
 import { BadgeStatus } from '@/src/lib/types/ui/badge.types';
 import { avatarVariants } from '@/src/lib/variants/avatar.variants';
 import { badgeVariants } from '@/src/lib/variants/badge.variants';
@@ -15,6 +15,7 @@ import { cn } from '@/src/utils/cn';
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
   alt?: string;
   className?: string;
+  frame?: AvatarFrame;
   initials: string;
   size?: AvatarSize;
   src?: string;
@@ -22,7 +23,7 @@ export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
 }
 
 function Avatar(
-  { alt, className, initials, size = 'md', src, status, ...rest }: AvatarProps,
+  { alt, className, frame = 'none', initials, size = 'md', src, status, ...rest }: AvatarProps,
   ref: ForwardedRef<HTMLDivElement>,
 ) {
   const [imgError, setImgError] = useState(false);
@@ -40,7 +41,7 @@ function Avatar(
     <div
       aria-label={alt ?? initials}
       className={cn(
-        avatarVariants({ size, status: showImage ? null : status }),
+        avatarVariants({ size, status: showImage ? null : status, frame }),
         { 'shadow-[0_2px_8px_rgba(0,0,0,0.25)]': showImage },
         className,
       )}

@@ -11,6 +11,7 @@ function AvatarButton(
   {
     className,
     alt,
+    frame,
     initials,
     size,
     src,
@@ -30,7 +31,7 @@ function AvatarButton(
         className,
       )}
     >
-      <Avatar alt={alt} initials={initials} size={size} src={src} status={status} />
+      <Avatar alt={alt} frame={frame} initials={initials} size={size} src={src} status={status} />
     </button>
   );
 }
