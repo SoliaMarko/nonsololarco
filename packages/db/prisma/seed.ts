@@ -21,9 +21,10 @@ async function main() {
   // duplicates rows or errors on a second run.
   // Use the real OAuth user if they already exist, otherwise create a seed user.
   // This ensures tracks are linked to the actual logged-in account.
-  const existingUser = await prisma.user.findUnique({
-    where: { email: "soliamark25@gmail.com" },
-  });
+  const devEmail = process.env.SEED_USER_EMAIL;
+  const existingUser = devEmail
+    ? await prisma.user.findUnique({ where: { email: devEmail } })
+    : null;
 
   const solomiia = existingUser
     ? existingUser

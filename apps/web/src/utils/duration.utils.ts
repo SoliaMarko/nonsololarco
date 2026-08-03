@@ -17,8 +17,14 @@ export function parseFormattedDuration(formatted: string): number {
  * Matches the backend format: "3 min", "1 hr 2 min", "2 hr".
  */
 export function formatDuration(totalSeconds: number): string {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.round((totalSeconds % 3600) / 60);
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.round((totalSeconds % 3600) / 60);
+
+  // Carry rounding overflow (e.g. 7199 s → 1 hr 60 min → 2 hr)
+  if (minutes === 60) {
+    hours += 1;
+    minutes = 0;
+  }
 
   if (hours === 0) return `${minutes} min`;
 

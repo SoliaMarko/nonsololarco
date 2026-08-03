@@ -6,20 +6,33 @@ import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
 const PSEUDO_BAND_IDS: readonly string[] = [ALL_BANDS_ID, SOLO_BAND_ID];
 
 /**
- * Assigns each band a vinyl color, cycling through the palette.
+ * djb2 hash processed from the string's tail.
  *
- * Bands are sorted by id first, so a band keeps its color no matter what order
- * the caller passes them in or whether the "Solo" tab is present. Cycling —
- * rather than hashing each id independently — is what guarantees that adjacent
- * bands never land on the same color.
+ * Processing in reverse means the suffix (which is the unique part of cuid-like
+ * ids) is weighted heavily, so ids that share a long common prefix still land on
+ * well-distributed palette slots.
+ */
+function hashBandId(id: string): number {
+  let h = 5381;
+  for (let i = id.length - 1; i >= 0; i--) {
+    h = (((h << 5) + h) ^ id.charCodeAt(i)) >>> 0;
+  }
+  return h;
+}
+
+/**
+ * Assigns each band a vinyl color derived from its id.
+ *
+ * Using a hash (rather than a sorted index) means a band's color is stable even
+ * when other bands are added or removed — new bands do not shift existing colors.
  */
 export function buildBandColorMap(bandIds: readonly string[]): Map<string, VinylColor> {
-  const realBandIds = [...new Set(bandIds)]
-    .filter((id) => id && !PSEUDO_BAND_IDS.includes(id))
-    .sort();
+  const realBandIds = [...new Set(bandIds)].filter(
+    (id) => id && !PSEUDO_BAND_IDS.includes(id),
+  );
 
   return new Map(
-    realBandIds.map((id, index) => [id, VINYL_COLORS[index % VINYL_COLORS.length] ?? 'solo']),
+    realBandIds.map((id) => [id, VINYL_COLORS[hashBandId(id) % VINYL_COLORS.length] ?? 'solo']),
   );
 }
 

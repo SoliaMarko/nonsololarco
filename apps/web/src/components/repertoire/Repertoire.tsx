@@ -24,10 +24,10 @@ export default function Repertoire({ bands, isEmpty, stats }: RepertoireProps) {
           description="Add your first song — and it will appear in your setlist."
           action={
             <Button variant="retro-primary" className="bg-emerald-main">
-              <div className="text-primary-light flex items-center gap-2">
+              <span className="text-primary-light flex items-center gap-2">
                 <PlusSolidIcon size={16} />
-                <Text className="text-sm font-medium text-inherit uppercase">New Track</Text>
-              </div>
+                <Text tag="span" className="text-sm font-medium text-inherit uppercase">New Track</Text>
+              </span>
             </Button>
           }
         />
