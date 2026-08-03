@@ -9,6 +9,12 @@ on:
   push:
     branches: [develop]
 
+env:
+  # `prisma generate` (run via packages/db's postinstall hook on every
+  # `pnpm install`) needs DATABASE_URL to resolve, even though none of these
+  # jobs touch a real database — codegen only reads schema.prisma.
+  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public"
+
 jobs:
   lint:
     runs-on: ubuntu-latest
