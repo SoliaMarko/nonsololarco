@@ -108,6 +108,7 @@ describe('BandsService', () => {
             },
           },
         },
+        orderBy: { band: { name: 'asc' } },
       });
     });
 
