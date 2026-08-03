@@ -25,7 +25,27 @@ export class RepertoireService {
       status: track.status as TrackStatus,
       duration: track.duration,
       leadMember: { id: track.leadMember.id, name: track.leadMember.name },
-      band: { id: track.band.id, name: track.band.name },
+      band: track.band ? { id: track.band.id, name: track.band.name } : undefined,
+    }));
+  }
+
+  async getSoloByUser(userId: string): Promise<Track[]> {
+    const tracks = await this.prisma.track.findMany({
+      where: { leadMemberId: userId, bandId: { equals: null } },
+      include: { leadMember: true, band: true },
+      orderBy: { order: 'asc' },
+    });
+
+    return tracks.map((track) => ({
+      id: track.id,
+      order: track.order,
+      title: track.title,
+      side: track.side as TrackSide,
+      musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
+      bpm: track.bpm,
+      status: track.status as TrackStatus,
+      duration: track.duration,
+      leadMember: { id: track.leadMember.id, name: track.leadMember.name },
     }));
   }
 

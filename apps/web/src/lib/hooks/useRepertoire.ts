@@ -1,17 +1,36 @@
 import { useQuery } from '@tanstack/react-query';
 
-import { fetchBandRepertoire, fetchMyRepertoire } from '../api/repertoire.api';
+import {
+  fetchBandRepertoire,
+  fetchMyRepertoire,
+  fetchSoloRepertoire,
+} from '../api/repertoire.api';
+
+import { ALL_BANDS_ID, SOLO_BAND_ID } from '../constants/repertoire.const';
+
+export { ALL_BANDS_ID, SOLO_BAND_ID };
 
 /**
  * Fetches repertoire tracks based on context:
- * - No bandId (or empty string) → fetches all user tracks
- * - With bandId → fetches tracks for that specific band
+ * - Empty string → all user tracks (where user is lead)
+ * - 'solo'       → solo tracks only (no band)
+ * - Other string → tracks for that specific band
  */
 export function useRepertoireTracks(bandId: string) {
-  const isBandSelected = Boolean(bandId);
+  const isSolo = bandId === SOLO_BAND_ID;
+  const isBandSelected = Boolean(bandId) && !isSolo;
 
   return useQuery({
-    queryKey: isBandSelected ? ['repertoire', 'band', bandId] : ['repertoire', 'me'],
-    queryFn: () => (isBandSelected ? fetchBandRepertoire(bandId) : fetchMyRepertoire()),
+    queryKey: isSolo
+      ? ['repertoire', 'solo']
+      : isBandSelected
+        ? ['repertoire', 'band', bandId]
+        : ['repertoire', 'me'],
+    queryFn: () =>
+      isSolo
+        ? fetchSoloRepertoire()
+        : isBandSelected
+          ? fetchBandRepertoire(bandId)
+          : fetchMyRepertoire(),
   });
 }

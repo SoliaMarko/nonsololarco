@@ -1,3 +1,7 @@
+'use client';
+
+import { useState } from 'react';
+
 import Link from 'next/link';
 
 import Text from '@/src/components/typography/Text';
@@ -36,9 +40,25 @@ export interface TrackListRowProps {
 }
 
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
-  const { isSpecificBandSelected } = useActiveBand();
+  const { getVinylColor, isSpecificBandSelected } = useActiveBand();
+  const [isSelected, setIsSelected] = useState(false);
 
   const isArchived = track.status === 'archived';
+
+  /** Accent stripe is shown for my tracks in a band view, and for every track in "all bands" view */
+  const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected;
+
+  /** Tracks without a band are solo — labelled as such instead of showing a blank cell */
+  const bandName = track.band?.name ?? 'Solo';
+
+  /** Border width is always reserved so selecting a row never shifts its content */
+  const borderColor = isSelected
+    ? 'border-l-accent-red dark:border-l-accent-red'
+    : !hasAccentBorder
+      ? 'border-l-transparent dark:border-l-transparent'
+      : isArchived
+        ? 'border-l-fg-tertiary dark:border-l-fg-tertiary'
+        : 'border-l-emerald-main dark:border-l-emerald-main';
 
   return (
     <div
@@ -48,18 +68,17 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
       })}
       role="row"
     >
-      <Link
+      <div
         className={cn(
-          'group border-border-primary hover:bg-elevated border-l-emerald-main border-b',
-          'pli-4 plb-3 transition-colors duration-100',
-          {
-            'hover:bg-emerald-subtle-hover border-l-3': isMyTrack && isSpecificBandSelected,
-            'border-l-3': !isSpecificBandSelected,
-            'bg-hatching border-l-fg-tertiary': isArchived,
-          },
+          'group border-border-primary dark:border-fg-primary/30 border-1.5 border-b',
+          'pli-4 plb-3 cursor-pointer transition-colors duration-100',
+          'border-l-3',
+          borderColor,
+          isSelected ? 'bg-elevated' : 'hover:bg-elevated',
+          { 'bg-hatching': isArchived && !isSelected },
           isSpecificBandSelected ? SPECIFIC_BAND_ROW_GRID : ALL_BANDS_ROW_GRID,
         )}
-        href={`/repertoire/${track.id}`}
+        onClick={() => setIsSelected((prev) => !prev)}
       >
         {/* ★ indicator — only for my tracks */}
         <div role="cell" className="hidden items-center justify-center sm:flex">
@@ -101,8 +120,8 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           <div className="text-fg-tertiary xs:flex-row xs:items-center mbs-0.5 flex flex-col items-start gap-1 text-xs sm:hidden">
             {!isSpecificBandSelected ? (
               <div className="flex items-center gap-1" role="cell">
-                <VinylRecord size={16} />
-                <span className="text-fg-secondary text-sm tabular-nums">{track.band?.name}</span>
+                <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
+                <span className="text-fg-secondary text-sm tabular-nums">{bandName}</span>
                 <span className="text-fg-tertiary xs:inline hidden">{' · '}</span>
               </div>
             ) : null}
@@ -122,8 +141,8 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
         {/* Band  */}
         {!isSpecificBandSelected ? (
           <div className="hidden items-center gap-2 sm:flex" role="cell">
-            <VinylRecord size={16} />
-            <span className="text-fg-secondary text-sm tabular-nums">{track.band?.name}</span>
+            <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
+            <span className="text-fg-secondary text-sm tabular-nums">{bandName}</span>
           </div>
         ) : null}
 
@@ -171,16 +190,18 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           {track.duration}
         </span>
 
-        <div
-          role="cell"
-          className={cn(
-            'text-fg-tertiary flex items-center justify-end gap-1 transition-opacity',
-            'group-hover:opacity-100 sm:opacity-0',
-          )}
-        >
-          <ChevronIcon direction="right" size={12} aria-hidden="true" />
+        {/* Navigate button — always visible */}
+        <div role="cell" className="mis-3 sm:mis-0 flex items-center justify-end">
+          <Link
+            aria-label={`Open ${track.title}`}
+            className="text-fg-tertiary hover:text-fg-primary hover:bg-edge rounded-lg p-1.5 transition-colors"
+            href={`/repertoire/${track.id}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ChevronIcon direction="right" size={16} strokeWidth="2" aria-hidden="true" />
+          </Link>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

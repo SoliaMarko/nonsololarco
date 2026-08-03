@@ -2,47 +2,59 @@
 
 import { Suspense, useMemo } from 'react';
 
+import { RepertoireStats, Track } from '@nonsololarco/types';
+
 import AppShell from '@/src/components/layout/AppShell';
 import Repertoire from '@/src/components/repertoire';
 import Spinner from '@/src/components/ui/Spinner';
-import { MOCK_REPERTOIRE_STATS } from '@/src/data/repertoire/bands.mock';
 import { ActiveBandProvider, useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useMyBands } from '@/src/lib/hooks/useBands';
+import { ALL_BANDS_ID, SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
+import { sumRawDurations } from '@/src/utils/duration.utils';
+
+function deriveStats(tracks: Track[]): RepertoireStats {
+  return {
+    totalTracks: tracks.length,
+    readyTracks: tracks.filter((t) => t.status === 'ready').length,
+    totalDuration: sumRawDurations(tracks.map((t) => t.duration)),
+  };
+}
 
 function RepertoireShell({ children }: { children: React.ReactNode }) {
   const { activeBand } = useActiveBand();
 
   return (
-    <AppShell activePath="/repertoire" activeTitle={activeBand?.name}>
+    <AppShell activePath="/repertoire" activeTitle={activeBand?.name} mainClassName="flex flex-col">
       {children}
     </AppShell>
   );
 }
 
 function RepertoirePageContent() {
-  // TODO: Replace with actual stats from API
-  const stats = MOCK_REPERTOIRE_STATS;
-
   const { data: bands, isLoading: isLoadingMyBands } = useMyBands();
+  const { data: allMyTracks } = useRepertoireTracks(ALL_BANDS_ID);
+  const { data: soloTracks } = useRepertoireTracks(SOLO_BAND_ID);
+
+  const allMyStats = useMemo(() => (allMyTracks ? deriveStats(allMyTracks) : null), [allMyTracks]);
+  const soloStats = useMemo(() => (soloTracks ? deriveStats(soloTracks) : null), [soloTracks]);
+
+  const hasSoloTracks = soloTracks && soloTracks.length > 0;
 
   const formattedBands = useMemo(
     () =>
-      bands
+      bands && allMyStats
         ? [
-            {
-              id: '',
-              name: 'All Repertoires',
-              readyTracks: stats.readyTracks,
-              totalTracks: stats.totalTracks,
-              totalDuration: stats.totalDuration,
-            },
+            { id: ALL_BANDS_ID, name: 'All Repertoires', ...allMyStats },
+            ...(hasSoloTracks && soloStats
+              ? [{ id: SOLO_BAND_ID, name: 'Solo', ...soloStats }]
+              : []),
             ...bands,
           ]
         : null,
-    [bands, stats],
+    [bands, allMyStats, hasSoloTracks, soloStats],
   );
 
-  if (isLoadingMyBands || !formattedBands) {
+  if (isLoadingMyBands || !formattedBands || !allMyStats) {
     return (
       <AppShell activePath="/repertoire" mainClassName="flex flex-col">
         <div className="mli-auto flex min-h-full flex-1 flex-col items-center justify-center">
@@ -55,7 +67,7 @@ function RepertoirePageContent() {
   return (
     <ActiveBandProvider bands={formattedBands}>
       <RepertoireShell>
-        <Repertoire bands={formattedBands} stats={stats} />
+        <Repertoire bands={formattedBands} isEmpty={allMyStats.totalTracks === 0} stats={allMyStats} />
       </RepertoireShell>
     </ActiveBandProvider>
   );

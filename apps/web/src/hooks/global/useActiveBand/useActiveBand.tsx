@@ -6,11 +6,16 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Band } from '@nonsololarco/types';
 
+import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
+import { buildBandColorMap, getBandVinylColor } from '@/src/utils/vinyl.utils';
+
 interface ActiveBandContextValue {
   /** Full band object for the active tab */
   activeBand: Band | undefined;
   /** Band ID from URL, or fallback to first band's ID */
   activeBandId: string;
+  /** Stable vinyl color for a band — `solo` when there is no band */
+  getVinylColor: (bandId: string | null | undefined) => VinylColor;
   /** Whether a specific band (not "All Repertoires") is selected */
   isSpecificBandSelected: boolean;
   /** Navigate to a different band tab */
@@ -34,13 +39,21 @@ export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps)
     const activeBandId = activeBand?.id ?? '';
     const isSpecificBandSelected = Boolean(rawId && activeBand?.id === rawId);
 
+    const colorMap = buildBandColorMap(bands.map((band) => band.id));
+
     function onBandChange(bandId: string) {
       const params = new URLSearchParams(searchParams.toString());
       params.set('band', bandId);
       router.push(`?${params.toString()}`);
     }
 
-    return { activeBand, activeBandId, isSpecificBandSelected, onBandChange };
+    return {
+      activeBand,
+      activeBandId,
+      getVinylColor: (bandId: string | null | undefined) => getBandVinylColor(colorMap, bandId),
+      isSpecificBandSelected,
+      onBandChange,
+    };
   }, [bands, searchParams, router]);
 
   return <ActiveBandContext.Provider value={value}>{children}</ActiveBandContext.Provider>;

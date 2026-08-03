@@ -130,7 +130,8 @@ function Select({
           <button
             type="button"
             aria-label="Clear selection"
-            className="text-fg-disabled hover:text-danger absolute top-1/2 right-9 -translate-y-1/2 cursor-pointer transition-colors"
+            disabled={disabled}
+            className="text-fg-disabled hover:text-danger absolute top-1/2 right-9 -translate-y-1/2 transition-colors disabled:pointer-events-none"
             onClick={() => onChange(null)}
           >
             <CloseSolidIcon size={12} aria-hidden="true" />

@@ -12,6 +12,8 @@ export default function TrackListHeader() {
       role="row"
       className={cn(
         'bg-surface border-border-primary pli-4 plb-2 border-b',
+        // Mirror the rows' horizontal borders (transparent) so both grids share one content box
+        'border-x-1.5 border-l-3 border-x-transparent',
         isSpecificBandSelected ? SPECIFIC_BAND_ROW_GRID : ALL_BANDS_ROW_GRID,
       )}
     >

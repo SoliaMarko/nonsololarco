@@ -1,11 +1,12 @@
-import { MOCK_CURRENT_USER_ID } from '@/src/data/auth/auth.mock';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
+import { useAuth } from '@/src/hooks/global/useAuth';
 import { useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 
 import TrackListHeader from './TrackListHeader';
 import TrackListRow from './TrackListRow';
 
 export default function TracksTable() {
+  const { user } = useAuth();
   const { activeBandId, isSpecificBandSelected } = useActiveBand();
   const { data: tracks } = useRepertoireTracks(activeBandId);
   const sortedTracks = tracks
@@ -22,7 +23,7 @@ export default function TracksTable() {
           index={index}
           isMyTrack={
             !isSpecificBandSelected ||
-            (isSpecificBandSelected && track.leadMember.id === MOCK_CURRENT_USER_ID)
+            (isSpecificBandSelected && track.leadMember.id === user?.id)
           }
           key={track.id}
           track={track}
