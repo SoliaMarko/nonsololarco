@@ -1,6 +1,8 @@
 import { Controller, Get, Post, Req, Res, UseGuards } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import type { CookieOptions, Request, Response } from 'express';
 
+import type { EnvConfig } from '../config/env.validation';
 import { AuthService } from './auth.service';
 import { CurrentUser } from './decorators/current-user.decorator';
 import type { SessionUser } from './decorators/current-user.decorator';
@@ -19,21 +21,34 @@ interface OAuthRequest extends Request {
   user: OAuthUser;
 }
 
-const isProduction = process.env.NODE_ENV === 'production';
-
-const TOKEN_COOKIE_OPTIONS: CookieOptions = {
-  httpOnly: true,
-  secure: isProduction,
-  sameSite: 'lax',
-  domain: isProduction ? '.nonsololarco.com' : undefined,
-  path: '/',
-};
-
 const TOKEN_MAX_AGE = 7 * 24 * 60 * 60 * 1000; // 7 days
 
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  private readonly frontendUrl: string;
+  private readonly cookieOptions: CookieOptions;
+
+  constructor(
+    private readonly authService: AuthService,
+    config: ConfigService<EnvConfig, true>,
+  ) {
+    this.frontendUrl =
+      config.get('FRONTEND_URL', { infer: true }) ?? 'http://localhost:3000';
+
+    const isProduction =
+      config.get('NODE_ENV', { infer: true }) === 'production';
+    const cookieDomain: string | undefined = config.get('COOKIE_DOMAIN', {
+      infer: true,
+    });
+
+    this.cookieOptions = {
+      httpOnly: true,
+      secure: isProduction,
+      sameSite: 'lax',
+      domain: cookieDomain || (isProduction ? '.nonsololarco.com' : undefined),
+      path: '/',
+    };
+  }
 
   @Get('me')
   @UseGuards(JwtAuthGuard)
@@ -43,7 +58,7 @@ export class AuthController {
 
   @Post('logout')
   logout(@Res() res: Response) {
-    res.clearCookie('token', TOKEN_COOKIE_OPTIONS);
+    res.clearCookie('token', this.cookieOptions);
     res.json({ ok: true });
   }
 
@@ -82,9 +97,9 @@ export class AuthController {
     const token = this.authService.signJwt(user.id);
 
     res.cookie('token', token, {
-      ...TOKEN_COOKIE_OPTIONS,
+      ...this.cookieOptions,
       maxAge: TOKEN_MAX_AGE,
     });
-    res.redirect(process.env.FRONTEND_URL ?? 'http://localhost:3000');
+    res.redirect(this.frontendUrl);
   }
 }

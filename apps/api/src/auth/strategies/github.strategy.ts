@@ -1,14 +1,17 @@
 import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
 import { Strategy, Profile } from 'passport-github2';
 
+import type { EnvConfig } from '../../config/env.validation';
+
 @Injectable()
 export class GithubStrategy extends PassportStrategy(Strategy, 'github') {
-  constructor() {
+  constructor(config: ConfigService<EnvConfig, true>) {
     super({
-      clientID: process.env.GITHUB_CLIENT_ID!,
-      clientSecret: process.env.GITHUB_CLIENT_SECRET!,
-      callbackURL: process.env.GITHUB_CALLBACK_URL!,
+      clientID: config.get('GITHUB_CLIENT_ID', { infer: true }),
+      clientSecret: config.get('GITHUB_CLIENT_SECRET', { infer: true }),
+      callbackURL: config.get('GITHUB_CALLBACK_URL', { infer: true }),
       scope: ['user:email'],
     });
   }
