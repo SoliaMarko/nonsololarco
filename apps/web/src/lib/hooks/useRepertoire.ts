@@ -1,4 +1,6 @@
-import { useQuery } from '@tanstack/react-query';
+import { keepPreviousData, useQuery } from '@tanstack/react-query';
+
+import { SortField, SortOrder } from '@/src/utils/tracks-sort.utils';
 
 import {
   fetchBandRepertoire,
@@ -15,22 +17,26 @@ export { ALL_BANDS_ID, SOLO_BAND_ID };
  * - Empty string → all user tracks (where user is lead)
  * - 'solo'       → solo tracks only (no band)
  * - Other string → tracks for that specific band
+ *
+ * Sort params are forwarded to the backend so ordering is server-side
+ * (ready for future pagination).
  */
-export function useRepertoireTracks(bandId: string) {
+export function useRepertoireTracks(bandId: string, sort?: SortField, order?: SortOrder) {
   const isSolo = bandId === SOLO_BAND_ID;
   const isBandSelected = Boolean(bandId) && !isSolo;
 
   return useQuery({
     queryKey: isSolo
-      ? ['repertoire', 'solo']
+      ? ['repertoire', 'solo', sort, order]
       : isBandSelected
-        ? ['repertoire', 'band', bandId]
-        : ['repertoire', 'me'],
+        ? ['repertoire', 'band', bandId, sort, order]
+        : ['repertoire', 'me', sort, order],
     queryFn: () =>
       isSolo
-        ? fetchSoloRepertoire()
+        ? fetchSoloRepertoire(sort, order)
         : isBandSelected
-          ? fetchBandRepertoire(bandId)
-          : fetchMyRepertoire(),
+          ? fetchBandRepertoire(bandId, sort, order)
+          : fetchMyRepertoire(sort, order),
+    placeholderData: keepPreviousData,
   });
 }

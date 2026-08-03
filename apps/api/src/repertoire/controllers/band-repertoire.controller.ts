@@ -1,4 +1,4 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query } from '@nestjs/common';
 import {
   ApiNotFoundResponse,
   ApiOkResponse,
@@ -8,7 +8,7 @@ import {
 } from '@nestjs/swagger';
 import { Track } from '@nonsololarco/types';
 
-import { TrackDto } from '../dto';
+import { SortTracksDto, TrackDto } from '../dto';
 import { RepertoireService } from '../repertoire.service';
 
 @ApiTags('repertoire')
@@ -24,7 +24,10 @@ export class BandRepertoireController {
     description: 'List of band tracks (without band field)',
   })
   @ApiNotFoundResponse({ description: 'Band not found' })
-  getBandRepertoire(@Param('id') bandId: string): Promise<Track[]> {
-    return this.repertoireService.getByBand(bandId);
+  getBandRepertoire(
+    @Param('id') bandId: string,
+    @Query() { sort, order }: SortTracksDto,
+  ): Promise<Track[]> {
+    return this.repertoireService.getByBand(bandId, sort, order);
   }
 }
