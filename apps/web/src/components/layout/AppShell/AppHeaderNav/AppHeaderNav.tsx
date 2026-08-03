@@ -102,7 +102,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
                   ],
                 },
               ]}
-              trigger={<AvatarButton initials={initials} />}
+              trigger={<AvatarButton initials={initials} frame="portrait" />}
             />
           </div>
         </div>
