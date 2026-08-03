@@ -8,6 +8,25 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/**
+ * Tailwind v4's preflight no longer sets `cursor: pointer` on buttons.
+ * Restore it for all interactive elements so new components get the
+ * correct affordance without repeating `cursor-pointer` everywhere.
+ */
+@layer base {
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role='button'][aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+}
+
 @theme {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);

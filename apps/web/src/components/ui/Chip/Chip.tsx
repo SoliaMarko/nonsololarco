@@ -74,7 +74,7 @@ function Chip(
       {onRemove ? (
         <button
           aria-label={`Remove ${label}`}
-          className="mis-0.5 cursor-pointer rounded-full opacity-60 hover:opacity-100 focus-visible:ring-1 focus-visible:ring-current focus-visible:outline-none"
+          className="mis-0.5 rounded-full opacity-60 hover:opacity-100 focus-visible:ring-1 focus-visible:ring-current focus-visible:outline-none"
           disabled={disabled}
           onClick={(e) => {
             e.stopPropagation();

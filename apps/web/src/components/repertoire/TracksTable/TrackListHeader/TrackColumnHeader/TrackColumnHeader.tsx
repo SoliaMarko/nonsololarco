@@ -69,7 +69,7 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
           onClick={() => handleSort(props.field)}
           className={cn(
             'flex items-center gap-1',
-            'cursor-pointer transition-colors',
+            'transition-colors',
             isActive ? 'text-fg-primary' : 'text-fg-tertiary hover:text-fg-secondary',
           )}
         >
