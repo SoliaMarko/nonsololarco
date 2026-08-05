@@ -1,16 +1,24 @@
 import { keepPreviousData, useQuery } from '@tanstack/react-query';
 
-import { SortField, SortOrder } from '@/src/utils/tracks-sort.utils';
+import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
 
 import {
   fetchBandRepertoire,
   fetchMyRepertoire,
   fetchSoloRepertoire,
+  RepertoireQueryParams,
 } from '../api/repertoire.api';
 
 import { ALL_BANDS_ID, SOLO_BAND_ID } from '../constants/repertoire.const';
 
 export { ALL_BANDS_ID, SOLO_BAND_ID };
+
+export interface UseRepertoireTracksOptions {
+  onlyMine?: boolean;
+  order?: SortOrder;
+  sort?: SortField;
+  status?: TrackFilterParam;
+}
 
 /**
  * Fetches repertoire tracks based on context:
@@ -18,25 +26,28 @@ export { ALL_BANDS_ID, SOLO_BAND_ID };
  * - 'solo'       → solo tracks only (no band)
  * - Other string → tracks for that specific band
  *
- * Sort params are forwarded to the backend so ordering is server-side
- * (ready for future pagination).
+ * Sort and filter params are forwarded to the backend so ordering and
+ * filtering are server-side (ready for future pagination).
  */
-export function useRepertoireTracks(bandId: string, sort?: SortField, order?: SortOrder) {
+export function useRepertoireTracks(bandId: string, options: UseRepertoireTracksOptions = {}) {
+  const { sort, order, status, onlyMine } = options;
   const isSolo = bandId === SOLO_BAND_ID;
   const isBandSelected = Boolean(bandId) && !isSolo;
 
+  const params: RepertoireQueryParams = { sort, order, status, onlyMine };
+
   return useQuery({
     queryKey: isSolo
-      ? ['repertoire', 'solo', sort, order]
+      ? ['repertoire', 'solo', sort, order, status, onlyMine]
       : isBandSelected
-        ? ['repertoire', 'band', bandId, sort, order]
-        : ['repertoire', 'me', sort, order],
+        ? ['repertoire', 'band', bandId, sort, order, status, onlyMine]
+        : ['repertoire', 'me', sort, order, status, onlyMine],
     queryFn: () =>
       isSolo
-        ? fetchSoloRepertoire(sort, order)
+        ? fetchSoloRepertoire(params)
         : isBandSelected
-          ? fetchBandRepertoire(bandId, sort, order)
-          : fetchMyRepertoire(sort, order),
+          ? fetchBandRepertoire(bandId, params)
+          : fetchMyRepertoire(params),
     placeholderData: keepPreviousData,
   });
 }

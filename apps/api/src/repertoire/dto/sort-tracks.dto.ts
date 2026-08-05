@@ -1,4 +1,5 @@
-import { IsEnum, IsOptional } from 'class-validator';
+import { IsBoolean, IsEnum, IsOptional } from 'class-validator';
+import { Transform } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum TrackSortField {
@@ -14,7 +15,16 @@ export enum SortOrder {
   DESC = 'desc',
 }
 
-export class SortTracksDto {
+export enum TrackFilterField {
+  ALL = 'all',
+  READY = 'ready',
+  LEARNING = 'learning',
+  NEW = 'new',
+  ACTIVE = 'active',
+  ARCHIVED = 'archived',
+}
+
+export class RepertoireQueryDto {
   @ApiPropertyOptional({ enum: TrackSortField })
   @IsOptional()
   @IsEnum(TrackSortField)
@@ -24,4 +34,15 @@ export class SortTracksDto {
   @IsOptional()
   @IsEnum(SortOrder)
   order?: SortOrder;
+
+  @ApiPropertyOptional({ enum: TrackFilterField, default: TrackFilterField.ALL })
+  @IsOptional()
+  @IsEnum(TrackFilterField)
+  status?: TrackFilterField;
+
+  @ApiPropertyOptional({ description: 'Show only tracks where current user participates' })
+  @IsOptional()
+  @IsBoolean()
+  @Transform(({ value }) => value === 'true' || value === '1' || value === true)
+  onlyMine?: boolean;
 }

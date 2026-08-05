@@ -5,6 +5,7 @@ import Button from '@/src/components/ui/Button';
 import { PlusSolidIcon } from '@/src/icons/base';
 
 import NoDataCard from '../shared/NoDataCard';
+import RepertoireFilterBar from './RepertoireFilterBar';
 import RepertoireHeader from './RepertoireHeader';
 import TracksTable from './TracksTable';
 
@@ -38,6 +39,7 @@ export default function Repertoire({ bands, isEmpty, stats }: RepertoireProps) {
   return (
     <>
       <RepertoireHeader bands={bands} stats={stats} onAIToggle={() => {}} />
+      <RepertoireFilterBar />
       <TracksTable />
     </>
   );
