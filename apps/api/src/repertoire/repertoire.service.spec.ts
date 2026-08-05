@@ -19,6 +19,7 @@ const mockTracks = [
     bandId: 'band-1',
     leadMember: { id: 'user-1', name: 'Solomiia' },
     band: { id: 'band-1', name: 'Quiet Yard' },
+    performers: [],
   },
   {
     id: 't-2',
@@ -33,6 +34,7 @@ const mockTracks = [
     bandId: 'band-1',
     leadMember: { id: 'user-2', name: 'Anna' },
     band: { id: 'band-1', name: 'Quiet Yard' },
+    performers: [{ user: { id: 'user-1', name: 'Solomiia' } }],
   },
 ];
 
@@ -79,16 +81,12 @@ describe('RepertoireService', () => {
       expect(tracks).toEqual([]);
     });
 
-    it('queries with correct where and include', async () => {
-      mockPrisma.track.findMany.mockResolvedValue([]);
+    it('maps performers to members array', async () => {
+      mockPrisma.track.findMany.mockResolvedValue([mockTracks[1]]);
 
-      await service.getByUser('user-1');
+      const tracks = await service.getByUser('user-1');
 
-      expect(mockPrisma.track.findMany).toHaveBeenCalledWith({
-        where: { leadMemberId: 'user-1' },
-        include: { leadMember: true, band: true },
-        orderBy: [{ bandId: 'asc' }, { order: 'asc' }],
-      });
+      expect(tracks[0].members).toEqual([{ id: 'user-1', name: 'Solomiia' }]);
     });
   });
 
@@ -97,7 +95,7 @@ describe('RepertoireService', () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
       mockPrisma.track.findMany.mockResolvedValue(mockTracks);
 
-      const tracks = await service.getByBand('band-1');
+      const tracks = await service.getByBand('band-1', 'user-1');
 
       tracks.forEach((track) => {
         expect(track).not.toHaveProperty('band');
@@ -108,7 +106,7 @@ describe('RepertoireService', () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
       mockPrisma.track.findMany.mockResolvedValue([mockTracks[0]]);
 
-      const tracks = await service.getByBand('band-1');
+      const tracks = await service.getByBand('band-1', 'user-1');
 
       expect(tracks[0]).toEqual({
         id: 't-1',
@@ -120,13 +118,14 @@ describe('RepertoireService', () => {
         status: 'ready',
         duration: '3:10',
         leadMember: { id: 'user-1', name: 'Solomiia' },
+        members: [],
       });
     });
 
     it('throws NotFoundException for unknown band', async () => {
       mockPrisma.band.findUnique.mockResolvedValue(null);
 
-      await expect(service.getByBand('nonexistent')).rejects.toThrow(
+      await expect(service.getByBand('nonexistent', 'user-1')).rejects.toThrow(
         NotFoundException,
       );
     });
@@ -134,7 +133,7 @@ describe('RepertoireService', () => {
     it('includes band id in error message', async () => {
       mockPrisma.band.findUnique.mockResolvedValue(null);
 
-      await expect(service.getByBand('band-999')).rejects.toThrow(
+      await expect(service.getByBand('band-999', 'user-1')).rejects.toThrow(
         'Band with id band-999 not found',
       );
     });
@@ -143,12 +142,15 @@ describe('RepertoireService', () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
       mockPrisma.track.findMany.mockResolvedValue([]);
 
-      await service.getByBand('band-1');
+      await service.getByBand('band-1', 'user-1');
 
       expect(mockPrisma.track.findMany).toHaveBeenCalledWith({
         where: { bandId: 'band-1' },
-        include: { leadMember: true },
-        orderBy: { order: 'asc' },
+        include: {
+          leadMember: true,
+          performers: { include: { user: true } },
+        },
+        orderBy: [{ order: 'asc' }],
       });
     });
   });

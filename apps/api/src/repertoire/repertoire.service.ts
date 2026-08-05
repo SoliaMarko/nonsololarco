@@ -4,7 +4,11 @@ import { Track, TrackSide, TrackStatus } from '@nonsololarco/types';
 import { PrismaService } from '../prisma';
 import { toDisplayMusicalKey } from '../utils/musical-key.util';
 
-import { SortOrder, TrackSortField } from './dto/sort-tracks.dto';
+import {
+  SortOrder,
+  TrackFilterField,
+  TrackSortField,
+} from './dto/sort-tracks.dto';
 
 type OrderDir = 'asc' | 'desc';
 type TrackOrderBy = Record<string, OrderDir>;
@@ -40,14 +44,28 @@ function buildPrismaOrderBy(
     case TrackSortField.BPM:
       return [{ bpm: dir }];
     case TrackSortField.STATUS:
-      // Status is an enum — Prisma sorts by definition order, not by our weight.
-      // Post-query sort handles the correct order.
-      return [];
     case TrackSortField.TIME:
-      // Duration is stored as "m:ss" string — needs post-query sort.
+      // Post-query sort — return empty so default ordering is used for Prisma
       return [];
     default:
       return [];
+  }
+}
+
+function buildStatusFilter(filter?: TrackFilterField): object | undefined {
+  switch (filter) {
+    case TrackFilterField.READY:
+      return { status: 'ready' };
+    case TrackFilterField.LEARNING:
+      return { status: 'learning' };
+    case TrackFilterField.NEW:
+      return { status: 'new' };
+    case TrackFilterField.ARCHIVED:
+      return { status: 'archived' };
+    case TrackFilterField.ACTIVE:
+      return { status: { in: ['ready', 'learning', 'new'] } };
+    default:
+      return undefined;
   }
 }
 
@@ -62,7 +80,9 @@ function postQuerySort(
 
   if (sort === TrackSortField.STATUS) {
     return [...tracks].sort(
-      (a, b) => ((STATUS_WEIGHT[a.status] ?? 99) - (STATUS_WEIGHT[b.status] ?? 99)) * dir,
+      (a, b) =>
+        ((STATUS_WEIGHT[a.status] ?? 99) - (STATUS_WEIGHT[b.status] ?? 99)) *
+        dir,
     );
   }
 
@@ -75,60 +95,121 @@ function postQuerySort(
   return tracks;
 }
 
+/** Prisma include for loading lead member and performers */
+const TRACK_INCLUDE_MEMBERS = {
+  leadMember: true,
+  performers: { include: { user: true } },
+} as const;
+
+/** Prisma include for loading lead member, performers, and band */
+const TRACK_INCLUDE_ALL = {
+  ...TRACK_INCLUDE_MEMBERS,
+  band: true,
+} as const;
+
+/** Where clause: tracks the user participates in (as lead or performer) */
+function participatesIn(userId: string): object {
+  return {
+    OR: [
+      { leadMemberId: userId },
+      { performers: { some: { userId } } },
+    ],
+  };
+}
+
+interface TrackRow {
+  band?: { id: string; name: string } | null;
+  bpm: number;
+  duration: string;
+  id: string;
+  leadMember: { id: string; name: string };
+  musicalKey: Parameters<typeof toDisplayMusicalKey>[0];
+  order: number;
+  performers: { user: { id: string; name: string } }[];
+  side: string;
+  status: string;
+  title: string;
+}
+
+function mapTrack(track: TrackRow, includeBand = false): Track {
+  return {
+    id: track.id,
+    order: track.order,
+    title: track.title,
+    side: track.side as TrackSide,
+    musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
+    bpm: track.bpm,
+    status: track.status as TrackStatus,
+    duration: track.duration,
+    leadMember: { id: track.leadMember.id, name: track.leadMember.name },
+    members: track.performers.map((p) => ({ id: p.user.id, name: p.user.name })),
+    ...(includeBand && track.band
+      ? { band: { id: track.band.id, name: track.band.name } }
+      : {}),
+  };
+}
+
+export interface RepertoireQueryOptions {
+  onlyMine?: boolean;
+  order?: SortOrder;
+  sort?: TrackSortField;
+  status?: TrackFilterField;
+}
+
 @Injectable()
 export class RepertoireService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async getByUser(userId: string, sort?: TrackSortField, order?: SortOrder): Promise<Track[]> {
+  async getByUser(
+    userId: string,
+    options: RepertoireQueryOptions = {},
+  ): Promise<Track[]> {
+    const { sort, order, status } = options;
     const orderBy = buildPrismaOrderBy(sort, order);
+    const statusFilter = buildStatusFilter(status);
 
     const tracks = await this.prisma.track.findMany({
-      where: { leadMemberId: userId },
-      include: { leadMember: true, band: true },
+      where: {
+        ...participatesIn(userId),
+        ...statusFilter,
+      },
+      include: TRACK_INCLUDE_ALL,
       orderBy: orderBy.length ? orderBy : [{ bandId: 'asc' }, { order: 'asc' }],
     });
 
-    const mapped = tracks.map((track) => ({
-      id: track.id,
-      order: track.order,
-      title: track.title,
-      side: track.side as TrackSide,
-      musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
-      bpm: track.bpm,
-      status: track.status as TrackStatus,
-      duration: track.duration,
-      leadMember: { id: track.leadMember.id, name: track.leadMember.name },
-      band: track.band ? { id: track.band.id, name: track.band.name } : undefined,
-    }));
-
+    const mapped = tracks.map((track) => mapTrack(track, true));
     return postQuerySort(mapped, sort, order);
   }
 
-  async getSoloByUser(userId: string, sort?: TrackSortField, order?: SortOrder): Promise<Track[]> {
+  async getSoloByUser(
+    userId: string,
+    options: RepertoireQueryOptions = {},
+  ): Promise<Track[]> {
+    const { sort, order, status } = options;
     const orderBy = buildPrismaOrderBy(sort, order);
+    const statusFilter = buildStatusFilter(status);
 
     const tracks = await this.prisma.track.findMany({
-      where: { leadMemberId: userId, bandId: { equals: null } },
-      include: { leadMember: true, band: true },
+      where: {
+        leadMemberId: userId,
+        bandId: { equals: null },
+        ...statusFilter,
+      },
+      include: TRACK_INCLUDE_MEMBERS,
       orderBy: orderBy.length ? orderBy : [{ order: 'asc' }],
     });
 
-    const mapped = tracks.map((track) => ({
-      id: track.id,
-      order: track.order,
-      title: track.title,
-      side: track.side as TrackSide,
-      musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
-      bpm: track.bpm,
-      status: track.status as TrackStatus,
-      duration: track.duration,
-      leadMember: { id: track.leadMember.id, name: track.leadMember.name },
-    }));
-
+    const mapped = tracks.map((track) => mapTrack(track));
     return postQuerySort(mapped, sort, order);
   }
 
-  async getByBand(bandId: string, sort?: TrackSortField, order?: SortOrder): Promise<Track[]> {
+  async getByBand(
+    bandId: string,
+    userId: string,
+    options: RepertoireQueryOptions = {},
+  ): Promise<Track[]> {
+    const { sort, order, status, onlyMine } = options;
+
     const band = await this.prisma.band.findUnique({
       where: { id: bandId },
     });
@@ -138,25 +219,19 @@ export class RepertoireService {
     }
 
     const orderBy = buildPrismaOrderBy(sort, order);
+    const statusFilter = buildStatusFilter(status);
 
     const tracks = await this.prisma.track.findMany({
-      where: { bandId },
-      include: { leadMember: true },
+      where: {
+        bandId,
+        ...(onlyMine ? participatesIn(userId) : {}),
+        ...statusFilter,
+      },
+      include: TRACK_INCLUDE_MEMBERS,
       orderBy: orderBy.length ? orderBy : [{ order: 'asc' }],
     });
 
-    const mapped = tracks.map((track) => ({
-      id: track.id,
-      order: track.order,
-      title: track.title,
-      side: track.side as TrackSide,
-      musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
-      bpm: track.bpm,
-      status: track.status as TrackStatus,
-      duration: track.duration,
-      leadMember: { id: track.leadMember.id, name: track.leadMember.name },
-    }));
-
+    const mapped = tracks.map((track) => mapTrack(track));
     return postQuerySort(mapped, sort, order);
   }
 }
