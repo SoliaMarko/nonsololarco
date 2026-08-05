@@ -72,6 +72,87 @@ jobs:
       - run: pnpm install
       - run: pnpm test
 
+  e2e:
+    runs-on: ubuntu-latest
+    # Unlike the jobs above, this one talks to a real database and runs both
+    # apps, so it needs Postgres, a migrated schema and seed data.
+    services:
+      postgres:
+        image: postgres:16
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: nonsololarco
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    env:
+      # Not a secret — a throwaway value for an ephemeral database. The e2e
+      # auth setup signs its own token with it, so it only has to match what
+      # the API verifies against in this same job.
+      JWT_SECRET: ci-e2e-secret-not-used-outside-this-job
+      CORS_ORIGINS: http://localhost:3000
+      FRONTEND_URL: http://localhost:3000
+      NEXT_PUBLIC_API_URL: http://localhost:3001/api
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4.1.0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: "pnpm"
+      - run: pnpm install
+
+      - name: Apply migrations and seed
+        run: |
+          pnpm --filter @nonsololarco/db exec prisma migrate deploy
+          pnpm --filter @nonsololarco/db db:seed
+
+      # Cached separately from node_modules — the browser binaries are large
+      # and change only when the Playwright version does.
+      - name: Cache Playwright browsers
+        uses: actions/cache@v4
+        id: playwright-cache
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+
+      - name: Install Playwright browsers
+        if: steps.playwright-cache.outputs.cache-hit != 'true'
+        run: pnpm --filter web exec playwright install --with-deps chromium
+
+      # `next dev` is too slow to boot reliably in CI, so run the production
+      # build. The API is started in the background; Playwright's webServer
+      # only knows how to wait for the web app.
+      - name: Build
+        run: pnpm build
+
+      - name: Start API
+        run: pnpm --filter api start:prod &
+
+      - name: Wait for API
+        run: npx wait-on http://localhost:3001/api/docs --timeout 60000
+
+      - name: Run e2e
+        run: pnpm --filter web e2e
+        env:
+          E2E_START_SERVER: "1"
+          E2E_WEB_COMMAND: "pnpm --filter web start"
+
+      - name: Upload report
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report/
+          retention-days: 7
+
   build:
     needs: [lint, stylelint, typecheck, test]
     runs-on: ubuntu-latest
@@ -89,7 +170,7 @@ jobs:
 
   ci:
     runs-on: ubuntu-latest
-    needs: [lint, stylelint, typecheck, test, build]
+    needs: [lint, stylelint, typecheck, test, e2e, build]
     if: always()
     steps:
       - name: Check all jobs passed
