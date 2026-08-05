@@ -6,34 +6,37 @@ import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
 const PSEUDO_BAND_IDS: readonly string[] = [ALL_BANDS_ID, SOLO_BAND_ID];
 
 /**
- * djb2 hash processed from the string's tail.
+ * Assigns each band a vinyl color, cycling through the palette while
+ * guaranteeing no two adjacent bands share the same color.
  *
- * Processing in reverse means the suffix (which is the unique part of cuid-like
- * ids) is weighted heavily, so ids that share a long common prefix still land on
- * well-distributed palette slots.
- */
-function hashBandId(id: string): number {
-  let h = 5381;
-  for (let i = id.length - 1; i >= 0; i--) {
-    h = (((h << 5) + h) ^ id.charCodeAt(i)) >>> 0;
-  }
-  return h;
-}
-
-/**
- * Assigns each band a vinyl color derived from its id.
- *
- * Using a hash (rather than a sorted index) means a band's color is stable even
- * when other bands are added or removed — new bands do not shift existing colors.
+ * Bands are sorted by id so the assignment is deterministic regardless of
+ * the order the caller passes them. When a band is added or removed some
+ * downstream colors may shift — an acceptable tradeoff for zero adjacent
+ * repeats across tabs, track rows, and the profile page.
  */
 export function buildBandColorMap(bandIds: readonly string[]): Map<string, VinylColor> {
-  const realBandIds = [...new Set(bandIds)].filter(
-    (id) => id && !PSEUDO_BAND_IDS.includes(id),
-  );
+  const realBandIds = [...new Set(bandIds)]
+    .filter((id) => id && !PSEUDO_BAND_IDS.includes(id))
+    .sort();
 
-  return new Map(
-    realBandIds.map((id) => [id, VINYL_COLORS[hashBandId(id) % VINYL_COLORS.length] ?? 'solo']),
-  );
+  const map = new Map<string, VinylColor>();
+  let paletteIndex = 0;
+
+  for (const id of realBandIds) {
+    const color = VINYL_COLORS[paletteIndex % VINYL_COLORS.length] ?? 'solo';
+    map.set(id, color);
+    paletteIndex++;
+
+    // If the next color would be the same as this one (palette wrapped), skip it
+    if (
+      realBandIds.length > 1 &&
+      VINYL_COLORS[paletteIndex % VINYL_COLORS.length] === color
+    ) {
+      paletteIndex++;
+    }
+  }
+
+  return map;
 }
 
 /**
