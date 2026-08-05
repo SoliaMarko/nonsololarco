@@ -7,12 +7,15 @@ import Link from 'next/link';
 import Text from '@/src/components/typography/Text';
 import Badge from '@/src/components/ui/Badge';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
+import { useAuth } from '@/src/hooks/global/useAuth';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
 import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
 import { cn } from '@/src/utils/cn';
+import { getTrackPerformers } from '@/src/utils/track-performers.utils';
 
+import TrackPerformerNames from '../TrackPerformerNames';
 import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 
 const STATUS_VARIANT: Record<
@@ -41,9 +44,13 @@ export interface TrackListRowProps {
 
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
   const { getVinylColor, isSpecificBandSelected } = useActiveBand();
+  const { user } = useAuth();
   const [isSelected, setIsSelected] = useState(false);
 
   const isArchived = track.status === 'archived';
+
+  /** Current user first, then the rest — see getTrackPerformers */
+  const performers = getTrackPerformers(track, user?.id);
 
   /** Accent stripe is shown for my tracks in a band view, and for every track in "all bands" view */
   const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected;
@@ -100,11 +107,11 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           {isSpecificBandSelected ? track.order : index + 1}
         </span>
 
-        {/* Title + meta */}
-        <div className="flex flex-col gap-1 sm:gap-0" role="cell">
+        {/* Title + meta — min-w-0 lets the children truncate inside the grid cell */}
+        <div className="flex min-w-0 flex-col gap-1 sm:gap-0" role="cell">
           <div
             className={cn(
-              'text-sm leading-snug font-semibold',
+              'truncate text-sm leading-snug font-semibold',
               isArchived ? 'text-fg-tertiary line-through' : 'text-fg-primary',
             )}
           >
@@ -112,9 +119,12 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           </div>
 
           {/* from sm screens */}
-          <div className="text-fg-tertiary mbs-0.5 hidden text-xs sm:block">
-            {track.leadMember.name}
-          </div>
+          <TrackPerformerNames
+            className="text-fg-tertiary mbs-0.5 hidden text-xs sm:block"
+            isMuted={isArchived}
+            isTruncated
+            performers={performers}
+          />
 
           {/* up to sm screens */}
           <div className="text-fg-tertiary xs:flex-row xs:items-center mbs-0.5 flex flex-col items-start gap-1 text-xs sm:hidden">
@@ -125,15 +135,21 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
                 <span className="text-fg-tertiary xs:inline hidden">{' · '}</span>
               </div>
             ) : null}
-            <Text className="text-fg-tertiary">
-              {[
-                isSpecificBandSelected ? track.leadMember.name : null,
-                track.musicalKey,
-                track.bpm,
-                track.duration,
-              ]
-                .filter((item) => item)
-                .join(' · ')}
+            <Text className="text-fg-tertiary flex min-w-0 items-baseline" tag="span">
+              {isSpecificBandSelected ? (
+                <>
+                  <TrackPerformerNames
+                    className="max-w-40"
+                    isMuted={isArchived}
+                    isTruncated
+                    performers={performers}
+                  />
+                  <span className="mie-1">{' ·'}</span>
+                </>
+              ) : null}
+              <span className="whitespace-nowrap">
+                {[track.musicalKey, track.bpm, track.duration].join(' · ')}
+              </span>
             </Text>
           </div>
         </div>
