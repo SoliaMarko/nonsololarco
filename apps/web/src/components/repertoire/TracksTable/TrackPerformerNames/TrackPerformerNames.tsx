@@ -1,6 +1,10 @@
 import { TrackPerformer, shouldHighlightLead } from '@/src/utils/track-performers.utils';
 import { cn } from '@/src/utils/cn';
 
+/**
+ * Props for TrackPerformerNames. Expects performers pre-sorted by
+ * `getTrackPerformers()` — current user first, then the rest alphabetically.
+ */
 export interface TrackPerformerNamesProps {
   className?: string;
   /** Dims every name — used on archived rows, where the row is struck through */

@@ -32,6 +32,6 @@ describe('getPaginationRange', () => {
   });
 
   it('clamps out-of-range currentPage', () => {
-    expect(getPaginationRange(99, 5)).toEqual([1, 'ellipsis', 4, 5]);
+    expect(getPaginationRange(99, 5)).toEqual([1, 2, 3, 4, 5]);
   });
 });

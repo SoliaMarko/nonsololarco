@@ -33,7 +33,7 @@ Accepted by all three repertoire endpoints. Validated by `RepertoireQueryDto`
 
 Example:
 
-```
+```http
 GET /api/bands/band-quiet-yard/repertoire?status=ready&onlyMine=true&sort=bpm&order=desc
 ```
 
@@ -57,9 +57,11 @@ the requested page — so sorting is always across the full result set.
 
 ## Pagination
 
-Pagination is opt-in. Omitting `page` returns every matching track as a single
-page (backward compatible). When `page` is supplied, the response wraps results
-in a `PaginatedResult<Track>` envelope:
+Pagination is opt-in. All three repertoire endpoints always return a
+`PaginatedResult<Track>` envelope. Omitting `page` returns every matching track
+as a single page (backward compatible — `page: 1`, `totalPages: 1`,
+`pageSize: total`). The `/api/users/me/bands` endpoint returns band statistics
+and is not paginated.
 
 ```ts
 {
@@ -76,8 +78,8 @@ for frontend integration details.
 
 ## Response shape
 
-All endpoints return `PaginatedResult<Track>`. The `Track` shape inside
-`data`:
+The three repertoire endpoints return `PaginatedResult<Track>`. The `Track`
+shape inside `data`:
 
 ```ts
 interface Track {
@@ -105,7 +107,7 @@ flags which entry is the lead. Don't spread `[leadMember, ...members]` by hand.
 
 ## Frontend integration
 
-```
+```text
 RepertoireFilterBar  writes  ?status=&onlyMine=   to the URL
 TracksTable          reads   the URL, calls useRepertoireTracks()
 useRepertoireTracks  →       fetch* in lib/api/repertoire.api.ts

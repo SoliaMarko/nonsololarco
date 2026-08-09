@@ -62,7 +62,7 @@ export default function TracksTable() {
   const sortOrder = (searchParams.get('order') as SortOrder) ?? undefined;
   const status = (searchParams.get('status') as TrackFilterParam) ?? undefined;
   const onlyMine = searchParams.get('onlyMine') === 'true';
-  const page = Number(searchParams.get('page')) || 1;
+  const page = Math.max(1, Math.floor(Number(searchParams.get('page')) || 1));
 
   const hasFilters = Boolean(status) || onlyMine;
 

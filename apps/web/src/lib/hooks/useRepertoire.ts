@@ -36,18 +36,16 @@ export function useRepertoireTracks(bandId: string, options: UseRepertoireTracks
 
   const params: RepertoireQueryParams = { sort, order, status, onlyMine, page, pageSize };
 
+  const scope = isSolo ? 'solo' : isBandSelected ? 'band' : 'me';
+  const scopeKey = scope === 'band' ? ['repertoire', scope, bandId] : ['repertoire', scope];
+
   return useQuery({
-    queryKey: isSolo
-      ? ['repertoire', 'solo', sort, order, status, onlyMine, page, pageSize]
-      : isBandSelected
-        ? ['repertoire', 'band', bandId, sort, order, status, onlyMine, page, pageSize]
-        : ['repertoire', 'me', sort, order, status, onlyMine, page, pageSize],
-    queryFn: () =>
-      isSolo
-        ? fetchSoloRepertoire(params)
-        : isBandSelected
-          ? fetchBandRepertoire(bandId, params)
-          : fetchMyRepertoire(params),
+    queryKey: [...scopeKey, params],
+    queryFn: () => {
+      if (scope === 'solo') return fetchSoloRepertoire(params);
+      if (scope === 'band') return fetchBandRepertoire(bandId, params);
+      return fetchMyRepertoire(params);
+    },
     placeholderData: keepPreviousData,
   });
 }

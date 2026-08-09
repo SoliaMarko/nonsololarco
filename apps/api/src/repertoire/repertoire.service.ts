@@ -46,11 +46,11 @@ function buildPrismaOrderBy(
 
   switch (sort) {
     case TrackSortField.TRACK_ORDER:
-      return [{ order: dir }];
+      return [{ order: dir }, { id: 'asc' }];
     case TrackSortField.TITLE:
-      return [{ title: dir }];
+      return [{ title: dir }, { id: 'asc' }];
     case TrackSortField.BPM:
-      return [{ bpm: dir }];
+      return [{ bpm: dir }, { id: 'asc' }];
     case TrackSortField.STATUS:
     case TrackSortField.TIME:
       // Post-query sort — return empty so default ordering is used for Prisma
@@ -241,7 +241,7 @@ export class RepertoireService {
     const tracks = await this.prisma.track.findMany({
       where,
       include: TRACK_INCLUDE_ALL,
-      orderBy: orderBy.length ? orderBy : [{ bandId: 'asc' }, { order: 'asc' }],
+      orderBy: orderBy.length ? orderBy : [{ bandId: 'asc' }, { order: 'asc' }, { id: 'asc' }],
       ...(pa.isPaginated && !needsPostSort
         ? { skip: pa.offset, take: pa.pageSize }
         : {}),
@@ -275,7 +275,7 @@ export class RepertoireService {
     const tracks = await this.prisma.track.findMany({
       where,
       include: TRACK_INCLUDE_MEMBERS,
-      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }],
+      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }, { id: 'asc' }],
       ...(pa.isPaginated && !needsPostSort
         ? { skip: pa.offset, take: pa.pageSize }
         : {}),
@@ -319,7 +319,7 @@ export class RepertoireService {
     const tracks = await this.prisma.track.findMany({
       where,
       include: TRACK_INCLUDE_MEMBERS,
-      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }],
+      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }, { id: 'asc' }],
       ...(pa.isPaginated && !needsPostSort
         ? { skip: pa.offset, take: pa.pageSize }
         : {}),

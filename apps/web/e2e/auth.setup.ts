@@ -60,11 +60,14 @@ setup('authenticate as the seeded user', async ({ context, page }) => {
     );
   }
 
+  const webUrl = process.env.E2E_WEB_URL ?? 'http://localhost:3000';
+  const cookieDomain = new URL(webUrl).hostname;
+
   await context.addCookies([
     {
       name: 'token',
       value: signToken(user.id, jwtSecret),
-      domain: 'localhost',
+      domain: cookieDomain,
       path: '/',
       httpOnly: true,
       sameSite: 'Lax',

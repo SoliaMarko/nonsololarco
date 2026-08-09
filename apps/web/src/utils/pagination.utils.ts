@@ -1,3 +1,7 @@
+/**
+ * A single slot in a pagination control — either a 1-based page number or an
+ * `'ellipsis'` placeholder representing a gap between visible page buttons.
+ */
 export type PaginationItem = number | 'ellipsis';
 
 /**
@@ -24,21 +28,31 @@ export function getPaginationRange(
 
   const clamped = Math.max(1, Math.min(currentPage, totalPages));
 
+  // If total pages fit within the sibling window, show all pages
+  const maxVisible = siblingCount * 2 + 3; // siblings + first + last + current
+  if (totalPages <= maxVisible + 2) {
+    return Array.from({ length: totalPages }, (_, i) => i + 1);
+  }
+
   const rangeStart = Math.max(2, clamped - siblingCount);
   const rangeEnd = Math.min(totalPages - 1, clamped + siblingCount);
 
   const items: PaginationItem[] = [1];
 
-  if (rangeStart > 2) {
+  if (rangeStart > 3) {
     items.push('ellipsis');
+  } else if (rangeStart === 3) {
+    items.push(2);
   }
 
   for (let i = rangeStart; i <= rangeEnd; i++) {
     items.push(i);
   }
 
-  if (rangeEnd < totalPages - 1) {
+  if (rangeEnd < totalPages - 2) {
     items.push('ellipsis');
+  } else if (rangeEnd === totalPages - 2) {
+    items.push(totalPages - 1);
   }
 
   if (totalPages > 1) {

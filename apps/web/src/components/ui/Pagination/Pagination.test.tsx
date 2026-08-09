@@ -5,6 +5,13 @@ import { describe, expect, it, vi } from 'vitest';
 import Pagination from './Pagination';
 
 describe('Pagination', () => {
+  it('renders nothing when totalPages is 0', () => {
+    const { container } = render(
+      <Pagination currentPage={1} totalPages={0} onPageChange={() => {}} />,
+    );
+    expect(container.firstChild).toBeNull();
+  });
+
   it('renders nothing when totalPages is 1', () => {
     const { container } = render(
       <Pagination currentPage={1} totalPages={1} onPageChange={() => {}} />,

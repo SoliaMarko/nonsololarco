@@ -33,7 +33,8 @@ interface ActiveBandProviderProps {
 export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const getVinylColor = useBandColors(bands.map((b) => b.id));
+  const bandIds = useMemo(() => bands.map((b) => b.id), [bands]);
+  const getVinylColor = useBandColors(bandIds);
 
   const value = useMemo(() => {
     const rawId = searchParams.get('band');
