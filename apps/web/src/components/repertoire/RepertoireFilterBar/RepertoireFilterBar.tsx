@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
-import DropdownRadio from '@/src/components/ui/DropdownRadio';
+import Dropdown from '@/src/components/ui/Dropdown';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useAuth } from '@/src/hooks/global/useAuth';
 import { StarOutlineIcon } from '@/src/icons/achievements';
@@ -46,8 +46,6 @@ function decodeSortValue(value: string): { field: SortField; order: SortOrder } 
   const [field, order] = value.split(':') as [SortField, SortOrder];
   return { field, order };
 }
-
-const DEFAULT_SORT_OPTION = { label: 'Default', value: 'default' };
 
 const SORT_OPTIONS_COMMON = [
   { label: 'Title A→Z', value: encodeSortValue('title', 'asc') },
@@ -92,12 +90,11 @@ export default function RepertoireFilterBar() {
     ).length ?? 0;
 
   const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
-    ? [DEFAULT_SORT_OPTION, ORDER_OPTION, ...SORT_OPTIONS_COMMON]
-    : [DEFAULT_SORT_OPTION, ...SORT_OPTIONS_COMMON];
+    ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
+    : SORT_OPTIONS_COMMON;
 
   const activeSortValue = currentSortDropdownValue(sortField, sortOrder);
-  const activeSortOption = mobileSortOptions.find((o) => o.value === activeSortValue);
-  const activeSortLabel = activeSortOption?.value === 'default' ? undefined : activeSortOption?.label;
+  const activeSortLabel = mobileSortOptions.find((o) => o.value === activeSortValue)?.label;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
@@ -281,8 +278,9 @@ export default function RepertoireFilterBar() {
           ) : null}
 
           {/* Sort dropdown */}
-          <DropdownRadio
+          <Dropdown
             align="start"
+            side="bottom"
             trigger={
               <button
                 className={cn(
@@ -296,9 +294,13 @@ export default function RepertoireFilterBar() {
                 <ChevronIcon size={10} direction="down" />
               </button>
             }
-            value={activeSortValue}
-            onChange={handleMobileSort}
-            options={mobileSortOptions}
+            groups={[{
+              items: mobileSortOptions.map((opt) => ({
+                label: opt.label,
+                selected: opt.value === activeSortValue,
+                onClick: () => handleMobileSort(opt.value),
+              })),
+            }]}
           />
 
           <span className="text-fg-tertiary mis-auto text-xs tabular-nums">

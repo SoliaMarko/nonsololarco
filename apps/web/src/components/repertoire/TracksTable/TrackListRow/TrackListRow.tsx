@@ -130,14 +130,25 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           {/* up to sm screens */}
           <div className="text-fg-tertiary mbs-0.5 flex min-w-0 flex-col items-start gap-0.5 text-xs sm:hidden">
             {!isSpecificBandSelected ? (
-              <div className="flex min-w-0 items-center gap-1">
-                <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
-                <span className="text-fg-secondary truncate text-sm tabular-nums">{bandName}</span>
-                <span className="text-fg-tertiary shrink-0">{' · '}</span>
-                <span className="whitespace-nowrap">
-                  {[track.musicalKey, track.bpm, track.duration].join(' · ')}
-                </span>
-              </div>
+              <>
+                <div className="flex min-w-0 items-center gap-1">
+                  <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
+                  <span className="text-fg-secondary truncate text-sm tabular-nums">{bandName}</span>
+                  <span className="shrink-0 whitespace-nowrap">
+                    {' · '}
+                    <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                      {track.musicalKey}
+                    </span>
+                    {' · '}{track.bpm}{' · '}{track.duration}
+                  </span>
+                </div>
+                <TrackPerformerNames
+                  className="max-w-full"
+                  isMuted={isArchived}
+                  isTruncated
+                  performers={performers}
+                />
+              </>
             ) : (
               <>
                 <TrackPerformerNames
@@ -147,7 +158,10 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
                   performers={performers}
                 />
                 <span className="whitespace-nowrap">
-                  {[track.musicalKey, track.bpm, track.duration].join(' · ')}
+                  <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                    {track.musicalKey}
+                  </span>
+                  {' · '}{track.bpm}{' · '}{track.duration}
                 </span>
               </>
             )}
