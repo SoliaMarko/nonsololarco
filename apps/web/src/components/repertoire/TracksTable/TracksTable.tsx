@@ -88,7 +88,7 @@ export default function TracksTable() {
     const params = new URLSearchParams(searchParams.toString());
     params.delete('status');
     params.delete('onlyMine');
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   return (
