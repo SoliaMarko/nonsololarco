@@ -155,7 +155,15 @@ function applyPageSlice<T>(items: T[], pa: PaginationArgs): T[] {
   return items.slice(pa.offset, pa.offset + pa.pageSize);
 }
 
-/** Returns true when the sort field requires in-memory sorting. */
+/**
+ * Returns true when the sort field requires in-memory sorting.
+ *
+ * TODO: eliminate the full-table load by making these fields sortable at the
+ * DB level — store duration as an integer `durationSeconds` column and map
+ * status to a sortable integer column. Until then the in-memory path loads
+ * every matching track on each page request, so cost grows linearly with
+ * repertoire size.
+ */
 function isPostQuerySortField(sort?: TrackSortField): boolean {
   return sort === TrackSortField.STATUS || sort === TrackSortField.TIME;
 }
