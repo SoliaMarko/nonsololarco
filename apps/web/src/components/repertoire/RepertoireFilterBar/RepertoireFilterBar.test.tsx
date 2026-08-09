@@ -116,7 +116,7 @@ describe('RepertoireFilterBar', () => {
 
     fireEvent.click(getFirstButton('Ready'));
 
-    expect(mockPush).toHaveBeenCalledWith('?status=ready');
+    expect(mockPush).toHaveBeenCalledWith('?status=ready', { scroll: false });
   });
 
   it('removes status param when "All" is clicked', () => {
@@ -125,7 +125,7 @@ describe('RepertoireFilterBar', () => {
 
     fireEvent.click(getFirstButton('All'));
 
-    expect(mockPush).toHaveBeenCalledWith('?');
+    expect(mockPush).toHaveBeenCalledWith('?', { scroll: false });
   });
 
   it('shows archived and active counts on extra filters', () => {
@@ -177,7 +177,7 @@ describe('RepertoireFilterBar', () => {
 
       fireEvent.click(getFirstButton('Only mine'));
 
-      expect(mockPush).toHaveBeenCalledWith('?onlyMine=true');
+      expect(mockPush).toHaveBeenCalledWith('?onlyMine=true', { scroll: false });
     });
 
     it('removes onlyMine param when toggled off', () => {
@@ -186,7 +186,7 @@ describe('RepertoireFilterBar', () => {
 
       fireEvent.click(getFirstButton('Only mine'));
 
-      expect(mockPush).toHaveBeenCalledWith('?');
+      expect(mockPush).toHaveBeenCalledWith('?', { scroll: false });
     });
 
     it('shows count of tracks where user participates', () => {
