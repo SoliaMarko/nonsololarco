@@ -241,7 +241,9 @@ export class RepertoireService {
     const tracks = await this.prisma.track.findMany({
       where,
       include: TRACK_INCLUDE_ALL,
-      orderBy: orderBy.length ? orderBy : [{ bandId: 'asc' }, { order: 'asc' }, { id: 'asc' }],
+      orderBy: orderBy.length
+        ? orderBy
+        : [{ bandId: 'asc' }, { order: 'asc' }, { id: 'asc' }],
       ...(pa.isPaginated && !needsPostSort
         ? { skip: pa.offset, take: pa.pageSize }
         : {}),

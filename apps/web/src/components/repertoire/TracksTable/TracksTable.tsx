@@ -135,7 +135,7 @@ export default function TracksTable() {
                 index={rowNumberOffset + index}
                 isMyTrack={
                   track.leadMember.id === user?.id ||
-                  track.members?.some((member) => member.id === user?.id)
+                  track.members.some((member) => member.id === user?.id)
                 }
                 key={track.id}
                 track={track}

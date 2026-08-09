@@ -55,14 +55,20 @@ export class RepertoireQueryDto {
   })
   onlyMine?: boolean;
 
-  @ApiPropertyOptional({ description: '1-based page number. Omit for unpaginated results.', example: 1 })
+  @ApiPropertyOptional({
+    description: '1-based page number. Omit for unpaginated results.',
+    example: 1,
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()
   @Min(1)
   page?: number;
 
-  @ApiPropertyOptional({ description: 'Items per page (default 10)', example: 10 })
+  @ApiPropertyOptional({
+    description: 'Items per page (default 10)',
+    example: 10,
+  })
   @IsOptional()
   @Type(() => Number)
   @IsInt()

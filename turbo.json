@@ -19,6 +19,7 @@
     },
     "e2e": {
       "dependsOn": ["^build", "build"],
+      "cache": false,
       "env": [
         "CI",
         "DATABASE_URL",

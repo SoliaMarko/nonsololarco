@@ -15,12 +15,12 @@ What we chose. Present tense, active voice: "We store X in Y."
 
 ## Alternatives considered
 
-### <Option B>
+### Option B — \<title\>
 
 Why it was rejected. Be fair to it — the value of an ADR is that it captures a
 real trade-off, not a strawman.
 
-### <Option C>
+### Option C — \<title\>
 
 ...
 

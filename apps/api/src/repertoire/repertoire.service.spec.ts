@@ -90,7 +90,9 @@ describe('RepertoireService', () => {
 
       const result = await service.getByUser('user-1');
 
-      expect(result.data[0].members).toEqual([{ id: 'user-1', name: 'Solomiia' }]);
+      expect(result.data[0].members).toEqual([
+        { id: 'user-1', name: 'Solomiia' },
+      ]);
     });
   });
 

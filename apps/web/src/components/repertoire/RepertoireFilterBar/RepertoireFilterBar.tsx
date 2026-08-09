@@ -104,7 +104,7 @@ export default function RepertoireFilterBar() {
   const archivedCount = tracks?.filter((t) => t.status === 'archived').length ?? 0;
   const activeCount = tracks?.filter((t) => t.status !== 'archived').length ?? 0;
   const mineCount =
-    tracks?.filter((t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id))
+    tracks?.filter((t) => t.leadMember.id === user?.id || t.members.some((m) => m.id === user?.id))
       .length ?? 0;
 
   const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
