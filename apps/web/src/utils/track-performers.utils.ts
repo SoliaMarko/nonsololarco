@@ -32,7 +32,7 @@ export function getTrackPerformers(
 ): TrackPerformer[] {
   const combined: TrackPerformer[] = [
     { ...track.leadMember, isLead: true },
-    ...track.members.map((member) => ({ ...member, isLead: false })),
+    ...(track.members ?? []).map((member) => ({ ...member, isLead: false })),
   ];
 
   const performers = combined.filter(
