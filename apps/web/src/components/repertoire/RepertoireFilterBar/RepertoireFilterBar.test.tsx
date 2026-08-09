@@ -64,9 +64,15 @@ vi.mock('@/src/icons/achievements', () => ({
   StarOutlineIcon: () => <span data-icon="star" />,
 }));
 
-vi.mock('@/src/icons/base', () => ({
-  ArrowRightSolidIcon: () => <span data-icon="arrow" />,
-}));
+vi.mock('@/src/icons/base', async (importOriginal) => {
+  const actual = await importOriginal<typeof import('@/src/icons/base')>();
+  return {
+    ...actual,
+    ArrowRightSolidIcon: () => <span data-icon="arrow" />,
+    ChevronIcon: () => <span data-icon="chevron" />,
+    SortIcon: () => <span data-icon="sort" />,
+  };
+});
 
 function findButtons(text: string) {
   return screen.getAllByRole('button').filter((b) => b.textContent?.includes(text));

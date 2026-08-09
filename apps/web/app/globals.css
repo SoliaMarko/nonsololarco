@@ -16,6 +16,8 @@
 @utility scrollbar-none {
   -ms-overflow-style: none;
   scrollbar-width: none;
+
+  /* stylelint-disable-next-line nesting-selector-no-missing-scoping-root */
   &::-webkit-scrollbar {
     display: none;
   }

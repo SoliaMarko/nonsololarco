@@ -47,6 +47,8 @@ function decodeSortValue(value: string): { field: SortField; order: SortOrder } 
   return { field, order };
 }
 
+const DEFAULT_SORT_OPTION = { label: 'Default', value: 'default' };
+
 const SORT_OPTIONS_COMMON = [
   { label: 'Title A→Z', value: encodeSortValue('title', 'asc') },
   { label: 'Title Z→A', value: encodeSortValue('title', 'desc') },
@@ -90,11 +92,12 @@ export default function RepertoireFilterBar() {
     ).length ?? 0;
 
   const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
-    ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
-    : SORT_OPTIONS_COMMON;
+    ? [DEFAULT_SORT_OPTION, ORDER_OPTION, ...SORT_OPTIONS_COMMON]
+    : [DEFAULT_SORT_OPTION, ...SORT_OPTIONS_COMMON];
 
   const activeSortValue = currentSortDropdownValue(sortField, sortOrder);
-  const activeSortLabel = mobileSortOptions.find((o) => o.value === activeSortValue)?.label;
+  const activeSortOption = mobileSortOptions.find((o) => o.value === activeSortValue);
+  const activeSortLabel = activeSortOption?.value === 'default' ? undefined : activeSortOption?.label;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
@@ -119,15 +122,13 @@ export default function RepertoireFilterBar() {
   function handleMobileSort(value: string) {
     const params = new URLSearchParams(searchParams.toString());
     const isAlreadyActive = value === activeSortValue;
-    if (isAlreadyActive) {
+    const decoded = decodeSortValue(value);
+    if (isAlreadyActive || !decoded) {
       params.delete('sort');
       params.delete('order');
     } else {
-      const decoded = decodeSortValue(value);
-      if (decoded) {
-        params.set('sort', decoded.field);
-        params.set('order', decoded.order);
-      }
+      params.set('sort', decoded.field);
+      params.set('order', decoded.order);
     }
     router.push(`?${params.toString()}`, { scroll: false });
   }

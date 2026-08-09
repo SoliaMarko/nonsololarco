@@ -130,7 +130,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           {/* up to sm screens */}
           <div className="text-fg-tertiary mbs-0.5 flex min-w-0 flex-col items-start gap-0.5 text-xs sm:hidden">
             {!isSpecificBandSelected ? (
-              <div className="flex min-w-0 items-center gap-1" role="cell">
+              <div className="flex min-w-0 items-center gap-1">
                 <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
                 <span className="text-fg-secondary truncate text-sm tabular-nums">{bandName}</span>
                 <span className="text-fg-tertiary shrink-0">{' · '}</span>
