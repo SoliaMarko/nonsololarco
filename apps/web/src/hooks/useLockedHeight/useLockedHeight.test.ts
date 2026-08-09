@@ -78,6 +78,24 @@ describe('useLockedHeight', () => {
     expect(result.current.minHeight).toBe(420);
   });
 
+  it('locks zero height when the element starts at zero', () => {
+    const element = document.createElement('div');
+    stubHeight(element, 0);
+
+    const { rerender, result } = renderHook(
+      ({ isLocked }) => {
+        const locked = useLockedHeight<HTMLDivElement>(isLocked);
+        locked.ref.current = element;
+        return locked;
+      },
+      { initialProps: { isLocked: false } },
+    );
+
+    rerender({ isLocked: true });
+
+    expect(result.current.minHeight).toBe(0);
+  });
+
   it('yields undefined when there is no element to measure', () => {
     const { rerender, result } = renderHook(
       ({ isLocked }) => useLockedHeight<HTMLDivElement>(isLocked),

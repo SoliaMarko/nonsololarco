@@ -21,8 +21,13 @@ export class UserRepertoireController {
   constructor(private readonly repertoireService: RepertoireService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all tracks where the current user is lead (band + solo)' })
-  @ApiOkResponse({ type: PaginatedTracksDto, description: 'Paginated list of user tracks' })
+  @ApiOperation({
+    summary: 'Get all tracks where the current user is lead (band + solo)',
+  })
+  @ApiOkResponse({
+    type: PaginatedTracksDto,
+    description: 'List of user tracks',
+  })
   getMyRepertoire(
     @CurrentUser() user: SessionUser,
     @Query() query: RepertoireQueryDto,
@@ -32,7 +37,10 @@ export class UserRepertoireController {
 
   @Get('solo')
   @ApiOperation({ summary: 'Get solo tracks for the current user (no band)' })
-  @ApiOkResponse({ type: PaginatedTracksDto, description: 'Paginated list of solo tracks' })
+  @ApiOkResponse({
+    type: PaginatedTracksDto,
+    description: 'Paginated list of solo tracks',
+  })
   getMySoloRepertoire(
     @CurrentUser() user: SessionUser,
     @Query() query: RepertoireQueryDto,

@@ -95,9 +95,18 @@ jobs:
       # auth setup signs its own token with it, so it only has to match what
       # the API verifies against in this same job.
       JWT_SECRET: ci-e2e-secret-not-used-outside-this-job
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public
       CORS_ORIGINS: http://localhost:3000
       FRONTEND_URL: http://localhost:3000
       NEXT_PUBLIC_API_URL: http://localhost:3001/api
+      # Dummy OAuth creds — the e2e tests auth via a minted JWT, never
+      # through a real OAuth flow, but the API's env validator requires them.
+      GOOGLE_CLIENT_ID: unused
+      GOOGLE_CLIENT_SECRET: unused
+      GOOGLE_CALLBACK_URL: http://localhost:3001/api/auth/google/callback
+      GITHUB_CLIENT_ID: unused
+      GITHUB_CLIENT_SECRET: unused
+      GITHUB_CALLBACK_URL: http://localhost:3001/api/auth/github/callback
     steps:
       - uses: actions/checkout@v4
         with:
@@ -112,6 +121,7 @@ jobs:
       - name: Apply migrations and seed
         run: |
           pnpm --filter @nonsololarco/db exec prisma migrate deploy
+          pnpm --filter @nonsololarco/db db:generate
           pnpm --filter @nonsololarco/db db:seed
 
       # Cached separately from node_modules — the browser binaries are large
@@ -134,10 +144,15 @@ jobs:
         run: pnpm build
 
       - name: Start API
-        run: pnpm --filter api start:prod &
+        run: pnpm --filter api start:prod > api.log 2>&1 &
 
       - name: Wait for API
         run: npx wait-on http://localhost:3001/api/docs --timeout 60000
+        continue-on-error: true
+
+      - name: Show API logs
+        if: always()
+        run: cat api.log
 
       - name: Run e2e
         run: pnpm --filter web e2e

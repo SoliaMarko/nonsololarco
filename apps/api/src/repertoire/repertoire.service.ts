@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@nonsololarco/db';
 import {
   PaginatedResult,
   Track,
@@ -41,7 +42,7 @@ function buildPrismaOrderBy(
   sort?: TrackSortField,
   order?: SortOrder,
 ): TrackOrderBy[] {
-  const dir: OrderDir = order === 'desc' ? 'desc' : 'asc';
+  const dir: OrderDir = order === SortOrder.DESC ? 'desc' : 'asc';
 
   switch (sort) {
     case TrackSortField.TRACK_ORDER:
@@ -83,7 +84,7 @@ function postQuerySort(
 ): Track[] {
   if (!sort) return tracks;
 
-  const dir = order === 'desc' ? -1 : 1;
+  const dir = order === SortOrder.DESC ? -1 : 1;
 
   if (sort === TrackSortField.STATUS) {
     return [...tracks].sort(
@@ -178,21 +179,17 @@ function participatesIn(userId: string): object {
   };
 }
 
-interface TrackRow {
-  band?: { id: string; name: string } | null;
-  bpm: number;
-  duration: string;
-  id: string;
-  leadMember: { id: string; name: string };
-  musicalKey: Parameters<typeof toDisplayMusicalKey>[0];
-  order: number;
-  performers: { user: { id: string; name: string } }[];
-  side: string;
-  status: string;
-  title: string;
-}
+type TrackWithMembers = Prisma.TrackGetPayload<{
+  include: typeof TRACK_INCLUDE_MEMBERS;
+}>;
+type TrackWithAll = Prisma.TrackGetPayload<{
+  include: typeof TRACK_INCLUDE_ALL;
+}>;
+type TrackRow = TrackWithMembers | TrackWithAll;
 
 function mapTrack(track: TrackRow, includeBand = false): Track {
+  const band = 'band' in track ? track.band : null;
+
   return {
     id: track.id,
     order: track.order,

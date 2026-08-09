@@ -13,6 +13,7 @@ export interface RepertoireQueryParams {
   status?: TrackFilterParam;
 }
 
+/** Serialises sort/filter params into a URL query string. Omits defaults (`status=all`) to keep URLs clean. */
 function buildQueryString(params: RepertoireQueryParams): string {
   const search = new URLSearchParams();
   if (params.sort) search.set('sort', params.sort);
@@ -37,6 +38,7 @@ export async function fetchSoloRepertoire(
   return apiFetch<PaginatedResult<Track>>(`/users/me/repertoire/solo${buildQueryString(params)}`);
 }
 
+/** Fetches all tracks for a specific band. Supports `onlyMine` to restrict to the user's tracks. */
 export async function fetchBandRepertoire(
   bandId: string,
   params: RepertoireQueryParams = {},

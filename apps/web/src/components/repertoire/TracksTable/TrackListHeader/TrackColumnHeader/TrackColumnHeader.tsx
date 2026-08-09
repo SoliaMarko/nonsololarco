@@ -33,7 +33,7 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
     }
     params.delete('page');
 
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   function getSortIcon(field: SortField) {

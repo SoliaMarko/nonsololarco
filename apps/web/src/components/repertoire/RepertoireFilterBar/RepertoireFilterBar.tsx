@@ -3,13 +3,16 @@
 import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import Dropdown from '@/src/components/ui/Dropdown';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useAuth } from '@/src/hooks/global/useAuth';
-import { SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 import { StarOutlineIcon } from '@/src/icons/achievements';
-import { ArrowRightSolidIcon } from '@/src/icons/base';
+import { ArrowRightSolidIcon, ChevronIcon, SortIcon } from '@/src/icons/base';
+import { SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 import { cn } from '@/src/utils/cn';
-import { TrackFilterParam } from '@/src/utils/tracks-sort.utils';
+import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
+
+import FilterPill from './FilterPill';
 
 const STATUS_FILTERS: { label: string; value: TrackFilterParam }[] = [
   { label: 'All', value: 'all' },
@@ -32,6 +35,36 @@ const ACTIVE_STYLE: Record<TrackFilterParam, string> = {
   archived: 'border-fg-tertiary text-fg-tertiary bg-base',
 };
 
+/** Encodes sort field + order into a single dropdown value, e.g. `"bpm:asc"` */
+function encodeSortValue(field: SortField, order: SortOrder): string {
+  return `${field}:${order}`;
+}
+
+/** Decodes a dropdown value back into field + order, or `null` for the default */
+function decodeSortValue(value: string): { field: SortField; order: SortOrder } | null {
+  if (value === 'default') return null;
+  const [field, order] = value.split(':') as [SortField, SortOrder];
+  return { field, order };
+}
+
+const SORT_OPTIONS_COMMON = [
+  { label: 'Title A→Z', value: encodeSortValue('title', 'asc') },
+  { label: 'Title Z→A', value: encodeSortValue('title', 'desc') },
+  { label: 'BPM ↑', value: encodeSortValue('bpm', 'asc') },
+  { label: 'BPM ↓', value: encodeSortValue('bpm', 'desc') },
+  { label: 'Status', value: encodeSortValue('status', 'desc') },
+  { label: 'Time ↑', value: encodeSortValue('time', 'asc') },
+  { label: 'Time ↓', value: encodeSortValue('time', 'desc') },
+];
+
+const ORDER_OPTION = { label: '# Order', value: encodeSortValue('trackOrder', 'asc') };
+
+/** Maps the current URL params to the composite dropdown value */
+function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
+  if (!sortField) return 'default';
+  return encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+}
+
 export default function RepertoireFilterBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -40,6 +73,8 @@ export default function RepertoireFilterBar() {
 
   const currentFilter = (searchParams.get('status') as TrackFilterParam) ?? 'all';
   const isMineActive = searchParams.get('onlyMine') === 'true';
+  const sortField = searchParams.get('sort');
+  const sortOrder = searchParams.get('order');
 
   /** "Only mine" and participation legend are only relevant for real bands (not Solo/All) */
   const isRealBand = isSpecificBandSelected && activeBandId !== SOLO_BAND_ID;
@@ -51,17 +86,25 @@ export default function RepertoireFilterBar() {
   const archivedCount = tracks?.filter((t) => t.status === 'archived').length ?? 0;
   const activeCount = tracks?.filter((t) => t.status !== 'archived').length ?? 0;
   const mineCount =
-    tracks?.filter((t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id)).length ?? 0;
+    tracks?.filter((t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id))
+      .length ?? 0;
+
+  const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
+    ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
+    : SORT_OPTIONS_COMMON;
+
+  const activeSortValue = currentSortDropdownValue(sortField, sortOrder);
+  const activeSortLabel = mobileSortOptions.find((o) => o.value === activeSortValue)?.label;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
-    if (value === 'all') {
+    if (value === 'all' || value === currentFilter) {
       params.delete('status');
     } else {
       params.set('status', value);
     }
     params.delete('page');
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   function toggleMine() {
@@ -72,7 +115,21 @@ export default function RepertoireFilterBar() {
       params.set('onlyMine', 'true');
     }
     params.delete('page');
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
+  }
+
+  function handleMobileSort(value: string) {
+    const params = new URLSearchParams(searchParams.toString());
+    const isAlreadyActive = value === activeSortValue;
+    const decoded = decodeSortValue(value);
+    if (isAlreadyActive || !decoded) {
+      params.delete('sort');
+      params.delete('order');
+    } else {
+      params.set('sort', decoded.field);
+      params.set('order', decoded.order);
+    }
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   return (
@@ -113,27 +170,27 @@ export default function RepertoireFilterBar() {
         {/* Only mine toggle */}
         {isRealBand ? (
           <>
-          <div className="bg-border-primary h-6 w-px" />
-          <button
-            onClick={toggleMine}
-            className={cn(
-              'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
-              isMineActive
-                ? 'border-yellow-deep bg-yellow-main text-primary-dark'
-                : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
-            )}
-          >
-            <StarOutlineIcon size={14} />
-            <span>Only mine</span>
-            <span
+            <div className="bg-border-primary h-6 w-px" />
+            <button
+              onClick={toggleMine}
               className={cn(
-                'text-[10px] tabular-nums border pli-1.5 plb-0.5',
-                isMineActive ? 'border-primary-dark' : 'border-border-primary',
+                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
+                isMineActive
+                  ? 'border-yellow-deep bg-yellow-main text-primary-dark'
+                  : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
               )}
             >
-              {mineCount}
-            </span>
-          </button>
+              <StarOutlineIcon size={14} />
+              <span>Only mine</span>
+              <span
+                className={cn(
+                  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
+                  isMineActive ? 'border-primary-dark' : 'border-border-primary',
+                )}
+              >
+                {mineCount}
+              </span>
+            </button>
           </>
         ) : null}
 
@@ -144,7 +201,7 @@ export default function RepertoireFilterBar() {
         {isSpecificBandSelected && activeBand ? (
           <Link
             href={`/band/${activeBandId}`}
-            className="bg-contrast text-primary-light plb-2 pli-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors hover:opacity-90"
+            className="bg-contrast text-primary-light dark:text-primary-dark plb-2 pli-4 flex items-center gap-2 text-xs font-bold tracking-wider uppercase transition-colors hover:opacity-90"
           >
             <span>Page &laquo; {activeBand.name} &raquo;</span>
             <ArrowRightSolidIcon size={12} />
@@ -154,27 +211,27 @@ export default function RepertoireFilterBar() {
         {/* My participation legend */}
         {isRealBand ? (
           <div className="flex items-center gap-2 text-xs font-medium tracking-wider">
-            <span className="bg-emerald-subtle inline-block size-4 border border-emerald-main" />
+            <span className="bg-emerald-subtle border-emerald-main inline-block size-4 border" />
             <span className="text-fg-tertiary uppercase">my participation</span>
           </div>
         ) : null}
       </div>
 
       {/* Mobile layout */}
-      <div className="pli-4 plb-3 flex flex-col gap-3 sm:hidden">
-        {/* Band page link on top for mobile */}
+      <div className="flex flex-col sm:hidden">
+        {/* Band page link — full-width, no spacing */}
         {isSpecificBandSelected && activeBand ? (
           <Link
             href={`/band/${activeBandId}`}
-            className="bg-contrast text-primary-light plb-2 pli-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider"
+            className="bg-yellow-deep text-primary-dark plb-2.5 pli-4 flex items-center justify-center gap-2 text-xs font-bold tracking-wider uppercase"
           >
             <span>Page &laquo; {activeBand.name} &raquo;</span>
             <ArrowRightSolidIcon size={12} />
           </Link>
         ) : null}
 
-        {/* Filter pills row */}
-        <div className="flex flex-wrap items-center gap-2">
+        {/* Scrollable filter pills */}
+        <div className="pli-4 plb-3 flex scrollbar-none items-center gap-2 overflow-x-auto">
           {STATUS_FILTERS.map(({ label, value }) => (
             <FilterPill
               key={value}
@@ -184,7 +241,7 @@ export default function RepertoireFilterBar() {
               activeStyle={ACTIVE_STYLE[value]}
             />
           ))}
-          <div className="bg-border-primary h-6 w-px" />
+          <div className="bg-border-primary h-6 w-px shrink-0" />
           {EXTRA_FILTERS.map(({ label, value }) => (
             <FilterPill
               key={value}
@@ -197,13 +254,13 @@ export default function RepertoireFilterBar() {
           ))}
         </div>
 
-        {/* Only mine + count row */}
-        <div className="flex items-center gap-3">
+        {/* Only mine + sort dropdown row */}
+        <div className="pli-4 plb-3 border-border-primary flex items-center gap-3 border-t">
           {isRealBand ? (
             <button
               onClick={toggleMine}
               className={cn(
-                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
+                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
                 isMineActive
                   ? 'border-yellow-deep bg-yellow-main text-primary-dark'
                   : 'border-border-primary text-fg-tertiary hover:text-fg-secondary',
@@ -213,7 +270,7 @@ export default function RepertoireFilterBar() {
               <span>Only mine</span>
               <span
                 className={cn(
-                  'text-[10px] tabular-nums border pli-1.5 plb-0.5',
+                  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
                   isMineActive ? 'border-primary-dark' : 'border-border-primary',
                 )}
               >
@@ -222,39 +279,39 @@ export default function RepertoireFilterBar() {
             </button>
           ) : null}
 
-          <span className="text-fg-tertiary text-xs tabular-nums">
-            {allTracks?.total ?? 0} in group
+          {/* Sort dropdown */}
+          <Dropdown
+            align="start"
+            side="bottom"
+            trigger={
+              <button
+                className={cn(
+                  'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
+                  'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
+                  activeSortLabel && 'border-fg-primary text-fg-primary',
+                )}
+              >
+                <SortIcon size={14} />
+                <span>{activeSortLabel ?? 'Sort'}</span>
+                <ChevronIcon size={10} direction="down" />
+              </button>
+            }
+            groups={[
+              {
+                items: mobileSortOptions.map((opt) => ({
+                  label: opt.label,
+                  selected: opt.value === activeSortValue,
+                  onClick: () => handleMobileSort(opt.value),
+                })),
+              },
+            ]}
+          />
+
+          <span className="text-fg-tertiary mis-auto text-xs tabular-nums">
+            {tracks?.length ?? 0} in group
           </span>
         </div>
       </div>
     </div>
-  );
-}
-
-interface FilterPillProps {
-  activeStyle: string;
-  count?: number;
-  isActive: boolean;
-  label: string;
-  onClick: () => void;
-}
-
-function FilterPill({ activeStyle, count, isActive, label, onClick }: FilterPillProps) {
-  return (
-    <button
-      onClick={onClick}
-      aria-pressed={isActive}
-      className={cn(
-        'plb-1.5 pli-3 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
-        isActive
-          ? activeStyle
-          : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
-      )}
-    >
-      {label}
-      {count !== undefined ? (
-        <span className="mis-1.5 text-[10px] tabular-nums">{count}</span>
-      ) : null}
-    </button>
   );
 }

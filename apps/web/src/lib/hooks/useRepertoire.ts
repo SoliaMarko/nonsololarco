@@ -3,12 +3,11 @@ import { keepPreviousData, useQuery } from '@tanstack/react-query';
 import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
 
 import {
+  RepertoireQueryParams,
   fetchBandRepertoire,
   fetchMyRepertoire,
   fetchSoloRepertoire,
-  RepertoireQueryParams,
 } from '../api/repertoire.api';
-
 import { ALL_BANDS_ID, SOLO_BAND_ID } from '../constants/repertoire.const';
 
 export { ALL_BANDS_ID, SOLO_BAND_ID };

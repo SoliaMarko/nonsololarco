@@ -11,7 +11,8 @@ import { useAuth } from '@/src/hooks/global/useAuth';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
-import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
+import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
+import { Track, TrackStatus } from '@nonsololarco/types';
 import { cn } from '@/src/utils/cn';
 import { getTrackPerformers } from '@/src/utils/track-performers.utils';
 
@@ -43,17 +44,17 @@ export interface TrackListRowProps {
 }
 
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
-  const { getVinylColor, isSpecificBandSelected } = useActiveBand();
+  const { activeBandId, getVinylColor, isSpecificBandSelected } = useActiveBand();
   const { user } = useAuth();
   const [isSelected, setIsSelected] = useState(false);
 
   const isArchived = track.status === 'archived';
+  const isSoloView = activeBandId === SOLO_BAND_ID;
 
-  /** Current user first, then the rest — see getTrackPerformers */
   const performers = getTrackPerformers(track, user?.id);
 
-  /** Accent stripe is shown for my tracks in a band view, and for every track in "all bands" view */
-  const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected;
+  /** Accent stripe is shown for my tracks in a band view, for every track in "all bands" and solo views */
+  const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
 
   /** Tracks without a band are solo — labelled as such instead of showing a blank cell */
   const bandName = track.band?.name ?? 'Solo';
@@ -70,8 +71,8 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
   return (
     <div
       className={cn('bg-base', {
-        'bg-emerald-subtle-70': isSpecificBandSelected && isMyTrack && isArchived,
-        'bg-emerald-subtle': isSpecificBandSelected && isMyTrack && !isArchived,
+        'bg-emerald-subtle-70': isSpecificBandSelected && !isSoloView && isMyTrack && isArchived,
+        'bg-emerald-subtle': isSpecificBandSelected && !isSoloView && isMyTrack && !isArchived,
       })}
       role="row"
     >
@@ -127,30 +128,43 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           />
 
           {/* up to sm screens */}
-          <div className="text-fg-tertiary xs:flex-row xs:items-center mbs-0.5 flex flex-col items-start gap-1 text-xs sm:hidden">
+          <div className="text-fg-tertiary mbs-0.5 flex min-w-0 flex-col items-start gap-0.5 text-xs sm:hidden">
             {!isSpecificBandSelected ? (
-              <div className="flex items-center gap-1" role="cell">
-                <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
-                <span className="text-fg-secondary text-sm tabular-nums">{bandName}</span>
-                <span className="text-fg-tertiary xs:inline hidden">{' · '}</span>
-              </div>
-            ) : null}
-            <Text className="text-fg-tertiary flex min-w-0 items-baseline" tag="span">
-              {isSpecificBandSelected ? (
-                <>
-                  <TrackPerformerNames
-                    className="max-w-40"
-                    isMuted={isArchived}
-                    isTruncated
-                    performers={performers}
-                  />
-                  <span className="mie-1">{' ·'}</span>
-                </>
-              ) : null}
-              <span className="whitespace-nowrap">
-                {[track.musicalKey, track.bpm, track.duration].join(' · ')}
-              </span>
-            </Text>
+              <>
+                <div className="flex min-w-0 items-center gap-1">
+                  <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
+                  <span className="text-fg-secondary truncate text-sm tabular-nums">{bandName}</span>
+                  <span className="shrink-0 whitespace-nowrap">
+                    {' · '}
+                    <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                      {track.musicalKey}
+                    </span>
+                    {' · '}{track.bpm}{' · '}{track.duration}
+                  </span>
+                </div>
+                <TrackPerformerNames
+                  className="max-w-full"
+                  isMuted={isArchived}
+                  isTruncated
+                  performers={performers}
+                />
+              </>
+            ) : (
+              <>
+                <TrackPerformerNames
+                  className="max-w-full"
+                  isMuted={isArchived}
+                  isTruncated
+                  performers={performers}
+                />
+                <span className="whitespace-nowrap">
+                  <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                    {track.musicalKey}
+                  </span>
+                  {' · '}{track.bpm}{' · '}{track.duration}
+                </span>
+              </>
+            )}
           </div>
         </div>
 

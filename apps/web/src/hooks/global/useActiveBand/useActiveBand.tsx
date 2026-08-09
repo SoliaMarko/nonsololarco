@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { ReactNode, createContext, useContext, useMemo } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
@@ -33,7 +33,7 @@ interface ActiveBandProviderProps {
 export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const getVinylColor = useBandColors();
+  const getVinylColor = useBandColors(bands.map((b) => b.id));
 
   const value = useMemo(() => {
     const rawId = searchParams.get('band');

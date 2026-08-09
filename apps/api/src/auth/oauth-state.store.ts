@@ -47,7 +47,12 @@ export class OAuthStateStore {
   }
 
   verify(req: Request, state: string, callback: VerifyCallback): void;
-  verify(req: Request, state: string, meta: unknown, callback: VerifyCallback): void;
+  verify(
+    req: Request,
+    state: string,
+    meta: unknown,
+    callback: VerifyCallback,
+  ): void;
   verify(_req: Request, providedState: string, callback: VerifyCallback): void {
     const parts = providedState?.split('.') ?? [];
 

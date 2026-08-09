@@ -85,8 +85,8 @@ index.
 of the user's personal repertoire, not any band's. This is why "Solo" is a
 pseudo-band in the UI rather than a real `Band` row.
 
-`@@unique([bandId, order])` gives each band a gap-free, deterministic track
-order and prevents two tracks claiming position 3. Postgres excludes NULLs from
+`@@unique([bandId, order])` prevents two tracks from claiming the same position
+within a band, but does not guarantee gap-free numbering. Postgres excludes NULLs from
 unique constraints, so solo tracks order independently of each other — an
 accepted quirk, since solo ordering is per-user and never collides in practice.
 
@@ -123,9 +123,11 @@ pnpm --filter @nonsololarco/db db:generate    # regenerate the TS client
 ```
 
 Both are needed after a schema edit. `db:migrate` changes the database;
-`db:generate` changes the types your code compiles against. Doing only the
-second produces `Cannot read properties of undefined (reading 'upsert')` at
-runtime — the client knows about a model the database doesn't have.
+`db:generate` changes the types your code compiles against. Running only
+`db:migrate` (without `db:generate`) leaves a stale client that may produce
+`Cannot read properties of undefined` at runtime. Running only `db:generate`
+(without `db:migrate`) gives a client that knows about models the database
+doesn't have yet.
 
 ## Seeding
 

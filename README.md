@@ -35,6 +35,7 @@ pnpm install
 cp .env.example .env          # then fill in DATABASE_URL, JWT_SECRET, OAuth keys
 
 pnpm --filter @nonsololarco/db db:migrate
+pnpm --filter @nonsololarco/db db:generate
 pnpm --filter @nonsololarco/db db:seed
 
 pnpm dev
