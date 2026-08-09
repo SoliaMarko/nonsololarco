@@ -113,6 +113,7 @@ jobs:
       - name: Apply migrations and seed
         run: |
           pnpm --filter @nonsololarco/db exec prisma migrate deploy
+          pnpm --filter @nonsololarco/db db:generate
           pnpm --filter @nonsololarco/db db:seed
 
       # Cached separately from node_modules — the browser binaries are large

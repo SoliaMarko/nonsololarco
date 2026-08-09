@@ -11,7 +11,7 @@ import { useAuth } from '@/src/hooks/global/useAuth';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
-import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
+import { Track, TrackStatus } from '@nonsololarco/types';
 import { cn } from '@/src/utils/cn';
 import { getTrackPerformers } from '@/src/utils/track-performers.utils';
 

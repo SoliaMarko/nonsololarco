@@ -1,4 +1,4 @@
-import { Track, TrackMember } from '@/src/lib/types/repertoire/track.types';
+import { Track, TrackMember } from '@nonsololarco/types';
 
 /** A performer on a track, flagged with whether they lead it. */
 export interface TrackPerformer extends TrackMember {
