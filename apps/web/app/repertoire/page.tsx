@@ -13,10 +13,12 @@ import { ALL_BANDS_ID, SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks
 import { sumRawDurations } from '@/src/utils/duration.utils';
 
 function deriveStats(tracks: Track[]): RepertoireStats {
+  const safeTracks = tracks ?? [];
+
   return {
-    totalTracks: tracks?.length,
-    readyTracks: tracks?.filter((t) => t.status === 'ready').length,
-    totalDuration: sumRawDurations(tracks?.map((t) => t.duration)),
+    totalTracks: safeTracks.length,
+    readyTracks: safeTracks.filter((t) => t.status === 'ready').length,
+    totalDuration: sumRawDurations(safeTracks.map((t) => t.duration)),
   };
 }
 
