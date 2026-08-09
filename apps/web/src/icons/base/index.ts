@@ -34,5 +34,6 @@ export { default as SettingsOutlineIcon } from './SettingsOutlineIcon';
 export { default as SettingsSolidIcon } from './SettingsSolidIcon';
 export { default as ShareOutlineIcon } from './ShareOutlineIcon';
 export { default as ShareSolidIcon } from './ShareSolidIcon';
+export { default as SortIcon } from './SortIcon';
 export { default as SunOutlineIcon } from './SunOutlineIcon';
 export { default as UploadIcon } from './UploadIcon';
