@@ -15,19 +15,19 @@ describe('Pagination', () => {
   it('renders all page buttons for a small range', () => {
     render(<Pagination currentPage={1} totalPages={3} onPageChange={() => {}} />);
 
-    expect(screen.getByRole('button', { name: 'Page 1' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Page 2' })).toBeDefined();
-    expect(screen.getByRole('button', { name: 'Page 3' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Go to page 1' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Go to page 2' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Go to page 3' })).toBeDefined();
   });
 
   it('marks the current page with aria-current', () => {
     render(<Pagination currentPage={2} totalPages={3} onPageChange={() => {}} />);
 
-    expect(screen.getByRole('button', { name: 'Page 2' }).getAttribute('aria-current')).toBe(
+    expect(screen.getByRole('button', { name: 'Go to page 2' }).getAttribute('aria-current')).toBe(
       'page',
     );
     expect(
-      screen.getByRole('button', { name: 'Page 1' }).getAttribute('aria-current'),
+      screen.getByRole('button', { name: 'Go to page 1' }).getAttribute('aria-current'),
     ).toBeNull();
   });
 
@@ -36,7 +36,7 @@ describe('Pagination', () => {
     const onChange = vi.fn();
     render(<Pagination currentPage={1} totalPages={5} onPageChange={onChange} />);
 
-    await user.click(screen.getByRole('button', { name: 'Page 3' }));
+    await user.click(screen.getByRole('button', { name: 'Go to page 3' }));
     expect(onChange).toHaveBeenCalledWith(3);
   });
 
