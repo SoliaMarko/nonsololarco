@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 
 import { useMyBands } from '@/src/lib/hooks/useBands';
 import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
@@ -26,5 +26,8 @@ export function useBandColors(
     [bands, fallbackBandIds],
   );
 
-  return (bandId: string | null | undefined) => getBandVinylColor(colorMap, bandId);
+  return useCallback(
+    (bandId: string | null | undefined) => getBandVinylColor(colorMap, bandId),
+    [colorMap],
+  );
 }

@@ -33,7 +33,8 @@ interface ActiveBandProviderProps {
 export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
-  const getVinylColor = useBandColors(bands.map((b) => b.id));
+  const bandIds = useMemo(() => bands.map((b) => b.id), [bands]);
+  const getVinylColor = useBandColors(bandIds);
 
   const value = useMemo(() => {
     const rawId = searchParams.get('band');
@@ -44,6 +45,7 @@ export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps)
     function onBandChange(bandId: string) {
       const params = new URLSearchParams(searchParams.toString());
       params.set('band', bandId);
+      params.delete('page');
       router.push(`?${params.toString()}`);
     }
 

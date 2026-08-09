@@ -9,6 +9,10 @@ import { useAuth } from '@/src/hooks/global/useAuth';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ArrowRightSolidIcon, ChevronIcon, SortIcon } from '@/src/icons/base';
 import { SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
+import {
+  onlyMineCountVariants,
+  onlyMineToggleVariants,
+} from '@/src/lib/variants/only-mine-toggle.variants';
 import { cn } from '@/src/utils/cn';
 import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
 
@@ -65,6 +69,13 @@ function currentSortDropdownValue(sortField: string | null, sortOrder: string | 
   return encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
 }
 
+/**
+ * URL-driven filter and sort toolbar for the repertoire table.
+ *
+ * Reads `status`, `onlyMine`, `sort` and `order` from the URL search params,
+ * and writes changes back via `router.push`. Resets `page` to 1 on every
+ * filter/sort change so the user never lands on an out-of-range page.
+ */
 export default function RepertoireFilterBar() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -79,15 +90,22 @@ export default function RepertoireFilterBar() {
   /** "Only mine" and participation legend are only relevant for real bands (not Solo/All) */
   const isRealBand = isSpecificBandSelected && activeBandId !== SOLO_BAND_ID;
 
-  /** Unfiltered query to derive counts */
+  /**
+   * Unfiltered, unpaginated query to derive badge counts.
+   *
+   * No `page` param → the API returns every matching track in one response,
+   * so counts are always across the full repertoire. This is correct but
+   * wasteful at scale — a dedicated `/counts` endpoint would let us drop
+   * this extra fetch once repertoires grow large.
+   */
   const { data: allTracks } = useRepertoireTracks(activeBandId);
 
-  const archivedCount = allTracks?.filter((t) => t.status === 'archived').length ?? 0;
-  const activeCount = allTracks?.filter((t) => t.status !== 'archived').length ?? 0;
+  const tracks = allTracks?.data;
+  const archivedCount = tracks?.filter((t) => t.status === 'archived').length ?? 0;
+  const activeCount = tracks?.filter((t) => t.status !== 'archived').length ?? 0;
   const mineCount =
-    allTracks?.filter(
-      (t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id),
-    ).length ?? 0;
+    tracks?.filter((t) => t.leadMember.id === user?.id || t.members.some((m) => m.id === user?.id))
+      .length ?? 0;
 
   const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
     ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
@@ -103,6 +121,7 @@ export default function RepertoireFilterBar() {
     } else {
       params.set('status', value);
     }
+    params.delete('page');
     router.push(`?${params.toString()}`, { scroll: false });
   }
 
@@ -113,6 +132,7 @@ export default function RepertoireFilterBar() {
     } else {
       params.set('onlyMine', 'true');
     }
+    params.delete('page');
     router.push(`?${params.toString()}`, { scroll: false });
   }
 
@@ -170,22 +190,16 @@ export default function RepertoireFilterBar() {
           <>
             <div className="bg-border-primary h-6 w-px" />
             <button
+              aria-pressed={isMineActive}
               onClick={toggleMine}
               className={cn(
-                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
-                isMineActive
-                  ? 'border-yellow-deep bg-yellow-main text-primary-dark'
-                  : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
+                onlyMineToggleVariants({ active: isMineActive }),
+                !isMineActive && 'hover:border-fg-tertiary',
               )}
             >
               <StarOutlineIcon size={14} />
               <span>Only mine</span>
-              <span
-                className={cn(
-                  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
-                  isMineActive ? 'border-primary-dark' : 'border-border-primary',
-                )}
-              >
+              <span className={onlyMineCountVariants({ active: isMineActive })}>
                 {mineCount}
               </span>
             </button>
@@ -256,22 +270,13 @@ export default function RepertoireFilterBar() {
         <div className="pli-4 plb-3 border-border-primary flex items-center gap-3 border-t">
           {isRealBand ? (
             <button
+              aria-pressed={isMineActive}
               onClick={toggleMine}
-              className={cn(
-                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
-                isMineActive
-                  ? 'border-yellow-deep bg-yellow-main text-primary-dark'
-                  : 'border-border-primary text-fg-tertiary hover:text-fg-secondary',
-              )}
+              className={onlyMineToggleVariants({ active: isMineActive })}
             >
               <StarOutlineIcon size={14} />
               <span>Only mine</span>
-              <span
-                className={cn(
-                  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
-                  isMineActive ? 'border-primary-dark' : 'border-border-primary',
-                )}
-              >
+              <span className={onlyMineCountVariants({ active: isMineActive })}>
                 {mineCount}
               </span>
             </button>
@@ -294,17 +299,19 @@ export default function RepertoireFilterBar() {
                 <ChevronIcon size={10} direction="down" />
               </button>
             }
-            groups={[{
-              items: mobileSortOptions.map((opt) => ({
-                label: opt.label,
-                selected: opt.value === activeSortValue,
-                onClick: () => handleMobileSort(opt.value),
-              })),
-            }]}
+            groups={[
+              {
+                items: mobileSortOptions.map((opt) => ({
+                  label: opt.label,
+                  selected: opt.value === activeSortValue,
+                  onClick: () => handleMobileSort(opt.value),
+                })),
+              },
+            ]}
           />
 
           <span className="text-fg-tertiary mis-auto text-xs tabular-nums">
-            {allTracks?.length ?? 0} in group
+            {tracks?.length ?? 0} in group
           </span>
         </div>
       </div>

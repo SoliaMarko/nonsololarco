@@ -1,6 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Prisma } from '@nonsololarco/db';
-import { Track, TrackSide, TrackStatus } from '@nonsololarco/types';
+import {
+  PaginatedResult,
+  Track,
+  TrackSide,
+  TrackStatus,
+} from '@nonsololarco/types';
 
 import { PrismaService } from '../prisma';
 import { toDisplayMusicalKey } from '../utils/musical-key.util';
@@ -13,6 +18,8 @@ import {
 
 type OrderDir = 'asc' | 'desc';
 type TrackOrderBy = Record<string, OrderDir>;
+
+const DEFAULT_PAGE_SIZE = 10;
 
 /** Status weight for sorting — lower value = earlier when ascending */
 const STATUS_WEIGHT: Record<string, number> = {
@@ -39,11 +46,11 @@ function buildPrismaOrderBy(
 
   switch (sort) {
     case TrackSortField.TRACK_ORDER:
-      return [{ order: dir }];
+      return [{ order: dir }, { id: 'asc' }];
     case TrackSortField.TITLE:
-      return [{ title: dir }];
+      return [{ title: dir }, { id: 'asc' }];
     case TrackSortField.BPM:
-      return [{ bpm: dir }];
+      return [{ bpm: dir }, { id: 'asc' }];
     case TrackSortField.STATUS:
     case TrackSortField.TIME:
       // Post-query sort — return empty so default ordering is used for Prisma
@@ -94,6 +101,71 @@ function postQuerySort(
   }
 
   return tracks;
+}
+
+// ---------------------------------------------------------------------------
+// Pagination helpers
+// ---------------------------------------------------------------------------
+
+interface PaginationArgs {
+  isPaginated: boolean;
+  offset: number;
+  page: number;
+  pageSize: number;
+}
+
+/**
+ * Resolves raw query params into deterministic pagination args.
+ *
+ * When `page` is omitted the endpoint is unpaginated — the full result set is
+ * returned as a single page.
+ */
+function resolvePagination(page?: number, pageSize?: number): PaginationArgs {
+  const isPaginated = page !== undefined;
+  const resolvedPage = page ?? 1;
+  const resolvedPageSize = isPaginated ? (pageSize ?? DEFAULT_PAGE_SIZE) : 0;
+  return {
+    isPaginated,
+    offset: isPaginated ? (resolvedPage - 1) * resolvedPageSize : 0,
+    page: resolvedPage,
+    pageSize: resolvedPageSize,
+  };
+}
+
+/**
+ * Builds the pagination envelope metadata from total count and pagination args.
+ */
+function buildMeta(
+  total: number,
+  pa: PaginationArgs,
+): Omit<PaginatedResult<never>, 'data'> {
+  const pageSize = pa.isPaginated ? pa.pageSize : total;
+  const totalPages = pageSize > 0 ? Math.ceil(total / pageSize) : 1;
+  return { page: pa.page, pageSize, total, totalPages };
+}
+
+/**
+ * Slices a fully-sorted in-memory array to the requested page.
+ *
+ * Used only for post-query sort fields (status, time) where the entire result
+ * set must be loaded and sorted before pagination can be applied.
+ */
+function applyPageSlice<T>(items: T[], pa: PaginationArgs): T[] {
+  if (!pa.isPaginated) return items;
+  return items.slice(pa.offset, pa.offset + pa.pageSize);
+}
+
+/**
+ * Returns true when the sort field requires in-memory sorting.
+ *
+ * TODO: eliminate the full-table load by making these fields sortable at the
+ * DB level — store duration as an integer `durationSeconds` column and map
+ * status to a sortable integer column. Until then the in-memory path loads
+ * every matching track on each page request, so cost grows linearly with
+ * repertoire size.
+ */
+function isPostQuerySortField(sort?: TrackSortField): boolean {
+  return sort === TrackSortField.STATUS || sort === TrackSortField.TIME;
 }
 
 /** Prisma include for loading lead member and performers */
@@ -147,6 +219,8 @@ function mapTrack(track: TrackRow, includeBand = false): Track {
 export interface RepertoireQueryOptions {
   onlyMine?: boolean;
   order?: SortOrder;
+  page?: number;
+  pageSize?: number;
   sort?: TrackSortField;
   status?: TrackFilterField;
 }
@@ -158,52 +232,78 @@ export class RepertoireService {
   async getByUser(
     userId: string,
     options: RepertoireQueryOptions = {},
-  ): Promise<Track[]> {
-    const { sort, order, status } = options;
+  ): Promise<PaginatedResult<Track>> {
+    const { sort, order, status, page, pageSize } = options;
     const orderBy = buildPrismaOrderBy(sort, order);
     const statusFilter = buildStatusFilter(status);
+    const pa = resolvePagination(page, pageSize);
 
+    const where = {
+      ...participatesIn(userId),
+      ...statusFilter,
+    };
+
+    const total = await this.prisma.track.count({ where });
+
+    const needsPostSort = isPostQuerySortField(sort);
     const tracks = await this.prisma.track.findMany({
-      where: {
-        ...participatesIn(userId),
-        ...statusFilter,
-      },
+      where,
       include: TRACK_INCLUDE_ALL,
-      orderBy: orderBy.length ? orderBy : [{ bandId: 'asc' }, { order: 'asc' }],
+      orderBy: orderBy.length
+        ? orderBy
+        : [{ bandId: 'asc' }, { order: 'asc' }, { id: 'asc' }],
+      ...(pa.isPaginated && !needsPostSort
+        ? { skip: pa.offset, take: pa.pageSize }
+        : {}),
     });
 
-    const mapped = tracks.map((track) => mapTrack(track, true));
-    return postQuerySort(mapped, sort, order);
+    let mapped = tracks.map((track) => mapTrack(track, true));
+    mapped = postQuerySort(mapped, sort, order);
+    if (needsPostSort) mapped = applyPageSlice(mapped, pa);
+
+    return { data: mapped, ...buildMeta(total, pa) };
   }
 
   async getSoloByUser(
     userId: string,
     options: RepertoireQueryOptions = {},
-  ): Promise<Track[]> {
-    const { sort, order, status } = options;
+  ): Promise<PaginatedResult<Track>> {
+    const { sort, order, status, page, pageSize } = options;
     const orderBy = buildPrismaOrderBy(sort, order);
     const statusFilter = buildStatusFilter(status);
+    const pa = resolvePagination(page, pageSize);
 
+    const where = {
+      leadMemberId: userId,
+      bandId: { equals: null },
+      ...statusFilter,
+    };
+
+    const total = await this.prisma.track.count({ where });
+
+    const needsPostSort = isPostQuerySortField(sort);
     const tracks = await this.prisma.track.findMany({
-      where: {
-        leadMemberId: userId,
-        bandId: { equals: null },
-        ...statusFilter,
-      },
+      where,
       include: TRACK_INCLUDE_MEMBERS,
-      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }],
+      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }, { id: 'asc' }],
+      ...(pa.isPaginated && !needsPostSort
+        ? { skip: pa.offset, take: pa.pageSize }
+        : {}),
     });
 
-    const mapped = tracks.map((track) => mapTrack(track));
-    return postQuerySort(mapped, sort, order);
+    let mapped = tracks.map((track) => mapTrack(track));
+    mapped = postQuerySort(mapped, sort, order);
+    if (needsPostSort) mapped = applyPageSlice(mapped, pa);
+
+    return { data: mapped, ...buildMeta(total, pa) };
   }
 
   async getByBand(
     bandId: string,
     userId: string,
     options: RepertoireQueryOptions = {},
-  ): Promise<Track[]> {
-    const { sort, order, status, onlyMine } = options;
+  ): Promise<PaginatedResult<Track>> {
+    const { sort, order, status, onlyMine, page, pageSize } = options;
 
     const band = await this.prisma.band.findUnique({
       where: { id: bandId },
@@ -215,18 +315,30 @@ export class RepertoireService {
 
     const orderBy = buildPrismaOrderBy(sort, order);
     const statusFilter = buildStatusFilter(status);
+    const pa = resolvePagination(page, pageSize);
 
+    const where = {
+      bandId,
+      ...(onlyMine ? participatesIn(userId) : {}),
+      ...statusFilter,
+    };
+
+    const total = await this.prisma.track.count({ where });
+
+    const needsPostSort = isPostQuerySortField(sort);
     const tracks = await this.prisma.track.findMany({
-      where: {
-        bandId,
-        ...(onlyMine ? participatesIn(userId) : {}),
-        ...statusFilter,
-      },
+      where,
       include: TRACK_INCLUDE_MEMBERS,
-      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }],
+      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }, { id: 'asc' }],
+      ...(pa.isPaginated && !needsPostSort
+        ? { skip: pa.offset, take: pa.pageSize }
+        : {}),
     });
 
-    const mapped = tracks.map((track) => mapTrack(track));
-    return postQuerySort(mapped, sort, order);
+    let mapped = tracks.map((track) => mapTrack(track));
+    mapped = postQuerySort(mapped, sort, order);
+    if (needsPostSort) mapped = applyPageSlice(mapped, pa);
+
+    return { data: mapped, ...buildMeta(total, pa) };
   }
 }

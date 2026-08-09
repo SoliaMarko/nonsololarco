@@ -15,7 +15,7 @@ around vinyl records, stamps and monospace labels.
 | Monorepo | Turborepo + pnpm workspaces |
 | Testing | Vitest (unit), Playwright (web e2e), supertest (api e2e), Storybook |
 
-```
+```text
 apps/
   web/            Next.js frontend        → localhost:3000
   api/            NestJS backend          → localhost:3001, docs at /api/docs
@@ -86,7 +86,7 @@ New feature? Write the doc in the same PR — see
 Before opening a PR:
 
 ```sh
-pnpm typecheck && pnpm lint && pnpm test
+pnpm lint && pnpm typecheck && pnpm test && pnpm --filter web e2e && pnpm build
 ```
 
 Unit tests are required for all new code; e2e is required for features that
@@ -95,7 +95,7 @@ cross the frontend/backend boundary. The full policy is in
 
 CodeRabbit reviews every PR automatically. Useful comment commands:
 
-```
+```sh
 @coderabbitai review     # trigger a re-review
 @coderabbitai summary    # regenerate the PR summary
 @coderabbitai resolve    # close all comments

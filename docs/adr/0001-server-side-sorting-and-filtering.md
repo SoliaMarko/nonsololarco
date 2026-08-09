@@ -73,11 +73,13 @@ key falls out naturally.
 
 - Every sort click is a network round-trip. Mitigated with `keepPreviousData`
   plus a dimmed overlay, so the table doesn't blank out.
-- `postQuerySort` is a latent bug once pagination arrives — it sorts a page,
-  not the set. Must be resolved in the same change that adds pagination.
+- `postQuerySort` loads and sorts the full result set in memory for `status`
+  and `time` sorts. This is correct with pagination (the slice happens after
+  sorting) but O(n) per page request. Acceptable at current data volumes.
 - Slightly more code across three layers than a single client-side `.sort()`.
 
 **Follow-up needed**
 
-- When adding pagination: migrate `status` and `duration` to sortable column
-  types and delete `postQuerySort`.
+- Migrate `status` and `duration` to sortable column types (integer weight,
+  seconds) and delete `postQuerySort` once repertoire sizes make the full-set
+  load a performance concern.

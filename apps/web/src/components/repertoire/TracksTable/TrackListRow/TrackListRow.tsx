@@ -105,7 +105,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
           )}
         >
-          {isSpecificBandSelected ? track.order : index + 1}
+          {index + 1}
         </span>
 
         {/* Title + meta — min-w-0 lets the children truncate inside the grid cell */}

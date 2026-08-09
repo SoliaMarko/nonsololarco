@@ -105,7 +105,7 @@ the pointer.
 Defaults are omitted from the URL rather than written explicitly, so a clean
 view has a clean address.
 
-```
+```text
 /repertoire?band=band-quiet-yard&status=ready&onlyMine=true&sort=bpm&order=desc
 ```
 
@@ -123,9 +123,10 @@ All params pass straight through to the backend. See
 ## Implementation notes
 
 **Filtering and sorting are server-side.** The frontend never sorts a fetched
-array — every param is a query param. This is what makes pagination addable
-later without reworking the table
-([ADR 0001](../adr/0001-server-side-sorting-and-filtering.md)).
+array — every param is a query param. Pagination is handled the same way: `page`
+and `pageSize` are forwarded as query params and the table reads the envelope.
+See [repertoire pagination](./repertoire-pagination.md) and
+[ADR 0001](../adr/0001-server-side-sorting-and-filtering.md).
 
 **Counts come from a second, unfiltered query.** `RepertoireFilterBar` calls
 `useRepertoireTracks(activeBandId)` with no params so the badges keep showing

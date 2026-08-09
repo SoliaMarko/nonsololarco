@@ -1,5 +1,5 @@
-import { IsBoolean, IsEnum, IsOptional } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { IsBoolean, IsEnum, IsInt, IsOptional, Min } from 'class-validator';
+import { Transform, Type } from 'class-transformer';
 import { ApiPropertyOptional } from '@nestjs/swagger';
 
 export enum TrackSortField {
@@ -49,9 +49,29 @@ export class RepertoireQueryDto {
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => {
-    if (value === 'true' || value === '1' || value === true) return true;
-    if (value === 'false' || value === '0' || value === false) return false;
+    if (value === 'true' || value === true) return true;
+    if (value === 'false' || value === false) return false;
     return value as unknown;
   })
   onlyMine?: boolean;
+
+  @ApiPropertyOptional({
+    description: '1-based page number. Omit for unpaginated results.',
+    example: 1,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  page?: number;
+
+  @ApiPropertyOptional({
+    description: 'Items per page (default 10)',
+    example: 10,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsInt()
+  @Min(1)
+  pageSize?: number;
 }

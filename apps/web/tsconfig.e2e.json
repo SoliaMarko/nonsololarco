@@ -1,16 +1,8 @@
 {
+  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "ES2023",
-    "module": "nodenext",
-    "moduleResolution": "nodenext",
-    "strict": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "noEmit": true,
-    "baseUrl": ".",
-    "paths": {
-      "@/*": ["./*"]
-    }
+    "noEmit": true
   },
-  "include": ["e2e/**/*.ts", "playwright.config.ts"]
+  "include": ["e2e/**/*.ts", "playwright.config.ts"],
+  "exclude": ["node_modules"]
 }

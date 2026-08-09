@@ -1,6 +1,14 @@
 'use client';
 
-import { RefObject, useLayoutEffect, useRef, useState } from 'react';
+import { RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
+
+/**
+ * `useLayoutEffect` on the client, `useEffect` on the server.
+ * Avoids React's SSR warning without losing the synchronous-before-paint
+ * timing on the client.
+ */
+const useIsomorphicLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export interface UseLockedHeightResult<T extends HTMLElement> {
   /** Apply as `style={{ minHeight }}` — `undefined` while unlocked */
@@ -33,7 +41,7 @@ export function useLockedHeight<T extends HTMLElement>(
   const ref = useRef<T>(null);
   const [minHeight, setMinHeight] = useState<number>();
 
-  useLayoutEffect(() => {
+  useIsomorphicLayoutEffect(() => {
     if (!isLocked) {
       setMinHeight(undefined);
       return;

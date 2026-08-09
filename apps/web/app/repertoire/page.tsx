@@ -35,10 +35,16 @@ function RepertoirePageContent() {
   const { data: allMyTracks } = useRepertoireTracks(ALL_BANDS_ID);
   const { data: soloTracks } = useRepertoireTracks(SOLO_BAND_ID);
 
-  const allMyStats = useMemo(() => (allMyTracks ? deriveStats(allMyTracks) : null), [allMyTracks]);
-  const soloStats = useMemo(() => (soloTracks ? deriveStats(soloTracks) : null), [soloTracks]);
+  const allMyStats = useMemo(
+    () => (allMyTracks ? deriveStats(allMyTracks.data) : null),
+    [allMyTracks],
+  );
+  const soloStats = useMemo(
+    () => (soloTracks ? deriveStats(soloTracks.data) : null),
+    [soloTracks],
+  );
 
-  const hasSoloTracks = soloTracks && soloTracks.length > 0;
+  const hasSoloTracks = soloTracks && soloTracks.data.length > 0;
 
   const formattedBands = useMemo(
     () =>

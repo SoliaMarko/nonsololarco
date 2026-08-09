@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 export function createMockPrisma() {
   return {
     bandMember: { findMany: vi.fn() },
-    track: { findMany: vi.fn() },
+    track: { count: vi.fn(), findMany: vi.fn() },
     band: { findUnique: vi.fn() },
   };
 }
