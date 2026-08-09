@@ -69,7 +69,6 @@
     "eslint-plugin-storybook": "^10.4.0",
     "eslint-plugin-typescript-sort-keys": "^3.3.0",
     "jsdom": "^25.0.1",
-    "playwright": "^1.60.0",
     "postcss": "^8.5.15",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "storybook": "^10.4.0",
