@@ -754,15 +754,61 @@ async function main() {
     });
   }
 
+  // --- Track performers (additional members beyond the lead) ---
+  // The lead member is implicitly a performer — these rows add other participants.
+  const performers: { trackId: string; userId: string }[] = [
+    // Quiet Yard — solomiia performs on tracks she doesn't lead
+    { trackId: "track-quiet-yard-2", userId: solomiia.id },
+    { trackId: "track-quiet-yard-3", userId: solomiia.id },
+    { trackId: "track-quiet-yard-4", userId: anna.id },
+
+    // Night Shift — multiple performers on several tracks
+    { trackId: "track-night-shift-3", userId: solomiia.id },
+    { trackId: "track-night-shift-4", userId: solomiia.id },
+    { trackId: "track-night-shift-5", userId: solomiia.id },
+    { trackId: "track-night-shift-7", userId: jared.id },
+
+    // Broken Glass
+    { trackId: "track-broken-glass-3", userId: solomiia.id },
+    { trackId: "track-broken-glass-4", userId: anna.id },
+    { trackId: "track-broken-glass-5", userId: jared.id },
+
+    // Dreamy Garden — solomiia on several she doesn't lead
+    { trackId: "track-dreamy-garden-3", userId: solomiia.id },
+    { trackId: "track-dreamy-garden-4", userId: solomiia.id },
+    { trackId: "track-dreamy-garden-6", userId: solomiia.id },
+    { trackId: "track-dreamy-garden-9", userId: anna.id },
+    { trackId: "track-dreamy-garden-12", userId: solomiia.id },
+
+    // Pumpkin Square
+    { trackId: "track-pumpkin-square-3", userId: solomiia.id },
+    { trackId: "track-pumpkin-square-4", userId: solomiia.id },
+    { trackId: "track-pumpkin-square-7", userId: anna.id },
+  ];
+
+  for (const performer of performers) {
+    await prisma.trackPerformer.upsert({
+      where: {
+        trackId_userId: {
+          trackId: performer.trackId,
+          userId: performer.userId,
+        },
+      },
+      update: {},
+      create: performer,
+    });
+  }
+
   const counts = await Promise.all([
     prisma.user.count(),
     prisma.band.count(),
     prisma.bandMember.count(),
     prisma.track.count(),
+    prisma.trackPerformer.count(),
   ]);
 
   console.log(
-    `Seeded: ${counts[0]} users, ${counts[1]} bands, ${counts[2]} memberships, ${counts[3]} tracks`,
+    `Seeded: ${counts[0]} users, ${counts[1]} bands, ${counts[2]} memberships, ${counts[3]} tracks, ${counts[4]} performers`,
   );
 }
 

@@ -40,6 +40,11 @@ export interface Track extends TrackSummary {
   duration: string;
   /** Band member who leads this track */
   leadMember: TrackMember;
+  /**
+   * Additional performers on this track (excluding the lead).
+   * Empty for solo tracks; may contain band members for band tracks.
+   */
+  members: TrackMember[];
   side: TrackSide;
   status: TrackStatus;
 }

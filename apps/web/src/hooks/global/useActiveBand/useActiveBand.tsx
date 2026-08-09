@@ -1,13 +1,14 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { ReactNode, createContext, useContext, useMemo } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Band } from '@nonsololarco/types';
 
 import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
-import { buildBandColorMap, getBandVinylColor } from '@/src/utils/vinyl.utils';
+
+import { useBandColors } from '../useBandColors';
 
 interface ActiveBandContextValue {
   /** Full band object for the active tab */
@@ -32,14 +33,13 @@ interface ActiveBandProviderProps {
 export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const getVinylColor = useBandColors(bands.map((b) => b.id));
 
   const value = useMemo(() => {
     const rawId = searchParams.get('band');
     const activeBand = bands.find((b) => b.id === rawId) ?? bands[0];
     const activeBandId = activeBand?.id ?? '';
     const isSpecificBandSelected = Boolean(rawId && activeBand?.id === rawId);
-
-    const colorMap = buildBandColorMap(bands.map((band) => band.id));
 
     function onBandChange(bandId: string) {
       const params = new URLSearchParams(searchParams.toString());
@@ -50,11 +50,11 @@ export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps)
     return {
       activeBand,
       activeBandId,
-      getVinylColor: (bandId: string | null | undefined) => getBandVinylColor(colorMap, bandId),
+      getVinylColor,
       isSpecificBandSelected,
       onBandChange,
     };
-  }, [bands, searchParams, router]);
+  }, [bands, searchParams, router, getVinylColor]);
 
   return <ActiveBandContext.Provider value={value}>{children}</ActiveBandContext.Provider>;
 }

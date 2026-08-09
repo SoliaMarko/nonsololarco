@@ -20,7 +20,8 @@ model User {
   updatedAt DateTime @updatedAt @map("updated_at")
 
   memberships BandMember[]
-  leadTracks  Track[]      @relation("LeadMember")
+  leadTracks       Track[]          @relation("LeadMember")
+  trackPerformances TrackPerformer[]
   // One user can be linked to multiple OAuth providers (Google, GitHub, etc).
   accounts    Account[]
 
@@ -153,7 +154,27 @@ model Track {
   // (bandId, order) also covers plain "filter by bandId" queries via the
   // leftmost-prefix rule, so no separate @@index([bandId]) is needed.
   // Null bandId is excluded from the constraint (solo tracks have independent ordering).
+  performers TrackPerformer[]
+
   @@unique([bandId, order])
   @@index([leadMemberId])
   @@map("tracks")
+}
+
+/// Join table: which users perform on which tracks.
+/// The lead member is implicitly a performer and does not need a separate row.
+model TrackPerformer {
+  id      String @id @default(cuid())
+
+  trackId String @map("track_id")
+  track   Track  @relation(fields: [trackId], references: [id], onDelete: Cascade)
+
+  userId  String @map("user_id")
+  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([trackId, userId])
+  @@index([userId])
+  @@map("track_performers")
 }

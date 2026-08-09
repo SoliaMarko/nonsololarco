@@ -1,17 +1,23 @@
-import { Controller, Get, Param } from '@nestjs/common';
+import { Controller, Get, Param, Query, UseGuards } from '@nestjs/common';
 import {
+  ApiBearerAuth,
   ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
   ApiParam,
   ApiTags,
 } from '@nestjs/swagger';
-import { Track } from '@nonsololarco/types';
+import type { Track } from '@nonsololarco/types';
 
-import { TrackDto } from '../dto';
+import { CurrentUser } from '../../auth/decorators/current-user.decorator';
+import type { SessionUser } from '../../auth/decorators/current-user.decorator';
+import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
+import { RepertoireQueryDto, TrackDto } from '../dto';
 import { RepertoireService } from '../repertoire.service';
 
 @ApiTags('repertoire')
+@ApiBearerAuth()
+@UseGuards(JwtAuthGuard)
 @Controller('bands/:id/repertoire')
 export class BandRepertoireController {
   constructor(private readonly repertoireService: RepertoireService) {}
@@ -24,7 +30,11 @@ export class BandRepertoireController {
     description: 'List of band tracks (without band field)',
   })
   @ApiNotFoundResponse({ description: 'Band not found' })
-  getBandRepertoire(@Param('id') bandId: string): Promise<Track[]> {
-    return this.repertoireService.getByBand(bandId);
+  getBandRepertoire(
+    @Param('id') bandId: string,
+    @Query() query: RepertoireQueryDto,
+    @CurrentUser() user: SessionUser,
+  ): Promise<Track[]> {
+    return this.repertoireService.getByBand(bandId, user.id, query);
   }
 }

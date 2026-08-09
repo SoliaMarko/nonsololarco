@@ -6,7 +6,7 @@
 // the two grids would drift apart.
 
 export const ALL_BANDS_ROW_GRID =
-  'grid grid-cols-[16px_1fr_80px_28px] sm:grid-cols-[16px_32px_3fr_2fr_60px_40px_100px_64px_28px] items-center gap-3';
+  'grid grid-cols-[16px_1fr_80px_28px] sm:grid-cols-[16px_32px_3fr_2fr_60px_56px_100px_64px_28px] items-center gap-3';
 
 export const SPECIFIC_BAND_ROW_GRID =
-  'grid grid-cols-[16px_1fr_80px_28px] sm:grid-cols-[16px_32px_3fr_60px_40px_100px_64px_28px] items-center gap-3';
+  'grid grid-cols-[16px_1fr_80px_28px] sm:grid-cols-[16px_32px_3fr_60px_56px_100px_64px_28px] items-center gap-3';

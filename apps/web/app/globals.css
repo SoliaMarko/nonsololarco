@@ -13,7 +13,21 @@
  * Restore it for all interactive elements so new components get the
  * correct affordance without repeating `cursor-pointer` everywhere.
  */
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  /* stylelint-disable-next-line nesting-selector-no-missing-scoping-root */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
   button:not(:disabled),
   [role='button']:not([aria-disabled='true']),
   summary,

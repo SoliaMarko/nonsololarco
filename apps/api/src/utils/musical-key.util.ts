@@ -35,10 +35,9 @@ const PRISMA_TO_DISPLAY_MUSICAL_KEY: Record<MusicalKey, string> = {
 
 const DISPLAY_TO_PRISMA_MUSICAL_KEY: Record<string, MusicalKey> =
   Object.fromEntries(
-    Object.entries(PRISMA_TO_DISPLAY_MUSICAL_KEY).map(([prismaKey, display]) => [
-      display,
-      prismaKey as MusicalKey,
-    ]),
+    Object.entries(PRISMA_TO_DISPLAY_MUSICAL_KEY).map(
+      ([prismaKey, display]) => [display, prismaKey as MusicalKey],
+    ),
   );
 
 /** Converts a Prisma-stored musical key (e.g. `CSharp`) to display notation (`C#`). */

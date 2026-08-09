@@ -1,7 +1,5 @@
 'use client';
 
-'use client';
-
 import { useParams } from 'next/navigation';
 
 import AppShell from '@/src/components/layout/AppShell';

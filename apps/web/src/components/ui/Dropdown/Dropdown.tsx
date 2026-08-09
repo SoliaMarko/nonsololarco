@@ -3,6 +3,7 @@ import { ElementType, Fragment, ReactNode } from 'react';
 import * as RadixDropdown from '@radix-ui/react-dropdown-menu';
 import { VariantProps } from 'class-variance-authority';
 
+import { CheckSolidIcon } from '@/src/icons/base';
 import { OPTIONS_POSITION } from '@/src/lib/constants/common.const';
 import { OptionsPositionType } from '@/src/lib/types/common.types';
 import { dropdownItemVariants } from '@/src/lib/variants/dropdown-item.variants';
@@ -14,6 +15,8 @@ type DropdownItemBase = DropdownVariantProps & {
   disabled?: boolean;
   icon?: ElementType;
   label: string;
+  /** When true, renders a checkmark on the trailing edge. Useful for sort/view pickers. */
+  selected?: boolean;
 };
 
 type DropdownItemWithClick = DropdownItemBase & {
@@ -37,6 +40,8 @@ export interface DropdownProps {
   className?: string;
   /** Groups of items — groups are separated by a dotted divider */
   groups: DropdownGroup[];
+  /** Which side of the trigger the menu opens on. Defaults to `"bottom"`. */
+  side?: 'bottom' | 'top';
   /** Trigger element — button, avatar, icon, anything */
   trigger: ReactNode;
 }
@@ -60,7 +65,7 @@ export interface DropdownProps {
  *   ]}
  * />
  */
-function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className }: DropdownProps) {
+function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className, side = 'bottom' }: DropdownProps) {
   return (
     <RadixDropdown.Root>
       <RadixDropdown.Trigger asChild>{trigger}</RadixDropdown.Trigger>
@@ -68,6 +73,7 @@ function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className }: 
       <RadixDropdown.Portal>
         <RadixDropdown.Content
           align={align}
+          side={side}
           sideOffset={6}
           className={cn(
             'bg-card border-edge z-dropdown w-fit min-w-40 rounded-lg border',
@@ -86,13 +92,21 @@ function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className }: 
               {group.items.map((item, itemIndex) => {
                 const Icon = item.icon;
                 const variant = item.variant ?? 'default';
-                const itemClass = cn(dropdownItemVariants({ variant }));
+                const itemClass = cn(
+                  dropdownItemVariants({ variant }),
+                  item.selected && 'text-fg-primary font-semibold',
+                );
+                const checkmark = item.selected ? (
+                  <CheckSolidIcon size={16} className="text-emerald-main mis-auto shrink-0" aria-hidden="true" />
+                ) : null;
+
                 if (item.href) {
                   return (
                     <RadixDropdown.Item key={itemIndex} asChild disabled={item.disabled}>
                       <a href={item.href} className={itemClass}>
                         {Icon ? <Icon size={15} aria-hidden="true" /> : null}
                         {item.label}
+                        {checkmark}
                       </a>
                     </RadixDropdown.Item>
                   );
@@ -107,6 +121,7 @@ function Dropdown({ trigger, groups, align = OPTIONS_POSITION.end, className }: 
                   >
                     {Icon ? <Icon size={15} aria-hidden="true" /> : null}
                     {item.label}
+                    {checkmark}
                   </RadixDropdown.Item>
                 );
               })}

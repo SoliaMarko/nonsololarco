@@ -1,7 +1,7 @@
 import Link from 'next/link';
 
 import Text from '@/src/components/typography/Text';
-import { TrackSummary } from '@/src/lib/types/repertoire/track.types';
+import { TrackSummary } from '@nonsololarco/types';
 import { cn } from '@/src/utils/cn';
 
 interface LeadRowProps {

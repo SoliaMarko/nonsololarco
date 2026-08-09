@@ -35,8 +35,30 @@ describe('toPrismaMusicalKey', () => {
 
   it('round-trips every key through both conversions', () => {
     const allDisplayKeys = [
-      'C', 'Cm', 'C#', 'C#m', 'D', 'Dm', 'D#', 'D#m', 'E', 'Em', 'F', 'Fm',
-      'F#', 'F#m', 'G', 'Gm', 'G#', 'G#m', 'A', 'Am', 'A#', 'A#m', 'B', 'Bm',
+      'C',
+      'Cm',
+      'C#',
+      'C#m',
+      'D',
+      'Dm',
+      'D#',
+      'D#m',
+      'E',
+      'Em',
+      'F',
+      'Fm',
+      'F#',
+      'F#m',
+      'G',
+      'Gm',
+      'G#',
+      'G#m',
+      'A',
+      'Am',
+      'A#',
+      'A#m',
+      'B',
+      'Bm',
     ];
 
     for (const display of allDisplayKeys) {

@@ -2,9 +2,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 
 import { ChevronIcon } from '@/src/icons/base';
 import { cn } from '@/src/utils/cn';
-
-type SortField = 'bpm' | 'status' | 'time' | 'title' | 'trackOrder';
-type SortOrder = 'asc' | 'desc';
+import { SortField, SortOrder } from '@/src/utils/tracks-sort.utils';
 
 type BaseProps = {
   className?: string;
@@ -21,28 +19,20 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const sortField = (searchParams.get('sort') as SortField | null) ?? 'trackOrder';
+  const sortField = searchParams.get('sort') as SortField | null;
   const sortOrder = (searchParams.get('order') as SortOrder | null) ?? 'asc';
 
   function handleSort(field: SortField) {
     const params = new URLSearchParams(searchParams.toString());
 
     if (sortField === field) {
-      if (sortOrder === 'asc') {
-        params.set('order', 'desc');
-      } else {
-        params.set('order', 'asc');
-      }
+      params.set('order', sortOrder === 'asc' ? 'desc' : 'asc');
     } else {
       params.set('sort', field);
       params.set('order', 'desc');
     }
 
-    router.push(`?${params.toString()}`);
-
-    // TODO: when pagination is implemented, pass sort params to server:
-    // GET /bands/:id/tracks?sort=bpm&order=asc&page=1
-    // GET /users/me/tracks?sort=bpm&order=asc
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   function getSortIcon(field: SortField) {
