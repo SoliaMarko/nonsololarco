@@ -6,11 +6,13 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import DropdownRadio from '@/src/components/ui/DropdownRadio';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useAuth } from '@/src/hooks/global/useAuth';
-import { SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ArrowRightSolidIcon, ChevronIcon, SortIcon } from '@/src/icons/base';
+import { SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
 import { cn } from '@/src/utils/cn';
 import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
+
+import FilterPill from './FilterPill';
 
 const STATUS_FILTERS: { label: string; value: TrackFilterParam }[] = [
   { label: 'All', value: 'all' },
@@ -83,7 +85,9 @@ export default function RepertoireFilterBar() {
   const archivedCount = allTracks?.filter((t) => t.status === 'archived').length ?? 0;
   const activeCount = allTracks?.filter((t) => t.status !== 'archived').length ?? 0;
   const mineCount =
-    allTracks?.filter((t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id)).length ?? 0;
+    allTracks?.filter(
+      (t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id),
+    ).length ?? 0;
 
   const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
     ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
@@ -166,27 +170,27 @@ export default function RepertoireFilterBar() {
         {/* Only mine toggle */}
         {isRealBand ? (
           <>
-          <div className="bg-border-primary h-6 w-px" />
-          <button
-            onClick={toggleMine}
-            className={cn(
-              'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
-              isMineActive
-                ? 'border-yellow-deep bg-yellow-main text-primary-dark'
-                : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
-            )}
-          >
-            <StarOutlineIcon size={14} />
-            <span>Only mine</span>
-            <span
+            <div className="bg-border-primary h-6 w-px" />
+            <button
+              onClick={toggleMine}
               className={cn(
-                'text-[10px] tabular-nums border pli-1.5 plb-0.5',
-                isMineActive ? 'border-primary-dark' : 'border-border-primary',
+                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
+                isMineActive
+                  ? 'border-yellow-deep bg-yellow-main text-primary-dark'
+                  : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
               )}
             >
-              {mineCount}
-            </span>
-          </button>
+              <StarOutlineIcon size={14} />
+              <span>Only mine</span>
+              <span
+                className={cn(
+                  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
+                  isMineActive ? 'border-primary-dark' : 'border-border-primary',
+                )}
+              >
+                {mineCount}
+              </span>
+            </button>
           </>
         ) : null}
 
@@ -197,7 +201,7 @@ export default function RepertoireFilterBar() {
         {isSpecificBandSelected && activeBand ? (
           <Link
             href={`/band/${activeBandId}`}
-            className="bg-contrast text-primary-light plb-2 pli-4 flex items-center gap-2 text-xs font-bold uppercase tracking-wider transition-colors hover:opacity-90"
+            className="bg-contrast text-primary-light dark:text-primary-dark plb-2 pli-4 flex items-center gap-2 text-xs font-bold tracking-wider uppercase transition-colors hover:opacity-90"
           >
             <span>Page &laquo; {activeBand.name} &raquo;</span>
             <ArrowRightSolidIcon size={12} />
@@ -207,7 +211,7 @@ export default function RepertoireFilterBar() {
         {/* My participation legend */}
         {isRealBand ? (
           <div className="flex items-center gap-2 text-xs font-medium tracking-wider">
-            <span className="bg-emerald-subtle inline-block size-4 border border-emerald-main" />
+            <span className="bg-emerald-subtle border-emerald-main inline-block size-4 border" />
             <span className="text-fg-tertiary uppercase">my participation</span>
           </div>
         ) : null}
@@ -219,7 +223,7 @@ export default function RepertoireFilterBar() {
         {isSpecificBandSelected && activeBand ? (
           <Link
             href={`/band/${activeBandId}`}
-            className="bg-yellow-deep text-primary-dark plb-2.5 pli-4 flex items-center justify-center gap-2 text-xs font-bold uppercase tracking-wider"
+            className="bg-yellow-deep text-primary-dark plb-2.5 pli-4 flex items-center justify-center gap-2 text-xs font-bold tracking-wider uppercase"
           >
             <span>Page &laquo; {activeBand.name} &raquo;</span>
             <ArrowRightSolidIcon size={12} />
@@ -227,7 +231,7 @@ export default function RepertoireFilterBar() {
         ) : null}
 
         {/* Scrollable filter pills */}
-        <div className="scrollbar-none flex items-center gap-2 overflow-x-auto pli-4 plb-3">
+        <div className="pli-4 plb-3 flex scrollbar-none items-center gap-2 overflow-x-auto">
           {STATUS_FILTERS.map(({ label, value }) => (
             <FilterPill
               key={value}
@@ -251,12 +255,12 @@ export default function RepertoireFilterBar() {
         </div>
 
         {/* Only mine + sort dropdown row */}
-        <div className="flex items-center gap-3 pli-4 plb-3 border-t border-border-primary">
+        <div className="pli-4 plb-3 border-border-primary flex items-center gap-3 border-t">
           {isRealBand ? (
             <button
               onClick={toggleMine}
               className={cn(
-                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
+                'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
                 isMineActive
                   ? 'border-yellow-deep bg-yellow-main text-primary-dark'
                   : 'border-border-primary text-fg-tertiary hover:text-fg-secondary',
@@ -266,7 +270,7 @@ export default function RepertoireFilterBar() {
               <span>Only mine</span>
               <span
                 className={cn(
-                  'text-[10px] tabular-nums border pli-1.5 plb-0.5',
+                  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
                   isMineActive ? 'border-primary-dark' : 'border-border-primary',
                 )}
               >
@@ -281,7 +285,7 @@ export default function RepertoireFilterBar() {
             trigger={
               <button
                 className={cn(
-                  'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
+                  'plb-1.5 pli-3 flex items-center gap-2 border-2 text-xs font-bold tracking-wider uppercase transition-colors',
                   'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
                   activeSortLabel && 'border-fg-primary text-fg-primary',
                 )}
@@ -302,33 +306,5 @@ export default function RepertoireFilterBar() {
         </div>
       </div>
     </div>
-  );
-}
-
-interface FilterPillProps {
-  activeStyle: string;
-  count?: number;
-  isActive: boolean;
-  label: string;
-  onClick: () => void;
-}
-
-function FilterPill({ activeStyle, count, isActive, label, onClick }: FilterPillProps) {
-  return (
-    <button
-      onClick={onClick}
-      aria-pressed={isActive}
-      className={cn(
-        'plb-1.5 pli-3 shrink-0 border-2 text-xs font-bold uppercase tracking-wider transition-colors',
-        isActive
-          ? activeStyle
-          : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',
-      )}
-    >
-      {label}
-      {count !== undefined ? (
-        <span className="mis-1.5 text-[10px] tabular-nums">{count}</span>
-      ) : null}
-    </button>
   );
 }
