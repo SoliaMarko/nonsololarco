@@ -8,6 +8,7 @@ import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
+import Tabs from '@/src/components/ui/Tabs';
 import { useAuth } from '@/src/hooks/global/useAuth';
 import { BellIcon, LogOutIcon, ProfileOutlineIcon, SettingsOutlineIcon } from '@/src/icons/base';
 import { NAV_ITEMS, OPTIONS_POSITION } from '@/src/lib/constants/common.const';
@@ -54,7 +55,13 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
           </div>
         </Link>
 
-        <nav className="hidden flex-1 items-end gap-1 self-end md:flex" aria-label="Main Nav">
+        <Tabs
+          animated
+          variant="nav"
+          label="Main Nav"
+          scrollable={false}
+          className="hidden flex-1 self-end md:flex"
+        >
           {NAV_ITEMS.map((item) => (
             <NavLink
               key={item.href}
@@ -66,7 +73,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               isActive={activePath === item.href}
             />
           ))}
-        </nav>
+        </Tabs>
 
         <div
           className={cn(

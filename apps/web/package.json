@@ -27,6 +27,7 @@
     "@nonsololarco/types": "workspace:*",
     "@radix-ui/react-dropdown-menu": "^2.1.17",
     "@radix-ui/react-select": "^2.3.0",
+    "@radix-ui/react-slot": "^1.2.5",
     "@repo/ui": "workspace:*",
     "@tanstack/react-query": "^5.101.2",
     "class-variance-authority": "^0.7.1",

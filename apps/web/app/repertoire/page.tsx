@@ -14,9 +14,9 @@ import { sumRawDurations } from '@/src/utils/duration.utils';
 
 function deriveStats(tracks: Track[]): RepertoireStats {
   return {
-    totalTracks: tracks.length,
-    readyTracks: tracks.filter((t) => t.status === 'ready').length,
-    totalDuration: sumRawDurations(tracks.map((t) => t.duration)),
+    totalTracks: tracks?.length,
+    readyTracks: tracks?.filter((t) => t.status === 'ready').length,
+    totalDuration: sumRawDurations(tracks?.map((t) => t.duration)),
   };
 }
 
@@ -39,12 +39,9 @@ function RepertoirePageContent() {
     () => (allMyTracks ? deriveStats(allMyTracks.data) : null),
     [allMyTracks],
   );
-  const soloStats = useMemo(
-    () => (soloTracks ? deriveStats(soloTracks.data) : null),
-    [soloTracks],
-  );
+  const soloStats = useMemo(() => (soloTracks ? deriveStats(soloTracks.data) : null), [soloTracks]);
 
-  const hasSoloTracks = soloTracks && soloTracks.data.length > 0;
+  const hasSoloTracks = soloTracks && soloTracks.data?.length > 0;
 
   const formattedBands = useMemo(
     () =>
@@ -73,7 +70,11 @@ function RepertoirePageContent() {
   return (
     <ActiveBandProvider bands={formattedBands}>
       <RepertoireShell>
-        <Repertoire bands={formattedBands} isEmpty={allMyStats.totalTracks === 0} stats={allMyStats} />
+        <Repertoire
+          bands={formattedBands}
+          isEmpty={allMyStats.totalTracks === 0}
+          stats={allMyStats}
+        />
       </RepertoireShell>
     </ActiveBandProvider>
   );
