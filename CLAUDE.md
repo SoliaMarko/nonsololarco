@@ -297,6 +297,11 @@ rename something, grep the docs for the old name.
 Full detail is in the `nonsololarco-conventions` skill. The rules most often
 missed:
 
+- **One component per file, one file per folder.** Every component — including a
+  sub-component used by a single parent — gets its own folder with a matching
+  `PascalCase.tsx` and a barrel `index.ts`. Never declare a second component in
+  the same file; extract it to its own folder and import it
+  (`import PageButton from './PageButton'`).
 - **Logical CSS properties only**: `pli-`/`plb-`/`mli-`/`mbs-`/`mbe-`, never
   `pl-`/`pr-`/`pt-`/`pb-`/`px-`/`py-`/`ml-`/`mt-`.
 - **`cn()`** for all className merging; the external `className` prop goes last.

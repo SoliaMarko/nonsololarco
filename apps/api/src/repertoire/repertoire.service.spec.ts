@@ -56,59 +56,65 @@ describe('RepertoireService', () => {
 
   describe('getByUser', () => {
     it('returns tracks filtered by lead member', async () => {
+      mockPrisma.track.count.mockResolvedValue(1);
       mockPrisma.track.findMany.mockResolvedValue([mockTracks[0]]);
 
-      const tracks = await service.getByUser('user-1');
+      const result = await service.getByUser('user-1');
 
-      expect(tracks).toHaveLength(1);
-      expect(tracks[0].title).toBe('Yard in the fog');
-      expect(tracks[0].leadMember.id).toBe('user-1');
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0].title).toBe('Yard in the fog');
+      expect(result.data[0].leadMember.id).toBe('user-1');
     });
 
     it('includes band field on returned tracks', async () => {
+      mockPrisma.track.count.mockResolvedValue(1);
       mockPrisma.track.findMany.mockResolvedValue([mockTracks[0]]);
 
-      const tracks = await service.getByUser('user-1');
+      const result = await service.getByUser('user-1');
 
-      expect(tracks[0].band).toEqual({ id: 'band-1', name: 'Quiet Yard' });
+      expect(result.data[0].band).toEqual({ id: 'band-1', name: 'Quiet Yard' });
     });
 
     it('returns empty array for unknown user', async () => {
+      mockPrisma.track.count.mockResolvedValue(0);
       mockPrisma.track.findMany.mockResolvedValue([]);
 
-      const tracks = await service.getByUser('nonexistent');
+      const result = await service.getByUser('nonexistent');
 
-      expect(tracks).toEqual([]);
+      expect(result.data).toEqual([]);
     });
 
     it('maps performers to members array', async () => {
+      mockPrisma.track.count.mockResolvedValue(1);
       mockPrisma.track.findMany.mockResolvedValue([mockTracks[1]]);
 
-      const tracks = await service.getByUser('user-1');
+      const result = await service.getByUser('user-1');
 
-      expect(tracks[0].members).toEqual([{ id: 'user-1', name: 'Solomiia' }]);
+      expect(result.data[0].members).toEqual([{ id: 'user-1', name: 'Solomiia' }]);
     });
   });
 
   describe('getByBand', () => {
     it('returns tracks without band field', async () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
+      mockPrisma.track.count.mockResolvedValue(2);
       mockPrisma.track.findMany.mockResolvedValue(mockTracks);
 
-      const tracks = await service.getByBand('band-1', 'user-1');
+      const result = await service.getByBand('band-1', 'user-1');
 
-      tracks.forEach((track) => {
+      result.data.forEach((track) => {
         expect(track).not.toHaveProperty('band');
       });
     });
 
     it('preserves all other track fields', async () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
+      mockPrisma.track.count.mockResolvedValue(1);
       mockPrisma.track.findMany.mockResolvedValue([mockTracks[0]]);
 
-      const tracks = await service.getByBand('band-1', 'user-1');
+      const result = await service.getByBand('band-1', 'user-1');
 
-      expect(tracks[0]).toEqual({
+      expect(result.data[0]).toEqual({
         id: 't-1',
         order: 1,
         title: 'Yard in the fog',
@@ -140,6 +146,7 @@ describe('RepertoireService', () => {
 
     it('queries with correct where and include', async () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
+      mockPrisma.track.count.mockResolvedValue(0);
       mockPrisma.track.findMany.mockResolvedValue([]);
 
       await service.getByBand('band-1', 'user-1');
@@ -152,6 +159,67 @@ describe('RepertoireService', () => {
         },
         orderBy: [{ order: 'asc' }],
       });
+    });
+  });
+
+  describe('pagination', () => {
+    it('returns full result set when page is omitted', async () => {
+      mockPrisma.track.count.mockResolvedValue(2);
+      mockPrisma.track.findMany.mockResolvedValue(mockTracks);
+
+      const result = await service.getByUser('user-1');
+
+      expect(result.data).toHaveLength(2);
+      expect(result.page).toBe(1);
+      expect(result.total).toBe(2);
+      expect(result.totalPages).toBe(1);
+    });
+
+    it('passes skip and take to Prisma when paginated', async () => {
+      mockPrisma.track.count.mockResolvedValue(25);
+      mockPrisma.track.findMany.mockResolvedValue([mockTracks[0]]);
+
+      await service.getByUser('user-1', { page: 2, pageSize: 10 });
+
+      const callArgs = mockPrisma.track.findMany.mock.calls[0][0] as {
+        skip?: number;
+        take?: number;
+      };
+      expect(callArgs.skip).toBe(10);
+      expect(callArgs.take).toBe(10);
+    });
+
+    it('defaults pageSize to 10', async () => {
+      mockPrisma.track.count.mockResolvedValue(25);
+      mockPrisma.track.findMany.mockResolvedValue([]);
+
+      const result = await service.getByUser('user-1', { page: 1 });
+
+      expect(result.pageSize).toBe(10);
+    });
+
+    it('slices in memory for post-query sort fields', async () => {
+      const manyTracks = Array.from({ length: 15 }, (_, i) => ({
+        ...mockTracks[0],
+        id: `t-${i}`,
+        order: i + 1,
+        status: i < 5 ? 'new' : 'ready',
+        duration: `${i}:00`,
+      }));
+
+      mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
+      mockPrisma.track.count.mockResolvedValue(15);
+      mockPrisma.track.findMany.mockResolvedValue(manyTracks);
+
+      const result = await service.getByBand('band-1', 'user-1', {
+        sort: 'status' as never,
+        page: 1,
+        pageSize: 10,
+      });
+
+      expect(result.data).toHaveLength(10);
+      expect(result.total).toBe(15);
+      expect(result.totalPages).toBe(2);
     });
   });
 });

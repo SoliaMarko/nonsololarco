@@ -25,6 +25,15 @@
   [role='button'][aria-disabled='true'] {
     cursor: not-allowed;
   }
+
+  ::selection {
+    background: color-mix(in srgb, var(--yellow-main) 38%, transparent);
+    color: #000;
+  }
+
+  [data-theme='dark'] ::selection {
+    color: #fff;
+  }
 }
 
 @theme {

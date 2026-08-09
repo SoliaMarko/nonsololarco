@@ -44,6 +44,7 @@ export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps)
     function onBandChange(bandId: string) {
       const params = new URLSearchParams(searchParams.toString());
       params.set('band', bandId);
+      params.delete('page');
       router.push(`?${params.toString()}`);
     }
 

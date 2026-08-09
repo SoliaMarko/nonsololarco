@@ -47,10 +47,11 @@ export default function RepertoireFilterBar() {
   /** Unfiltered query to derive counts */
   const { data: allTracks } = useRepertoireTracks(activeBandId);
 
-  const archivedCount = allTracks?.filter((t) => t.status === 'archived').length ?? 0;
-  const activeCount = allTracks?.filter((t) => t.status !== 'archived').length ?? 0;
+  const tracks = allTracks?.data;
+  const archivedCount = tracks?.filter((t) => t.status === 'archived').length ?? 0;
+  const activeCount = tracks?.filter((t) => t.status !== 'archived').length ?? 0;
   const mineCount =
-    allTracks?.filter((t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id)).length ?? 0;
+    tracks?.filter((t) => t.leadMember.id === user?.id || t.members?.some((m) => m.id === user?.id)).length ?? 0;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
@@ -59,6 +60,7 @@ export default function RepertoireFilterBar() {
     } else {
       params.set('status', value);
     }
+    params.delete('page');
     router.push(`?${params.toString()}`);
   }
 
@@ -69,6 +71,7 @@ export default function RepertoireFilterBar() {
     } else {
       params.set('onlyMine', 'true');
     }
+    params.delete('page');
     router.push(`?${params.toString()}`);
   }
 
@@ -220,7 +223,7 @@ export default function RepertoireFilterBar() {
           ) : null}
 
           <span className="text-fg-tertiary text-xs tabular-nums">
-            {allTracks?.length ?? 0} in group
+            {allTracks?.total ?? 0} in group
           </span>
         </div>
       </div>

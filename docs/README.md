@@ -12,6 +12,8 @@ Project documentation. Three kinds, three folders.
 
 - [Repertoire filtering & sorting](./features/repertoire-filtering.md) — status
   filters, "only mine", column sorting, counts.
+- [Repertoire pagination](./features/repertoire-pagination.md) — paged track
+  list with URL state, ellipsis collapsing, continuous row numbers.
 
 ## Architecture
 

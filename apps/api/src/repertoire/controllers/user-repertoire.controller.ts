@@ -5,12 +5,12 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
-import type { Track } from '@nonsololarco/types';
+import type { PaginatedResult, Track } from '@nonsololarco/types';
 
 import { CurrentUser } from '../../auth/decorators/current-user.decorator';
 import type { SessionUser } from '../../auth/decorators/current-user.decorator';
 import { JwtAuthGuard } from '../../auth/guards/jwt-auth.guard';
-import { RepertoireQueryDto, TrackDto } from '../dto';
+import { PaginatedTracksDto, RepertoireQueryDto } from '../dto';
 import { RepertoireService } from '../repertoire.service';
 
 @ApiTags('repertoire')
@@ -22,21 +22,21 @@ export class UserRepertoireController {
 
   @Get()
   @ApiOperation({ summary: 'Get all tracks where the current user is lead (band + solo)' })
-  @ApiOkResponse({ type: [TrackDto], description: 'List of user tracks' })
+  @ApiOkResponse({ type: PaginatedTracksDto, description: 'Paginated list of user tracks' })
   getMyRepertoire(
     @CurrentUser() user: SessionUser,
     @Query() query: RepertoireQueryDto,
-  ): Promise<Track[]> {
+  ): Promise<PaginatedResult<Track>> {
     return this.repertoireService.getByUser(user.id, query);
   }
 
   @Get('solo')
   @ApiOperation({ summary: 'Get solo tracks for the current user (no band)' })
-  @ApiOkResponse({ type: [TrackDto], description: 'List of solo tracks' })
+  @ApiOkResponse({ type: PaginatedTracksDto, description: 'Paginated list of solo tracks' })
   getMySoloRepertoire(
     @CurrentUser() user: SessionUser,
     @Query() query: RepertoireQueryDto,
-  ): Promise<Track[]> {
+  ): Promise<PaginatedResult<Track>> {
     return this.repertoireService.getSoloByUser(user.id, query);
   }
 }

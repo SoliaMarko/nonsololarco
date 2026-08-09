@@ -31,6 +31,7 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
       params.set('sort', field);
       params.set('order', 'desc');
     }
+    params.delete('page');
 
     router.push(`?${params.toString()}`);
   }

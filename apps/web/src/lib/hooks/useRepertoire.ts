@@ -16,6 +16,8 @@ export { ALL_BANDS_ID, SOLO_BAND_ID };
 export interface UseRepertoireTracksOptions {
   onlyMine?: boolean;
   order?: SortOrder;
+  page?: number;
+  pageSize?: number;
   sort?: SortField;
   status?: TrackFilterParam;
 }
@@ -26,22 +28,21 @@ export interface UseRepertoireTracksOptions {
  * - 'solo'       → solo tracks only (no band)
  * - Other string → tracks for that specific band
  *
- * Sort and filter params are forwarded to the backend so ordering and
- * filtering are server-side (ready for future pagination).
+ * Sort, filter and pagination params are forwarded to the backend.
  */
 export function useRepertoireTracks(bandId: string, options: UseRepertoireTracksOptions = {}) {
-  const { sort, order, status, onlyMine } = options;
+  const { sort, order, status, onlyMine, page, pageSize } = options;
   const isSolo = bandId === SOLO_BAND_ID;
   const isBandSelected = Boolean(bandId) && !isSolo;
 
-  const params: RepertoireQueryParams = { sort, order, status, onlyMine };
+  const params: RepertoireQueryParams = { sort, order, status, onlyMine, page, pageSize };
 
   return useQuery({
     queryKey: isSolo
-      ? ['repertoire', 'solo', sort, order, status, onlyMine]
+      ? ['repertoire', 'solo', sort, order, status, onlyMine, page, pageSize]
       : isBandSelected
-        ? ['repertoire', 'band', bandId, sort, order, status, onlyMine]
-        : ['repertoire', 'me', sort, order, status, onlyMine],
+        ? ['repertoire', 'band', bandId, sort, order, status, onlyMine, page, pageSize]
+        : ['repertoire', 'me', sort, order, status, onlyMine, page, pageSize],
     queryFn: () =>
       isSolo
         ? fetchSoloRepertoire(params)
