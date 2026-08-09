@@ -7,17 +7,6 @@ import { expect, test } from '@playwright/test';
  * See docs/features/repertoire-filtering.md.
  */
 
-test.beforeEach(async ({ page }) => {
-  page.on('console', (msg) => console.log('CONSOLE:', msg.type(), msg.text()));
-  page.on('pageerror', (err) => console.log('PAGE ERROR:', err.message));
-  page.on('requestfailed', (req) =>
-    console.log('REQUEST FAILED:', req.url(), req.failure()?.errorText),
-  );
-  page.on('response', (res) => {
-    if (!res.ok()) console.log('BAD RESPONSE:', res.status(), res.url());
-  });
-});
-
 /** Waits for the table to settle after a filter or sort changes the query. */
 async function tracksTable(page: import('@playwright/test').Page) {
   const table = page.getByRole('table', { name: /repertoire/i });
