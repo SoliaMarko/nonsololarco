@@ -50,10 +50,10 @@ test('column header sorts and toggles direction', async ({ page }) => {
   const titleHeader = page.getByRole('button', { name: /title/i });
   await titleHeader.click();
   await expect(page).toHaveURL(/sort=title/);
-  await expect(page).toHaveURL(/order=asc/);
+  await expect(page).toHaveURL(/order=desc/);
 
   await titleHeader.click();
-  await expect(page).toHaveURL(/order=desc/);
+  await expect(page).toHaveURL(/order=asc/);
 });
 
 test('sort survives a page reload', async ({ page }) => {
