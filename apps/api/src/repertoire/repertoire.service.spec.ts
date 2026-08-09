@@ -159,7 +159,7 @@ describe('RepertoireService', () => {
           leadMember: true,
           performers: { include: { user: true } },
         },
-        orderBy: [{ order: 'asc' }],
+        orderBy: [{ order: 'asc' }, { id: 'asc' }],
       });
     });
   });
