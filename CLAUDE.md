@@ -17,7 +17,7 @@ trust and change it.
 1. **Tests written.** Unit tests for every new module, in the same commit. E2E
    if the feature meets the criteria in [Testing policy](#testing-policy).
 2. **JSDoc written.** Every utility, hook and service method — see
-   [JSDoc](#jsdoc-required-on-every-utility).
+   [JSDoc](#jsdoc--required-on-every-utility).
 3. **Docs updated.** Check the table in
    [Documentation policy](#documentation-policy) against what changed, and
    update or create the file it points to. This is not optional and not
@@ -41,7 +41,7 @@ that now describes behaviour the code no longer has.
 platform and practice tool with a retro/vintage aesthetic. Turborepo monorepo,
 pnpm workspaces.
 
-```
+```text
 apps/
   web/            Next.js 15 App Router, React 19, Tailwind v4
   api/            NestJS 11, Prisma 7, PostgreSQL
@@ -246,7 +246,11 @@ do **not** need e2e.
 - **API:** supertest, in `apps/api/test/`. Test the HTTP contract — status
   codes, response shape, query-param handling, auth guards.
 
-Before opening a PR: `pnpm typecheck && pnpm lint && pnpm test`.
+Before opening a PR:
+
+```sh
+pnpm lint && pnpm stylelint && pnpm typecheck && pnpm test && pnpm --filter web e2e && pnpm build
+```
 
 CI runs lint, stylelint, typecheck, unit tests, **e2e** and build; all six gate
 the final `ci` check, so none of them can be skipped on the way to merge.
@@ -257,7 +261,7 @@ the final `ci` check, so none of them can be skipped on the way to merge.
 
 Docs live in `docs/`. See `docs/README.md` for the index.
 
-```
+```text
 docs/
   features/       One file per user-facing feature — what it does, how to use it
   architecture/   Data model, API reference, diagrams (Mermaid)

@@ -17,6 +17,19 @@
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
     },
+    "e2e": {
+      "dependsOn": ["^build"],
+      "env": [
+        "CI",
+        "DATABASE_URL",
+        "E2E_START_SERVER",
+        "E2E_USER_EMAIL",
+        "E2E_WEB_COMMAND",
+        "E2E_WEB_URL",
+        "JWT_SECRET"
+      ],
+      "outputs": []
+    },
     "dev": {
       "cache": false,
       "persistent": true

@@ -1,4 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
+import { Prisma } from '@nonsololarco/db';
 import { Track, TrackSide, TrackStatus } from '@nonsololarco/types';
 
 import { PrismaService } from '../prisma';
@@ -114,21 +115,17 @@ function participatesIn(userId: string): object {
   };
 }
 
-interface TrackRow {
-  band?: { id: string; name: string } | null;
-  bpm: number;
-  duration: string;
-  id: string;
-  leadMember: { id: string; name: string };
-  musicalKey: Parameters<typeof toDisplayMusicalKey>[0];
-  order: number;
-  performers: { user: { id: string; name: string } }[];
-  side: string;
-  status: string;
-  title: string;
-}
+type TrackWithMembers = Prisma.TrackGetPayload<{
+  include: typeof TRACK_INCLUDE_MEMBERS;
+}>;
+type TrackWithAll = Prisma.TrackGetPayload<{
+  include: typeof TRACK_INCLUDE_ALL;
+}>;
+type TrackRow = TrackWithMembers | TrackWithAll;
 
 function mapTrack(track: TrackRow, includeBand = false): Track {
+  const band = 'band' in track ? track.band : null;
+
   return {
     id: track.id,
     order: track.order,
@@ -143,9 +140,7 @@ function mapTrack(track: TrackRow, includeBand = false): Track {
       id: p.user.id,
       name: p.user.name,
     })),
-    ...(includeBand && track.band
-      ? { band: { id: track.band.id, name: track.band.name } }
-      : {}),
+    ...(includeBand && band ? { band: { id: band.id, name: band.name } } : {}),
   };
 }
 

@@ -52,9 +52,9 @@ is yours by definition, so all rows are highlighted.
 Each row lists everyone who plays on the track, comma-separated under the
 title.
 
-**Your own name comes first**, so you can scan the column for yourself rather
-than reading every row. The rest follow in API order — lead, then the other
-performers.
+**Your own name comes first** when you participate in the track, so you can
+scan the column for yourself rather than reading every row. On tracks you don't
+play on, the list follows API order — lead, then the other performers.
 
 **The lead's name is in the accent colour**, but only when the track has more
 than one performer. On a one-person track the highlight would be marking the
