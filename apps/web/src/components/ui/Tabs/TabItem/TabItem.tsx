@@ -11,8 +11,7 @@ import { useTabsContext } from '../TabsContext';
 type TabItemVariantProps = VariantProps<typeof tabItemVariants>;
 
 export interface TabItemProps
-  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>,
-    TabItemVariantProps {
+  extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>, TabItemVariantProps {
   /**
    * When true, merges props onto the immediate child element instead of
    * rendering a `<button>`. Use this to render a `<Link>` or any other
@@ -48,10 +47,11 @@ export default function TabItem({
   return (
     <Comp
       role="tab"
+      type={asChild ? undefined : 'button'}
       aria-selected={isActive ?? false}
       className={cn(
         tabItemVariants({ variant, isActive }),
-        ctx.animated && 'relative z-[1] border-b-transparent bg-transparent',
+        ctx.animated && 'relative z-1 border-b-transparent bg-transparent',
         ctx.animated && isActive && 'text-fg-primary',
         className,
       )}

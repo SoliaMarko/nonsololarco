@@ -69,7 +69,7 @@ test('sort survives a page reload', async ({ page }) => {
 test.describe('within a band', () => {
   test.beforeEach(async ({ page }) => {
     // The first tab is "All Repertoires"; the second is Solo or a real band.
-    await page.getByRole('button', { name: /Quiet Yard/i }).click();
+    await page.getByRole('tab', { name: /Quiet Yard/i }).click();
     await expect(page).toHaveURL(/band=/);
   });
 

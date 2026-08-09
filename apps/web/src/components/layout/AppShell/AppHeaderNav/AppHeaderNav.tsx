@@ -55,25 +55,21 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
           </div>
         </Link>
 
-        <Tabs
-          animated
-          variant="nav"
-          label="Main Nav"
-          scrollable={false}
-          className="hidden flex-1 self-end md:flex"
-        >
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              badge={item.badge}
-              variant="desktop"
-              isActive={activePath === item.href}
-            />
-          ))}
-        </Tabs>
+        <nav className="hidden flex-1 self-end md:flex" aria-label="Main Nav">
+          <Tabs animated variant="nav" scrollable={false}>
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={item.label}
+                badge={item.badge}
+                variant="desktop"
+                isActive={activePath === item.href}
+              />
+            ))}
+          </Tabs>
+        </nav>
 
         <div
           className={cn(
