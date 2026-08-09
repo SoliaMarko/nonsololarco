@@ -95,6 +95,7 @@ jobs:
       # auth setup signs its own token with it, so it only has to match what
       # the API verifies against in this same job.
       JWT_SECRET: ci-e2e-secret-not-used-outside-this-job
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public
       CORS_ORIGINS: http://localhost:3000
       FRONTEND_URL: http://localhost:3000
       NEXT_PUBLIC_API_URL: http://localhost:3001/api

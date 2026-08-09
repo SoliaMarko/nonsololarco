@@ -54,7 +54,8 @@ export default function TracksTable() {
   const searchParams = useSearchParams();
   const router = useRouter();
 
-  const sortField = (searchParams.get('sort') as SortField) ?? undefined;
+  const rawSortField = (searchParams.get('sort') as SortField) ?? undefined;
+  const sortField = !isSpecificBandSelected && rawSortField === 'trackOrder' ? undefined : rawSortField;
   const sortOrder = (searchParams.get('order') as SortOrder) ?? undefined;
   const status = (searchParams.get('status') as TrackFilterParam) ?? undefined;
   const onlyMine = searchParams.get('onlyMine') === 'true';
@@ -73,7 +74,6 @@ export default function TracksTable() {
    * we can tell "first ever load" (nothing to show) from "updating" (show the
    * old rows behind a spinner).
    */
-  const hasRows = Boolean(tracks?.length);
   const isInitialLoad = isFetching && !tracks;
   const isRefetching = isFetching && Boolean(tracks);
 
@@ -113,7 +113,6 @@ export default function TracksTable() {
             <TrackListRow
               index={index}
               isMyTrack={
-                !isSpecificBandSelected ||
                 track.leadMember.id === user?.id ||
                 track.members?.some((member) => member.id === user?.id)
               }
@@ -143,7 +142,7 @@ export default function TracksTable() {
         {/* Sits over the dimmed rows so the wait has a visible anchor.
             `sticky` keeps it in view when the locked height exceeds the
             viewport — otherwise it can end up scrolled off on a long list. */}
-        {isRefetching && hasRows ? (
+        {isRefetching ? (
           <div
             className="pointer-events-none absolute inset-0 flex justify-center"
             role="presentation"

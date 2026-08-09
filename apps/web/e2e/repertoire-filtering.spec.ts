@@ -75,7 +75,8 @@ test.describe('within a band', () => {
 
   test('"Only mine" filters to tracks the user participates in', async ({ page }) => {
     const table = await tracksTable(page);
-    const totalRows = await table.getByRole('row').count();
+    const dataRows = table.getByRole('rowgroup').getByRole('row');
+    const totalRows = await dataRows.count();
 
     const onlyMine = page.getByRole('button', { name: /only mine/i });
     await expect(onlyMine).toBeVisible();
@@ -88,7 +89,7 @@ test.describe('within a band', () => {
     await expect(page).toHaveURL(/onlyMine=true/);
 
     const filtered = await tracksTable(page);
-    const filteredRows = await filtered.getByRole('row').count();
+    const filteredRows = await filtered.getByRole('rowgroup').getByRole('row').count();
 
     expect(filteredRows).toBe(badgeCount);
     expect(filteredRows).toBeLessThanOrEqual(totalRows);

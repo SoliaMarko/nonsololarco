@@ -48,6 +48,10 @@ export class RepertoireQueryDto {
   })
   @IsOptional()
   @IsBoolean()
-  @Transform(({ value }) => value === 'true' || value === '1' || value === true)
+  @Transform(({ value }) => {
+    if (value === 'true' || value === '1' || value === true) return true;
+    if (value === 'false' || value === '0' || value === false) return false;
+    return value as unknown;
+  })
   onlyMine?: boolean;
 }

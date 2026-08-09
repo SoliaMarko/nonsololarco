@@ -49,7 +49,6 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
 
   const isArchived = track.status === 'archived';
 
-  /** Current user first, then the rest — see getTrackPerformers */
   const performers = getTrackPerformers(track, user?.id);
 
   /** Accent stripe is shown for my tracks in a band view, and for every track in "all bands" view */
