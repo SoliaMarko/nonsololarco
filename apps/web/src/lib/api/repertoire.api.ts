@@ -26,12 +26,14 @@ function buildQueryString(params: RepertoireQueryParams): string {
   return str ? `?${str}` : '';
 }
 
+/** Fetches all tracks where the current user is lead or performer, across all bands. */
 export async function fetchMyRepertoire(
   params: RepertoireQueryParams = {},
 ): Promise<PaginatedResult<Track>> {
   return apiFetch<PaginatedResult<Track>>(`/users/me/repertoire${buildQueryString(params)}`);
 }
 
+/** Fetches the current user's solo tracks (no band). */
 export async function fetchSoloRepertoire(
   params: RepertoireQueryParams = {},
 ): Promise<PaginatedResult<Track>> {

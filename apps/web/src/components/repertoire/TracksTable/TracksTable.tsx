@@ -98,7 +98,7 @@ export default function TracksTable() {
     params.delete('status');
     params.delete('onlyMine');
     params.delete('page');
-    router.push(`?${params.toString()}`);
+    router.push(`?${params.toString()}`, { scroll: false });
   }
 
   function goToPage(nextPage: number) {
