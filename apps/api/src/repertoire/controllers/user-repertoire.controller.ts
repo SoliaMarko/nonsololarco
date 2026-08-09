@@ -21,7 +21,9 @@ export class UserRepertoireController {
   constructor(private readonly repertoireService: RepertoireService) {}
 
   @Get()
-  @ApiOperation({ summary: 'Get all tracks where the current user is lead (band + solo)' })
+  @ApiOperation({
+    summary: 'Get all tracks where the current user is lead (band + solo)',
+  })
   @ApiOkResponse({ type: [TrackDto], description: 'List of user tracks' })
   getMyRepertoire(
     @CurrentUser() user: SessionUser,

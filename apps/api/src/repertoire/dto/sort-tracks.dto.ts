@@ -35,12 +35,17 @@ export class RepertoireQueryDto {
   @IsEnum(SortOrder)
   order?: SortOrder;
 
-  @ApiPropertyOptional({ enum: TrackFilterField, default: TrackFilterField.ALL })
+  @ApiPropertyOptional({
+    enum: TrackFilterField,
+    default: TrackFilterField.ALL,
+  })
   @IsOptional()
   @IsEnum(TrackFilterField)
   status?: TrackFilterField;
 
-  @ApiPropertyOptional({ description: 'Show only tracks where current user participates' })
+  @ApiPropertyOptional({
+    description: 'Show only tracks where current user participates',
+  })
   @IsOptional()
   @IsBoolean()
   @Transform(({ value }) => value === 'true' || value === '1' || value === true)
