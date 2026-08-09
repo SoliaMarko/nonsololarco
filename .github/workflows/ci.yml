@@ -136,10 +136,15 @@ jobs:
         run: pnpm build
 
       - name: Start API
-        run: pnpm --filter api start:prod &
+        run: pnpm --filter api start:prod > api.log 2>&1 &
 
       - name: Wait for API
         run: npx wait-on http://localhost:3001/api/docs --timeout 60000
+        continue-on-error: true
+
+      - name: Show API logs
+        if: always()
+        run: cat api.log
 
       - name: Run e2e
         run: pnpm --filter web e2e
