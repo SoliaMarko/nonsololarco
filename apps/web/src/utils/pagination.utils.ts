@@ -35,7 +35,11 @@ export function getPaginationRange(
   }
 
   const rangeStart = Math.max(2, clamped - siblingCount);
-  const rangeEnd = Math.min(totalPages - 1, clamped + siblingCount);
+  let rangeEnd = Math.min(totalPages - 1, clamped + siblingCount);
+
+  if (clamped - siblingCount < 2) {
+    rangeEnd = Math.min(totalPages - 1, 2 * siblingCount + 1);
+  }
 
   const items: PaginationItem[] = [1];
 

@@ -11,7 +11,7 @@ export default function PageButton({ isActive, onClick, page }: PageButtonProps)
   return (
     <button
       aria-current={isActive ? 'page' : undefined}
-      aria-label={`Page ${page}`}
+      aria-label={`Go to page ${page}`}
       className={paginationItemVariants({ isActive })}
       onClick={onClick}
       type="button"
