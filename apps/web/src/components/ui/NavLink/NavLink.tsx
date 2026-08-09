@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import { type VariantProps } from 'class-variance-authority';
 
+import TabItem from '@/src/components/ui/Tabs/TabItem';
 import { navLinkVariants } from '@/src/lib/variants/navlink.variants';
 import { cn } from '@/src/utils/cn';
 
@@ -29,13 +30,37 @@ export default function NavLink({
   className,
   ...props
 }: NavLinkProps) {
+  if (variant === 'desktop') {
+    return (
+      <TabItem asChild variant="nav" isActive={isActive ?? false} className={className}>
+        <Link
+          href={href}
+          aria-current={isActive ? 'page' : undefined}
+          {...props}
+        >
+          <span className="relative shrink-0">
+            <Icon className="size-5 transition-colors" aria-hidden="true" />
+            {badge !== undefined && badge > 0 && (
+              <span
+                className="bg-accent-red pli-0.5 absolute -top-1.5 -right-1.5 flex h-4 min-w-4 items-center justify-center rounded-full text-[9px] leading-none font-bold text-white"
+                aria-label={`${badge} unread`}
+              >
+                {badge > 99 ? '99+' : badge}
+              </span>
+            )}
+          </span>
+          <span>{label}</span>
+        </Link>
+      </TabItem>
+    );
+  }
+
   return (
     <Link
       href={href}
       aria-current={isActive ? 'page' : undefined}
       className={cn(
         navLinkVariants({ variant, isActive }),
-        { 'border-accent-red rounded-none border-b-2 pbe-1.5': variant === 'desktop' && isActive },
         { 'hover:text-fg-primary': !isActive },
         className,
       )}
@@ -45,7 +70,7 @@ export default function NavLink({
         <Icon
           className={cn(
             'size-5 transition-colors',
-            variant === 'mobile' && isActive ? 'text-accent-red' : '',
+            isActive ? 'text-accent-red' : '',
           )}
           aria-hidden="true"
         />
@@ -58,8 +83,7 @@ export default function NavLink({
           </span>
         )}
       </span>
-
-      <span className={cn(variant === 'mobile' ? 'leading-none' : '')}>{label}</span>
+      <span className="leading-none">{label}</span>
     </Link>
   );
 }
