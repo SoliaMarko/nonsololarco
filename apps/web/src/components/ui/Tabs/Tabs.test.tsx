@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 import TabItem from './TabItem';
 import Tabs from './Tabs';
+
+beforeAll(() => {
+  globalThis.ResizeObserver = class {
+    observe() {}
+    unobserve() {}
+    disconnect() {}
+  } as unknown as typeof ResizeObserver;
+});
 
 describe('Tabs', () => {
   it('renders children inside a tablist', () => {
