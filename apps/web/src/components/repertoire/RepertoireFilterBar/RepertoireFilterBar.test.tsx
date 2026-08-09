@@ -35,7 +35,7 @@ vi.mock('@/src/hooks/global/useAuth', () => ({
   useAuth: () => ({ user: mockUser }),
 }));
 
-const TRACKS: Track[] = [
+const tracks: Track[] = [
   {
     id: 't-1', order: 1, title: 'Song A', bpm: 120, musicalKey: 'C',
     duration: '3:20', side: 'a', status: 'ready',
@@ -53,7 +53,7 @@ const TRACKS: Track[] = [
   },
 ];
 
-let mockTracks: Track[] = TRACKS;
+let mockTracks: Track[] = tracks;
 
 vi.mock('@/src/lib/hooks/useRepertoire', () => ({
   SOLO_BAND_ID: 'solo',
@@ -72,13 +72,19 @@ function findButtons(text: string) {
   return screen.getAllByRole('button').filter((b) => b.textContent?.includes(text));
 }
 
+function getFirstButton(text: string) {
+  const [button] = findButtons(text);
+  if (!button) throw new Error(`Button not found: ${text}`);
+  return button;
+}
+
 beforeEach(() => {
   vi.clearAllMocks();
   mockSearchParams = new URLSearchParams();
   mockActiveBand.activeBand = undefined;
   mockActiveBand.activeBandId = '';
   mockActiveBand.isSpecificBandSelected = false;
-  mockTracks = TRACKS;
+  mockTracks = tracks;
 });
 
 describe('RepertoireFilterBar', () => {
@@ -102,7 +108,7 @@ describe('RepertoireFilterBar', () => {
   it('updates URL when a filter pill is clicked', () => {
     render(<RepertoireFilterBar />);
 
-    fireEvent.click(findButtons('Ready')[0]!);
+    fireEvent.click(getFirstButton('Ready'));
 
     expect(mockPush).toHaveBeenCalledWith('?status=ready');
   });
@@ -111,7 +117,7 @@ describe('RepertoireFilterBar', () => {
     mockSearchParams = new URLSearchParams('status=ready');
     render(<RepertoireFilterBar />);
 
-    fireEvent.click(findButtons('All')[0]!);
+    fireEvent.click(getFirstButton('All'));
 
     expect(mockPush).toHaveBeenCalledWith('?');
   });
@@ -163,7 +169,7 @@ describe('RepertoireFilterBar', () => {
     it('toggles onlyMine param in URL', () => {
       render(<RepertoireFilterBar />);
 
-      fireEvent.click(findButtons('Only mine')[0]!);
+      fireEvent.click(getFirstButton('Only mine'));
 
       expect(mockPush).toHaveBeenCalledWith('?onlyMine=true');
     });
@@ -172,7 +178,7 @@ describe('RepertoireFilterBar', () => {
       mockSearchParams = new URLSearchParams('onlyMine=true');
       render(<RepertoireFilterBar />);
 
-      fireEvent.click(findButtons('Only mine')[0]!);
+      fireEvent.click(getFirstButton('Only mine'));
 
       expect(mockPush).toHaveBeenCalledWith('?');
     });
