@@ -25,20 +25,28 @@ export function getPaginationRange(
   const clamped = Math.max(1, Math.min(currentPage, totalPages));
 
   const rangeStart = Math.max(2, clamped - siblingCount);
-  const rangeEnd = Math.min(totalPages - 1, clamped + siblingCount);
+  let rangeEnd = Math.min(totalPages - 1, clamped + siblingCount);
+
+  if (clamped - siblingCount < 2) {
+    rangeEnd = Math.min(totalPages - 1, 2 * siblingCount + 1);
+  }
 
   const items: PaginationItem[] = [1];
 
-  if (rangeStart > 2) {
+  if (rangeStart > 3) {
     items.push('ellipsis');
+  } else if (rangeStart === 3) {
+    items.push(2);
   }
 
   for (let i = rangeStart; i <= rangeEnd; i++) {
     items.push(i);
   }
 
-  if (rangeEnd < totalPages - 1) {
+  if (rangeEnd < totalPages - 2) {
     items.push('ellipsis');
+  } else if (rangeEnd === totalPages - 2) {
+    items.push(totalPages - 1);
   }
 
   if (totalPages > 1) {

@@ -15,19 +15,20 @@ describe('Pagination', () => {
   it('renders all page buttons for a small range', () => {
     render(<Pagination currentPage={1} totalPages={3} onPageChange={() => {}} />);
 
-    expect(screen.getByRole('button', { name: 'Page 1' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Page 2' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Page 3' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Page 1' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Page 2' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Page 3' })).toBeDefined();
   });
 
   it('marks the current page with aria-current', () => {
     render(<Pagination currentPage={2} totalPages={3} onPageChange={() => {}} />);
 
-    expect(screen.getByRole('button', { name: 'Page 2' })).toHaveAttribute(
-      'aria-current',
+    expect(screen.getByRole('button', { name: 'Page 2' }).getAttribute('aria-current')).toBe(
       'page',
     );
-    expect(screen.getByRole('button', { name: 'Page 1' })).not.toHaveAttribute('aria-current');
+    expect(
+      screen.getByRole('button', { name: 'Page 1' }).getAttribute('aria-current'),
+    ).toBeNull();
   });
 
   it('calls onPageChange with the clicked page', async () => {
@@ -42,15 +43,23 @@ describe('Pagination', () => {
   it('disables prev arrow on first page', () => {
     render(<Pagination currentPage={1} totalPages={5} onPageChange={() => {}} />);
 
-    expect(screen.getByRole('button', { name: 'Previous page' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Next page' })).not.toBeDisabled();
+    expect(
+      (screen.getByRole('button', { name: 'Previous page' }) as HTMLButtonElement).disabled,
+    ).toBe(true);
+    expect(
+      (screen.getByRole('button', { name: 'Next page' }) as HTMLButtonElement).disabled,
+    ).toBe(false);
   });
 
   it('disables next arrow on last page', () => {
     render(<Pagination currentPage={5} totalPages={5} onPageChange={() => {}} />);
 
-    expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Previous page' })).not.toBeDisabled();
+    expect(
+      (screen.getByRole('button', { name: 'Next page' }) as HTMLButtonElement).disabled,
+    ).toBe(true);
+    expect(
+      (screen.getByRole('button', { name: 'Previous page' }) as HTMLButtonElement).disabled,
+    ).toBe(false);
   });
 
   it('steps forward / backward via arrows', async () => {
@@ -67,6 +76,6 @@ describe('Pagination', () => {
 
   it('has an accessible navigation landmark', () => {
     render(<Pagination currentPage={1} totalPages={3} onPageChange={() => {}} />);
-    expect(screen.getByRole('navigation', { name: 'Pagination' })).toBeInTheDocument();
+    expect(screen.getByRole('navigation', { name: 'Pagination' })).toBeDefined();
   });
 });

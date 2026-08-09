@@ -57,7 +57,7 @@ let mockTracks: Track[] = tracks;
 
 vi.mock('@/src/lib/hooks/useRepertoire', () => ({
   SOLO_BAND_ID: 'solo',
-  useRepertoireTracks: () => ({ data: mockTracks }),
+  useRepertoireTracks: () => ({ data: { data: mockTracks } }),
 }));
 
 vi.mock('@/src/icons/achievements', () => ({
