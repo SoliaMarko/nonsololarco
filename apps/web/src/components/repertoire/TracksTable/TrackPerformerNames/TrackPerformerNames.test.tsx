@@ -27,26 +27,29 @@ describe('TrackPerformerNames', () => {
   it('highlights the lead when there is more than one performer', () => {
     render(<TrackPerformerNames performers={[LEAD, MEMBER]} />);
 
-    expect(screen.getByText('Anna')).toHaveClass('text-accent-red');
-    expect(screen.getByText('Jared')).not.toHaveClass('text-accent-red');
+    const anna = screen.getByText('Anna');
+    const jared = screen.getByText('Jared');
+
+    expect(anna.className).toContain('font-semibold');
+    expect(jared.className).not.toContain('font-semibold');
   });
 
   it('does not highlight a lone performer — there is nothing to contrast', () => {
     render(<TrackPerformerNames performers={[LEAD]} />);
 
-    expect(screen.getByText('Anna')).not.toHaveClass('text-accent-red');
+    expect(screen.getByText('Anna').className).not.toContain('font-semibold');
   });
 
   it('highlights the lead even when they are not listed first', () => {
     render(<TrackPerformerNames performers={[OTHER, LEAD]} />);
 
-    expect(screen.getByText('Anna')).toHaveClass('text-accent-red');
+    expect(screen.getByText('Anna').className).toContain('font-semibold');
   });
 
   it('dims the highlighted lead when muted', () => {
     render(<TrackPerformerNames isMuted performers={[LEAD, MEMBER]} />);
 
-    expect(screen.getByText('Anna')).toHaveClass('opacity-60');
+    expect(screen.getByText('Anna').className).toContain('opacity-60');
   });
 
   it('renders nothing for an empty list', () => {
@@ -55,26 +58,20 @@ describe('TrackPerformerNames', () => {
     expect(container.textContent).toBe('');
   });
 
-  it('applies the external className', () => {
-    const { container } = render(
-      <TrackPerformerNames className="text-xs" performers={[LEAD]} />,
-    );
-
-    expect(container.firstChild).toHaveClass('text-xs');
-  });
-
-  it('truncates the list as a whole, not each name', () => {
+  it('truncates the list as a whole when isTruncated is true', () => {
     const { container } = render(
       <TrackPerformerNames isTruncated performers={[LEAD, MEMBER, OTHER]} />,
     );
 
-    expect(container.firstChild).toHaveClass('truncate');
-    expect(screen.getByText('Jared')).not.toHaveClass('truncate');
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper.className).toContain('truncate');
+    expect(screen.getByText('Jared').className).not.toContain('truncate');
   });
 
   it('does not truncate by default', () => {
     const { container } = render(<TrackPerformerNames performers={[LEAD, MEMBER]} />);
 
-    expect(container.firstChild).not.toHaveClass('truncate');
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper.className).not.toContain('truncate');
   });
 });

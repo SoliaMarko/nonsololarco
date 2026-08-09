@@ -34,7 +34,7 @@ function buildPrismaOrderBy(
   sort?: TrackSortField,
   order?: SortOrder,
 ): TrackOrderBy[] {
-  const dir: OrderDir = order === 'desc' ? 'desc' : 'asc';
+  const dir: OrderDir = order === SortOrder.DESC ? 'desc' : 'asc';
 
   switch (sort) {
     case TrackSortField.TRACK_ORDER:
@@ -76,7 +76,7 @@ function postQuerySort(
 ): Track[] {
   if (!sort) return tracks;
 
-  const dir = order === 'desc' ? -1 : 1;
+  const dir = order === SortOrder.DESC ? -1 : 1;
 
   if (sort === TrackSortField.STATUS) {
     return [...tracks].sort(
@@ -110,10 +110,7 @@ const TRACK_INCLUDE_ALL = {
 /** Where clause: tracks the user participates in (as lead or performer) */
 function participatesIn(userId: string): object {
   return {
-    OR: [
-      { leadMemberId: userId },
-      { performers: { some: { userId } } },
-    ],
+    OR: [{ leadMemberId: userId }, { performers: { some: { userId } } }],
   };
 }
 
@@ -142,7 +139,10 @@ function mapTrack(track: TrackRow, includeBand = false): Track {
     status: track.status as TrackStatus,
     duration: track.duration,
     leadMember: { id: track.leadMember.id, name: track.leadMember.name },
-    members: track.performers.map((p) => ({ id: p.user.id, name: p.user.name })),
+    members: track.performers.map((p) => ({
+      id: p.user.id,
+      name: p.user.name,
+    })),
     ...(includeBand && track.band
       ? { band: { id: track.band.id, name: track.band.name } }
       : {}),
