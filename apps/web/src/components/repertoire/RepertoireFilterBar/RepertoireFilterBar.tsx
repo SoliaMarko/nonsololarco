@@ -61,8 +61,6 @@ const SORT_OPTIONS_COMMON = [
   { label: 'Time ↓', value: encodeSortValue('time', 'desc') },
 ];
 
-const ORDER_OPTION = { label: '# Order', value: encodeSortValue('trackOrder', 'asc') };
-
 /** Maps the current URL params to the composite dropdown value */
 function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
   if (!sortField) return 'default';
@@ -107,12 +105,8 @@ export default function RepertoireFilterBar() {
     tracks?.filter((t) => t.leadMember.id === user?.id || t.members.some((m) => m.id === user?.id))
       .length ?? 0;
 
-  const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
-    ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
-    : SORT_OPTIONS_COMMON;
-
   const activeSortValue = currentSortDropdownValue(sortField, sortOrder);
-  const activeSortLabel = mobileSortOptions.find((o) => o.value === activeSortValue)?.label;
+  const activeSortLabel = SORT_OPTIONS_COMMON.find((o) => o.value === activeSortValue)?.label;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
@@ -153,7 +147,7 @@ export default function RepertoireFilterBar() {
   return (
     <div className="border-border-primary bg-base border-b">
       {/* Desktop layout */}
-      <div className="pli-4 plb-3 hidden items-center gap-3 sm:flex">
+      <div className="pli-4 plb-3 hidden flex-wrap items-center gap-3 sm:flex">
         {/* Status filter pills */}
         <fieldset className="flex items-center gap-2">
           <legend className="sr-only">Filter by status</legend>
@@ -301,7 +295,7 @@ export default function RepertoireFilterBar() {
             }
             groups={[
               {
-                items: mobileSortOptions.map((opt) => ({
+                items: SORT_OPTIONS_COMMON.map((opt) => ({
                   label: opt.label,
                   selected: opt.value === activeSortValue,
                   onClick: () => handleMobileSort(opt.value),

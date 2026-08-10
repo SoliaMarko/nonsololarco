@@ -19,11 +19,7 @@ export default function TrackListHeader() {
     >
       <span className="hidden sm:inline" role="columnheader" aria-hidden="true" />
 
-      {isSpecificBandSelected ? (
-        <TrackColumnHeader field="trackOrder" title="#" isSortable={true} />
-      ) : (
-        <TrackColumnHeader title="#" />
-      )}
+      <TrackColumnHeader title="#" />
       <TrackColumnHeader field="title" isSortable={true} title="Title" />
       {!isSpecificBandSelected ? (
         <TrackColumnHeader className="hidden sm:flex" title="Band" />
