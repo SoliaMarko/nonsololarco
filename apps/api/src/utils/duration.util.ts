@@ -37,7 +37,8 @@ export function formatDuration(totalSeconds: number): string {
  * Sum an array of "m:ss" duration strings into a formatted total.
  */
 export function sumDurations(durations: string[]): string {
-  const totalSeconds = durations.reduce((sum, d) => sum + parseDuration(d), 0);
+  const totalSeconds =
+    durations?.reduce((sum, d) => sum + parseDuration(d), 0) ?? 0;
 
   return formatDuration(totalSeconds);
 }

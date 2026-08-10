@@ -49,7 +49,7 @@ export function parseRawDuration(duration: string): number {
  * Sum an array of formatted duration strings into a single formatted total.
  */
 export function sumFormattedDurations(durations: string[]): string {
-  const totalSeconds = durations.reduce((sum, d) => sum + parseFormattedDuration(d), 0);
+  const totalSeconds = durations?.reduce((sum, d) => sum + parseFormattedDuration(d), 0) ?? 0;
 
   return formatDuration(totalSeconds);
 }
@@ -58,7 +58,7 @@ export function sumFormattedDurations(durations: string[]): string {
  * Sum an array of raw "m:ss" track durations into a formatted total.
  */
 export function sumRawDurations(durations: string[]): string {
-  const totalSeconds = durations.reduce((sum, d) => sum + parseRawDuration(d), 0);
+  const totalSeconds = durations?.reduce((sum, d) => sum + parseRawDuration(d), 0) ?? 0;
 
   return formatDuration(totalSeconds);
 }
