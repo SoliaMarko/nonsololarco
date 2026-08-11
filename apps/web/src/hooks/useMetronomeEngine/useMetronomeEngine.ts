@@ -118,11 +118,10 @@ export function useMetronomeEngine({
 
     const draw = () => {
       let beatToShow = lastDrawn;
-      while (queue.length && queue[0].time <= ctx.currentTime) {
-        const note = queue[0];
+      while (queue.length && queue[0]!.time <= ctx.currentTime) {
+        const note = queue.shift()!;
         beatToShow = note.beatInBar;
         anchorRef.current = { beats: note.index, time: note.time };
-        queue.shift();
       }
       if (beatToShow !== lastDrawn) {
         lastDrawn = beatToShow;

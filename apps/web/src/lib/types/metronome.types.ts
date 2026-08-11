@@ -38,7 +38,7 @@ export const TIME_SIGNATURE_OPTIONS: TimeSignatureDef[] = [
 ];
 
 /** Default time signature */
-export const DEFAULT_SIGNATURE: TimeSignatureDef = TIME_SIGNATURE_OPTIONS[2]; // 4/4
+export const DEFAULT_SIGNATURE: TimeSignatureDef = TIME_SIGNATURE_OPTIONS[2]!; // 4/4
 
 /**
  * Valid numerators for each denominator value. Covers standard simple,
