@@ -20,7 +20,9 @@ On first load the user sees a fullscreen overlay asking which song to track.
 Options:
 
 - **Pick a song** from the repertoire list (search supported).
-- **"Новий твір"** — placeholder for creating a new piece (not yet wired).
+- **"Новий твір"** — opens an inline form (title + optional BPM). If BPM is
+  omitted, the current metronome BPM is used. The new song is added to the
+  repertoire list and auto-selected for tracking.
 - **"Просто грати"** — skip tracking and start the metronome freely.
 
 ### Metronome stage (play phase)
@@ -43,7 +45,8 @@ Accessible via the burger menu in the top bar. Shows:
 
 - Stats banner: total songs, sessions, and minutes practised.
 - Grouped history: sessions grouped by song, each expandable to show individual
-  entries with date, BPM, and duration.
+  entries with date, BPM, and duration. Ordered newest first, both within a
+  song and across songs.
 - Delete with undo: entries can be deleted, with a 3-second undo bar.
 - Empty state when no history exists.
 
@@ -59,8 +62,17 @@ None. All state is local to the component.
 
 ## API
 
-None. This is a fully offline feature. Practice history is local (mock data
-for now).
+None. This is a fully offline feature. Practice history is stored in
+component state (seeded with mock data). Sessions are created automatically
+when the user stops/saves the metronome while a song is tracked — each
+entry records `startedAt`, BPM, duration, and song. Navigating back to the
+chooser while playing auto-saves the current session. Prepared for future API
+migration: the `PracticeSession` interface is the contract.
+
+`startedAt` is an ISO timestamp and the single source of truth for when a
+session happened — it is both the sort key and the input to the displayed
+label, via `formatSessionDate`. Storing a pre-formatted date string instead
+would leave nothing reliable to sort by.
 
 ## Implementation notes
 
@@ -95,3 +107,4 @@ for now).
 - Unit: `src/components/metronome/MetronomeTopBar/MetronomeTopBar.test.tsx`
 - Unit: `src/components/metronome/MetronomeToast/MetronomeToast.test.tsx`
 - Unit: `src/components/metronome/MetronomeFab/MetronomeFab.test.tsx`
+- Unit: `src/components/metronome/SongChooser/SongChooser.test.tsx`

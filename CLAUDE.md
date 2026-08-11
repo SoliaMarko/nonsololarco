@@ -205,6 +205,20 @@ has a constraint the type can't express.
   Nest modules.
 - Comments explain *why*, not *what*. Delete commented-out code.
 
+### English-only in tests and accessibility props
+
+All `aria-label`, `aria-description`, `aria-placeholder`, `role` names, and
+similar accessibility props must be written **in English**, even though the
+UI is in Ukrainian. This keeps test selectors language-agnostic and matches
+the lang expected by assistive technology.
+
+In test files, everything is English: `describe()` and `it()` descriptions,
+variable names, comments, and mock data labels. The only place Ukrainian
+text may appear is in assertions or queries that match **rendered UI
+content** (e.g. `getByText('Без трекінгу')`) — that must match whatever the
+component actually renders. But test descriptions and aria-based queries
+use the English aria-labels, never Ukrainian.
+
 ---
 
 ## Testing policy
@@ -308,6 +322,17 @@ missed:
   (`import PageButton from './PageButton'`).
 - **Logical CSS properties only**: `pli-`/`plb-`/`mli-`/`mbs-`/`mbe-`, never
   `pl-`/`pr-`/`pt-`/`pb-`/`px-`/`py-`/`ml-`/`mt-`.
+- **No `px` sizing.** Reach for the Tailwind scale first (`p-3`, `gap-2`,
+  `size-8`, `text-sm`), then arbitrary `rem` for in-between values
+  (`text-[0.6875rem]`). `px` is only for things that must *not* scale with the
+  reader's font size: border widths, hairline dividers, `box-shadow` offsets and
+  1px optical nudges. Prefer classes over inline `style` — that's where `px`
+  creeps back in, and inline styles bypass `tailwind-merge`.
+- **Design tokens go through `@theme`.** A new custom property in
+  `src/styles/tokens.css` is only half the job: map it in the `@theme` block of
+  `app/globals.css` (`--color-banner-label: var(--banner-label)`) and consume the
+  generated utility (`text-banner-label`). Never reach into the raw variable from
+  a component with `text-(--banner-label)` or `text-[var(--banner-label)]`.
 - **`cn()`** for all className merging; the external `className` prop goes last.
 - **CVA** for component variants, not ad-hoc conditional strings.
 - **Radix primitives** directly — this project does not use shadcn.
