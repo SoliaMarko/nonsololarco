@@ -11,54 +11,32 @@ interface BpmControlProps {
   onTap: () => void;
 }
 
+const STEP_BUTTON =
+  'border-primary-light/35 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] flex size-9.5 items-center justify-center border-2 transition-[background-color] duration-100';
+
 /**
  * BPM display with the numeric value, unit label, Italian tempo name,
  * a draggable ruler strip, and +/−/TAP buttons.
  */
 export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps) {
   return (
-    <div className="relative z-5 text-center" style={{ padding: '6px 0 2px' }}>
-      <div
-        className="text-primary-light tabular-nums"
-        style={{
-          fontFamily: "'Alfa Slab One', serif",
-          fontSize: '72px',
-          lineHeight: 0.85,
-        }}
-      >
+    <div className="relative z-5 pbs-2 text-center">
+      <div className="font-display text-primary-light text-[4.5rem] leading-[0.85] tabular-nums">
         {bpm}
       </div>
 
-      <div
-        className="text-yellow-main"
-        style={{
-          fontFamily: "'Space Mono', monospace",
-          fontSize: '13px',
-          letterSpacing: '4px',
-          marginTop: '2px',
-        }}
-      >
+      <div className="font-label text-yellow-main mbs-1 text-[0.8125rem] tracking-[0.25rem]">
         BPM
       </div>
 
-      <div
-        className="text-primary-light/55"
-        style={{
-          fontFamily: "'Spectral', serif",
-          fontStyle: 'italic',
-          fontSize: '14px',
-          marginTop: '4px',
-        }}
-      >
-        {tempoName(bpm)}
-      </div>
+      <div className="font-prose text-primary-light/55 mbs-1 text-sm italic">{tempoName(bpm)}</div>
 
       <BpmRuler bpm={bpm} onBpmChange={onBpmChange} />
 
-      <div className="mbs-2.5 inline-flex gap-2">
+      <div className="mbs-3 inline-flex gap-2">
         <button
-          aria-label="Зменшити BPM"
-          className="flex size-[38px] items-center justify-center border-2 border-primary-light/35 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12]"
+          aria-label="Decrease BPM"
+          className={STEP_BUTTON}
           onClick={() => onBpmChange(clampBpm(bpm - 1))}
           type="button"
         >
@@ -66,25 +44,16 @@ export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps)
         </button>
 
         <button
-          className="border-2 border-yellow-main bg-transparent text-yellow-main hover:bg-yellow-main hover:text-primary-dark"
+          className="pli-4 font-ui border-yellow-main text-yellow-main hover:bg-yellow-main hover:text-primary-dark h-9.5 border-2 bg-transparent text-[0.8125rem] font-semibold tracking-wider uppercase transition-[background-color,color] duration-100"
           onClick={onTap}
-          style={{
-            fontFamily: "'Oswald', sans-serif",
-            fontWeight: 600,
-            fontSize: '13px',
-            letterSpacing: '1px',
-            textTransform: 'uppercase',
-            padding: '0 16px',
-            height: '38px',
-          }}
           type="button"
         >
           TAP
         </button>
 
         <button
-          aria-label="Збільшити BPM"
-          className="flex size-[38px] items-center justify-center border-2 border-primary-light/35 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12]"
+          aria-label="Increase BPM"
+          className={STEP_BUTTON}
           onClick={() => onBpmChange(clampBpm(bpm + 1))}
           type="button"
         >

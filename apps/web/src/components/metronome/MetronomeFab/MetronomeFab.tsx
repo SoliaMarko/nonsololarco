@@ -38,10 +38,9 @@ export default function MetronomeFab() {
         </>
       )}
       <button
-        aria-label="Метроном"
-        className="absolute inset-0 z-3 flex items-center justify-center rounded-full border-[2.5px] border-primary-dark bg-yellow-main transition-transform duration-100 hover:-translate-x-px hover:-translate-y-px"
+        aria-label="Metronome"
+        className="border-primary-dark bg-yellow-main absolute inset-0 z-3 flex items-center justify-center rounded-full border-[2.5px] shadow-[2px_2px_0_rgba(0,0,0,0.5)] transition-transform duration-100 hover:-translate-x-px hover:-translate-y-px"
         onClick={() => setAnimate((a) => !a)}
-        style={{ boxShadow: '2px 2px 0 rgba(0,0,0,0.5)' }}
         type="button"
       >
         <MetronomeIcon size={28} className="text-primary-dark" />

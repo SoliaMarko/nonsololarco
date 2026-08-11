@@ -13,17 +13,8 @@ interface MetronomeToastProps {
 export default function MetronomeToast({ message }: MetronomeToastProps) {
   return (
     <div
-      className="absolute inset-x-0 bottom-[22px] z-40 mli-auto inline-flex w-fit items-center gap-2.5 border-2 border-primary-dark bg-emerald-deep text-primary-light"
-      style={{
-        left: '50%',
-        transform: 'translateX(-50%)',
-        fontFamily: "'Oswald', sans-serif",
-        fontWeight: 500,
-        fontSize: '14px',
-        padding: '11px 18px',
-        boxShadow: '2px 2px 0 rgba(0,0,0,0.5)',
-        animation: 'mt-toast-in 0.3s ease-out',
-      }}
+      className="pli-4 plb-3 font-ui border-primary-dark bg-emerald-deep text-primary-light absolute bottom-5.5 left-1/2 z-40 inline-flex w-fit -translate-x-1/2 items-center gap-2.5 border-2 text-sm font-medium shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
+      style={{ animation: 'mt-toast-in 0.3s ease-out' }}
     >
       <CheckCircleIcon size={17} className="text-emerald-light" />
       {message}

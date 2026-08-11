@@ -2,9 +2,10 @@
 
 import { useMemo, useState } from 'react';
 
-import { MetronomeIcon } from '@/src/icons/base';
-
+import { HomeOutlineIcon, MetronomeIcon } from '@/src/icons/base';
 import { PracticeSession } from '@/src/lib/types/metronome.types';
+import { cn } from '@/src/utils/cn';
+import { byNewestFirst } from '@/src/utils/metronome.utils';
 
 import HistoryGroup from './HistoryGroup';
 
@@ -12,17 +13,22 @@ interface HistoryDrawerProps {
   history: PracticeSession[];
   onClose: () => void;
   onDelete: (id: string, restore?: PracticeSession) => void;
+  /** Leaves the metronome and returns to the rest of the app. */
+  onExit: () => void;
 }
 
 /**
  * Slide-in drawer showing aggregated practice stats and a grouped song
  * history. Each song can be expanded to see individual sessions. Deleted
- * entries show a 4-second undo bar at the bottom.
+ * entries show a 4-second undo bar at the bottom, and a pinned footer
+ * action exits the metronome back to the app.
  */
-export default function HistoryDrawer({ history, onClose, onDelete }: HistoryDrawerProps) {
+export default function HistoryDrawer({ history, onClose, onDelete, onExit }: HistoryDrawerProps) {
   const [openSong, setOpenSong] = useState<string | null>(null);
   const [undoEntry, setUndoEntry] = useState<PracticeSession | null>(null);
 
+  // Newest first, both within each song and across songs — the most recent
+  // practice is what you look for when you open the log.
   const groups = useMemo(() => {
     const map: Record<string, { rows: PracticeSession[]; song: string; songNumber: number }> = {};
     history.forEach((h) => {
@@ -33,10 +39,16 @@ export default function HistoryDrawer({ history, onClose, onDelete }: HistoryDra
         map[h.song] = { rows: [h], song: h.song, songNumber: h.songNumber };
       }
     });
-    return Object.values(map);
+
+    return Object.values(map)
+      .map((group) => ({ ...group, rows: group.rows.slice().sort(byNewestFirst) }))
+      .sort((a, b) => byNewestFirst(a.rows[0]!, b.rows[0]!));
   }, [history]);
 
-  const totalMin = history.reduce((a, h) => a + parseInt(h.duration), 0);
+  const totalMin = history.reduce((a, h) => {
+    const parsed = parseInt(h.duration, 10);
+    return a + (Number.isNaN(parsed) ? 0 : parsed);
+  }, 0);
 
   const handleDelete = (entry: PracticeSession) => {
     onDelete(entry.id);
@@ -50,60 +62,41 @@ export default function HistoryDrawer({ history, onClose, onDelete }: HistoryDra
     setUndoEntry(null);
   };
 
+  const stats = [
+    { label: 'ТВОРІВ', value: groups.length },
+    { label: 'СЕСІЙ', value: history.length },
+    { label: 'ХВИЛИН', value: totalMin },
+  ];
+
   return (
     <>
       {/* Scrim */}
       <div
-        className="absolute inset-0 z-35"
+        className="absolute inset-0 z-35 bg-[rgba(20,16,11,0.6)] backdrop-blur-[1.5px]"
         onClick={onClose}
-        style={{
-          background: 'rgba(20,16,11,0.6)',
-          backdropFilter: 'blur(1.5px)',
-          animation: 'mt-toast-in 0.2s ease-out',
-        }}
+        style={{ animation: 'mt-toast-in 0.2s ease-out' }}
       />
 
       {/* Drawer */}
       <div
-        className="absolute inset-y-0 start-0 z-36 flex max-w-[86%] flex-col border-ie-[2.5px] border-primary-dark bg-surface text-fg-primary"
-        style={{
-          width: '340px',
-          boxShadow: '6px 0 0 rgba(0,0,0,0.35)',
-          animation: 'mt-drawer-in 0.24s ease-out',
-        }}
+        className="border-ie-[2.5px] border-primary-dark bg-surface text-fg-primary absolute inset-y-0 inset-s-0 z-36 flex w-85 max-w-[86%] flex-col shadow-[6px_0_0_rgba(0,0,0,0.35)]"
+        style={{ animation: 'mt-drawer-in 0.24s ease-out' }}
       >
-        {/* Header */}
-        <div
-          className="flex items-end justify-between border-b-[2.5px] border-fg-primary bg-fg-primary text-primary-light"
-          style={{ padding: '18px 20px 14px' }}
-        >
+        {/* Header — an inverted banner. It must pair `bg-contrast` with
+            `text-on-contrast`; using `text-primary-light` here renders
+            invisible in dark mode, where that token and `fg-primary`
+            resolve to the same cream. */}
+        <div className="pli-4 plb-4 border-fg-primary bg-contrast text-on-contrast flex items-end justify-between border-b-[2.5px]">
           <div>
-            <div
-              className="text-yellow-main"
-              style={{
-                fontFamily: "'Space Mono', monospace",
-                fontSize: '10px',
-                letterSpacing: '3px',
-              }}
-            >
+            <div className="font-label text-banner-label dark:text-danger text-[0.625rem] tracking-[0.1875rem]">
               ЖУРНАЛ МЕТРОНОМА
             </div>
-            <h2
-              style={{
-                fontFamily: "'Alfa Slab One', serif",
-                fontSize: '24px',
-                lineHeight: 0.95,
-                marginTop: '4px',
-              }}
-            >
-              Історія практик
-            </h2>
+            <h2 className="font-display mbs-1 text-2xl leading-[0.95]">Історія практик</h2>
           </div>
           <button
-            aria-label="Закрити"
-            className="border-0 bg-transparent text-primary-light opacity-70 hover:opacity-100"
+            aria-label="Close"
+            className="border-0 bg-transparent text-lg text-current opacity-70 transition-opacity duration-100 hover:opacity-100"
             onClick={onClose}
-            style={{ fontSize: '18px' }}
             type="button"
           >
             ✕
@@ -111,27 +104,19 @@ export default function HistoryDrawer({ history, onClose, onDelete }: HistoryDra
         </div>
 
         {/* Stats */}
-        <div className="flex border-b-2 border-edge">
-          {[
-            { label: 'ТВОРІВ', value: groups.length },
-            { label: 'СЕСІЙ', value: history.length },
-            { label: 'ХВИЛИН', value: totalMin },
-          ].map((stat, i) => (
+        <div className="border-edge flex border-b-2">
+          {stats.map((stat, i) => (
             <div
               key={stat.label}
-              className={`flex-1 text-center ${i > 0 ? 'border-is-[1.5px] border-edge' : ''}`}
-              style={{ padding: '12px 14px' }}
+              className={cn(
+                'pli-3 plb-3 flex-1 text-center',
+                i > 0 && 'border-is-[1.5px] border-edge',
+              )}
             >
-              <div
-                className="text-fg-primary"
-                style={{ fontFamily: "'Alfa Slab One', serif", fontSize: '22px', lineHeight: 1 }}
-              >
+              <div className="font-display text-fg-primary text-[1.375rem] leading-none">
                 {stat.value}
               </div>
-              <div
-                className="mbs-1 text-fg-tertiary"
-                style={{ fontFamily: "'Space Mono', monospace", fontSize: '9px', letterSpacing: '1px' }}
-              >
+              <div className="font-label text-fg-tertiary mbs-1 text-[0.5625rem] tracking-wider">
                 {stat.label}
               </div>
             </div>
@@ -139,24 +124,12 @@ export default function HistoryDrawer({ history, onClose, onDelete }: HistoryDra
         </div>
 
         {/* History list */}
-        <div className="flex-1 overflow-y-auto" style={{ padding: '8px 0 16px' }}>
+        <div className="plb-2 flex-1 overflow-y-auto">
           {groups.length === 0 ? (
-            <div className="text-center text-fg-tertiary" style={{ padding: '40px 24px' }}>
+            <div className="pli-6 plb-8 text-fg-tertiary text-center">
               <MetronomeIcon size={40} />
-              <div
-                className="mbs-3 text-fg-secondary"
-                style={{ fontFamily: "'Alfa Slab One', serif", fontSize: '18px' }}
-              >
-                Поки порожньо
-              </div>
-              <div
-                style={{
-                  fontFamily: "'Space Mono', monospace",
-                  fontSize: '11px',
-                  lineHeight: 1.6,
-                  marginTop: '6px',
-                }}
-              >
+              <div className="font-display text-fg-secondary mbs-3 text-lg">Поки порожньо</div>
+              <div className="font-label mbs-2 text-[0.6875rem] leading-relaxed">
                 Обери твір при старті метронома —
                 <br />і сесії з&apos;являться тут.
               </div>
@@ -174,25 +147,25 @@ export default function HistoryDrawer({ history, onClose, onDelete }: HistoryDra
           )}
         </div>
 
+        {/* Exit to the rest of the app */}
+        <button
+          className="pli-4 plb-3 border-fg-primary bg-surface text-fg-primary hover:bg-elevated flex w-full items-center gap-2 border-t-2 text-start transition-colors duration-100"
+          onClick={onExit}
+          type="button"
+        >
+          <HomeOutlineIcon size={17} />
+          <span className="font-ui text-[0.8125rem] font-semibold tracking-wide uppercase">
+            Вийти з метронома
+          </span>
+        </button>
+
         {/* Undo bar */}
         {undoEntry && (
-          <div
-            className="flex items-center justify-between gap-2.5 bg-fg-primary text-primary-light"
-            style={{ padding: '9px 18px' }}
-          >
-            <span style={{ fontFamily: "'Space Mono', monospace", fontSize: '11px' }}>
-              Запис видалено · {undoEntry.song}
-            </span>
+          <div className="pli-4 plb-2 bg-contrast text-on-contrast flex items-center justify-between gap-2">
+            <span className="font-label text-[0.6875rem]">Запис видалено · {undoEntry.song}</span>
             <button
-              className="border-0 bg-transparent text-yellow-main"
+              className="font-ui border-0 bg-transparent text-xs font-semibold tracking-wider text-current uppercase underline underline-offset-2 opacity-80 transition-opacity duration-100 hover:opacity-100"
               onClick={handleUndo}
-              style={{
-                fontFamily: "'Oswald', sans-serif",
-                fontWeight: 600,
-                fontSize: '12px',
-                textTransform: 'uppercase',
-                letterSpacing: '1px',
-              }}
               type="button"
             >
               Повернути
