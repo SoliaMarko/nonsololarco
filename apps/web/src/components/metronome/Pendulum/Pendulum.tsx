@@ -1,82 +1,94 @@
 'use client';
 
-import { cn } from '@/src/utils/cn';
+import { memo, useEffect, useRef } from 'react';
 
 interface PendulumProps {
-  bpm: number;
+  /**
+   * Reads the continuous beat position (in beats) off the audio clock.
+   * Returns `null` while stopped or before the first beat sounds.
+   */
+  getBeatPosition: () => number | null;
   playing: boolean;
 }
+
+/** How far the arm leans from vertical, in degrees. */
+const SWING_ANGLE = 14;
 
 /**
  * Classic metronome pendulum with a trapezoid body, swinging arm, movable
  * weight, and a pivot dot at the base.
  *
- * The swing animation duration is derived from BPM via the `--beat` CSS
- * custom property.
+ * The arm is driven by neither CSS keyframes nor React state. Both restart
+ * their motion on every beat, and a restart that lands a frame late reads
+ * as a stutter. Instead a `requestAnimationFrame` loop samples the audio
+ * clock each frame and writes the transform directly to the node:
+ *
+ *     angle = -SWING_ANGLE * cos(π · beatPosition)
+ *
+ * That puts the extremes exactly on the beats (`cos` is ±1 at whole beat
+ * numbers) and gives sinusoidal easing for free — slowest at the turns,
+ * fastest through the middle, like a real weighted arm. Because it samples
+ * the same clock the clicks are scheduled on, it cannot drift, and because
+ * it never sets state it costs no re-renders.
+ *
+ * Memoised: the parent re-renders on every beat to move the dots, and each
+ * of those renders would otherwise stomp on the transform the loop writes.
  */
-export default function Pendulum({ bpm, playing }: PendulumProps) {
-  const beat = `${(60 / bpm).toFixed(3)}s`;
+function Pendulum({ getBeatPosition, playing }: PendulumProps) {
+  const armRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const arm = armRef.current;
+    if (!arm) return;
+
+    if (!playing) {
+      arm.style.transform = 'rotate(0deg)';
+      return;
+    }
+
+    let rafId = 0;
+
+    const frame = () => {
+      const position = getBeatPosition();
+      // Before the first beat lands, hold at the left extreme so the
+      // opening swing covers the same arc as every one after it.
+      const angle =
+        position === null ? -SWING_ANGLE : -SWING_ANGLE * Math.cos(Math.PI * position);
+
+      arm.style.transform = `rotate(${angle.toFixed(2)}deg)`;
+      rafId = requestAnimationFrame(frame);
+    };
+
+    rafId = requestAnimationFrame(frame);
+    return () => cancelAnimationFrame(rafId);
+  }, [playing, getBeatPosition]);
 
   return (
-    <div className="relative size-[200px]">
+    <div className="relative size-50">
       {/* Trapezoid body */}
       <div
-        className="absolute inset-x-0 bottom-0 mli-auto h-[210px] w-[160px] border-3 border-primary-dark"
-        style={{
-          background: 'linear-gradient(180deg, #e7dcc4, #d8c8a8)',
-          clipPath: 'polygon(30% 0, 70% 0, 100% 100%, 0 100%)',
-          boxShadow: '2px 2px 0 rgba(0,0,0,0.5)',
-        }}
+        className="mli-auto border-primary-dark absolute inset-x-0 bottom-0 h-52.5 w-40 border-3 bg-[linear-gradient(180deg,#e7dcc4,#d8c8a8)] shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
+        style={{ clipPath: 'polygon(30% 0, 70% 0, 100% 100%, 0 100%)' }}
       />
 
-      {/* Scale line */}
+      {/* Swinging arm — `transform` is deliberately absent here: the rAF
+          loop owns it, and listing it in JSX would let React reset it to
+          its initial value on every parent re-render. */}
       <div
-        className="absolute inset-x-0 mli-auto w-0.5 opacity-25"
-        style={{
-          top: '18px',
-          bottom: '30px',
-          left: '50%',
-          transform: 'translateX(-50%)',
-          background: '#1c1a18',
-        }}
-      />
-
-      {/* Swinging arm */}
-      <div
-        className={cn('absolute z-3 w-[5px] rounded-sm', playing && 'animate-[mt-swing_var(--beat)_ease-in-out_infinite_alternate]')}
-        style={{
-          '--beat': beat,
-          left: '50%',
-          bottom: '30px',
-          height: '180px',
-          marginLeft: '-2.5px',
-          transformOrigin: 'bottom center',
-          background: '#1c1a18',
-        } as React.CSSProperties}
+        ref={armRef}
+        className="bg-primary-dark absolute bottom-7.5 inset-s-1/2 z-3 h-45 w-1.25 origin-bottom rounded-sm will-change-transform"
+        // Half the arm's width, to centre it on the pivot. A `-translate-x-1/2`
+        // can't be used here: the rAF loop owns `transform`.
+        style={{ marginInlineStart: '-2.5px' }}
       >
         {/* Weight */}
-        <div
-          className="absolute border-[2.5px] border-primary-dark bg-yellow-main"
-          style={{
-            left: '50%',
-            top: '28px',
-            transform: 'translateX(-50%)',
-            width: '30px',
-            height: '20px',
-          }}
-        />
+        <div className="border-primary-dark bg-yellow-main absolute top-7 inset-s-1/2 h-5 w-7.5 -translate-x-1/2 border-[2.5px]" />
       </div>
 
       {/* Pivot */}
-      <div
-        className="absolute z-4 size-4 rounded-full"
-        style={{
-          left: '50%',
-          bottom: '26px',
-          transform: 'translateX(-50%)',
-          background: '#1c1a18',
-        }}
-      />
+      <div className="bg-primary-dark absolute bottom-6.5 inset-s-1/2 z-4 size-4 -translate-x-1/2 rounded-full" />
     </div>
   );
 }
+
+export default memo(Pendulum);
