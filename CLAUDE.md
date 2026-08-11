@@ -225,6 +225,9 @@ Every new module ships with unit tests in the same commit. No exceptions for
 Cover the happy path, the empty/zero case, and each error branch. When fixing a
 bug, add the test that would have caught it — in the same commit as the fix.
 
+Tests render with the `en` locale so that `getByText` assertions match English
+translation strings. `aria-label` values stay in English and are not translated.
+
 Prisma is mocked via `src/test/mocks/prisma.mock.ts`; never hit a real database
 in a unit test.
 
@@ -293,6 +296,65 @@ Walk the table above against the real diff:
 Keep docs short and current. A stale doc is worse than no doc — it actively
 misleads. If you change behaviour, update the doc in the same PR; if you
 rename something, grep the docs for the old name.
+
+---
+
+## Internationalization (i18n)
+
+Library: `next-intl`. Routing: URL prefix (`/en`, `/it`, `/uk`) with
+browser auto-detect on first visit. Default locale: `en`.
+
+### Translation files
+
+Three namespace files in `apps/web/messages/`:
+
+```text
+messages/
+  common.json    → navigation, shared buttons (Save, Cancel, Search), general UI
+  auth.json      → login, signup, auth errors
+  pages.json     → all page-specific content, grouped by feature
+```
+
+When a group inside `pages.json` grows past ~200 keys and becomes unwieldy,
+extract it into its own namespace file (e.g. `repertoire.json`). Until then,
+keep it together.
+
+### Key structure and sorting
+
+Keys use **camelCase** and are sorted **alphabetically at every level**. Within
+each namespace, related keys are grouped under a top-level object named after
+the feature. Groups themselves are also sorted alphabetically.
+
+```jsonc
+// pages.json
+{
+  "band": {
+    "memberCount": "...",
+    "name": "..."
+  },
+  "calendar": {
+    "noEvents": "...",
+    "title": "..."
+  },
+  "repertoire": {
+    "addTrack": "...",
+    "title": "..."
+  }
+}
+```
+
+### Rules
+
+- **Max nesting depth: 2 levels** (`group.key`). If you want
+  `repertoire.track.status.archived`, flatten it to
+  `repertoire.trackStatusArchived` or promote `repertoire` to its own namespace.
+- **English is the source of truth.** `it.json` and `uk.json` must contain an
+  identical set of keys. A missing key is a bug, not a fallback.
+- **Placeholders** use ICU syntax: `"greeting": "Hello, {userName}"`.
+- **`aria-label` stays in English** — not translated, not in message files.
+  Screen readers get consistent identifiers regardless of locale.
+- Dates, numbers and relative time are formatted via `useFormatter()` from
+  next-intl, not hand-rolled.
 
 ---
 
