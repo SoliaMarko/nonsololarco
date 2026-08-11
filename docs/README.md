@@ -14,6 +14,8 @@ Project documentation. Three kinds, three folders.
   filters, "only mine", column sorting, counts.
 - [Repertoire pagination](./features/repertoire-pagination.md) — paged track
   list with URL state, ellipsis collapsing, continuous row numbers.
+- [Internationalization (i18n)](./features/i18n.md) — locale switcher, next-intl
+  setup, translation file structure, layout stability.
 
 ## Architecture
 
