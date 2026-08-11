@@ -1,26 +1,100 @@
 {
   "band": {
-    "title": "Band"
+    "comingSoonDescription": "Full band page — members, repertoire, and stats. Coming soon.",
+    "title": "Band profile"
   },
   "calendar": {
+    "comingSoonDescription": "Rehearsals, gigs, and deadlines — all in one place. Coming soon.",
     "title": "Calendar"
   },
   "chat": {
-    "title": "Chat"
+    "comingSoonDescription": "Message your bandmates and coordinate in real time. Coming soon.",
+    "title": "Chats"
   },
-  "home": {
-    "title": "Home"
+  "feed": {
+    "comingSoonDescription": "Updates from your bands, recent activity, and picks from the community. Coming soon.",
+    "title": "Feed"
   },
   "notifications": {
+    "comingSoonDescription": "Stay in the loop with band updates, picks, and rehearsal reminders. Coming soon.",
     "title": "Notifications"
   },
   "profile": {
-    "title": "Profile"
+    "achievementsSection": "Achievements",
+    "bandsSection": "Bands",
+    "bandSince": "since {since}",
+    "exportPortfolio": "Export portfolio",
+    "instrumentsSection": "Instruments",
+    "leadsInRepertoire": "Leads in repertoire",
+    "memberSince": "on nonsololarco since {memberSince}",
+    "momentsMediaMeta": "photos and videos · drag your",
+    "momentsPhoto": "photo",
+    "momentsSection": "Moments",
+    "momentsVideo": "video",
+    "profileTag": "MUSICIAN PROFILE · PORTFOLIO",
+    "stats": {
+      "performances": "Performances",
+      "picks": "Picks",
+      "rehearsals": "Rehearsals",
+      "tracks": "Tracks"
+    },
+    "title": "Profile",
+    "trackCount": "{count, plural, one {# track} other {# tracks}}",
+    "wantToLearn": "Want to learn"
   },
   "repertoire": {
-    "title": "Repertoire"
+    "addTrackButton": "New",
+    "addTrackButtonFull": "track",
+    "aiButton": "AI",
+    "allRepertoires": "All Repertoires",
+    "bandPageLink": "Page « {bandName} »",
+    "bandRepertoire": "Band repertoire",
+    "columnBand": "Band",
+    "columnBpm": "BPM",
+    "columnKey": "Key",
+    "columnNumber": "#",
+    "columnStatus": "Status",
+    "columnTime": "Time",
+    "columnTitle": "Title",
+    "emptyDescription": "Add your first song — and it will appear in your setlist.",
+    "emptyTitle": "Repertoire is empty",
+    "extraFilterActive": "Active",
+    "extraFilterArchive": "Archive",
+    "filterLegend": "Filter by status",
+    "filterLegendActivity": "Activity filter",
+    "filteredEmptyDescription": "No tracks match the selected filter. Try a different one or reset.",
+    "filteredEmptyTitle": "No tracks match",
+    "genuinelyEmptyDescription": "This repertoire has no tracks.",
+    "genuinelyEmptyTitle": "Nothing here yet",
+    "mobileTrackCount": "{count} in group",
+    "newTrackButton": "New Track",
+    "onlyMine": "Only mine",
+    "onlyMineLegend": "my participation",
+    "orderOption": "# Order",
+    "solo": "Solo",
+    "sortButton": "Sort",
+    "sortBpmAsc": "BPM ↑",
+    "sortBpmDesc": "BPM ↓",
+    "sortStatus": "Status",
+    "sortTimeAsc": "Time ↑",
+    "sortTimeDesc": "Time ↓",
+    "sortTitleAsc": "Title A→Z",
+    "sortTitleDesc": "Title Z→A",
+    "statusAll": "All",
+    "statusArchived": "Archived",
+    "statusLearning": "Learning",
+    "statusNew": "New",
+    "statusReady": "Ready",
+    "statReady": "ready",
+    "statTracks": "tracks",
+    "title": "Repertoire",
+    "trackDetailsComingSoon": "Lyrics, notes, and practice history. Coming soon.",
+    "trackDetailsTitle": "Track details",
+    "unmatchedMineDescription": "No tracks with your part match the current filter. Reset to see the full repertoire.",
+    "unmatchedMineTitle": "You are not involved yet"
   },
   "settings": {
+    "comingSoonDescription": "Theme, language, notification preferences, and account details. Coming soon.",
     "title": "Settings"
   }
 }

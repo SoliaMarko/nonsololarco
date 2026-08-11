@@ -1,26 +1,100 @@
 {
   "band": {
-    "title": "Gruppo"
+    "comingSoonDescription": "Pagina completa del gruppo — membri, repertorio e statistiche. In arrivo.",
+    "title": "Profilo del gruppo"
   },
   "calendar": {
+    "comingSoonDescription": "Prove, concerti e scadenze — tutto in un posto. In arrivo.",
     "title": "Calendario"
   },
   "chat": {
+    "comingSoonDescription": "Scrivi ai tuoi compagni di gruppo e coordinati in tempo reale. In arrivo.",
     "title": "Chat"
   },
-  "home": {
-    "title": "Home"
+  "feed": {
+    "comingSoonDescription": "Aggiornamenti dai tuoi gruppi, attività recente e pick dalla comunità. In arrivo.",
+    "title": "Feed"
   },
   "notifications": {
+    "comingSoonDescription": "Resta aggiornato sulle novità del gruppo, pick e promemoria delle prove. In arrivo.",
     "title": "Notifiche"
   },
   "profile": {
-    "title": "Profilo"
+    "achievementsSection": "Traguardi",
+    "bandsSection": "Gruppi",
+    "bandSince": "dal {since}",
+    "exportPortfolio": "Esporta portfolio",
+    "instrumentsSection": "Strumenti",
+    "leadsInRepertoire": "Parti principali nel repertorio",
+    "memberSince": "su nonsololarco dal {memberSince}",
+    "momentsMediaMeta": "foto e video · trascina i tuoi",
+    "momentsPhoto": "foto",
+    "momentsSection": "Momenti",
+    "momentsVideo": "video",
+    "profileTag": "PROFILO MUSICISTA · PORTFOLIO",
+    "stats": {
+      "performances": "Esibizioni",
+      "picks": "Pick",
+      "rehearsals": "Prove",
+      "tracks": "Brani"
+    },
+    "title": "Profilo",
+    "trackCount": "{count, plural, one {# brano} other {# brani}}",
+    "wantToLearn": "Voglio imparare"
   },
   "repertoire": {
-    "title": "Repertorio"
+    "addTrackButton": "Nuovo",
+    "addTrackButtonFull": "brano",
+    "aiButton": "AI",
+    "allRepertoires": "Tutti i repertori",
+    "bandPageLink": "Pagina « {bandName} »",
+    "bandRepertoire": "Repertorio del gruppo",
+    "columnBand": "Gruppo",
+    "columnBpm": "BPM",
+    "columnKey": "Tonalità",
+    "columnNumber": "#",
+    "columnStatus": "Stato",
+    "columnTime": "Durata",
+    "columnTitle": "Titolo",
+    "emptyDescription": "Aggiungi il tuo primo brano — e apparirà nella tua scaletta.",
+    "emptyTitle": "Il repertorio è vuoto",
+    "extraFilterActive": "Attivi",
+    "extraFilterArchive": "Archivio",
+    "filterLegend": "Filtra per stato",
+    "filterLegendActivity": "Filtro attività",
+    "filteredEmptyDescription": "Nessun brano corrisponde al filtro selezionato. Prova un altro o ripristina.",
+    "filteredEmptyTitle": "Nessun brano trovato",
+    "genuinelyEmptyDescription": "Questo repertorio non ha brani.",
+    "genuinelyEmptyTitle": "Ancora niente qui",
+    "mobileTrackCount": "{count} nel gruppo",
+    "newTrackButton": "Nuovo brano",
+    "onlyMine": "Solo i miei",
+    "onlyMineLegend": "la mia partecipazione",
+    "orderOption": "# Ordine",
+    "solo": "Solo",
+    "sortButton": "Ordina",
+    "sortBpmAsc": "BPM ↑",
+    "sortBpmDesc": "BPM ↓",
+    "sortStatus": "Stato",
+    "sortTimeAsc": "Durata ↑",
+    "sortTimeDesc": "Durata ↓",
+    "sortTitleAsc": "Titolo A→Z",
+    "sortTitleDesc": "Titolo Z→A",
+    "statusAll": "Tutti",
+    "statusArchived": "Archiviato",
+    "statusLearning": "In studio",
+    "statusNew": "Nuovo",
+    "statusReady": "Pronto",
+    "statReady": "pronti",
+    "statTracks": "brani",
+    "title": "Repertorio",
+    "trackDetailsComingSoon": "Testi, note e storico delle prove. In arrivo.",
+    "trackDetailsTitle": "Dettagli brano",
+    "unmatchedMineDescription": "Nessun brano con la tua parte corrisponde al filtro attuale. Ripristina per vedere il repertorio completo.",
+    "unmatchedMineTitle": "Non sei ancora coinvolto"
   },
   "settings": {
+    "comingSoonDescription": "Tema, lingua, preferenze di notifica e dettagli account. In arrivo.",
     "title": "Impostazioni"
   }
 }

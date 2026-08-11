@@ -1,26 +1,100 @@
 {
   "band": {
-    "title": "Гурт"
+    "comingSoonDescription": "Повна сторінка гурту — учасники, репертуар та статистика. Скоро буде.",
+    "title": "Профіль гурту"
   },
   "calendar": {
+    "comingSoonDescription": "Репетиції, виступи та дедлайни — все в одному місці. Скоро буде.",
     "title": "Календар"
   },
   "chat": {
-    "title": "Чат"
+    "comingSoonDescription": "Пишіть учасникам гурту та координуйтесь у реальному часі. Скоро буде.",
+    "title": "Чати"
   },
-  "home": {
-    "title": "Головна"
+  "feed": {
+    "comingSoonDescription": "Оновлення від ваших гуртів, остання активність та піки від спільноти. Скоро буде.",
+    "title": "Стрічка"
   },
   "notifications": {
+    "comingSoonDescription": "Будьте в курсі оновлень гурту, піків та нагадувань про репетиції. Скоро буде.",
     "title": "Сповіщення"
   },
   "profile": {
-    "title": "Профіль"
+    "achievementsSection": "Досягнення",
+    "bandsSection": "Гурти",
+    "bandSince": "з {since}",
+    "exportPortfolio": "Експорт портфоліо",
+    "instrumentsSection": "Інструменти",
+    "leadsInRepertoire": "Ведучі партії в репертуарі",
+    "memberSince": "на nonsololarco з {memberSince}",
+    "momentsMediaMeta": "фото та відео · перетягніть свої",
+    "momentsPhoto": "фото",
+    "momentsSection": "Моменти",
+    "momentsVideo": "відео",
+    "profileTag": "ПРОФІЛЬ МУЗИКАНТА · ПОРТФОЛІО",
+    "stats": {
+      "performances": "Виступи",
+      "picks": "Піки",
+      "rehearsals": "Репетиції",
+      "tracks": "Треки"
+    },
+    "title": "Профіль",
+    "trackCount": "{count, plural, one {# трек} few {# треки} other {# треків}}",
+    "wantToLearn": "Хочу вивчити"
   },
   "repertoire": {
-    "title": "Репертуар"
+    "addTrackButton": "Новий",
+    "addTrackButtonFull": "трек",
+    "aiButton": "AI",
+    "allRepertoires": "Всі репертуари",
+    "bandPageLink": "Сторінка « {bandName} »",
+    "bandRepertoire": "Репертуар гурту",
+    "columnBand": "Гурт",
+    "columnBpm": "BPM",
+    "columnKey": "Тональність",
+    "columnNumber": "#",
+    "columnStatus": "Статус",
+    "columnTime": "Час",
+    "columnTitle": "Назва",
+    "emptyDescription": "Додайте перший трек — і він з'явиться у вашому сетлисті.",
+    "emptyTitle": "Репертуар порожній",
+    "extraFilterActive": "Активні",
+    "extraFilterArchive": "Архів",
+    "filterLegend": "Фільтр за статусом",
+    "filterLegendActivity": "Фільтр активності",
+    "filteredEmptyDescription": "Жоден трек не відповідає обраному фільтру. Спробуйте інший або скиньте.",
+    "filteredEmptyTitle": "Треків не знайдено",
+    "genuinelyEmptyDescription": "У цьому репертуарі немає треків.",
+    "genuinelyEmptyTitle": "Тут ще нічого немає",
+    "mobileTrackCount": "{count} у групі",
+    "newTrackButton": "Новий трек",
+    "onlyMine": "Тільки мої",
+    "onlyMineLegend": "моя участь",
+    "orderOption": "# Порядок",
+    "solo": "Соло",
+    "sortButton": "Сортувати",
+    "sortBpmAsc": "BPM ↑",
+    "sortBpmDesc": "BPM ↓",
+    "sortStatus": "Статус",
+    "sortTimeAsc": "Час ↑",
+    "sortTimeDesc": "Час ↓",
+    "sortTitleAsc": "Назва А→Я",
+    "sortTitleDesc": "Назва Я→А",
+    "statusAll": "Усі",
+    "statusArchived": "Архівований",
+    "statusLearning": "Вивчається",
+    "statusNew": "Новий",
+    "statusReady": "Готовий",
+    "statReady": "готових",
+    "statTracks": "треків",
+    "title": "Репертуар",
+    "trackDetailsComingSoon": "Тексти, нотатки та історія практики. Скоро буде.",
+    "trackDetailsTitle": "Деталі треку",
+    "unmatchedMineDescription": "Жоден трек з вашою партією не відповідає поточному фільтру. Скиньте, щоб побачити весь репертуар.",
+    "unmatchedMineTitle": "Ви ще не задіяні"
   },
   "settings": {
+    "comingSoonDescription": "Тема, мова, налаштування сповіщень та деталі акаунту. Скоро буде.",
     "title": "Налаштування"
   }
 }

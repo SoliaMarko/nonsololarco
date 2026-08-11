@@ -1,11 +1,36 @@
 {
+  "actions": {
+    "edit": "Modifica",
+    "reset": "Ripristina",
+    "seeAll": "Vedi tutto",
+    "share": "Condividi"
+  },
+  "comingSoon": {
+    "defaultDescription": "Questa sezione è ancora in studio. Torna presto.",
+    "defaultTitle": "In arrivo"
+  },
+  "legal": {
+    "agreementPrefix": "Continuando accetti i",
+    "and": "e",
+    "privacyPolicy": "Informativa sulla privacy",
+    "terms": "Termini"
+  },
   "nav": {
     "calendar": "Calendario",
-    "chat": "Chat",
-    "home": "Home",
+    "chats": "Chat",
+    "feed": "Feed",
     "notifications": "Notifiche",
     "profile": "Profilo",
     "repertoire": "Repertorio",
-    "settings": "Impostazioni"
-  }
+    "settings": "Impostazioni",
+    "signOut": "Esci",
+    "viewProfile": "Visualizza profilo"
+  },
+  "status": {
+    "idle": "inattivo",
+    "loading": "Caricamento",
+    "updatingTracks": "Aggiornamento brani"
+  },
+  "tagline": "Repertorio · Pratica · Gruppi",
+  "unreadCount": "{count} da leggere"
 }
