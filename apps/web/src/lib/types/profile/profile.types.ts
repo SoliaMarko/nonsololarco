@@ -6,7 +6,7 @@ export type ProfileStatsConfig = {
   color?: string;
   icon: ElementType;
   isPicks?: boolean;
-  label: string;
+  labelKey: string;
   valueKey: keyof Pick<
     ProfileType,
     'picks' | 'rehearsalsCount' | 'tracksCount' | 'performancesCount'

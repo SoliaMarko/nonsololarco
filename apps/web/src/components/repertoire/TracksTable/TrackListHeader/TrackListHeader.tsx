@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { cn } from '@/src/utils/cn';
 
@@ -6,6 +8,7 @@ import TrackColumnHeader from './TrackColumnHeader';
 
 export default function TrackListHeader() {
   const { isSpecificBandSelected } = useActiveBand();
+  const t = useTranslations('pages');
 
   return (
     <div
@@ -20,18 +23,18 @@ export default function TrackListHeader() {
       <span className="hidden sm:inline" role="columnheader" aria-hidden="true" />
 
       {isSpecificBandSelected ? (
-        <TrackColumnHeader field="trackOrder" title="#" isSortable={true} />
+        <TrackColumnHeader field="trackOrder" title={t('repertoire.columnNumber')} isSortable={true} />
       ) : (
-        <TrackColumnHeader title="#" />
+        <TrackColumnHeader title={t('repertoire.columnNumber')} />
       )}
-      <TrackColumnHeader field="title" isSortable={true} title="Title" />
+      <TrackColumnHeader field="title" isSortable={true} title={t('repertoire.columnTitle')} />
       {!isSpecificBandSelected ? (
-        <TrackColumnHeader className="hidden sm:flex" title="Band" />
+        <TrackColumnHeader className="hidden sm:flex" title={t('repertoire.columnBand')} />
       ) : null}
-      <TrackColumnHeader className="hidden sm:flex" title="Key" />
-      <TrackColumnHeader className="hidden sm:flex" field="bpm" isSortable={true} title="BPM" />
-      <TrackColumnHeader field="status" isSortable={true} title="Status" />
-      <TrackColumnHeader className="hidden sm:flex" field="time" isSortable={true} title="Time" />
+      <TrackColumnHeader className="hidden sm:flex" title={t('repertoire.columnKey')} />
+      <TrackColumnHeader className="hidden sm:flex" field="bpm" isSortable={true} title={t('repertoire.columnBpm')} />
+      <TrackColumnHeader field="status" isSortable={true} title={t('repertoire.columnStatus')} />
+      <TrackColumnHeader className="hidden sm:flex" field="time" isSortable={true} title={t('repertoire.columnTime')} />
 
       <span role="columnheader" aria-hidden="true" />
     </div>

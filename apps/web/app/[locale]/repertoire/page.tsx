@@ -2,6 +2,8 @@
 
 import { Suspense, useMemo } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { RepertoireStats, Track } from '@nonsololarco/types';
 
 import AppShell from '@/src/components/layout/AppShell';
@@ -36,6 +38,7 @@ function RepertoirePageContent() {
   const { data: bands, isLoading: isLoadingMyBands } = useMyBands();
   const { data: allMyTracks } = useRepertoireTracks(ALL_BANDS_ID);
   const { data: soloTracks } = useRepertoireTracks(SOLO_BAND_ID);
+  const t = useTranslations('pages');
 
   const allMyStats = useMemo(
     () => (allMyTracks ? deriveStats(allMyTracks.data) : null),
@@ -45,18 +48,21 @@ function RepertoirePageContent() {
 
   const hasSoloTracks = soloTracks && soloTracks.data?.length > 0;
 
+  const allRepertoiresLabel = t('repertoire.allRepertoires');
+  const soloLabel = t('repertoire.solo');
+
   const formattedBands = useMemo(
     () =>
       bands && allMyStats
         ? [
-            { id: ALL_BANDS_ID, name: 'All Repertoires', ...allMyStats },
+            { id: ALL_BANDS_ID, name: allRepertoiresLabel, ...allMyStats },
             ...(hasSoloTracks && soloStats
-              ? [{ id: SOLO_BAND_ID, name: 'Solo', ...soloStats }]
+              ? [{ id: SOLO_BAND_ID, name: soloLabel, ...soloStats }]
               : []),
             ...bands,
           ]
         : null,
-    [bands, allMyStats, hasSoloTracks, soloStats],
+    [bands, allMyStats, hasSoloTracks, soloStats, allRepertoiresLabel, soloLabel],
   );
 
   if (isLoadingMyBands || !formattedBands || !allMyStats) {

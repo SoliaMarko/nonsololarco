@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { Band, RepertoireStats } from '@nonsololarco/types';
 
 import Text from '@/src/components/typography/Text';
@@ -16,18 +18,22 @@ export interface RepertoireProps {
 }
 
 export default function Repertoire({ bands, isEmpty, stats }: RepertoireProps) {
+  const t = useTranslations('pages');
+
   if (isEmpty) {
     return (
       <div className="pli-4 flex grow items-center justify-center">
         <NoDataCard
           className="w-full max-w-md"
-          title="Repertoire is empty"
-          description="Add your first song — and it will appear in your setlist."
+          title={t('repertoire.emptyTitle')}
+          description={t('repertoire.emptyDescription')}
           action={
             <Button variant="retro-primary" className="bg-emerald-main">
               <span className="text-primary-light flex items-center gap-2">
                 <PlusSolidIcon size={16} />
-                <Text tag="span" className="text-sm font-medium text-inherit uppercase">New Track</Text>
+                <Text tag="span" className="text-sm font-medium text-inherit uppercase">
+                  {t('repertoire.newTrackButton')}
+                </Text>
               </span>
             </Button>
           }

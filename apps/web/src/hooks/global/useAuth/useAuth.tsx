@@ -2,7 +2,7 @@
 
 import { ReactNode, createContext, useCallback, useContext, useMemo } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter } from '@/i18n/navigation';
 
 import { User } from '@nonsololarco/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { RepertoireStats } from '@nonsololarco/types';
 
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
@@ -10,6 +12,7 @@ interface BandStatsProps {
 
 export default function BandStats({ stats }: BandStatsProps) {
   const { activeBand, isSpecificBandSelected } = useActiveBand();
+  const t = useTranslations('pages');
 
   const statsSource = isSpecificBandSelected && activeBand ? activeBand : stats;
 
@@ -19,14 +22,14 @@ export default function BandStats({ stats }: BandStatsProps) {
         <strong className="text-yellow-deep dark:text-emerald-deep md:text-primary-dark md:dark:text-primary-dark font-black">
           {statsSource.totalTracks}
         </strong>{' '}
-        tracks
+        {t('repertoire.statTracks')}
       </span>
       <span className="text-primary-dark">·</span>
       <span className="md:text-primary-dark">
         <strong className="text-yellow-deep dark:text-emerald-deep md:text-primary-dark md:dark:text-primary-dark font-black">
           {statsSource.readyTracks}
         </strong>{' '}
-        ready
+        {t('repertoire.statReady')}
       </span>
       <span className="text-primary-dark">·</span>
       <span>

@@ -1,6 +1,6 @@
 import { type ElementType } from 'react';
 
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 import { type VariantProps } from 'class-variance-authority';
 

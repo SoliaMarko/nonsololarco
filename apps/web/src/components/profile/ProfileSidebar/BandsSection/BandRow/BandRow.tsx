@@ -1,9 +1,11 @@
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import Text from '@/src/components/typography/Text';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
 import { Band } from '@/src/lib/types/profile/profile.types';
 import { cn } from '@/src/utils/cn';
+
+import { Link } from '@/i18n/navigation';
 
 interface BandRowProps {
   band: Band;
@@ -12,6 +14,8 @@ interface BandRowProps {
 }
 
 export default function BandRow({ band, className, isLastItem }: BandRowProps) {
+  const t = useTranslations('pages');
+
   return (
     <Link
       href={`/band/${band.id}`}
@@ -31,7 +35,7 @@ export default function BandRow({ band, className, isLastItem }: BandRowProps) {
           <Text className="text-fg-primary font-black">{band.name}</Text>
           <Text className="text-fg-tertiary text-sm">
             {band.role}
-            {band.since ? ` · since ${band.since}` : null}
+            {band.since ? ` · ${t('profile.bandSince', { since: band.since })}` : null}
           </Text>
         </div>
       </div>

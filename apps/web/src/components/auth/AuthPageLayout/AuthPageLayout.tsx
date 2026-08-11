@@ -2,6 +2,8 @@
 
 import { ReactNode } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import LoginFooter from '@/src/components/auth/LoginFooter';
 import LoginHero from '@/src/components/auth/LoginHero';
 import OAuthButton from '@/src/components/auth/OAuthButton';
@@ -25,6 +27,9 @@ export interface AuthPageLayoutProps {
 }
 
 export default function AuthPageLayout({ children, heading, loading, switchLabel }: AuthPageLayoutProps) {
+  const t = useTranslations('auth');
+  const tCommon = useTranslations('common');
+
   return (
     <div
       className={cn(
@@ -41,7 +46,7 @@ export default function AuthPageLayout({ children, heading, loading, switchLabel
           <div className="relative">
             {loading && (
               <div className="bg-card/80 absolute inset-0 z-10 flex items-center justify-center backdrop-blur-[2px]">
-                <Spinner size="lg" label="Loading" />
+                <Spinner size="lg" label={tCommon('status.loading')} />
               </div>
             )}
 
@@ -58,12 +63,12 @@ export default function AuthPageLayout({ children, heading, loading, switchLabel
                 <OAuthButton
                   href={`${API_URL}/auth/google`}
                   icon={<GoogleIcon />}
-                  label="Continue with Google"
+                  label={t('login.continueWithGoogle')}
                 />
                 <OAuthButton
                   href={`${API_URL}/auth/github`}
                   icon={<GithubIcon />}
-                  label="Continue with GitHub"
+                  label={t('login.continueWithGithub')}
                 />
               </div>
 
@@ -83,7 +88,7 @@ export default function AuthPageLayout({ children, heading, loading, switchLabel
         </div>
 
         <p className="text-fg-tertiary mbs-5 text-center font-mono text-[10px] font-bold tracking-[0.2em] uppercase">
-          Repertoire &middot; Practice &middot; Bands
+          {tCommon('tagline')}
         </p>
       </div>
     </div>

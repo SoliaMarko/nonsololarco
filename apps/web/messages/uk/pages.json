@@ -1,22 +1,22 @@
 {
   "band": {
-    "comingSoonDescription": "Повна сторінка гурту — учасники, репертуар та статистика. Скоро буде.",
+    "comingSoonDescription": "Повна сторінка гурту — учасники, репертуар та статистика. Незабаром.",
     "title": "Профіль гурту"
   },
   "calendar": {
-    "comingSoonDescription": "Репетиції, виступи та дедлайни — все в одному місці. Скоро буде.",
+    "comingSoonDescription": "Репетиції, виступи та дедлайни — все в одному місці. Незабаром.",
     "title": "Календар"
   },
   "chat": {
-    "comingSoonDescription": "Пишіть учасникам гурту та координуйтесь у реальному часі. Скоро буде.",
+    "comingSoonDescription": "Пишіть учасникам гурту та координуйтесь у реальному часі. Незабаром.",
     "title": "Чати"
   },
   "feed": {
-    "comingSoonDescription": "Оновлення від ваших гуртів, остання активність та піки від спільноти. Скоро буде.",
+    "comingSoonDescription": "Оновлення від ваших гуртів, остання активність та медіатори від спільноти. Незабаром.",
     "title": "Стрічка"
   },
   "notifications": {
-    "comingSoonDescription": "Будьте в курсі оновлень гурту, піків та нагадувань про репетиції. Скоро буде.",
+    "comingSoonDescription": "Будьте в курсі оновлень гурту, піків та нагадувань про репетиції. Незабаром.",
     "title": "Сповіщення"
   },
   "profile": {
@@ -25,7 +25,7 @@
     "bandSince": "з {since}",
     "exportPortfolio": "Експорт портфоліо",
     "instrumentsSection": "Інструменти",
-    "leadsInRepertoire": "Ведучі партії в репертуарі",
+    "leadsInRepertoire": "Провідні партії в репертуарі",
     "memberSince": "на nonsololarco з {memberSince}",
     "momentsMediaMeta": "фото та відео · перетягніть свої",
     "momentsPhoto": "фото",
@@ -34,7 +34,7 @@
     "profileTag": "ПРОФІЛЬ МУЗИКАНТА · ПОРТФОЛІО",
     "stats": {
       "performances": "Виступи",
-      "picks": "Піки",
+      "picks": "Медіатори",
       "rehearsals": "Репетиції",
       "tracks": "Треки"
     },
@@ -62,7 +62,7 @@
     "extraFilterArchive": "Архів",
     "filterLegend": "Фільтр за статусом",
     "filterLegendActivity": "Фільтр активності",
-    "filteredEmptyDescription": "Жоден трек не відповідає обраному фільтру. Спробуйте інший або скиньте.",
+    "filteredEmptyDescription": "Упс. Схоже жоден трек не відповідає обраному фільтру. Спробуйте інший або скиньте.",
     "filteredEmptyTitle": "Треків не знайдено",
     "genuinelyEmptyDescription": "У цьому репертуарі немає треків.",
     "genuinelyEmptyTitle": "Тут ще нічого немає",
@@ -81,20 +81,20 @@
     "sortTitleAsc": "Назва А→Я",
     "sortTitleDesc": "Назва Я→А",
     "statusAll": "Усі",
-    "statusArchived": "Архівований",
-    "statusLearning": "Вивчається",
-    "statusNew": "Новий",
-    "statusReady": "Готовий",
+    "statusArchived": "В Архіві",
+    "statusLearning": "Вчимо",
+    "statusNew": "Нове",
+    "statusReady": "Готове",
     "statReady": "готових",
     "statTracks": "треків",
     "title": "Репертуар",
-    "trackDetailsComingSoon": "Тексти, нотатки та історія практики. Скоро буде.",
+    "trackDetailsComingSoon": "Тексти, нотатки та історія практики. Незабаром.",
     "trackDetailsTitle": "Деталі треку",
     "unmatchedMineDescription": "Жоден трек з вашою партією не відповідає поточному фільтру. Скиньте, щоб побачити весь репертуар.",
-    "unmatchedMineTitle": "Ви ще не задіяні"
+    "unmatchedMineTitle": "Ви ще не залучені"
   },
   "settings": {
-    "comingSoonDescription": "Тема, мова, налаштування сповіщень та деталі акаунту. Скоро буде.",
+    "comingSoonDescription": "Тема, мова, налаштування сповіщень та деталі акаунту. Незабаром.",
     "title": "Налаштування"
   }
 }

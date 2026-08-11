@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
 import Text from '@/src/components/typography/Text';
 import Badge from '@/src/components/ui/Badge';
@@ -15,6 +15,8 @@ import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
 import { Track, TrackStatus } from '@nonsololarco/types';
 import { cn } from '@/src/utils/cn';
 import { getTrackPerformers } from '@/src/utils/track-performers.utils';
+
+import { Link } from '@/i18n/navigation';
 
 import TrackPerformerNames from '../TrackPerformerNames';
 import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
@@ -29,11 +31,11 @@ const STATUS_VARIANT: Record<
   archived: 'stamp-archived',
 };
 
-const STATUS_LABEL: Record<TrackStatus, string> = {
-  ready: 'Ready',
-  learning: 'Learning',
-  new: 'New',
-  archived: 'Archived',
+const STATUS_LABEL_KEY: Record<TrackStatus, string> = {
+  ready: 'repertoire.statusReady',
+  learning: 'repertoire.statusLearning',
+  new: 'repertoire.statusNew',
+  archived: 'repertoire.statusArchived',
 };
 
 export interface TrackListRowProps {
@@ -46,6 +48,7 @@ export interface TrackListRowProps {
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
   const { activeBandId, getVinylColor, isSpecificBandSelected } = useActiveBand();
   const { user } = useAuth();
+  const t = useTranslations('pages');
   const [isSelected, setIsSelected] = useState(false);
 
   const isArchived = track.status === 'archived';
@@ -57,7 +60,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
   const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
 
   /** Tracks without a band are solo — labelled as such instead of showing a blank cell */
-  const bandName = track.band?.name ?? 'Solo';
+  const bandName = track.band?.name ?? t('repertoire.solo');
 
   /** Border width is always reserved so selecting a row never shifts its content */
   const borderColor = isSelected
@@ -205,7 +208,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             variant={STATUS_VARIANT[track.status]}
             size="sm"
           >
-            {STATUS_LABEL[track.status]}
+            {t(STATUS_LABEL_KEY[track.status])}
           </Badge>
         </div>
 

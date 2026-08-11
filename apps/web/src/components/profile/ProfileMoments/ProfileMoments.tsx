@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { MomentType } from '@/src/lib/types/profile/profile.types';
 import { cn } from '@/src/utils/cn';
 
@@ -12,6 +14,8 @@ export interface ProfileMomentsProps {
 }
 
 export default function ProfileMoments({ moments, isOwnProfile, className }: ProfileMomentsProps) {
+  const t = useTranslations('pages');
+
   const featured = moments.find((moment) => moment.isFeatured);
   const rest = moments.filter((moment) => moment !== featured);
 
@@ -25,9 +29,9 @@ export default function ProfileMoments({ moments, isOwnProfile, className }: Pro
 
   return (
     <section className={cn('w-full p-6', className)}>
-      <SectionHeader title="Moments" meta="photos and videos · drag your" />
+      <SectionHeader title={t('profile.momentsSection')} meta={t('profile.momentsMediaMeta')} />
       <Text className="text-fg-tertiary mbe-4 shrink-0 text-xs tracking-widest uppercase sm:hidden">
-        photos and videos · drag your
+        {t('profile.momentsMediaMeta')}
       </Text>
 
       <div className={cn('grid grid-cols-1 gap-4', featured ? '' : 'grid-cols-1')}>

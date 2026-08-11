@@ -7,26 +7,26 @@ export const PROFILE_STATS: ProfileStatsConfig[] = [
   {
     color: 'text-icon-accent-yellow',
     icon: MediatorBadge,
-    label: 'Picks',
     isPicks: true,
+    labelKey: 'profile.stats.picks',
     valueKey: 'picks',
   },
   {
     color: 'text-icon-accent-green',
     icon: CalendarIcon,
-    label: 'Rehearsals',
+    labelKey: 'profile.stats.rehearsals',
     valueKey: 'rehearsalsCount',
   },
   {
     color: 'text-blue-subtle',
     icon: RepertoireIcon,
-    label: 'Tracks',
+    labelKey: 'profile.stats.tracks',
     valueKey: 'tracksCount',
   },
   {
     color: 'text-accent-red',
     icon: MicrophoneIcon,
-    label: 'Performances',
+    labelKey: 'profile.stats.performances',
     valueKey: 'performancesCount',
   },
 ];

@@ -2,16 +2,20 @@
 
 import { useEffect } from 'react';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import AuthPageLayout from '@/src/components/auth/AuthPageLayout';
 import Text from '@/src/components/typography/Text';
 import { useAuth } from '@/src/hooks/global/useAuth';
 
+import { Link } from '@/i18n/navigation';
+
 export default function LoginPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
+  const t = useTranslations('auth');
+  const tCommon = useTranslations('common');
 
   useEffect(() => {
     if (isAuthenticated && !isLoading) {
@@ -20,22 +24,22 @@ export default function LoginPage() {
   }, [isAuthenticated, isLoading, router]);
 
   return (
-    <AuthPageLayout heading="Sign in to continue" switchLabel="Or sign up" loading={isLoading}>
+    <AuthPageLayout heading={t('login.heading')} switchLabel={t('login.switchLabel')} loading={isLoading}>
       <div className="flex flex-col items-center gap-2">
         <Text size="sm" color="secondary" className="text-center">
-          New to nonsololarco?{' '}
+          {t('signup.newToNonsololarco')}{' '}
           <Link href="/signup" className="text-emerald-main hover:text-accent-red font-semibold">
-            Create an account
+            {t('login.switchLink')}
           </Link>
         </Text>
         <Text size="xs" color="tertiary" className="text-center">
-          By continuing you agree to the{' '}
+          {tCommon('legal.agreementPrefix')}{' '}
           <Link href="/terms" className="text-emerald-main hover:text-accent-red">
-            Terms
+            {tCommon('legal.terms')}
           </Link>{' '}
-          and{' '}
+          {tCommon('legal.and')}{' '}
           <Link href="/privacy" className="text-emerald-main hover:text-accent-red">
-            Privacy Policy
+            {tCommon('legal.privacyPolicy')}
           </Link>
           .
         </Text>

@@ -1,5 +1,4 @@
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import Logo from '@/components/ui/Logo';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
@@ -14,6 +13,8 @@ import { BellIcon, LogOutIcon, ProfileOutlineIcon, SettingsOutlineIcon } from '@
 import { NAV_ITEMS, OPTIONS_POSITION } from '@/src/lib/constants/common.const';
 import { cn } from '@/src/utils/cn';
 
+import { Link, usePathname } from '@/i18n/navigation';
+
 export interface AppHeaderNavProps {
   activePath: string;
   activeTitle?: string;
@@ -22,6 +23,7 @@ export interface AppHeaderNavProps {
 
 export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const { user, logout } = useAuth();
+  const t = useTranslations('common');
 
   const initials = user?.name
     ? user.name
@@ -62,7 +64,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
                 key={item.href}
                 href={item.href}
                 icon={item.icon}
-                label={item.label}
+                label={t(item.labelKey)}
                 badge={item.badge}
                 variant="desktop"
                 isActive={activePath === item.href}
@@ -94,14 +96,14 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               groups={[
                 {
                   items: [
-                    { label: 'View profile', icon: ProfileOutlineIcon, href: '/profile' },
-                    { label: 'Settings', icon: SettingsOutlineIcon, href: '/settings' },
-                    { label: 'Notifications', icon: BellIcon, href: '/notifications' },
+                    { label: t('nav.viewProfile'), icon: ProfileOutlineIcon, href: '/profile' },
+                    { label: t('nav.settings'), icon: SettingsOutlineIcon, href: '/settings' },
+                    { label: t('nav.notifications'), icon: BellIcon, href: '/notifications' },
                   ],
                 },
                 {
                   items: [
-                    { label: 'Sign out', icon: LogOutIcon, onClick: logout, variant: 'danger' },
+                    { label: t('nav.signOut'), icon: LogOutIcon, onClick: logout, variant: 'danger' },
                   ],
                 },
               ]}
