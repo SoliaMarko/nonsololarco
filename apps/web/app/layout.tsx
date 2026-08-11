@@ -1,5 +1,7 @@
 import type { Metadata } from 'next';
 import localFont from 'next/font/local';
+import { NextIntlClientProvider } from 'next-intl';
+import { getLocale, getMessages } from 'next-intl/server';
 
 import '@/styles/tokens.css';
 
@@ -20,9 +22,12 @@ export const metadata: Metadata = {
   description: 'A social platform for musicians',
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+export default async function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
+  const locale = await getLocale();
+  const messages = await getMessages();
+
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang={locale} suppressHydrationWarning>
       <head>
         <script
           dangerouslySetInnerHTML={{
@@ -38,9 +43,11 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
       <body
         className={`bg-edge bg-dots-subtle box-border ${geistSans.variable} ${geistMono.variable}`}
       >
-        <Providers>
-          <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>
-        </Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>
+            <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>
+          </Providers>
+        </NextIntlClientProvider>
       </body>
     </html>
   );

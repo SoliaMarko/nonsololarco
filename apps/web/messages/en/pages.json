@@ -1,0 +1,26 @@
+{
+  "band": {
+    "title": "Band"
+  },
+  "calendar": {
+    "title": "Calendar"
+  },
+  "chat": {
+    "title": "Chat"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "notifications": {
+    "title": "Notifications"
+  },
+  "profile": {
+    "title": "Profile"
+  },
+  "repertoire": {
+    "title": "Repertoire"
+  },
+  "settings": {
+    "title": "Settings"
+  }
+}

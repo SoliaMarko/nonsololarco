@@ -1,0 +1,26 @@
+{
+  "band": {
+    "title": "Гурт"
+  },
+  "calendar": {
+    "title": "Календар"
+  },
+  "chat": {
+    "title": "Чат"
+  },
+  "home": {
+    "title": "Головна"
+  },
+  "notifications": {
+    "title": "Сповіщення"
+  },
+  "profile": {
+    "title": "Профіль"
+  },
+  "repertoire": {
+    "title": "Репертуар"
+  },
+  "settings": {
+    "title": "Налаштування"
+  }
+}

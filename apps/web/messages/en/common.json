@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "calendar": "Calendar",
+    "chat": "Chat",
+    "home": "Home",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "repertoire": "Repertoire",
+    "settings": "Settings"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "band": {
+    "title": "Gruppo"
+  },
+  "calendar": {
+    "title": "Calendario"
+  },
+  "chat": {
+    "title": "Chat"
+  },
+  "home": {
+    "title": "Home"
+  },
+  "notifications": {
+    "title": "Notifiche"
+  },
+  "profile": {
+    "title": "Profilo"
+  },
+  "repertoire": {
+    "title": "Repertorio"
+  },
+  "settings": {
+    "title": "Impostazioni"
+  }
+}

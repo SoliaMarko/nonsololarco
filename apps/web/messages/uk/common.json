@@ -1,0 +1,11 @@
+{
+  "nav": {
+    "calendar": "Календар",
+    "chat": "Чат",
+    "home": "Головна",
+    "notifications": "Сповіщення",
+    "profile": "Профіль",
+    "repertoire": "Репертуар",
+    "settings": "Налаштування"
+  }
+}

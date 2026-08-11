@@ -1,4 +1,9 @@
+import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
+
+import { routing } from '@/i18n/routing';
+
+const intlMiddleware = createIntlMiddleware(routing);
 
 const PUBLIC_PATHS = ['/login', '/signup'];
 
@@ -7,9 +12,19 @@ const PUBLIC_PATHS = ['/login', '/signup'];
 // the end so a protected route like /profile/j.doe isn't treated as public.
 const STATIC_ASSET_PATTERN = /\.[a-zA-Z0-9]+$/;
 
+/**
+ * Checks whether the path (with the locale prefix stripped) is public.
+ *
+ * Locale prefix is always present because intlMiddleware runs first and
+ * redirects bare paths to `/{locale}/...`. We strip it before matching
+ * against PUBLIC_PATHS so that `/en/login` and `/it/login` both resolve.
+ */
 function isPublicPath(pathname: string): boolean {
+  // Strip locale prefix: "/en/login" → "/login", "/uk" → "/"
+  const withoutLocale = pathname.replace(/^\/[a-z]{2}(?=\/|$)/, '') || '/';
+
   return (
-    PUBLIC_PATHS.includes(pathname) ||
+    PUBLIC_PATHS.includes(withoutLocale) ||
     pathname === '/_next' ||
     pathname.startsWith('/_next/') ||
     pathname === '/api' ||
@@ -21,18 +36,22 @@ function isPublicPath(pathname: string): boolean {
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
 
+  // Let next-intl handle locale detection and prefix first
+  const intlResponse = intlMiddleware(request);
+
   if (isPublicPath(pathname)) {
-    return NextResponse.next();
+    return intlResponse;
   }
 
   const token = request.cookies.get('token')?.value;
 
   if (!token) {
-    const loginUrl = new URL('/login', request.url);
+    const locale = pathname.match(/^\/([a-z]{2})(?=\/|$)/)?.[1] ?? 'en';
+    const loginUrl = new URL(`/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }
 
-  return NextResponse.next();
+  return intlResponse;
 }
 
 export const config = {
