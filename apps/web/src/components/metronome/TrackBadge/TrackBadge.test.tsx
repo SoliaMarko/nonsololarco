@@ -13,25 +13,25 @@ describe('TrackBadge', () => {
     expect(screen.getByText('змінити')).toBeDefined();
   });
 
-  it('shows "Без трекінгу" when skipping', () => {
+  it('shows untracked state when skipping', () => {
     render(<TrackBadge onChangeTrack={() => {}} tracked="skip" />);
     expect(screen.getByText('Без трекінгу')).toBeDefined();
     expect(screen.getByText('обрати твір')).toBeDefined();
   });
 
-  it('shows "Без трекінгу" when tracked is null', () => {
+  it('shows untracked state when tracked is null', () => {
     render(<TrackBadge onChangeTrack={() => {}} tracked={null} />);
     expect(screen.getByText('Без трекінгу')).toBeDefined();
   });
 
-  it('calls onChangeTrack when "змінити" is clicked', async () => {
+  it('calls onChangeTrack when change button is clicked', async () => {
     const onChangeTrack = vi.fn();
     render(<TrackBadge onChangeTrack={onChangeTrack} tracked={MOCK_SONG} />);
     await userEvent.click(screen.getByText('змінити'));
     expect(onChangeTrack).toHaveBeenCalledOnce();
   });
 
-  it('calls onChangeTrack when "обрати твір" is clicked', async () => {
+  it('calls onChangeTrack when choose-song button is clicked', async () => {
     const onChangeTrack = vi.fn();
     render(<TrackBadge onChangeTrack={onChangeTrack} tracked="skip" />);
     await userEvent.click(screen.getByText('обрати твір'));

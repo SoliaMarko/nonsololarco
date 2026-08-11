@@ -14,7 +14,7 @@ describe('MetronomeFab', () => {
 
   it('renders the button with accessible label', () => {
     render(<MetronomeFab />);
-    expect(screen.getByRole('button', { name: 'Метроном' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Metronome' })).toBeDefined();
   });
 
   it('initially renders pulse ring spans', () => {
@@ -41,7 +41,7 @@ describe('MetronomeFab', () => {
     expect(container.querySelectorAll('span').length).toBe(0);
 
     act(() => {
-      screen.getByRole('button', { name: 'Метроном' }).click();
+      screen.getByRole('button', { name: 'Metronome' }).click();
     });
     expect(container.querySelectorAll('span').length).toBe(3);
   });

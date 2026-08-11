@@ -1,88 +1,54 @@
 'use client';
 
-import { ArrowLeftSolidIcon, MenuIcon } from '@/src/icons/base';
-import { cn } from '@/src/utils/cn';
+import { MenuIcon } from '@/src/icons/base';
 
-import { TimeSignature } from '@/src/lib/types/metronome.types';
+import { TimeSignatureDef } from '@/src/lib/types/metronome.types';
 
-const TIME_SIGNATURES: TimeSignature[] = [4, 3, 6];
+import TimeSignatureSelect from '../TimeSignatureSelect';
 
 interface MetronomeTopBarProps {
-  onBack: () => void;
   onMenuOpen: () => void;
-  onSignatureChange: (sig: TimeSignature) => void;
-  signature: TimeSignature;
+  onSignatureChange: (sig: TimeSignatureDef) => void;
+  signature: TimeSignatureDef;
 }
 
 /**
- * Top navigation bar with back button, burger menu, "МЕТРОНОМ" title,
- * and time signature selector (4/4, 3/4, 6/4).
+ * Top navigation bar: practice-history menu, the centred "МЕТРОНОМ" title,
+ * and the time signature selector.
+ *
+ * Laid out as a three-column grid (`1fr auto 1fr`) rather than absolute
+ * positioning, so the title stays centred at every width while the side
+ * columns reserve their own space and never overlap it.
  */
 export default function MetronomeTopBar({
-  onBack,
   onMenuOpen,
   onSignatureChange,
   signature,
 }: MetronomeTopBarProps) {
   return (
-    <div className="relative z-5 flex items-center justify-between" style={{ padding: '16px 22px' }}>
-      <div className="flex items-center gap-2.5">
+    <div className="pli-4 plb-3 relative z-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+      <div className="flex min-w-0 items-center">
         <button
-          aria-label="Історія практик"
-          className="flex size-[34px] shrink-0 items-center justify-center border-2 border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12]"
+          aria-label="Menu and practice history"
+          className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] flex size-8.5 shrink-0 items-center justify-center border-2 transition-[background-color] duration-100"
           onClick={onMenuOpen}
           type="button"
         >
           <MenuIcon size={18} />
         </button>
-
-        <button
-          className="inline-flex items-center gap-[7px] border-0 bg-transparent text-primary-light opacity-70 hover:opacity-100"
-          onClick={onBack}
-          style={{
-            fontFamily: "'Space Mono', monospace",
-            fontSize: '12px',
-            letterSpacing: '1px',
-          }}
-          type="button"
-        >
-          <ArrowLeftSolidIcon size={15} />
-          Назад
-        </button>
       </div>
 
-      <span
-        className="text-yellow-main"
-        style={{
-          fontFamily: "'Alfa Slab One', serif",
-          fontSize: '16px',
-          letterSpacing: '2px',
-        }}
-      >
+      <span className="font-display text-yellow-main text-[0.9375rem] tracking-[0.125rem] whitespace-nowrap">
         МЕТРОНОМ
       </span>
 
-      <div className="inline-flex border-2 border-primary-light/30">
-        {TIME_SIGNATURES.map((n) => (
-          <button
-            key={n}
-            className={cn(
-              'border-0 bg-transparent text-primary-light/60',
-              'first:border-ie-0 [&:not(:first-child)]:border-is-2 [&:not(:first-child)]:border-primary-light/30',
-              signature === n && 'bg-yellow-main text-primary-dark',
-            )}
-            onClick={() => onSignatureChange(n)}
-            style={{
-              fontFamily: "'Space Mono', monospace",
-              fontSize: '12px',
-              fontWeight: 700,
-              padding: '5px 10px',
-            }}
-            type="button"
-          >
-            {n}/4
-          </button>
-        ))}
+      <div className="flex justify-end">
+        <TimeSignatureSelect
+          denominator={Number(signature.label.split('/')[1])}
+          numerator={signature.beats}
+          onChange={(n, d) => onSignatureChange({ beats: n, label: `${n}/${d}` })}
+          variant="dark"
+        />
       </div>
     </div>
   );

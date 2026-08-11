@@ -5,7 +5,7 @@ import MetronomeToast from './MetronomeToast';
 
 describe('MetronomeToast', () => {
   it('renders the message text', () => {
-    render(<MetronomeToast message="Запис додано" />);
-    expect(screen.getByText('Запис додано')).toBeDefined();
+    render(<MetronomeToast message="Entry added" />);
+    expect(screen.getByText('Entry added')).toBeDefined();
   });
 });
