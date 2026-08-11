@@ -179,11 +179,11 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           </div>
         ) : null}
 
-        {/* Musical key */}
+        {/* Musical key — centred to match its column header */}
         <span
           role="cell"
           className={cn(
-            'hidden text-sm font-black tabular-nums sm:inline',
+            'hidden text-center text-sm font-black tabular-nums sm:inline',
             isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
           )}
         >

@@ -49,7 +49,9 @@ export default function NavLink({
               </span>
             )}
           </span>
-          <span>{label}</span>
+          {/* Truncates rather than overflowing when the tab is given a fixed
+              share of its container and the translated label runs long. */}
+          <span className="truncate">{label}</span>
         </Link>
       </TabItem>
     );

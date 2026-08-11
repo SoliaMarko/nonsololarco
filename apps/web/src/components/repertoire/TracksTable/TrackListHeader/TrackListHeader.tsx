@@ -31,7 +31,10 @@ export default function TrackListHeader() {
       {!isSpecificBandSelected ? (
         <TrackColumnHeader className="hidden sm:flex" title={t('repertoire.columnBand')} />
       ) : null}
-      <TrackColumnHeader className="hidden sm:flex" title={t('repertoire.columnKey')} />
+      <TrackColumnHeader
+        className="hidden justify-center text-center sm:flex"
+        title={t('repertoire.columnKey')}
+      />
       <TrackColumnHeader className="hidden sm:flex" field="bpm" isSortable={true} title={t('repertoire.columnBpm')} />
       <TrackColumnHeader field="status" isSortable={true} title={t('repertoire.columnStatus')} />
       <TrackColumnHeader className="hidden sm:flex" field="time" isSortable={true} title={t('repertoire.columnTime')} />

@@ -54,12 +54,15 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
       <div
         role="columnheader"
         aria-sort={ariaSortValue}
-        className={cn('text-[10px] font-bold tracking-widest uppercase', className)}
+        // `min-w-0` is required for `truncate` to take effect: a grid item
+        // defaults to `min-width: auto` and would overflow instead of clipping.
+        className={cn('min-w-0 truncate text-[10px] font-bold tracking-widest uppercase', className)}
+        title={title}
       >
         <button
           onClick={() => handleSort(props.field)}
           className={cn(
-            'flex items-center gap-1',
+            'flex items-center gap-1 whitespace-nowrap',
             'transition-colors',
             isActive ? 'text-fg-primary' : 'text-fg-tertiary hover:text-fg-secondary',
           )}
@@ -74,7 +77,13 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   return (
     <div
       role="columnheader"
-      className={cn('text-fg-tertiary text-[10px] font-bold tracking-widest uppercase', className)}
+      // `truncate` rather than wrapping: a header that grows to a second line
+      // in one locale changes the height of the whole header row.
+      className={cn(
+        'text-fg-tertiary min-w-0 truncate text-[10px] font-bold tracking-widest uppercase',
+        className,
+      )}
+      title={title}
     >
       {title}
     </div>

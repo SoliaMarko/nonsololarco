@@ -48,8 +48,8 @@ export default function TrackListSkeleton({
           {!isSpecificBandSelected ? (
             <Skeleton className="hidden sm:block" height={12} width="55%" />
           ) : null}
-          {/* key */}
-          <Skeleton className="hidden sm:block" height={12} width="70%" />
+          {/* key — centred to match the real cell */}
+          <Skeleton className="mli-auto hidden sm:block" height={12} width="70%" />
           {/* bpm */}
           <Skeleton className="hidden sm:block" height={12} width="80%" />
           {/* status badge */}
