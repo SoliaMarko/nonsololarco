@@ -194,6 +194,44 @@ Applies to: `*.utils.ts`, hooks, Nest service and controller methods, exported
 constants whose meaning isn't self-evident, and any shared type where a field
 has a constraint the type can't express.
 
+### Prefer `const`
+
+Use `const` by default. Reach for `let` only when the variable truly needs
+reassignment — loop counters, accumulators inside `reduce` callbacks, or
+values that change across branches where restructuring would hurt readability.
+If a `let` can be replaced by destructuring, a ternary, or a helper that
+returns the value, prefer that.
+
+### No JSX in variables
+
+Don't store JSX fragments in local variables (`const header = <div>…</div>`).
+Extract them into their own component file instead — this keeps render trees
+scannable and makes each piece testable and reusable.
+
+**Exception:** a tiny, single-use fragment (2–3 lines) that won't be reused
+may stay in the parent file as a plain variable when extracting a full
+component folder would be overkill.
+
+```tsx
+// ❌ JSX stashed in a variable
+const checkmark = item.selected ? (
+  <CheckIcon size={16} className="text-emerald-main" />
+) : null;
+return <MenuItem>{label}{checkmark}</MenuItem>;
+
+// ✅ inline when trivial
+return (
+  <MenuItem>
+    {label}
+    {item.selected && <CheckIcon size={16} className="text-emerald-main" />}
+  </MenuItem>
+);
+
+// ✅ extract when non-trivial
+import SelectionMark from './SelectionMark';
+return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
+```
+
 ### General
 
 - TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
