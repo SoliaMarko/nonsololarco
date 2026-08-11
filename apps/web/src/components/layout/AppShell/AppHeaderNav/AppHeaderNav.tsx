@@ -2,6 +2,7 @@ import { useTranslations } from 'next-intl';
 
 import Logo from '@/components/ui/Logo';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
+import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher';
 import ThemeToggle from '@/src/components/shared/ThemeToggle';
 import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
@@ -58,7 +59,21 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
         </Link>
 
         <nav className="hidden flex-1 self-end md:flex" aria-label="Main Nav">
-          <Tabs animated variant="nav" scrollable={false}>
+          {/*
+            Tabs are equal to each other, but only as wide as the longest
+            label — not stretched across the nav. A grid whose width is
+            `fit-content` with equal `1fr` tracks resolves every track to the
+            widest item's max-content, so the row shrink-wraps instead of
+            filling. Sizing each tab to its own label instead would put the
+            tabs in different positions in every language, since the labels
+            are translated ("Feed" → "Bacheca", "Calendar" → "Calendario").
+          */}
+          <Tabs
+            animated
+            variant="nav"
+            scrollable={false}
+            className="grid w-fit grid-flow-col auto-cols-fr"
+          >
             {NAV_ITEMS.map((item) => (
               <NavLink
                 key={item.href}
@@ -68,6 +83,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
                 badge={item.badge}
                 variant="desktop"
                 isActive={activePath === item.href}
+                className="min-w-0 justify-center"
               />
             ))}
           </Tabs>
@@ -87,9 +103,14 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
 
           <div className="flex gap-3 md:gap-4">
             {isRepertoirePageActive ? (
-              <AiButton className="bg-yellow-main md:hidden" textClassName="text-primary-dark" />
+              <AiButton
+                className="bg-yellow-main md:hidden"
+                size="sm"
+                textClassName="text-primary-dark"
+              />
             ) : null}
 
+            <LocaleSwitcher />
             <ThemeToggle />
             <Dropdown
               align={OPTIONS_POSITION.end}

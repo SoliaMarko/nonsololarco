@@ -9,6 +9,9 @@
     "defaultDescription": "Цей розділ ще в студії. Повертайся скоро.",
     "defaultTitle": "Скоро буде"
   },
+  "locale": {
+    "interfaceLanguage": "Мова інтерфейсу"
+  },
   "legal": {
     "agreementPrefix": "Продовжуючи, ви погоджуєтесь з",
     "and": "та",

@@ -9,6 +9,9 @@
     "defaultDescription": "Questa sezione è ancora in studio. Torna presto.",
     "defaultTitle": "In arrivo"
   },
+  "locale": {
+    "interfaceLanguage": "Lingua dell'interfaccia"
+  },
   "legal": {
     "agreementPrefix": "Continuando accetti i",
     "and": "e",

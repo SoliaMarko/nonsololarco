@@ -9,6 +9,9 @@
     "defaultDescription": "This section is still in the studio. Check back soon.",
     "defaultTitle": "Coming soon"
   },
+  "locale": {
+    "interfaceLanguage": "Interface language"
+  },
   "legal": {
     "agreementPrefix": "By continuing you agree to the",
     "and": "and",
