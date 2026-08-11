@@ -78,10 +78,27 @@
   --text-2xl: var(--text-size-2xl);
   --text-3xl: var(--text-size-3xl);
 
-  /* --- Typography: weights --- */
-  --font-weight-regular: var(--text-weight-regular);
+  /* --- Typography: weights ---
+   * Named to match Tailwind's stock weight utilities (`normal`, `medium`,
+   * `semibold`). A custom name such as `regular` would generate a
+   * `font-regular` class that `tailwind-merge` cannot classify as a
+   * font-weight, so it would never be dropped when a consumer passes
+   * `font-bold` — both would survive and CSS order would decide.
+   */
+  --font-weight-normal: var(--text-weight-regular);
   --font-weight-medium: var(--text-weight-medium);
   --font-weight-semibold: var(--text-weight-semibold);
+
+  /* --- Typography: families ---
+   * Named by role, not by typeface. The `--font-*-face` variables are
+   * emitted by next/font in app/[locale]/layout.tsx; next/font obfuscates
+   * the real family name, so a literal "Space Mono" would silently fall
+   * back to the system font. Always go through the variable.
+   */
+  --font-display: var(--font-alfa-slab), Georgia, serif;
+  --font-ui: var(--font-oswald), system-ui, sans-serif;
+  --font-label: var(--font-space-mono), ui-monospace, monospace;
+  --font-prose: var(--font-spectral), Georgia, serif;
 
   /* --- Typography: line heights --- */
   --leading-tight: var(--text-leading-tight);
@@ -159,6 +176,10 @@
 
   /* --- Colors: button fills --- */
   --color-btn-fill: var(--bg-btn-fill);
+
+  /* --- Colors: raised controls (dropdown triggers, menu panels) --- */
+  --color-control-surface: var(--control-surface);
+  --color-control-surface-hover: var(--control-surface-hover);
 
   --color-border-primary: var(--border-primary);
 
