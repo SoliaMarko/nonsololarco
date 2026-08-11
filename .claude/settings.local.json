@@ -1,0 +1,42 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(grep -v 'border-b-accent-red\\\\|border-b-transparent\\\\|border-t-edge\\\\|data-\\\\|border-b$')",
+      "Bash(git add *)",
+      "Bash(git commit -m ' *)",
+      "Bash(git stash *)",
+      "Bash(git checkout *)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco status)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco diff --stat)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco log --oneline -5)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco add apps/api/src/repertoire/controllers/band-repertoire.controller.ts apps/api/src/repertoire/controllers/user-repertoire.controller.ts apps/api/src/repertoire/dto/index.ts apps/api/src/repertoire/dto/sort-tracks.dto.ts apps/api/src/repertoire/dto/paginated-tracks.dto.ts apps/api/src/repertoire/repertoire.service.spec.ts apps/api/src/repertoire/repertoire.service.ts apps/api/src/test/mocks/prisma.mock.ts apps/web/app/globals.css apps/web/app/repertoire/page.tsx apps/web/src/components/repertoire/RepertoireFilterBar/RepertoireFilterBar.tsx apps/web/src/components/repertoire/TracksTable/TrackListHeader/TrackColumnHeader/TrackColumnHeader.tsx apps/web/src/components/repertoire/TracksTable/TrackListRow/TrackListRow.tsx apps/web/src/components/repertoire/TracksTable/TracksTable.tsx apps/web/src/hooks/global/useActiveBand/useActiveBand.tsx apps/web/src/lib/api/repertoire.api.ts apps/web/src/lib/constants/repertoire.const.ts apps/web/src/lib/hooks/useRepertoire.ts apps/web/src/lib/variants/button.variants.ts apps/web/src/lib/variants/pagination.variants.ts apps/web/src/components/ui/Pagination/ apps/web/src/utils/pagination.utils.test.ts apps/web/src/utils/pagination.utils.ts apps/web/stories/ui/Pagination.stories.tsx apps/web/e2e/repertoire-pagination.spec.ts packages/types/src/index.ts packages/types/src/common/pagination.types.ts docs/README.md docs/architecture/api-repertoire.md docs/features/repertoire-pagination.md CLAUDE.md)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco commit -m ' *)",
+      "Bash(pnpm lint *)",
+      "Bash(pnpm test *)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco branch --list '*163*')",
+      "Read(//Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco/**)",
+      "Bash(npx turbo *)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco add apps/api/src/repertoire/repertoire.service.ts apps/web/src/components/repertoire/TracksTable/TrackPerformerNames/TrackPerformerNames.test.tsx)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco diff)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco log --oneline -3)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco add apps/api/src/auth/oauth-state.store.ts apps/api/src/repertoire/controllers/user-repertoire.controller.ts apps/api/src/repertoire/dto/sort-tracks.dto.ts apps/api/src/utils/musical-key.util.spec.ts apps/api/src/utils/musical-key.util.ts)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco add apps/web/tsconfig.json)",
+      "Bash(gh api *)",
+      "Bash(which gh *)",
+      "WebFetch(domain:github.com)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco add .github/workflows/ci.yml apps/web/e2e/repertoire-filtering.spec.ts apps/web/src/components/repertoire/TracksTable/TracksTable.tsx apps/web/src/components/repertoire/TracksTable/TrackListRow/TrackListRow.tsx apps/web/src/components/repertoire/TracksTable/TrackListSkeleton/TrackListSkeleton.tsx apps/api/src/repertoire/dto/sort-tracks.dto.ts)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco status --short)",
+      "Bash(git -C /Users/solilamark/Solia_docs/SOLOMIIA/nonsololarco add CLAUDE.md README.md apps/api/src/repertoire/repertoire.service.ts apps/web/e2e/auth.setup.ts apps/web/src/hooks/global/useActiveBand/useActiveBand.tsx apps/web/src/hooks/global/useBandColors/useBandColors.tsx apps/web/src/hooks/useLockedHeight/useLockedHeight.test.ts apps/web/src/lib/api/repertoire.api.ts apps/web/src/lib/hooks/useRepertoire.ts docs/architecture/data-model.md docs/features/repertoire-filtering.md turbo.json)",
+      "Bash(pnpm --filter web test -- --run)",
+      "Bash(pnpm --filter web typecheck)",
+      "Bash(pnpm --filter api build)",
+      "Bash(pnpm install *)",
+      "Bash(git fetch *)",
+      "Bash(git merge *)",
+      "Bash(git ls-tree *)",
+      "Bash(pnpm --filter web test)",
+      "Bash(npx vitest *)",
+      "WebFetch(domain:claude.ai)"
+    ]
+  }
+}
