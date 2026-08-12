@@ -79,6 +79,41 @@ describe('SongChooser', () => {
     expect(onAdd).toHaveBeenCalledWith('Без BPM', undefined, { beats: 4, label: '4/4' });
   });
 
+  it('rejects a negative BPM and does not call onAdd', async () => {
+    const { onAdd } = setup();
+    await userEvent.click(screen.getByText('Новий твір'));
+    await userEvent.type(screen.getByPlaceholderText('Назва твору…'), 'Мінусовий');
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '-5');
+    await userEvent.click(screen.getByText('Додати і грати'));
+    expect(onAdd).not.toHaveBeenCalled();
+    expect(screen.getByRole('alert')).toBeDefined();
+  });
+
+  it('rejects a zero BPM and does not call onAdd', async () => {
+    const { onAdd } = setup();
+    await userEvent.click(screen.getByText('Новий твір'));
+    await userEvent.type(screen.getByPlaceholderText('Назва твору…'), 'Нуль');
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '0');
+    await userEvent.click(screen.getByText('Додати і грати'));
+    expect(onAdd).not.toHaveBeenCalled();
+    expect(screen.getByRole('alert')).toBeDefined();
+  });
+
+  it('clears the BPM error once the field is edited again', async () => {
+    const { onAdd } = setup();
+    await userEvent.click(screen.getByText('Новий твір'));
+    await userEvent.type(screen.getByPlaceholderText('Назва твору…'), 'Виправлення');
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '0');
+    await userEvent.click(screen.getByText('Додати і грати'));
+    expect(screen.getByRole('alert')).toBeDefined();
+
+    await userEvent.clear(screen.getByPlaceholderText('BPM'));
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '150');
+    expect(screen.queryByRole('alert')).toBeNull();
+    await userEvent.click(screen.getByText('Додати і грати'));
+    expect(onAdd).toHaveBeenCalledWith('Виправлення', 150, { beats: 4, label: '4/4' });
+  });
+
   it('disables submit button when title is empty', async () => {
     setup();
     await userEvent.click(screen.getByText('Новий твір'));

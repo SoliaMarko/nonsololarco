@@ -47,20 +47,39 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
   const [addMode, setAddMode] = useState(false);
   const [newTitle, setNewTitle] = useState('');
   const [newBpm, setNewBpm] = useState('');
+  const [bpmError, setBpmError] = useState(false);
   const [sigNum, setSigNum] = useState(4);
   const [sigDenom, setSigDenom] = useState(4);
   const cardRef = useRef<HTMLDivElement>(null);
 
   const filtered = songs.filter((s) => s.title.toLowerCase().includes(query.toLowerCase()));
 
+  /**
+   * Validates the inline "new song" form and forwards it to `onAdd`.
+   *
+   * A blank title is a silent no-op — the submit button is disabled in that
+   * state, this just guards the Enter key. BPM is optional: an empty field
+   * passes `undefined` so the caller keeps the current tempo. When present it
+   * must be a positive integer; zero, negatives and non-numeric input are
+   * rejected (surfaced via `bpmError`) rather than reaching playback state,
+   * since `MetronomeScreen` feeds this value straight into `setBpm`.
+   */
   const handleSubmitNew = () => {
     const title = newTitle.trim();
     if (!title) return;
-    const bpm = newBpm.trim() ? parseInt(newBpm, 10) : undefined;
+
+    const raw = newBpm.trim();
+    const parsed = raw ? Number(raw) : undefined;
+    if (parsed !== undefined && (!Number.isInteger(parsed) || parsed <= 0)) {
+      setBpmError(true);
+      return;
+    }
+
     const sig: TimeSignatureDef = { beats: sigNum, label: `${sigNum}/${sigDenom}` };
-    onAdd(title, bpm && !Number.isNaN(bpm) ? bpm : undefined, sig);
+    onAdd(title, parsed, sig);
     setNewTitle('');
     setNewBpm('');
+    setBpmError(false);
     setSigNum(4);
     setSigDenom(4);
     setAddMode(false);
@@ -68,7 +87,10 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSubmitNew();
-    if (e.key === 'Escape') setAddMode(false);
+    if (e.key === 'Escape') {
+      setBpmError(false);
+      setAddMode(false);
+    }
   };
 
   // Escape closes the overlay, but only once the inline form is out of the
@@ -169,8 +191,15 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
 
               <div className="flex items-center gap-3">
                 <input
-                  className="font-label border-edge text-fg-primary placeholder:text-fg-tertiary w-20 border-be bg-transparent pbe-1 text-xs outline-none"
-                  onChange={(e) => setNewBpm(e.target.value)}
+                  aria-invalid={bpmError}
+                  className={cn(
+                    'font-label border-edge text-fg-primary placeholder:text-fg-tertiary w-20 border-be bg-transparent pbe-1 text-xs outline-none',
+                    bpmError && 'border-accent-red',
+                  )}
+                  onChange={(e) => {
+                    setNewBpm(e.target.value);
+                    setBpmError(false);
+                  }}
                   onKeyDown={handleKeyDown}
                   placeholder="BPM"
                   type="number"
@@ -188,6 +217,12 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
                 />
               </div>
 
+              {bpmError && (
+                <div className="font-label text-accent-red text-[0.625rem]" role="alert">
+                  BPM має бути цілим числом більше нуля
+                </div>
+              )}
+
               <div className="flex gap-2">
                 <button
                   className={cn(
@@ -203,7 +238,10 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
                 </button>
                 <button
                   className="pli-3 plb-2 font-label text-fg-tertiary hover:text-fg-secondary border-0 bg-transparent text-[0.6875rem] transition-colors duration-100"
-                  onClick={() => setAddMode(false)}
+                  onClick={() => {
+                    setBpmError(false);
+                    setAddMode(false);
+                  }}
                   type="button"
                 >
                   Скасувати
