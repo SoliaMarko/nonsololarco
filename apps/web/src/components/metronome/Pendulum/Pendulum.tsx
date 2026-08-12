@@ -64,7 +64,7 @@ function Pendulum({ getBeatPosition, playing }: PendulumProps) {
   }, [playing, getBeatPosition]);
 
   return (
-    <div className="relative size-50">
+    <div className="relative size-50 [@media(min-height:36.0625rem)_and_(max-height:44rem)]:scale-[0.78] [@media(max-height:36rem)]:scale-[0.6]">
       {/* Trapezoid body */}
       <div
         className="mli-auto border-primary-dark absolute inset-x-0 block-end-0 h-52.5 w-40 border-3 bg-[linear-gradient(180deg,#e7dcc4,#d8c8a8)] shadow-[2px_2px_0_rgba(0,0,0,0.5)]"

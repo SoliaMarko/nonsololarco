@@ -85,7 +85,7 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
       <div
         className="absolute inset-0 z-35 bg-[rgba(20,16,11,0.6)] backdrop-blur-[1.5px]"
         onClick={onClose}
-        style={{ animation: 'mt-toast-in 0.2s ease-out' }}
+        style={{ animation: 'toast-in 0.2s ease-out' }}
       />
 
       {/* Drawer */}

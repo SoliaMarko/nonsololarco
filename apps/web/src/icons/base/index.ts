@@ -7,6 +7,7 @@ export { default as ChatSolidIcon } from './ChatSolidIcon';
 export { default as CheckCircleIcon } from './CheckCircleIcon';
 export { default as CheckSolidIcon } from './CheckSolidIcon';
 export { default as ChevronIcon } from './ChevronIcon';
+export { default as CloseCircleIcon } from './CloseCircleIcon';
 export { default as CloseSolidIcon } from './CloseSolidIcon';
 export { default as DisconnectOutlineIcon } from './DisconnectOutlineIcon';
 export { default as DisconnectSolidIcon } from './DisconnectSolidIcon';

@@ -37,7 +37,9 @@ Options:
   metronome is playing, a "Завершити та зберегти" (save session) button appears.
 - **Track badge** — shows which song is being tracked (emerald), or "Без
   трекінгу" (no tracking) in muted style.
-- **Toast** — appears briefly when a session is saved.
+- **Toast** — the DS `Toast` component (`src/components/ui/Toast`) appears
+  briefly when a session is saved or a song is added. Supports `success`,
+  `error` and `info` variants.
 
 ### History drawer
 
@@ -84,8 +86,11 @@ would leave nothing reliable to sort by.
   `next/font/google` in `app/metronome/layout.tsx` and passed as CSS variables.
 - **Auth** — `/metronome` is listed in `PUBLIC_PATHS` in the middleware, so it
   doesn't require login.
-- **Pendulum animation** — CSS `@keyframes mt-swing` with duration derived from
-  BPM via the `--beat` custom property.
+- **Pendulum animation** — driven by a `requestAnimationFrame` loop that
+  samples the audio clock each frame, not CSS keyframes. This avoids restarts
+  on every beat and cannot drift from the click track. On short viewports
+  (≤ 44 rem) the pendulum scales down via CSS `scale` to avoid overlapping
+  the BPM controls.
 - **BPM ruler** — uses pointer events for drag; mask-image fades at edges.
 
 ## Edge cases
@@ -97,16 +102,26 @@ would leave nothing reliable to sort by.
 
 ## Tests
 
+All paths are relative to `apps/web/`.
+
+- Unit: `src/utils/audio.utils.test.ts`
 - Unit: `src/utils/metronome.utils.test.ts`
 - Unit: `src/hooks/useMetronomeClicker/useMetronomeClicker.test.ts`
+- Unit: `src/hooks/useMetronomeEngine/useMetronomeEngine.test.ts`
 - Unit: `src/hooks/useTapTempo/useTapTempo.test.ts`
 - Unit: `src/components/metronome/BeatDots/BeatDots.test.tsx`
-- Unit: `src/components/metronome/Pendulum/Pendulum.test.tsx`
-- Unit: `src/components/metronome/TrackBadge/TrackBadge.test.tsx`
-- Unit: `src/components/metronome/MetronomeTransport/MetronomeTransport.test.tsx`
-- Unit: `src/components/metronome/MetronomeTopBar/MetronomeTopBar.test.tsx`
-- Unit: `src/components/metronome/MetronomeToast/MetronomeToast.test.tsx`
+- Unit: `src/components/metronome/BpmControl/BpmControl.test.tsx`
+- Unit: `src/components/metronome/BpmControl/BpmRuler/BpmRuler.test.tsx`
+- Unit: `src/components/metronome/HistoryDrawer/HistoryDrawer.test.tsx`
 - Unit: `src/components/metronome/MetronomeFab/MetronomeFab.test.tsx`
+- Unit: `src/components/metronome/MetronomeScreen/MetronomeScreen.test.tsx`
+- Unit: `src/components/metronome/MetronomeTopBar/MetronomeTopBar.test.tsx`
+- Unit: `src/components/metronome/MetronomeTransport/MetronomeTransport.test.tsx`
+- Unit: `src/components/metronome/Pendulum/Pendulum.test.tsx`
 - Unit: `src/components/metronome/SongChooser/SongChooser.test.tsx`
-- Unit: `src/hooks/useMetronomeEngine/useMetronomeEngine.test.ts`
+- Unit: `src/components/metronome/TimeSignatureSelect/SigDropdown/SigDropdown.test.tsx`
 - Unit: `src/components/metronome/TimeSignatureSelect/TimeSignatureSelect.test.tsx`
+- Unit: `src/components/metronome/TrackBadge/TrackBadge.test.tsx`
+- Unit: `src/components/ui/Toast/Toast.test.tsx`
+- Unit: `src/icons/base/baseIcons.test.tsx`
+- Unit: `src/icons/base/MenuIcon.test.tsx`

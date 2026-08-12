@@ -18,7 +18,7 @@ import {
 import BeatDots from '../BeatDots';
 import BpmControl from '../BpmControl';
 import HistoryDrawer from '../HistoryDrawer';
-import MetronomeToast from '../MetronomeToast';
+import Toast from '@/src/components/ui/Toast';
 import MetronomeTopBar from '../MetronomeTopBar';
 import MetronomeTransport from '../MetronomeTransport';
 import Pendulum from '../Pendulum';
@@ -195,13 +195,13 @@ export default function MetronomeScreen() {
 
       <BpmControl bpm={bpm} onBpmChange={setBpm} onTap={() => tap(setBpm)} />
 
-      <div className="relative z-4 flex flex-1 items-center justify-center">
+      <div className="relative z-4 flex min-h-0 flex-1 items-center justify-center">
         <Pendulum getBeatPosition={getBeatPosition} playing={playing} />
       </div>
 
       <BeatDots activeBeat={beat} signature={signature} />
 
-      <div className="pli-6 relative z-5 flex flex-col items-center gap-3 pbe-4">
+      <div className="pli-6 relative z-5 flex flex-col items-center gap-3">
         <TrackBadge onChangeTrack={handleSwitchSong} tracked={tracked} />
         <MetronomeTransport
           onSave={handleSave}
@@ -210,6 +210,10 @@ export default function MetronomeScreen() {
           tracked={tracked}
         />
       </div>
+
+      {/* Bottom spacer — prevents controls from hugging the screen edge on
+          tall viewports while staying flush on compact ones. */}
+      <div className="min-h-4 max-h-16 flex-1" />
 
       {menuOpen && (
         <HistoryDrawer
@@ -230,7 +234,13 @@ export default function MetronomeScreen() {
         />
       )}
 
-      {toast && <MetronomeToast message={toast} />}
+      {toast && (
+        <Toast
+          className="absolute inset-x-0 bottom-5.5 z-40 mx-auto w-fit"
+          message={toast}
+          style={{ animation: 'toast-in 0.3s ease-out' }}
+        />
+      )}
     </div>
   );
 }

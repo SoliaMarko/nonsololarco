@@ -22,6 +22,7 @@ import {
   CheckCircleIcon,
   CheckSolidIcon,
   ChevronIcon,
+  CloseCircleIcon,
   CloseSolidIcon,
   DisconnectOutlineIcon,
   DisconnectSolidIcon,
@@ -280,6 +281,9 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="CheckCircleIcon" copyText={toJsx('CheckCircleIcon')} {...cardProps}>
           <CheckCircleIcon size={size} />
+        </IconCard>
+        <IconCard label="CloseCircleIcon" copyText={toJsx('CloseCircleIcon')} {...cardProps}>
+          <CloseCircleIcon size={size} />
         </IconCard>
         <IconCard label="MetronomeIcon" copyText={toJsx('MetronomeIcon')} {...cardProps}>
           <MetronomeIcon size={size} />
