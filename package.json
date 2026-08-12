@@ -7,7 +7,8 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "typecheck": "turbo run typecheck",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "ai:map": "node scripts/generate-ai-map.mjs"
   },
   "devDependencies": {
     "prettier": "^3.7.4",
