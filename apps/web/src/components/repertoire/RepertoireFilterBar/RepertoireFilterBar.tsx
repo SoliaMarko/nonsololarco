@@ -61,12 +61,21 @@ const SORT_OPTIONS_COMMON = [
   { label: 'Time ↓', value: encodeSortValue('time', 'desc') },
 ];
 
-const ORDER_OPTION = { label: '# Order', value: encodeSortValue('trackOrder', 'asc') };
+/** Set of recognised composite sort values for fast lookup. */
+const KNOWN_SORT_VALUES = new Set(SORT_OPTIONS_COMMON.map((o) => o.value));
 
-/** Maps the current URL params to the composite dropdown value */
+/**
+ * Maps the current URL params to the composite dropdown value.
+ *
+ * Returns `'default'` when `sortField` is absent **or** when the encoded
+ * value doesn't match any entry in `SORT_OPTIONS_COMMON` — this covers
+ * legacy bookmarks (e.g. `?sort=trackOrder`) and any other unsupported
+ * values that may appear in browser history.
+ */
 function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
   if (!sortField) return 'default';
-  return encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+  const encoded = encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+  return KNOWN_SORT_VALUES.has(encoded) ? encoded : 'default';
 }
 
 /**
@@ -107,12 +116,8 @@ export default function RepertoireFilterBar() {
     tracks?.filter((t) => t.leadMember.id === user?.id || t.members.some((m) => m.id === user?.id))
       .length ?? 0;
 
-  const mobileSortOptions: { label: string; value: string }[] = isSpecificBandSelected
-    ? [ORDER_OPTION, ...SORT_OPTIONS_COMMON]
-    : SORT_OPTIONS_COMMON;
-
   const activeSortValue = currentSortDropdownValue(sortField, sortOrder);
-  const activeSortLabel = mobileSortOptions.find((o) => o.value === activeSortValue)?.label;
+  const activeSortLabel = SORT_OPTIONS_COMMON.find((o) => o.value === activeSortValue)?.label;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
@@ -153,7 +158,7 @@ export default function RepertoireFilterBar() {
   return (
     <div className="border-border-primary bg-base border-b">
       {/* Desktop layout */}
-      <div className="pli-4 plb-3 hidden items-center gap-3 sm:flex">
+      <div className="pli-4 plb-3 hidden flex-wrap items-center gap-3 sm:flex">
         {/* Status filter pills */}
         <fieldset className="flex items-center gap-2">
           <legend className="sr-only">Filter by status</legend>
@@ -301,7 +306,7 @@ export default function RepertoireFilterBar() {
             }
             groups={[
               {
-                items: mobileSortOptions.map((opt) => ({
+                items: SORT_OPTIONS_COMMON.map((opt) => ({
                   label: opt.label,
                   selected: opt.value === activeSortValue,
                   onClick: () => handleMobileSort(opt.value),

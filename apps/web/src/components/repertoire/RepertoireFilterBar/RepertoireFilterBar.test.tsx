@@ -196,6 +196,26 @@ describe('RepertoireFilterBar', () => {
     });
   });
 
+  describe('sort normalization', () => {
+    it('treats unsupported sort values as default', () => {
+      mockSearchParams = new URLSearchParams('sort=trackOrder&order=asc');
+      render(<RepertoireFilterBar />);
+
+      const sortBtns = findButtons('Sort');
+      expect(sortBtns.length).toBeGreaterThan(0);
+      expect(sortBtns[0]?.textContent).toContain('Sort');
+      expect(sortBtns[0]?.textContent).not.toContain('Track');
+    });
+
+    it('treats completely unknown sort fields as default', () => {
+      mockSearchParams = new URLSearchParams('sort=foobar&order=desc');
+      render(<RepertoireFilterBar />);
+
+      const sortBtns = findButtons('Sort');
+      expect(sortBtns.length).toBeGreaterThan(0);
+    });
+  });
+
   describe('band page link', () => {
     it('shows link when a specific band is selected', () => {
       mockActiveBand.activeBand = { id: 'band-1', name: 'The Band' };
