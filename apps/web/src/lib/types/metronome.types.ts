@@ -55,7 +55,15 @@ export const DENOMINATORS = [2, 4, 8] as const;
 
 export interface PracticeSession {
   bpm: number;
+  /**
+   * Human-readable duration label for display only — e.g. `"3 хв"` or
+   * `"< 1 хв"`. Derived from `durationMs`; never parse it back into a number
+   * (sub-minute sessions render as `"< 1 хв"` and cannot round-trip). Use
+   * `durationMs` for any arithmetic such as the journal's total-minutes stat.
+   */
   duration: string;
+  /** Session length in milliseconds — the numeric source of truth for stats. */
+  durationMs: number;
   id: string;
   song: string;
   songNumber: number;

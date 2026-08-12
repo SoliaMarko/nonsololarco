@@ -52,10 +52,10 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
       .sort((a, b) => byNewestFirst(a.rows[0]!, b.rows[0]!));
   }, [history]);
 
-  const totalMin = history.reduce((a, h) => {
-    const parsed = parseInt(h.duration, 10);
-    return a + (Number.isNaN(parsed) ? 0 : parsed);
-  }, 0);
+  // Sum the numeric durationMs, converting to whole minutes once at the end —
+  // parsing the localized `duration` label would under-report every sub-minute
+  // session (they render as "< 1 хв") and break on any wording change.
+  const totalMin = Math.round(history.reduce((a, h) => a + h.durationMs, 0) / 60000);
 
   const handleDelete = (entry: PracticeSession) => {
     onDelete(entry.id);

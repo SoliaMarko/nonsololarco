@@ -140,9 +140,11 @@ export default function MetronomeScreen() {
 
     if (tracked && tracked !== 'skip') {
       const startedAtMs = playStartRef.current ?? Date.now();
+      const durationMs = Date.now() - startedAtMs;
       const entry: PracticeSession = {
         bpm,
-        duration: formatDurationMs(Date.now() - startedAtMs),
+        duration: formatDurationMs(durationMs),
+        durationMs,
         id: `h-${nextId++}`,
         song: tracked.title,
         songNumber: tracked.number,
