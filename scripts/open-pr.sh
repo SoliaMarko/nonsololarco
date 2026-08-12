@@ -87,7 +87,7 @@ SCOPE="$([ "$(wc -l <<< "$POOL")" -eq 1 ] && echo "$POOL" || echo packages)"
 TITLE="$COMMIT_TYPE($SCOPE): ${SLUG//-/ }"
 
 # Size check — the same limits as docs/ai/GIT.md.
-FILE_COUNT="$(grep -cvE '(pnpm-lock\.yaml|packages/db/prisma/migrations/|packages/db/generated/|docs/ai/MAP\.md)' <<< "$CHANGED" || true)"
+FILE_COUNT="$(grep -cvE '(pnpm-lock\.yaml|packages/db/prisma/migrations/|packages/db/generated/|docs/.*\.md)' <<< "$CHANGED" || true)"
 LINE_COUNT="$(git diff --shortstat "origin/$BASE...HEAD" | grep -oE '[0-9]+ (insertion|deletion)' | grep -oE '^[0-9]+' | paste -sd+ | bc || echo 0)"
 
 echo "Branch : $BRANCH"

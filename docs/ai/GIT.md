@@ -141,6 +141,16 @@ too large to hold in your head.
 - generated files (`docs/ai/MAP.md`, `packages/db/generated/**`)
 - translation files when the change is a bulk key addition
 - pure renames with no content change
+- **new documentation files** (`docs/**/*.md`) — see below
+
+**Why documentation is exempt from the line count.** A prose document is not
+reviewed line by line the way code is; a 600-line doc is read once, top to
+bottom, and splitting it across commits makes it *harder* to review, not
+easier. The file-count limit still applies — a commit touching fifteen doc
+files is a dumping ground, whatever its line count.
+
+The exemption is for **new** documents. Editing prose scattered across many
+existing docs is the reviewable kind of change and counts normally.
 
 Current reality: 9 of 120 commits exceed 20 files and 20 exceed 400 lines. The
 worst is `chore: fix file structure in lib folder` — 119 files. A commit like
