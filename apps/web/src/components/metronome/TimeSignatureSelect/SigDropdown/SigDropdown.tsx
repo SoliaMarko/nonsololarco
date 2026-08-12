@@ -83,7 +83,7 @@ export default function SigDropdown({
             <RadixDropdown.Item
               key={opt}
               className={cn(
-                'font-label flex cursor-pointer items-center justify-between gap-2 px-2.5 py-1.5 text-sm outline-none select-none',
+                'font-label flex cursor-pointer items-center justify-between gap-2 pli-2.5 plb-1.5 text-sm outline-none select-none',
                 'transition-colors duration-75',
                 ITEM_VARIANT[variant],
                 opt === value && 'font-semibold',
