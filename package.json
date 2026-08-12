@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
-    "ai:map": "node scripts/generate-ai-map.mjs"
+    "ai:map": "node scripts/generate-ai-map.mjs",
+    "pr": "bash scripts/open-pr.sh"
   },
   "devDependencies": {
     "prettier": "^3.7.4",

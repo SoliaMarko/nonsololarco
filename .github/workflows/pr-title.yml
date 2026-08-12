@@ -1,0 +1,134 @@
+name: PR title
+
+# Derives the PR title from the branch name and validates it against
+# Conventional Commits.
+#
+# Why this matters beyond tidiness: PRs into `develop` are squash-merged, and
+# GitHub uses the PR title as the squash commit subject (appending " (#123)").
+# So the PR title IS the commit message that lands on `develop` forever — it
+# has to satisfy the same rules commitlint applies to every other commit.
+#
+#   branch:  feature/CLEF-187-create-metronome-page
+#   title:   feat(web): create metronome page
+#   squash:  feat(web): create metronome page (#66)
+#
+# The scope is inferred from which paths the PR touches, since the branch name
+# does not carry one.
+
+on:
+  pull_request:
+    types: [opened, edited, synchronize, reopened]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  title:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Derive and apply title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            const branch = pr.head.ref;
+
+            // feature/CLEF-187-create-metronome-page
+            //   → type "feature", ticket "CLEF-187", slug "create-metronome-page"
+            const m = branch.match(/^(?<type>[a-z]+)\/(?<ticket>[A-Z]+-\d+)-(?<slug>.+)$/);
+            if (!m) {
+              core.notice(`Branch "${branch}" does not match <type>/<TICKET>-<slug>; leaving the title alone.`);
+              return;
+            }
+            const { type, ticket, slug } = m.groups;
+
+            // Branch prefixes are readable words; commit types are the short forms.
+            const TYPE = {
+              feature: 'feat', feat: 'feat',
+              fix: 'fix', bugfix: 'fix', hotfix: 'fix',
+              chore: 'chore', refactor: 'refactor',
+              docs: 'docs', test: 'test', ci: 'ci',
+              redesign: 'style', perf: 'perf',
+            };
+            const commitType = TYPE[type] ?? 'chore';
+
+            // Infer the scope from the paths the PR touches. A PR confined to
+            // one area gets that scope; one spanning several gets the broadest
+            // sensible label.
+            const files = await github.paginate(
+              github.rest.pulls.listFiles,
+              { ...context.repo, pull_number: pr.number, per_page: 100 },
+            );
+            const areas = new Set(
+              files.map(f => {
+                const p = f.filename;
+                if (p.startsWith('apps/web/')) return 'web';
+                if (p.startsWith('apps/api/')) return 'api';
+                if (p.startsWith('packages/db/')) return 'db';
+                if (p.startsWith('packages/types/')) return 'types';
+                if (p.startsWith('packages/ui/')) return 'ui';
+                if (p.startsWith('packages/')) return 'packages';
+                if (p.startsWith('docs/')) return 'docs';
+                if (p.startsWith('.github/')) return 'ci';
+                return 'config';
+              }),
+            );
+            // Docs/ci/config noise shouldn't decide the scope of a code change.
+            const meaningful = [...areas].filter(a => !['docs', 'ci', 'config'].includes(a));
+            const pool = meaningful.length ? meaningful : [...areas];
+            const scope = pool.length === 1 ? pool[0] : 'packages';
+
+            const description = slug.replace(/-/g, ' ');
+            const title = `${commitType}(${scope}): ${description}`;
+
+            if (pr.title === title) {
+              core.info('Title already correct.');
+              return;
+            }
+
+            // A human may have written a better description than the slug.
+            // Only overwrite a title that is still the GitHub default (the
+            // branch name) or that fails Conventional Commits.
+            const isConventional = /^(feat|fix|chore|refactor|docs|test|ci|style|perf)\([a-z]+\): .{10,}$/.test(pr.title);
+            const isDefault = pr.title === branch || pr.title === description;
+
+            if (isConventional && !isDefault) {
+              core.info(`Keeping the hand-written title: "${pr.title}"`);
+            } else {
+              await github.rest.pulls.update({ ...context.repo, pull_number: pr.number, title });
+              core.notice(`Title set to: ${title}`);
+            }
+
+            // Make sure the ticket is linked in the body exactly once.
+            const body = pr.body ?? '';
+            if (!body.includes(ticket)) {
+              const footer = `\n\n---\nCloses ${ticket}`;
+              await github.rest.pulls.update({
+                ...context.repo,
+                pull_number: pr.number,
+                body: body + footer,
+              });
+              core.notice(`Added "Closes ${ticket}" to the body.`);
+            }
+
+      - name: Validate final title
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const { data: pr } = await github.rest.pulls.get({
+              ...context.repo, pull_number: context.payload.pull_request.number,
+            });
+            const ok = /^(feat|fix|chore|refactor|docs|test|ci|style|perf)\([a-z]+\): [a-z].{9,}[^.]$/.test(pr.title);
+            if (!ok) {
+              core.setFailed(
+                `PR title "${pr.title}" is not a valid commit subject.\n` +
+                'Required: <type>(<scope>): <lowercase description>, no trailing period, 10+ chars.\n' +
+                'It becomes the squash commit on develop, so it must satisfy commitlint.',
+              );
+            }
