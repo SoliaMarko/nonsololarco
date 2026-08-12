@@ -2,34 +2,20 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { mockIntl } from '@/src/test/intl-mock';
+
 import LocaleSwitcher from './LocaleSwitcher';
 
 /* ------------------------------------------------------------------ */
 /*  Mocks                                                              */
 /* ------------------------------------------------------------------ */
 
-const mockReplace = vi.fn();
-
-vi.mock('next-intl', () => ({
-  useLocale: () => mockLocale,
-  useTranslations: () => (key: string) => {
-    const translations: Record<string, string> = {
-      'locale.interfaceLanguage': 'Interface language',
-    };
-    return translations[key] ?? key;
-  },
-}));
-
-vi.mock('@/i18n/navigation', () => ({
-  usePathname: () => '/repertoire',
-  useRouter: () => ({ replace: mockReplace }),
-}));
-
-let mockLocale = 'en';
+vi.mock('next-intl', () => mockIntl.nextIntl);
+vi.mock('@/i18n/navigation', () => mockIntl.navigation);
 
 beforeEach(() => {
-  mockLocale = 'en';
-  mockReplace.mockClear();
+  mockIntl.reset();
+  mockIntl.setPathname('/repertoire');
 });
 
 /* ------------------------------------------------------------------ */
@@ -61,7 +47,7 @@ describe('LocaleSwitcher', () => {
 
     await user.click(screen.getByLabelText('Switch language'));
 
-    expect(screen.getByText('Interface language')).toBeDefined();
+    expect(screen.getByText('common.locale.interfaceLanguage')).toBeDefined();
   });
 
   it('calls router.replace with the selected locale and scroll: false', async () => {
@@ -71,7 +57,7 @@ describe('LocaleSwitcher', () => {
     await user.click(screen.getByLabelText('Switch language'));
     await user.click(screen.getByText('Italiano'));
 
-    expect(mockReplace).toHaveBeenCalledWith('/repertoire', {
+    expect(mockIntl.replace).toHaveBeenCalledWith('/repertoire', {
       locale: 'it',
       scroll: false,
     });
@@ -83,7 +69,6 @@ describe('LocaleSwitcher', () => {
 
     await user.click(screen.getByLabelText('Switch language'));
 
-    // The active locale item (English) should have a checkmark character
     const englishItem = screen.getByText('English').closest('[role="menuitem"]');
     expect(englishItem?.textContent).toContain('✓');
   });
@@ -112,7 +97,7 @@ describe('LocaleSwitcher', () => {
   });
 
   it('renders a different locale code when the active locale changes', () => {
-    mockLocale = 'uk';
+    mockIntl.setLocale('uk');
     render(<LocaleSwitcher />);
 
     expect(screen.getByText('UK')).toBeDefined();
