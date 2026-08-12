@@ -374,7 +374,7 @@ docs/features/<feature>.md                REQUIRED for user-facing work
 ## Before saying "done"
 
 ```sh
-pnpm typecheck && pnpm lint && pnpm test
+pnpm check
 pnpm ai:map          # if files were added or removed
 ```
 

@@ -92,8 +92,11 @@ Single-field CRUD, a presentational component and a pure formatting helper do
 Before opening a PR:
 
 ```sh
-pnpm lint && pnpm stylelint && pnpm typecheck && pnpm test && pnpm --filter web e2e && pnpm build
+pnpm check        # lint + stylelint + typecheck + test + build
+pnpm check:full   # the above plus e2e
 ```
+
+`pnpm pr` runs `check` for you before opening the PR.
 
 ## Documentation policy
 
@@ -132,9 +135,14 @@ pnpm dev          # web :3000, api :3001
 pnpm build
 pnpm typecheck    # tsc --noEmit across the monorepo
 pnpm lint
+pnpm stylelint
 pnpm test         # unit tests, all packages
+pnpm e2e
+pnpm check        # lint + stylelint + typecheck + test + build
+pnpm check:full   # check + e2e
 pnpm format
 pnpm ai:map       # regenerate docs/ai/MAP.md
+pnpm pr           # run checks, push, open the PR
 
 pnpm --filter web test | test:watch | storybook | e2e
 pnpm --filter api test | test:e2e | start:dev

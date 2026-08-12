@@ -8,6 +8,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
+    "stylelint": "stylelint \"src/**/*.css\" \"app/**/*.css\"",
+    "stylelint:fix": "stylelint --fix \"src/**/*.css\" \"app/**/*.css\"",
     "check-types": "next typegen && tsc --noEmit",
     "typecheck": "pnpm run check-types",
     "storybook": "storybook dev -p 6006",

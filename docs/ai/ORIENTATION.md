@@ -201,7 +201,9 @@ it silently — that shows it was weighed, not forgotten.
 pnpm dev            # web :3000, api :3001
 pnpm typecheck      # tsc --noEmit across the monorepo
 pnpm lint
+pnpm stylelint
 pnpm test           # unit tests
+pnpm check          # lint + stylelint + typecheck + test + build
 pnpm ai:map         # regenerate MAP.md
 
 pnpm --filter web test        # web only

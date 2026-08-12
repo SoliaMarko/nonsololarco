@@ -10,6 +10,7 @@
     "lint": {
       "dependsOn": ["^lint", "^build"]
     },
+    "stylelint": {},
     "typecheck": {
       "dependsOn": ["^typecheck", "^build"]
     },

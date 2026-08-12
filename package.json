@@ -8,6 +8,10 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "typecheck": "turbo run typecheck",
     "test": "turbo run test",
+    "stylelint": "turbo run stylelint",
+    "e2e": "turbo run e2e",
+    "check": "turbo run lint stylelint typecheck test build",
+    "check:full": "pnpm check && pnpm e2e",
     "ai:map": "node scripts/generate-ai-map.mjs",
     "pr": "bash scripts/open-pr.sh"
   },
