@@ -109,7 +109,7 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
         className="border-primary-dark bg-surface w-110 max-w-full border-[2.5px] shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
       >
         {/* Search */}
-        <div className="pli-4 plb-3 border-fg-primary bg-surface flex items-center gap-2 border-b-2">
+        <div className="pli-4 plb-3 border-fg-primary bg-surface flex items-center gap-2 border-be-2">
           <SearchOutlineIcon size={15} className="text-fg-tertiary" />
           <input
             className="font-prose text-fg-primary placeholder:text-fg-tertiary min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
@@ -124,7 +124,7 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
           {filtered.map((s) => (
             <button
               key={s.number}
-              className="pli-4 plb-3 border-edge hover:bg-elevated flex w-full items-center gap-3 border-b bg-transparent text-start transition-colors duration-100"
+              className="pli-4 plb-3 border-edge hover:bg-elevated flex w-full items-center gap-3 border-be bg-transparent text-start transition-colors duration-100"
               onClick={() => onPick(s)}
               type="button"
             >
@@ -150,13 +150,13 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
         </div>
 
         {/* Footer actions */}
-        <div className="border-fg-primary flex border-t-2">
+        <div className="border-fg-primary flex border-bs-2">
           {addMode ? (
             <div className="pli-4 plb-3 border-ie-2 border-fg-primary bg-surface flex flex-1 flex-col gap-2">
               <div className="relative">
                 <input
                   autoFocus
-                  className="font-ui border-edge text-fg-primary placeholder:text-fg-tertiary w-full border-b bg-transparent pbe-1 text-sm outline-none"
+                  className="font-ui border-edge text-fg-primary placeholder:text-fg-tertiary w-full border-be bg-transparent pbe-1 text-sm outline-none"
                   onChange={(e) => setNewTitle(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="Назва твору…"
@@ -169,7 +169,7 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
 
               <div className="flex items-center gap-3">
                 <input
-                  className="font-label border-edge text-fg-primary placeholder:text-fg-tertiary w-20 border-b bg-transparent pbe-1 text-xs outline-none"
+                  className="font-label border-edge text-fg-primary placeholder:text-fg-tertiary w-20 border-be bg-transparent pbe-1 text-xs outline-none"
                   onChange={(e) => setNewBpm(e.target.value)}
                   onKeyDown={handleKeyDown}
                   placeholder="BPM"

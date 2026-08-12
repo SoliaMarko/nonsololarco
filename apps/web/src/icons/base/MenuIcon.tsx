@@ -3,6 +3,14 @@ import { Ref, SVGProps, forwardRef, useId } from 'react';
 import { SVGCustomProps } from '@/lib/types/common.types';
 import { calcViewBox } from '@/src/utils/svg.utils';
 
+/**
+ * Three-line hamburger menu icon. Renders as a decorative `aria-hidden`
+ * element by default; pass `title` to make it an accessible `role="img"`
+ * with an `aria-labelledby` pointing at an embedded `<title>`.
+ *
+ * Fixed to its intrinsic 18 × 12 viewBox (3–21 × 6–18) — the `size`
+ * prop scales width and height together.
+ */
 function MenuIcon(
   { title, titleId, ...props }: Partial<SVGProps<SVGSVGElement> & SVGCustomProps>,
   ref: Ref<SVGSVGElement>,

@@ -32,4 +32,10 @@ describe('BeatDots', () => {
     expect(wrapper).toBeDefined();
     expect(wrapper?.children.length).toBe(4);
   });
+
+  it('renders no dots for zero beats', () => {
+    const { container } = render(<BeatDots activeBeat={-1} signature={sig(0, '0/4')} />);
+    const dots = container.querySelectorAll('span');
+    expect(dots.length).toBe(0);
+  });
 });

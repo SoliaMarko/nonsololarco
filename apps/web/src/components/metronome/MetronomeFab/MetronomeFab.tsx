@@ -15,9 +15,10 @@ export default function MetronomeFab() {
   const [animate, setAnimate] = useState(true);
 
   useEffect(() => {
+    if (!animate) return;
     const t = setTimeout(() => setAnimate(false), 4800);
     return () => clearTimeout(t);
-  }, []);
+  }, [animate]);
 
   return (
     <div className="relative size-16">

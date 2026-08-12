@@ -108,3 +108,5 @@ would leave nothing reliable to sort by.
 - Unit: `src/components/metronome/MetronomeToast/MetronomeToast.test.tsx`
 - Unit: `src/components/metronome/MetronomeFab/MetronomeFab.test.tsx`
 - Unit: `src/components/metronome/SongChooser/SongChooser.test.tsx`
+- Unit: `src/hooks/useMetronomeEngine/useMetronomeEngine.test.ts`
+- Unit: `src/components/metronome/TimeSignatureSelect/TimeSignatureSelect.test.tsx`

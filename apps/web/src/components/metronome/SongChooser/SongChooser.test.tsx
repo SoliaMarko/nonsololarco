@@ -41,7 +41,7 @@ describe('SongChooser', () => {
     expect(onPick).toHaveBeenCalledWith(SONGS[0]);
   });
 
-  it('calls onSkip when "Просто грати" is clicked', async () => {
+  it('calls onSkip when the skip action is clicked', async () => {
     const { onSkip } = setup();
     await userEvent.click(screen.getByText('Просто грати'));
     expect(onSkip).toHaveBeenCalledOnce();
@@ -55,7 +55,7 @@ describe('SongChooser', () => {
     expect(screen.getByText('Тролейбус №7')).toBeDefined();
   });
 
-  it('shows inline form when "Новий твір" is clicked', async () => {
+  it('shows inline form when the add action is clicked', async () => {
     setup();
     await userEvent.click(screen.getByText('Новий твір'));
     expect(screen.getByPlaceholderText('Назва твору…')).toBeDefined();
@@ -122,7 +122,7 @@ describe('SongChooser', () => {
     expect(screen.getByText('Що репетируєш?')).toBeDefined();
   });
 
-  it('hides the form when "Скасувати" is clicked', async () => {
+  it('hides the form when the cancel action is clicked', async () => {
     setup();
     await userEvent.click(screen.getByText('Новий твір'));
     expect(screen.getByPlaceholderText('Назва твору…')).toBeDefined();

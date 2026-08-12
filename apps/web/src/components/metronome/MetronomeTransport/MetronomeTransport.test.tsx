@@ -1,5 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { describe, expect, it } from 'vitest';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
 
 import MetronomeTransport from './MetronomeTransport';
 
@@ -56,5 +57,33 @@ describe('MetronomeTransport', () => {
     );
     const buttons = screen.getAllByRole('button');
     expect(buttons.length).toBe(1);
+  });
+
+  it('calls onTogglePlay when the play button is clicked', async () => {
+    const onTogglePlay = vi.fn();
+    render(
+      <MetronomeTransport
+        onSave={() => {}}
+        onTogglePlay={onTogglePlay}
+        playing={false}
+        tracked={null}
+      />,
+    );
+    await userEvent.click(screen.getByRole('button', { name: 'Play' }));
+    expect(onTogglePlay).toHaveBeenCalledOnce();
+  });
+
+  it('calls onSave when the save button is clicked', async () => {
+    const onSave = vi.fn();
+    render(
+      <MetronomeTransport
+        onSave={onSave}
+        onTogglePlay={() => {}}
+        playing={true}
+        tracked={MOCK_SONG}
+      />,
+    );
+    await userEvent.click(screen.getByText('Завершити та зберегти'));
+    expect(onSave).toHaveBeenCalledOnce();
   });
 });

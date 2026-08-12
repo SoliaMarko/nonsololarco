@@ -89,9 +89,9 @@
      next/font emits an obfuscated family name, so these must go through its
      CSS variable — a literal "Space Mono" silently falls back to the system
      monospace. Named by role rather than by typeface so a swap stays local. */
-  --font-display: var(--font-alfa-slab), serif;
+  --font-display: var(--font-alfa-slab), var(--font-oswald), serif;
   --font-ui: var(--font-oswald), sans-serif;
-  --font-label: var(--font-space-mono), monospace;
+  --font-label: var(--font-space-mono), "Courier New", monospace;
   --font-prose: var(--font-spectral), serif;
 
   /* --- Typography: weights --- */

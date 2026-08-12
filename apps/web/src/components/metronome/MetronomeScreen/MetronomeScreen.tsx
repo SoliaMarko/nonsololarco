@@ -55,6 +55,7 @@ export default function MetronomeScreen() {
   const [songs, setSongs] = useState<ChooserSong[]>(MOCK_REPERTOIRE_SONGS);
 
   const playStartRef = useRef<number | null>(null);
+  const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const router = useRouter();
 
   const tap = useTapTempo();
@@ -77,6 +78,13 @@ export default function MetronomeScreen() {
       playStartRef.current = Date.now();
     }
   }, [playing]);
+
+  // Clear toast timer on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
 
   const deleteEntry = useCallback((id: string, restore?: PracticeSession) => {
     if (restore) {
@@ -122,8 +130,9 @@ export default function MetronomeScreen() {
     setBpm(songBpm);
     if (inputSignature) setSignature(inputSignature);
     setPhase('play');
+    if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
     setToast(`«${title}» додано в репертуар`);
-    setTimeout(() => setToast(null), 2200);
+    toastTimerRef.current = setTimeout(() => setToast(null), 2200);
   };
 
   const handleSave = () => {
@@ -140,8 +149,9 @@ export default function MetronomeScreen() {
         startedAt: new Date(startedAtMs).toISOString(),
       };
       setHistory((prev) => [entry, ...prev]);
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
       setToast(`Сесію збережено · «${tracked.title}»`);
-      setTimeout(() => setToast(null), 2600);
+      toastTimerRef.current = setTimeout(() => setToast(null), 2600);
     }
 
     playStartRef.current = null;
@@ -163,7 +173,11 @@ export default function MetronomeScreen() {
 
   const handleExit = () => {
     stopAndSave();
-    router.back();
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.push('/');
+    }
   };
 
   return (

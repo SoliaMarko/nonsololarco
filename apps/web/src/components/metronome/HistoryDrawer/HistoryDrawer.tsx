@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { HomeOutlineIcon, MetronomeIcon } from '@/src/icons/base';
 import { PracticeSession } from '@/src/lib/types/metronome.types';
@@ -26,6 +26,13 @@ interface HistoryDrawerProps {
 export default function HistoryDrawer({ history, onClose, onDelete, onExit }: HistoryDrawerProps) {
   const [openSong, setOpenSong] = useState<string | null>(null);
   const [undoEntry, setUndoEntry] = useState<PracticeSession | null>(null);
+  const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    };
+  }, []);
 
   // Newest first, both within each song and across songs — the most recent
   // practice is what you look for when you open the log.
@@ -53,7 +60,11 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
   const handleDelete = (entry: PracticeSession) => {
     onDelete(entry.id);
     setUndoEntry(entry);
-    setTimeout(() => setUndoEntry((u) => (u && u.id === entry.id ? null : u)), 4000);
+    if (undoTimerRef.current) clearTimeout(undoTimerRef.current);
+    undoTimerRef.current = setTimeout(
+      () => setUndoEntry((u) => (u && u.id === entry.id ? null : u)),
+      4000,
+    );
   };
 
   const handleUndo = () => {

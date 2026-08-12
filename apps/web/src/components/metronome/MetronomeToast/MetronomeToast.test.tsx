@@ -8,4 +8,16 @@ describe('MetronomeToast', () => {
     render(<MetronomeToast message="Entry added" />);
     expect(screen.getByText('Entry added')).toBeDefined();
   });
+
+  it('has a status role for assistive technology', () => {
+    render(<MetronomeToast message="Saved" />);
+    expect(screen.getByRole('status')).toBeDefined();
+  });
+
+  it('renders an empty toast when message is empty', () => {
+    const { container } = render(<MetronomeToast message="" />);
+    const toast = container.querySelector('[role="status"]');
+    expect(toast).toBeDefined();
+    expect(toast?.textContent).toBe('');
+  });
 });
