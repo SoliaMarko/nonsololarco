@@ -61,10 +61,21 @@ const SORT_OPTIONS_COMMON = [
   { label: 'Time ↓', value: encodeSortValue('time', 'desc') },
 ];
 
-/** Maps the current URL params to the composite dropdown value */
+/** Set of recognised composite sort values for fast lookup. */
+const KNOWN_SORT_VALUES = new Set(SORT_OPTIONS_COMMON.map((o) => o.value));
+
+/**
+ * Maps the current URL params to the composite dropdown value.
+ *
+ * Returns `'default'` when `sortField` is absent **or** when the encoded
+ * value doesn't match any entry in `SORT_OPTIONS_COMMON` — this covers
+ * legacy bookmarks (e.g. `?sort=trackOrder`) and any other unsupported
+ * values that may appear in browser history.
+ */
 function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
   if (!sortField) return 'default';
-  return encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+  const encoded = encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+  return KNOWN_SORT_VALUES.has(encoded) ? encoded : 'default';
 }
 
 /**
