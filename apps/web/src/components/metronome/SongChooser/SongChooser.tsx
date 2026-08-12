@@ -2,7 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { ArrowRightSolidIcon, PlayIcon, PlusSolidIcon, SearchOutlineIcon } from '@/src/icons/base';
+import {
+  ArrowLeftSolidIcon,
+  ArrowRightSolidIcon,
+  PlayIcon,
+  PlusSolidIcon,
+  SearchOutlineIcon,
+} from '@/src/icons/base';
 import { ChooserSong, TimeSignatureDef } from '@/src/lib/types/metronome.types';
 import { cn } from '@/src/utils/cn';
 
@@ -26,6 +32,12 @@ const FOOTER_TITLE = 'font-ui text-[0.8125rem] font-semibold tracking-wide upper
 interface SongChooserProps {
   onAdd: (title: string, bpm?: number, signature?: TimeSignatureDef) => void;
   /**
+   * Leaves the metronome entirely (back to the app). Rendered as the
+   * top-left back arrow. Distinct from `onDismiss`: back exits the feature,
+   * dismiss just closes this overlay onto the running metronome.
+   */
+  onBack: () => void;
+  /**
    * Closes the overlay leaving the session untouched. Omit it when there is
    * nothing to go back to — on first open there's no previous selection, so
    * dismissing would strand the user on an empty metronome.
@@ -42,7 +54,14 @@ interface SongChooserProps {
  * action. When `onDismiss` is provided, clicking the backdrop or pressing
  * Escape closes it without changing the current song or tempo.
  */
-export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }: SongChooserProps) {
+export default function SongChooser({
+  onAdd,
+  onBack,
+  onDismiss,
+  onPick,
+  onSkip,
+  songs,
+}: SongChooserProps) {
   const [query, setQuery] = useState('');
   const [addMode, setAddMode] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -118,6 +137,20 @@ export default function SongChooser({ onAdd, onDismiss, onPick, onSkip, songs }:
           : undefined
       }
     >
+      <button
+        aria-label="Exit metronome"
+        className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] absolute block-start-5 inset-s-5 flex size-9 items-center justify-center border-2 transition-[background-color] duration-100"
+        // Stop the click reaching the backdrop handler, which would otherwise
+        // also fire onDismiss on the way up.
+        onClick={(e) => {
+          e.stopPropagation();
+          onBack();
+        }}
+        type="button"
+      >
+        <ArrowLeftSolidIcon size={18} />
+      </button>
+
       <div className="font-label text-yellow-main text-[0.6875rem] tracking-[0.25rem]">
         МЕТРОНОМ · ПЕРЕД СТАРТОМ
       </div>

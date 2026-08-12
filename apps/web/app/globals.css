@@ -362,15 +362,23 @@
   }
 }
 
-@keyframes fab-pulse {
-  0% {
-    opacity: 0.7;
-    transform: scale(1);
+/* Pendulum arm of the VintageMetronome illustration. Runs `alternate`, so a
+   single keyframe covers both directions and the turns land on the beat. */
+@keyframes metronome-swing {
+  from {
+    transform: rotate(-15deg);
   }
 
-  100% {
-    opacity: 0;
-    transform: scale(2.1);
+  to {
+    transform: rotate(15deg);
+  }
+}
+
+/* Decorative motion only — nothing here conveys state, so it is safe to stop
+   it outright rather than substitute a reduced variant. */
+@media (prefers-reduced-motion: reduce) {
+  [style*='metronome-swing'] {
+    animation: none !important;
   }
 }
 

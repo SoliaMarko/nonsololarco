@@ -5,7 +5,9 @@
 
 **Status:** In progress
 **Added:** 2026-08
-**Code:** `apps/web/src/components/metronome/`, `apps/web/app/metronome/`
+**Code:** `apps/web/src/components/metronome/`, `apps/web/app/metronome/`,
+`apps/web/src/components/shared/MetronomeButton/`,
+`apps/web/src/illustrations/metronome/`
 
 ---
 
@@ -24,6 +26,9 @@ Options:
   omitted, the current metronome BPM is used. The new song is added to the
   repertoire list and auto-selected for tracking.
 - **"Просто грати"** — skip tracking and start the metronome freely.
+- **Back arrow** (top-left) — leaves the metronome entirely and returns to the
+  app. Distinct from dismissing the overlay, which drops onto the running
+  metronome instead.
 
 ### Metronome stage (play phase)
 
@@ -52,11 +57,35 @@ Accessible via the burger menu in the top bar. Shows:
 - Delete with undo: entries can be deleted, with a 3-second undo bar.
 - Empty state when no history exists.
 
-### FAB
+### Entry point from the rest of the app
 
-`MetronomeFab` is a reusable floating action button intended for placement on
-other pages (e.g. repertoire). It shows three expanding pulse rings on mount
-that stop after 4.8 s.
+`MetronomeButton` (`src/components/shared/MetronomeButton`) links to
+`/metronome` from anywhere inside `AppShell`. It has two placements, chosen
+by the caller rather than by the component itself:
+
+- **`header`** — a 36 px square button in the desktop header row, rendered by
+  `AppHeaderNav` and hidden below `md`.
+- **`fab`** — a 56 px round floating button fixed to the bottom-end corner,
+  rendered by `AppShell` and hidden from `md` up. It sits in the thumb zone
+  and is lifted clear of `AppBottomNav`.
+
+Both render the `VintageMetronome` illustration in its `compact` variant. The
+illustration is `aria-hidden`; the accessible name lives on the link.
+
+### VintageMetronome illustration
+
+`src/illustrations/metronome/VintageMetronome` — an inline SVG of a wooden
+metronome, in two variants:
+
+- **`detailed`** — the full instrument: wood grain, engraved BPM scale with
+  numerals, M.M. key plate. For hero and empty-state use.
+- **`compact`** — body, panel, slot, arm and weight only. The engraved detail
+  collapses into noise below roughly 60 px, so the button variants use this.
+
+The arm rests upright and swings on hover or keyboard focus; pass `isSwinging`
+to run it continuously. The swing is a CSS keyframe (`metronome-swing`), not
+rAF — nothing is synchronised to it, unlike the real `Pendulum` on the
+metronome stage. `prefers-reduced-motion: reduce` disables it.
 
 ## URL state
 
@@ -113,7 +142,6 @@ All paths are relative to `apps/web/`.
 - Unit: `src/components/metronome/BpmControl/BpmControl.test.tsx`
 - Unit: `src/components/metronome/BpmControl/BpmRuler/BpmRuler.test.tsx`
 - Unit: `src/components/metronome/HistoryDrawer/HistoryDrawer.test.tsx`
-- Unit: `src/components/metronome/MetronomeFab/MetronomeFab.test.tsx`
 - Unit: `src/components/metronome/MetronomeScreen/MetronomeScreen.test.tsx`
 - Unit: `src/components/metronome/MetronomeTopBar/MetronomeTopBar.test.tsx`
 - Unit: `src/components/metronome/MetronomeTransport/MetronomeTransport.test.tsx`
@@ -122,6 +150,8 @@ All paths are relative to `apps/web/`.
 - Unit: `src/components/metronome/TimeSignatureSelect/SigDropdown/SigDropdown.test.tsx`
 - Unit: `src/components/metronome/TimeSignatureSelect/TimeSignatureSelect.test.tsx`
 - Unit: `src/components/metronome/TrackBadge/TrackBadge.test.tsx`
+- Unit: `src/components/shared/MetronomeButton/MetronomeButton.test.tsx`
 - Unit: `src/components/ui/Toast/Toast.test.tsx`
+- Unit: `src/illustrations/metronome/VintageMetronome/VintageMetronome.test.tsx`
 - Unit: `src/icons/base/baseIcons.test.tsx`
 - Unit: `src/icons/base/MenuIcon.test.tsx`

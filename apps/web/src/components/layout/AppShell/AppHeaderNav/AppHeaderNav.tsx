@@ -3,6 +3,7 @@ import { usePathname } from 'next/navigation';
 
 import Logo from '@/components/ui/Logo';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
+import MetronomeButton from '@/src/components/shared/MetronomeButton';
 import ThemeToggle from '@/src/components/shared/ThemeToggle';
 import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
@@ -87,6 +88,10 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
             {isRepertoirePageActive ? (
               <AiButton className="bg-yellow-main md:hidden" textClassName="text-primary-dark" />
             ) : null}
+
+            {/* Below md the metronome moves to the floating button in
+                AppShell, where it sits in the thumb zone. */}
+            <MetronomeButton className="hidden md:inline-flex" />
 
             <ThemeToggle />
             <Dropdown

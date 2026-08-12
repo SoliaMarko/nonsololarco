@@ -227,6 +227,7 @@ export default function MetronomeScreen() {
       {phase === 'choose' && (
         <SongChooser
           onAdd={handleAdd}
+          onBack={handleExit}
           onDismiss={handleDismissChooser}
           onPick={handlePick}
           onSkip={handleSkip}

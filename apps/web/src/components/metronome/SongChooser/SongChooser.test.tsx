@@ -13,18 +13,20 @@ const SONGS: ChooserSong[] = [
 
 function setup(overrides: Partial<React.ComponentProps<typeof SongChooser>> = {}) {
   const onAdd = vi.fn();
+  const onBack = vi.fn();
   const onPick = vi.fn();
   const onSkip = vi.fn();
   const utils = render(
     <SongChooser
       onAdd={onAdd}
+      onBack={onBack}
       onPick={onPick}
       onSkip={onSkip}
       songs={SONGS}
       {...overrides}
     />,
   );
-  return { ...utils, onAdd, onPick, onSkip };
+  return { ...utils, onAdd, onBack, onPick, onSkip };
 }
 
 describe('SongChooser', () => {
@@ -119,6 +121,20 @@ describe('SongChooser', () => {
     await userEvent.click(screen.getByText('Новий твір'));
     const submitBtn = screen.getByText('Додати і грати');
     expect(submitBtn.getAttribute('disabled')).toBe('');
+  });
+
+  it('calls onBack when the back button is clicked', async () => {
+    const { onBack } = setup();
+    await userEvent.click(screen.getByRole('button', { name: 'Exit metronome' }));
+    expect(onBack).toHaveBeenCalledOnce();
+  });
+
+  it('does not also dismiss when the back button is clicked', async () => {
+    const onDismiss = vi.fn();
+    const { onBack } = setup({ onDismiss });
+    await userEvent.click(screen.getByRole('button', { name: 'Exit metronome' }));
+    expect(onBack).toHaveBeenCalledOnce();
+    expect(onDismiss).not.toHaveBeenCalled();
   });
 
   it('calls onDismiss when the backdrop is clicked', async () => {
