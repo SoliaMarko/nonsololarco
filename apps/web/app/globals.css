@@ -378,6 +378,7 @@
    it outright rather than substitute a reduced variant. */
 @media (prefers-reduced-motion: reduce) {
   [style*='metronome-swing'] {
+    /* stylelint-disable-next-line declaration-no-important -- the swing is an inline style, so only !important can override it from a stylesheet */
     animation: none !important;
   }
 }

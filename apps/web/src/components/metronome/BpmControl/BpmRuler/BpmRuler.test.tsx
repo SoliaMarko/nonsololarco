@@ -32,14 +32,28 @@ function setup(bpm: number) {
   return { onBpmChange, strip };
 }
 
+// jsdom elements have no pointer-capture methods; the handler calls them. Keep
+// the originals so afterEach can undo the assignment — clearAllMocks only wipes
+// call history, leaving the stubs on the prototype for unrelated suites.
+type PatchedMethod = 'setPointerCapture' | 'releasePointerCapture';
+const originals: Partial<Record<PatchedMethod, PropertyDescriptor | undefined>> = {};
+const PATCHED: PatchedMethod[] = ['setPointerCapture', 'releasePointerCapture'];
+
 beforeEach(() => {
-  // jsdom elements have no pointer-capture methods; the handler calls them.
+  for (const method of PATCHED) {
+    originals[method] = Object.getOwnPropertyDescriptor(Element.prototype, method);
+  }
   Element.prototype.setPointerCapture = vi.fn();
   Element.prototype.releasePointerCapture = vi.fn();
 });
 
 afterEach(() => {
   vi.clearAllMocks();
+  for (const method of PATCHED) {
+    const descriptor = originals[method];
+    if (descriptor) Object.defineProperty(Element.prototype, method, descriptor);
+    else delete (Element.prototype as Partial<Element>)[method];
+  }
 });
 
 describe('BpmRuler', () => {

@@ -104,12 +104,23 @@ export default function SongChooser({
     setAddMode(false);
   };
 
+  /**
+   * Abandons the inline "new song" form and discards the draft: clears the
+   * title, BPM and validation error and restores the 4/4 default. Without the
+   * reset a cancelled entry would reappear the next time the form is opened.
+   */
+  const handleCancelNew = () => {
+    setNewTitle('');
+    setNewBpm('');
+    setBpmError(false);
+    setSigNum(4);
+    setSigDenom(4);
+    setAddMode(false);
+  };
+
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSubmitNew();
-    if (e.key === 'Escape') {
-      setBpmError(false);
-      setAddMode(false);
-    }
+    if (e.key === 'Escape') handleCancelNew();
   };
 
   // Escape closes the overlay, but only once the inline form is out of the
@@ -271,10 +282,7 @@ export default function SongChooser({
                 </button>
                 <button
                   className="pli-3 plb-2 font-label text-fg-tertiary hover:text-fg-secondary border-0 bg-transparent text-[0.6875rem] transition-colors duration-100"
-                  onClick={() => {
-                    setBpmError(false);
-                    setAddMode(false);
-                  }}
+                  onClick={handleCancelNew}
                   type="button"
                 >
                   Скасувати

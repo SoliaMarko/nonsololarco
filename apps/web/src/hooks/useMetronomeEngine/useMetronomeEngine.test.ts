@@ -49,6 +49,19 @@ describe('useMetronomeEngine', () => {
     expect(onBeat).not.toHaveBeenCalled();
   });
 
+  it('schedules nothing and delivers no beats when audio is unavailable', () => {
+    // getContext() returns null when the browser denied/failed the AudioContext.
+    const scheduleClick = vi.fn();
+    mockedUseClicker.mockReturnValue({ getContext: vi.fn(() => null), scheduleClick });
+    const onBeat = vi.fn();
+    renderHook(() => useMetronomeEngine({ beats: 4, bpm: 120, onBeat, playing: true }));
+
+    vi.advanceTimersByTime(1000);
+    rafCallback?.(0);
+    expect(scheduleClick).not.toHaveBeenCalled();
+    expect(onBeat).not.toHaveBeenCalled();
+  });
+
   it('schedules an accented downbeat when playback starts', () => {
     const { scheduleClick } = makeClock();
     renderHook(() => useMetronomeEngine({ beats: 4, bpm: 120, onBeat: vi.fn(), playing: true }));

@@ -5,7 +5,26 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import SigDropdown from './SigDropdown';
 
 // Radix DropdownMenu relies on pointer-capture and scroll APIs jsdom omits.
+// Capture the originals so each spy can be removed again — clearAllMocks only
+// resets call history, it does not undo the prototype assignment, which would
+// otherwise leak into unrelated suites that expect the jsdom defaults.
+type PatchedMethod =
+  | 'hasPointerCapture'
+  | 'setPointerCapture'
+  | 'releasePointerCapture'
+  | 'scrollIntoView';
+const originals: Partial<Record<PatchedMethod, PropertyDescriptor | undefined>> = {};
+const PATCHED: PatchedMethod[] = [
+  'hasPointerCapture',
+  'setPointerCapture',
+  'releasePointerCapture',
+  'scrollIntoView',
+];
+
 beforeEach(() => {
+  for (const method of PATCHED) {
+    originals[method] = Object.getOwnPropertyDescriptor(Element.prototype, method);
+  }
   Element.prototype.hasPointerCapture = vi.fn(() => false);
   Element.prototype.setPointerCapture = vi.fn();
   Element.prototype.releasePointerCapture = vi.fn();
@@ -14,6 +33,11 @@ beforeEach(() => {
 
 afterEach(() => {
   vi.clearAllMocks();
+  for (const method of PATCHED) {
+    const descriptor = originals[method];
+    if (descriptor) Object.defineProperty(Element.prototype, method, descriptor);
+    else delete (Element.prototype as Partial<Element>)[method];
+  }
 });
 
 function setup(options: readonly number[] = [2, 3, 4], value = 4) {
@@ -33,7 +57,7 @@ function setup(options: readonly number[] = [2, 3, 4], value = 4) {
 describe('SigDropdown', () => {
   it('renders the current value on the trigger', () => {
     setup([2, 3, 4], 3);
-    expect(screen.getByRole('button', { name: 'Beats' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Beats' }).textContent).toContain('3');
   });
 
   it('opens the menu and lists every option', async () => {

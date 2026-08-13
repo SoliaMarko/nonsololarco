@@ -22,10 +22,13 @@ On first load the user sees a fullscreen overlay asking which song to track.
 Options:
 
 - **Pick a song** from the repertoire list (search supported).
-- **"Новий твір"** — opens an inline form (title + optional BPM). If BPM is
-  omitted, the current metronome BPM is used. The new song is added to the
-  repertoire list and auto-selected for tracking.
-- **"Просто грати"** — skip tracking and start the metronome freely.
+- **"New song"** — opens an inline form (title, optional BPM, and time
+  signature, defaulting to 4/4). If BPM is omitted, the current metronome BPM
+  is used. The new song is added to the repertoire list and auto-selected for
+  tracking. Cancelling the form — via the **Cancel** button or the **Escape**
+  key — discards the draft: title, BPM and time signature all reset, so
+  reopening the form starts blank rather than showing the abandoned entry.
+- **"Just play"** — skip tracking and start the metronome freely.
 - **Back arrow** (top-left) — leaves the metronome entirely and returns to the
   app. Distinct from dismissing the overlay, which drops onto the running
   metronome instead.
@@ -39,9 +42,9 @@ Options:
   downbeat (first dot) flashes red; subsequent dots flash yellow.
 - **Time signature** — 4/4, 3/4, or 6/4, selectable from the top bar.
 - **Transport** — large play/pause button. When a song is tracked and the
-  metronome is playing, a "Завершити та зберегти" (save session) button appears.
-- **Track badge** — shows which song is being tracked (emerald), or "Без
-  трекінгу" (no tracking) in muted style.
+  metronome is playing, a "finish and save" button appears.
+- **Track badge** — shows which song is being tracked (emerald), or "no
+  tracking" in muted style.
 - **Toast** — the DS `Toast` component (`src/components/ui/Toast`) appears
   briefly when a session is saved or a song is added. Supports `success`,
   `error` and `info` variants.

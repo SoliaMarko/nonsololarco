@@ -5,6 +5,7 @@ import { describe, expect, it } from 'vitest';
 
 import {
   CheckCircleIcon,
+  CloseCircleIcon,
   EyeOffIcon,
   MetronomeIcon,
   MinusIcon,
@@ -23,6 +24,7 @@ import {
 type IconProps = { size?: number; title?: string };
 const ICONS: [string, ComponentType<IconProps>][] = [
   ['CheckCircleIcon', CheckCircleIcon],
+  ['CloseCircleIcon', CloseCircleIcon],
   ['EyeOffIcon', EyeOffIcon],
   ['MetronomeIcon', MetronomeIcon],
   ['MinusIcon', MinusIcon],

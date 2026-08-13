@@ -55,8 +55,8 @@ describe('Toast', () => {
   });
 
   it('merges an external className', () => {
-    const { container } = render(<Toast message="Pos" className="absolute bottom-4" />);
-    const el = container.querySelector('[role="status"]')!;
+    render(<Toast message="Pos" className="absolute bottom-4" />);
+    const el = screen.getByRole('status');
     expect(el.className).toContain('absolute');
     expect(el.className).toContain('bottom-4');
   });

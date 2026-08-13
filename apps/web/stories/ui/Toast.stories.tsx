@@ -59,7 +59,7 @@ export const OnDarkBackground: Story = {
   render: () => (
     <div className="bg-primary-dark relative flex items-center justify-center rounded-lg p-16">
       <Toast
-        className="absolute inset-x-0 bottom-5.5 mx-auto w-fit"
+        className="absolute inline-0 block-end-5.5 mli-auto w-fit"
         message="«Ніч у депо» додано в репертуар"
         variant="success"
         style={{ animation: 'toast-in 0.3s ease-out' }}

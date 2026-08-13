@@ -181,4 +181,26 @@ describe('SongChooser', () => {
     expect(screen.queryByPlaceholderText('Назва твору…')).toBeNull();
     expect(screen.getByText('Новий твір')).toBeDefined();
   });
+
+  it('discards the draft when the form is cancelled and reopened', async () => {
+    setup();
+    await userEvent.click(screen.getByText('Новий твір'));
+    await userEvent.type(screen.getByPlaceholderText('Назва твору…'), 'Чернетка');
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '175');
+    await userEvent.click(screen.getByText('Скасувати'));
+
+    await userEvent.click(screen.getByText('Новий твір'));
+    expect((screen.getByPlaceholderText('Назва твору…') as HTMLInputElement).value).toBe('');
+    expect((screen.getByPlaceholderText('BPM') as HTMLInputElement).value).toBe('');
+  });
+
+  it('discards the draft when Escape cancels the form and it is reopened', async () => {
+    setup({ onDismiss: vi.fn() });
+    await userEvent.click(screen.getByText('Новий твір'));
+    await userEvent.type(screen.getByPlaceholderText('Назва твору…'), 'Чернетка');
+    await userEvent.keyboard('{Escape}');
+
+    await userEvent.click(screen.getByText('Новий твір'));
+    expect((screen.getByPlaceholderText('Назва твору…') as HTMLInputElement).value).toBe('');
+  });
 });
