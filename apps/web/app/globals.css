@@ -59,7 +59,13 @@
   --radius-xl: var(--radius-xl);
   --radius-pill: var(--radius-pill);
 
-  /* --- Spacing --- */
+  /* --- Spacing ---
+     The base step unlocks Tailwind's dynamic scale, so any multiple works
+     (`p-3`, `size-8.5`, `w-85`). Without it only the explicitly listed keys
+     below exist and every other step silently renders no CSS. The named
+     steps stay for the semantic aliases and resolve to the same values. */
+  --spacing: 0.25rem;
+
   --spacing-1: var(--space-1);
   --spacing-2: var(--space-2);
   --spacing-3: var(--space-3);
@@ -77,6 +83,16 @@
   --text-xl: var(--text-size-xl);
   --text-2xl: var(--text-size-2xl);
   --text-3xl: var(--text-size-3xl);
+
+  /* --- Typography: families ---
+     Metronome display faces, loaded via next/font in app/metronome/layout.tsx.
+     next/font emits an obfuscated family name, so these must go through its
+     CSS variable — a literal "Space Mono" silently falls back to the system
+     monospace. Named by role rather than by typeface so a swap stays local. */
+  --font-display: var(--font-alfa-slab), var(--font-oswald), serif;
+  --font-ui: var(--font-oswald), sans-serif;
+  --font-label: var(--font-space-mono), "Courier New", monospace;
+  --font-prose: var(--font-spectral), serif;
 
   /* --- Typography: weights --- */
   --font-weight-regular: var(--text-weight-regular);
@@ -108,6 +124,10 @@
   --color-elevated: var(--bg-elevated);
   --color-edge: var(--bg-edge);
   --color-contrast: var(--bg-contrast);
+
+  /* Text sitting on an inverted `bg-contrast` panel. */
+  --color-on-contrast: var(--bg-base);
+  --color-banner-label: var(--banner-label);
 
   /* --- Colors: blue --- */
   --color-blue-subtle: var(--blue-subtle);
@@ -317,6 +337,49 @@
 
   100% {
     filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    translate: 0 20px;
+  }
+
+  to {
+    opacity: 1;
+    translate: 0 0;
+  }
+}
+
+@keyframes mt-drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+/* Pendulum arm of the VintageMetronome illustration. Runs `alternate`, so a
+   single keyframe covers both directions and the turns land on the beat. */
+@keyframes metronome-swing {
+  from {
+    transform: rotate(-15deg);
+  }
+
+  to {
+    transform: rotate(15deg);
+  }
+}
+
+/* Decorative motion only — nothing here conveys state, so it is safe to stop
+   it outright rather than substitute a reduced variant. */
+@media (prefers-reduced-motion: reduce) {
+  [style*='metronome-swing'] {
+    /* stylelint-disable-next-line declaration-no-important -- the swing is an inline style, so only !important can override it from a stylesheet */
+    animation: none !important;
   }
 }
 

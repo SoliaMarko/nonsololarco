@@ -14,6 +14,8 @@ Project documentation. Three kinds, three folders.
   filters, "only mine", column sorting, counts.
 - [Repertoire pagination](./features/repertoire-pagination.md) — paged track
   list with URL state, ellipsis collapsing, continuous row numbers.
+- [Metronome (offline)](./features/metronome.md) — fullscreen practice
+  metronome with pendulum, tap tempo, song tracking, practice history.
 
 ## Architecture
 

@@ -99,6 +99,13 @@
   --status-long: #8a8078;
   --status-inactive: #5a5248;
 
+  /* --- DARK: Inverted banner (drawer header, undo bar) ---
+     The banner sits on --bg-contrast, so its label needs a colour that
+     contrasts with the *inverted* background. In dark mode that background
+     is cream, where the yellow accent washes out, so the label goes muted
+     dark instead. */
+  --banner-label: #6b6055;
+
   /* --- DARK: Button fills --- */
   --bg-btn-fill: #37312b;
 
@@ -161,6 +168,10 @@
   --status-away-subtle: #331800;
   --status-long: #7a7268;
   --status-inactive: #b0a898;
+
+  /* --- LIGHT: Inverted banner (drawer header, undo bar) ---
+     Here the banner background is dark, so the yellow accent reads well. */
+  --banner-label: var(--yellow-main);
 
   /* --- LIGHT: Button fills --- */
   --bg-btn-fill: #e8e0d0;

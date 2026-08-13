@@ -30,7 +30,7 @@ export default function Pagination({
   return (
     <nav
       aria-label="Pagination"
-      className="xs:justify-end plb-4 pli-5 flex items-center justify-center gap-1.5"
+      className="plb-4 pli-5 flex items-center justify-center gap-1.5 md:justify-end"
     >
       <PageArrow
         direction="prev"

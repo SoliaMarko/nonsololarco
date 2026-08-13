@@ -25,6 +25,10 @@ apps/web/e2e/.auth/
 # Turbo
 .turbo
 
+# Claude Code — personal, machine-specific settings (contains local paths and
+# per-user tool approvals). The shared team config lives in .claude/settings.json.
+.claude/settings.local.json
+
 # Vercel
 .vercel
 
