@@ -207,17 +207,17 @@ describe('RepertoireFilterBar', () => {
       mockSearchParams = new URLSearchParams('sort=trackOrder&order=asc');
       render(<RepertoireFilterBar />);
 
-      const sortBtns = findButtons('Sort');
+      const sortBtns = findButtons('pages.repertoire.sortButton');
       expect(sortBtns.length).toBeGreaterThan(0);
-      expect(sortBtns[0]?.textContent).toContain('Sort');
-      expect(sortBtns[0]?.textContent).not.toContain('Track');
+      expect(sortBtns[0]?.textContent).toContain('pages.repertoire.sortButton');
+      expect(sortBtns[0]?.textContent).not.toContain('pages.repertoire.orderOption');
     });
 
     it('treats completely unknown sort fields as default', () => {
       mockSearchParams = new URLSearchParams('sort=foobar&order=desc');
       render(<RepertoireFilterBar />);
 
-      const sortBtns = findButtons('Sort');
+      const sortBtns = findButtons('pages.repertoire.sortButton');
       expect(sortBtns.length).toBeGreaterThan(0);
     });
   });

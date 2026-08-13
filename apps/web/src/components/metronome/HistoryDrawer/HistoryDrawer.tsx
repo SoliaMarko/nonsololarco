@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import { HomeOutlineIcon, MetronomeIcon } from '@/src/icons/base';
 import { PracticeSession } from '@/src/lib/types/metronome.types';
 import { cn } from '@/src/utils/cn';
@@ -24,6 +26,7 @@ interface HistoryDrawerProps {
  * action exits the metronome back to the app.
  */
 export default function HistoryDrawer({ history, onClose, onDelete, onExit }: HistoryDrawerProps) {
+  const t = useTranslations('pages.metronome');
   const [openSong, setOpenSong] = useState<string | null>(null);
   const [undoEntry, setUndoEntry] = useState<PracticeSession | null>(null);
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -52,9 +55,9 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
       .sort((a, b) => byNewestFirst(a.rows[0]!, b.rows[0]!));
   }, [history]);
 
-  // Sum the numeric durationMs, converting to whole minutes once at the end —
-  // parsing the localized `duration` label would under-report every sub-minute
-  // session (they render as "< 1 хв") and break on any wording change.
+  // Sum the numeric durationMs and convert to whole minutes once at the end,
+  // rather than parsing the rendered duration labels: those are localized and
+  // sub-minute sessions collapse to a "< 1 min" string that cannot round-trip.
   const totalMin = Math.round(history.reduce((a, h) => a + h.durationMs, 0) / 60000);
 
   const handleDelete = (entry: PracticeSession) => {
@@ -74,9 +77,9 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
   };
 
   const stats = [
-    { label: 'ТВОРІВ', value: groups.length },
-    { label: 'СЕСІЙ', value: history.length },
-    { label: 'ХВИЛИН', value: totalMin },
+    { label: t('statTracks'), value: groups.length },
+    { label: t('statSessions'), value: history.length },
+    { label: t('statMinutes'), value: totalMin },
   ];
 
   return (
@@ -100,9 +103,9 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
         <div className="pli-4 plb-4 border-fg-primary bg-contrast text-on-contrast flex items-end justify-between border-b-[2.5px]">
           <div>
             <div className="font-label text-banner-label dark:text-danger text-[0.625rem] tracking-[0.1875rem]">
-              ЖУРНАЛ МЕТРОНОМА
+              {t('journalLabel')}
             </div>
-            <h2 className="font-display mbs-1 text-2xl leading-[0.95]">Історія практик</h2>
+            <h2 className="font-display mbs-1 text-2xl leading-[0.95]">{t('journalTitle')}</h2>
           </div>
           <button
             aria-label="Close"
@@ -139,10 +142,9 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
           {groups.length === 0 ? (
             <div className="pli-6 plb-8 text-fg-tertiary text-center">
               <MetronomeIcon size={40} />
-              <div className="font-display text-fg-secondary mbs-3 text-lg">Поки порожньо</div>
+              <div className="font-display text-fg-secondary mbs-3 text-lg">{t('emptyTitle')}</div>
               <div className="font-label mbs-2 text-[0.6875rem] leading-relaxed">
-                Обери твір при старті метронома —
-                <br />і сесії з&apos;являться тут.
+                {t('emptyBody')}
               </div>
             </div>
           ) : (
@@ -166,20 +168,20 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
         >
           <HomeOutlineIcon size={17} />
           <span className="font-ui text-[0.8125rem] font-semibold tracking-wide uppercase">
-            Вийти з метронома
+            {t('exit')}
           </span>
         </button>
 
         {/* Undo bar */}
         {undoEntry && (
           <div className="pli-4 plb-2 bg-contrast text-on-contrast flex items-center justify-between gap-2">
-            <span className="font-label text-[0.6875rem]">Запис видалено · {undoEntry.song}</span>
+            <span className="font-label text-[0.6875rem]">{t('entryDeleted', { song: undoEntry.song })}</span>
             <button
               className="font-ui border-0 bg-transparent text-xs font-semibold tracking-wider text-current uppercase underline underline-offset-2 opacity-80 transition-opacity duration-100 hover:opacity-100"
               onClick={handleUndo}
               type="button"
             >
-              Повернути
+              {t('undo')}
             </button>
           </div>
         )}

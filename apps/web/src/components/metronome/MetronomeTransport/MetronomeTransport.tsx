@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { PauseIcon, PlayIcon, SaveIcon } from '@/src/icons/base';
 import { ChooserSong } from '@/src/lib/types/metronome.types';
 import { cn } from '@/src/utils/cn';
@@ -22,6 +24,7 @@ export default function MetronomeTransport({
   playing,
   tracked,
 }: MetronomeTransportProps) {
+  const t = useTranslations('pages.metronome');
   const isSong = tracked && tracked !== 'skip';
 
   return (
@@ -59,7 +62,7 @@ export default function MetronomeTransport({
           type="button"
         >
           <SaveIcon size={15} />
-          Завершити та зберегти
+          {t('finishAndSave')}
         </button>
       )}
     </div>

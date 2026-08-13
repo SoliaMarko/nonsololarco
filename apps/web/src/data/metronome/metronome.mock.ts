@@ -4,7 +4,6 @@ import { ChooserSong, PracticeSession } from '@/src/lib/types/metronome.types';
 export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   {
     bpm: 82,
-    duration: '15 хв',
     durationMs: 15 * 60000,
     id: 'h3',
     song: 'Ніч у депо',
@@ -13,7 +12,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 92,
-    duration: '18 хв',
     durationMs: 18 * 60000,
     id: 'h1',
     song: 'Ніч у депо',
@@ -22,7 +20,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 88,
-    duration: '22 хв',
     durationMs: 22 * 60000,
     id: 'h2',
     song: 'Ніч у депо',
@@ -31,7 +28,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 116,
-    duration: '20 хв',
     durationMs: 20 * 60000,
     id: 'h5',
     song: 'Тролейбус №7',
@@ -40,7 +36,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 120,
-    duration: '12 хв',
     durationMs: 12 * 60000,
     id: 'h4',
     song: 'Тролейбус №7',
@@ -49,7 +44,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 74,
-    duration: '25 хв',
     durationMs: 25 * 60000,
     id: 'h6',
     song: 'Сіль на вікнах',
@@ -58,7 +52,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 100,
-    duration: '16 хв',
     durationMs: 16 * 60000,
     id: 'h8',
     song: 'Кава о шостій',
@@ -67,7 +60,6 @@ export const MOCK_PRACTICE_HISTORY: PracticeSession[] = [
   },
   {
     bpm: 104,
-    duration: '14 хв',
     durationMs: 14 * 60000,
     id: 'h7',
     song: 'Кава о шостій',

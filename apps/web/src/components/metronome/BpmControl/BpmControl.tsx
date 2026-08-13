@@ -1,7 +1,9 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { MinusIcon, PlusSolidIcon } from '@/src/icons/base';
-import { clampBpm, tempoName } from '@/src/utils/metronome.utils';
+import { TempoId, clampBpm, tempoName } from '@/src/utils/metronome.utils';
 
 import BpmRuler from './BpmRuler';
 
@@ -11,6 +13,16 @@ interface BpmControlProps {
   onTap: () => void;
 }
 
+const TEMPO_KEY: Record<TempoId, string> = {
+  adagio: 'tempoAdagio',
+  allegro: 'tempoAllegro',
+  andante: 'tempoAndante',
+  largo: 'tempoLargo',
+  moderato: 'tempoModerato',
+  presto: 'tempoPresto',
+  prestissimo: 'tempoPrestissimo',
+};
+
 const STEP_BUTTON =
   'border-primary-light/35 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] flex size-9.5 items-center justify-center border-2 transition-[background-color] duration-100';
 
@@ -19,6 +31,8 @@ const STEP_BUTTON =
  * a draggable ruler strip, and +/−/TAP buttons.
  */
 export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps) {
+  const t = useTranslations('pages.metronome');
+
   return (
     <div className="relative z-5 pbs-2 text-center">
       <div className="font-display text-primary-light text-[4.5rem] leading-[0.85] tabular-nums">
@@ -29,7 +43,7 @@ export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps)
         BPM
       </div>
 
-      <div className="font-prose text-primary-light/55 mbs-1 text-sm italic">{tempoName(bpm)}</div>
+      <div className="font-prose text-primary-light/55 mbs-1 text-sm italic">{t(TEMPO_KEY[tempoName(bpm)])}</div>
 
       <BpmRuler bpm={bpm} onBpmChange={onBpmChange} />
 
@@ -48,7 +62,7 @@ export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps)
           onClick={onTap}
           type="button"
         >
-          TAP
+          {t('tap')}
         </button>
 
         <button

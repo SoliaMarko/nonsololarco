@@ -1,10 +1,18 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TimeSignatureDef } from '@/src/lib/types/metronome.types';
 
+import { mockIntl } from '@/src/test/intl-mock';
+
 import MetronomeTopBar from './MetronomeTopBar';
+
+vi.mock('next-intl', () => mockIntl.nextIntl);
+
+beforeEach(() => {
+  mockIntl.reset();
+});
 
 const sig44: TimeSignatureDef = { beats: 4, label: '4/4' };
 
@@ -17,7 +25,7 @@ describe('MetronomeTopBar', () => {
 
   it('renders the title', () => {
     render(<MetronomeTopBar {...defaultProps} />);
-    expect(screen.getByText('МЕТРОНОМ')).toBeDefined();
+    expect(screen.getByText('pages.metronome.title')).toBeDefined();
   });
 
   it('renders numerator and denominator dropdowns', () => {

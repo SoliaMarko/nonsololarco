@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { mockIntl } from '@/src/test/intl-mock';
 
 import TimeSignatureSelect from './TimeSignatureSelect';
+
+vi.mock('next-intl', () => mockIntl.nextIntl);
+
+beforeEach(() => {
+  mockIntl.reset();
+});
 
 describe('TimeSignatureSelect', () => {
   const defaults = {
@@ -31,14 +39,14 @@ describe('TimeSignatureSelect', () => {
 
   it('hides the captions by default', () => {
     render(<TimeSignatureSelect {...defaults} />);
-    expect(screen.queryByText('долі')).toBeNull();
-    expect(screen.queryByText('нота')).toBeNull();
+    expect(screen.queryByText('pages.metronome.beatsLabel')).toBeNull();
+    expect(screen.queryByText('pages.metronome.noteLabel')).toBeNull();
   });
 
   it('shows the captions when asked', () => {
     render(<TimeSignatureSelect {...defaults} showLabels />);
-    expect(screen.getByText('долі')).toBeDefined();
-    expect(screen.getByText('нота')).toBeDefined();
+    expect(screen.getByText('pages.metronome.beatsLabel')).toBeDefined();
+    expect(screen.getByText('pages.metronome.noteLabel')).toBeDefined();
   });
 
   it('offers only the numerators valid for the current denominator', async () => {

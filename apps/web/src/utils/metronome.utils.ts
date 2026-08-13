@@ -3,8 +3,21 @@ export const MT_MAX = 240;
 export const MT_TICK_WIDTH = 14;
 
 /**
- * Returns the Italian tempo marking with a Ukrainian translation for a given
- * BPM value — e.g. `"Andante · кроком"`.
+ * The seven classical tempo bands, as stable ids. The UI localizes each one
+ * through the `metronome.tempo*` messages — the Italian marking is kept in
+ * every locale, only the plain-language gloss after it changes.
+ */
+export type TempoId =
+  | 'largo'
+  | 'adagio'
+  | 'andante'
+  | 'moderato'
+  | 'allegro'
+  | 'presto'
+  | 'prestissimo';
+
+/**
+ * Maps a BPM value to its tempo band id — e.g. `92 → "andante"`.
  *
  * Ranges follow the standard classical convention:
  * Largo (< 60), Adagio (60–80), Andante (80–108), Moderato (108–120),
@@ -12,16 +25,17 @@ export const MT_TICK_WIDTH = 14;
  *
  * Real scores treat these as descriptions of character as much as speed, so
  * published charts disagree at the edges by a few BPM; these boundaries are
- * the most widely cited set.
+ * the most widely cited set. Returns an id rather than a display string so
+ * the wording stays in the message catalogue, not the util.
  */
-export function tempoName(bpm: number): string {
-  if (bpm < 60) return 'Largo · широко';
-  if (bpm < 80) return 'Adagio · повільно';
-  if (bpm < 108) return 'Andante · кроком';
-  if (bpm < 120) return 'Moderato · помірно';
-  if (bpm < 168) return 'Allegro · жваво';
-  if (bpm < 200) return 'Presto · швидко';
-  return 'Prestissimo';
+export function tempoName(bpm: number): TempoId {
+  if (bpm < 60) return 'largo';
+  if (bpm < 80) return 'adagio';
+  if (bpm < 108) return 'andante';
+  if (bpm < 120) return 'moderato';
+  if (bpm < 168) return 'allegro';
+  if (bpm < 200) return 'presto';
+  return 'prestissimo';
 }
 
 /**
@@ -29,34 +43,6 @@ export function tempoName(bpm: number): string {
  */
 export function clampBpm(bpm: number): number {
   return Math.max(MT_MIN, Math.min(MT_MAX, bpm));
-}
-
-const SHORT_MONTHS_UK = [
-  'СІЧ',
-  'ЛЮТ',
-  'БЕР',
-  'КВІ',
-  'ТРА',
-  'ЧЕРВ',
-  'ЛИП',
-  'СЕР',
-  'ВЕР',
-  'ЖОВ',
-  'ЛИС',
-  'ГРУ',
-];
-
-/**
- * Formats an ISO timestamp as a short Ukrainian date — `"4 ЧЕРВ"`.
- *
- * The year is omitted because the history list is grouped by song and read
- * at a glance; returns an em dash for a timestamp the browser can't parse
- * rather than the string `"Invalid Date"`.
- */
-export function formatSessionDate(iso: string): string {
-  const date = new Date(iso);
-  if (Number.isNaN(date.getTime())) return '—';
-  return `${date.getDate()} ${SHORT_MONTHS_UK[date.getMonth()]}`;
 }
 
 /**

@@ -1,15 +1,22 @@
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PracticeSession } from '@/src/lib/types/metronome.types';
 
+import { mockIntl } from '@/src/test/intl-mock';
+
 import HistoryDrawer from './HistoryDrawer';
+
+vi.mock('next-intl', () => mockIntl.nextIntl);
+
+beforeEach(() => {
+  mockIntl.reset();
+});
 
 function mkSession(over: Partial<PracticeSession> & { id: string }): PracticeSession {
   return {
     bpm: 90,
-    duration: '10 min',
     durationMs: 10 * 60000,
     song: 'Song',
     songNumber: 1,
@@ -19,9 +26,9 @@ function mkSession(over: Partial<PracticeSession> & { id: string }): PracticeSes
 }
 
 const HISTORY: PracticeSession[] = [
-  mkSession({ id: 'a', song: 'Night Depot', songNumber: 1, durationMs: 10 * 60000, duration: '10 min' }),
-  mkSession({ id: 'b', song: 'Night Depot', songNumber: 1, durationMs: 20 * 60000, duration: '20 min' }),
-  mkSession({ id: 'c', song: 'Trolleybus', songNumber: 2, durationMs: 15 * 60000, duration: '15 min' }),
+  mkSession({ id: 'a', song: 'Night Depot', songNumber: 1, durationMs: 10 * 60000 }),
+  mkSession({ id: 'b', song: 'Night Depot', songNumber: 1, durationMs: 20 * 60000 }),
+  mkSession({ id: 'c', song: 'Trolleybus', songNumber: 2, durationMs: 15 * 60000 }),
 ];
 
 function setup(history = HISTORY) {
@@ -47,13 +54,13 @@ describe('HistoryDrawer', () => {
     expect(screen.getByText('45')).toBeDefined();
     expect(screen.getByText('3')).toBeDefined();
     // Two groups → the "works" stat reads 2.
-    const works = screen.getByText('ТВОРІВ').parentElement as HTMLElement;
+    const works = screen.getByText('pages.metronome.statTracks').parentElement as HTMLElement;
     expect(within(works).getByText('2')).toBeDefined();
   });
 
   it('renders the empty state when there is no history', () => {
     setup([]);
-    expect(screen.getByText('Поки порожньо')).toBeDefined();
+    expect(screen.getByText('pages.metronome.emptyTitle')).toBeDefined();
   });
 
   it('calls onClose when the scrim is clicked', async () => {
@@ -65,7 +72,7 @@ describe('HistoryDrawer', () => {
 
   it('calls onExit from the footer action', async () => {
     const { onExit } = setup();
-    await userEvent.click(screen.getByText('Вийти з метронома'));
+    await userEvent.click(screen.getByText('pages.metronome.exit'));
     expect(onExit).toHaveBeenCalledOnce();
   });
 
@@ -77,8 +84,8 @@ describe('HistoryDrawer', () => {
     expect(onDelete).toHaveBeenCalledWith('c');
 
     // Undo bar appears; clicking it restores the entry.
-    expect(screen.getByText(/Запис видалено/)).toBeDefined();
-    await userEvent.click(screen.getByText('Повернути'));
+    expect(screen.getByText(/pages\.metronome\.entryDeleted/)).toBeDefined();
+    await userEvent.click(screen.getByText('pages.metronome.undo'));
     expect(onDelete).toHaveBeenLastCalledWith('', expect.objectContaining({ id: 'c' }));
   });
 });

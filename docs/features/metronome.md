@@ -5,7 +5,7 @@
 
 **Status:** In progress
 **Added:** 2026-08
-**Code:** `apps/web/src/components/metronome/`, `apps/web/app/metronome/`,
+**Code:** `apps/web/src/components/metronome/`, `apps/web/app/[locale]/metronome/`,
 `apps/web/src/components/shared/MetronomeButton/`,
 `apps/web/src/illustrations/metronome/`
 
@@ -13,8 +13,10 @@
 
 ## Behaviour
 
-The metronome opens as a standalone fullscreen page at `/metronome` with a
-warm-dark stage aesthetic. It does not use the main app shell navigation.
+The metronome opens as a standalone fullscreen page at `/{locale}/metronome`
+(e.g. `/en/metronome`) with a warm-dark stage aesthetic. It lives under the
+`[locale]` segment so its UI is localized, but does not use the main app shell
+navigation.
 
 ### Song chooser (entry phase)
 
@@ -99,14 +101,15 @@ None. All state is local to the component.
 None. This is a fully offline feature. Practice history is stored in
 component state (seeded with mock data). Sessions are created automatically
 when the user stops/saves the metronome while a song is tracked — each
-entry records `startedAt`, BPM, duration, and song. Navigating back to the
+entry records `startedAt`, BPM, `durationMs`, and song. Navigating back to the
 chooser while playing auto-saves the current session. Prepared for future API
 migration: the `PracticeSession` interface is the contract.
 
 `startedAt` is an ISO timestamp and the single source of truth for when a
 session happened — it is both the sort key and the input to the displayed
-label, via `formatSessionDate`. Storing a pre-formatted date string instead
-would leave nothing reliable to sort by.
+label, which is formatted per-locale at render time via next-intl's
+`useFormatter`. Storing a pre-formatted date string instead would leave
+nothing reliable to sort by.
 
 ## Implementation notes
 
@@ -115,9 +118,18 @@ would leave nothing reliable to sort by.
   on first play. Errors are silently caught so the feature works without audio
   permission.
 - **Fonts** — Alfa Slab One, Oswald, Space Mono, and Spectral are loaded via
-  `next/font/google` in `app/metronome/layout.tsx` and passed as CSS variables.
-- **Auth** — `/metronome` is listed in `PUBLIC_PATHS` in the middleware, so it
-  doesn't require login.
+  `next/font/google` in the `[locale]` root layout (`app/[locale]/layout.tsx`)
+  and shared across the app. The metronome inherits them through that layout,
+  so it no longer carries its own font-loading layout.
+- **i18n** — all UI copy lives in the `pages.metronome` group of
+  `messages/{en,it,uk}/pages.json` and is read via
+  `useTranslations('pages.metronome')`; track statuses reuse
+  `pages.repertoire.status*`. Dates and durations are formatted per-locale
+  (`useFormatter`, ICU plurals). The Italian tempo markings keep their name in
+  every language while the plain-language gloss after the `·` is translated.
+- **Auth** — `/metronome` is listed in `PUBLIC_PATHS` in the middleware; it
+  strips the locale prefix before matching, so `/en/metronome`,
+  `/it/metronome` and `/uk/metronome` are all public and need no login.
 - **Pendulum animation** — driven by a `requestAnimationFrame` loop that
   samples the audio clock each frame, not CSS keyframes. This avoids restarts
   on every beat and cannot drift from the click track. On short viewports

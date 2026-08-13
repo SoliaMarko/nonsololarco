@@ -1,42 +1,42 @@
 import { describe, expect, it } from 'vitest';
 
-import { MT_MAX, MT_MIN, byNewestFirst, clampBpm, formatSessionDate, tempoName } from './metronome.utils';
+import { MT_MAX, MT_MIN, byNewestFirst, clampBpm, tempoName } from './metronome.utils';
 
 describe('tempoName', () => {
   it('returns Largo for BPM below 60', () => {
-    expect(tempoName(40)).toBe('Largo · широко');
-    expect(tempoName(59)).toBe('Largo · широко');
+    expect(tempoName(40)).toBe('largo');
+    expect(tempoName(59)).toBe('largo');
   });
 
   it('returns Adagio for BPM 60–79', () => {
-    expect(tempoName(60)).toBe('Adagio · повільно');
-    expect(tempoName(79)).toBe('Adagio · повільно');
+    expect(tempoName(60)).toBe('adagio');
+    expect(tempoName(79)).toBe('adagio');
   });
 
   it('returns Andante for BPM 80–107', () => {
-    expect(tempoName(80)).toBe('Andante · кроком');
-    expect(tempoName(92)).toBe('Andante · кроком');
-    expect(tempoName(107)).toBe('Andante · кроком');
+    expect(tempoName(80)).toBe('andante');
+    expect(tempoName(92)).toBe('andante');
+    expect(tempoName(107)).toBe('andante');
   });
 
   it('returns Moderato for BPM 108–119', () => {
-    expect(tempoName(108)).toBe('Moderato · помірно');
-    expect(tempoName(119)).toBe('Moderato · помірно');
+    expect(tempoName(108)).toBe('moderato');
+    expect(tempoName(119)).toBe('moderato');
   });
 
   it('returns Allegro for BPM 120–167', () => {
-    expect(tempoName(120)).toBe('Allegro · жваво');
-    expect(tempoName(167)).toBe('Allegro · жваво');
+    expect(tempoName(120)).toBe('allegro');
+    expect(tempoName(167)).toBe('allegro');
   });
 
   it('returns Presto for BPM 168–199', () => {
-    expect(tempoName(168)).toBe('Presto · швидко');
-    expect(tempoName(199)).toBe('Presto · швидко');
+    expect(tempoName(168)).toBe('presto');
+    expect(tempoName(199)).toBe('presto');
   });
 
   it('returns Prestissimo for BPM 200+', () => {
-    expect(tempoName(200)).toBe('Prestissimo');
-    expect(tempoName(240)).toBe('Prestissimo');
+    expect(tempoName(200)).toBe('prestissimo');
+    expect(tempoName(240)).toBe('prestissimo');
   });
 });
 
@@ -59,17 +59,6 @@ describe('clampBpm', () => {
   });
 });
 
-describe('formatSessionDate', () => {
-  it('formats an ISO date as day + short Ukrainian month', () => {
-    expect(formatSessionDate('2026-06-04T18:30:00.000Z')).toBe('4 ЧЕРВ');
-    expect(formatSessionDate('2026-05-28T20:05:00.000Z')).toBe('28 ТРА');
-  });
-
-  it('returns an em dash for an unparseable value', () => {
-    expect(formatSessionDate('not a date')).toBe('—');
-    expect(formatSessionDate('')).toBe('—');
-  });
-});
 
 describe('byNewestFirst', () => {
   const older = { startedAt: '2026-05-02T19:10:00.000Z' };

@@ -22,7 +22,7 @@
  * });
  * ```
  */
-import { vi } from 'vitest';
+import { type Mock, vi } from 'vitest';
 
 /* ------------------------------------------------------------------ */
 /*  State                                                              */
@@ -31,8 +31,8 @@ import { vi } from 'vitest';
 let locale = 'en';
 let pathname = '/';
 
-const replace = vi.fn();
-const push = vi.fn();
+const replace: Mock = vi.fn();
+const push: Mock = vi.fn();
 
 /* ------------------------------------------------------------------ */
 /*  Stub: useTranslations                                              */
@@ -44,11 +44,17 @@ const push = vi.fn();
  * locale-independent.
  */
 function stubUseTranslations(namespace?: string) {
-  return (key: string, params?: Record<string, unknown>) => {
+  const translate = (key: string, params?: Record<string, unknown>) => {
     const fullKey = namespace ? `${namespace}.${key}` : key;
     if (params) return `${fullKey} ${JSON.stringify(params)}`;
     return fullKey;
   };
+
+  // next-intl's `t.rich` renders embedded markup tags; unit tests only need a
+  // stable string, so collapse it to the key and drop the rich formatting.
+  translate.rich = (key: string) => (namespace ? `${namespace}.${key}` : key);
+
+  return translate;
 }
 
 /* ------------------------------------------------------------------ */

@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { cn } from '@/src/utils/cn';
 
 import { DENOMINATORS, VALID_NUMERATORS } from '@/src/lib/types/metronome.types';
@@ -21,7 +23,7 @@ interface TimeSignatureSelectProps {
    */
   onChange: (numerator: number, denominator: number) => void;
   /**
-   * Renders the "долі" / "нота" captions under each dropdown. Off by
+   * Renders the "beats" / "note" captions under each dropdown. Off by
    * default so the control fits a single toolbar line; turn it on inside
    * forms, where the extra explanation is worth the vertical space.
    */
@@ -48,6 +50,7 @@ export default function TimeSignatureSelect({
   showLabels = false,
   variant,
 }: TimeSignatureSelectProps) {
+  const t = useTranslations('pages.metronome');
   const validNums = VALID_NUMERATORS[denominator] ?? [4];
   const captionClass = cn('mbs-1 font-label text-[0.5rem] tracking-wider', MUTED_VARIANT[variant]);
 
@@ -61,7 +64,7 @@ export default function TimeSignatureSelect({
           value={numerator}
           variant={variant}
         />
-        {showLabels && <span className={captionClass}>долі</span>}
+        {showLabels && <span className={captionClass}>{t('beatsLabel')}</span>}
       </div>
 
       <span
@@ -86,7 +89,7 @@ export default function TimeSignatureSelect({
           value={denominator}
           variant={variant}
         />
-        {showLabels && <span className={captionClass}>нота</span>}
+        {showLabels && <span className={captionClass}>{t('noteLabel')}</span>}
       </div>
     </div>
   );
