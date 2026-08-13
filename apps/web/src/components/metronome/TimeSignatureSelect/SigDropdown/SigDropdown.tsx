@@ -73,7 +73,10 @@ export default function SigDropdown({
           align="start"
           sideOffset={4}
           className={cn(
-            'bg-card border-edge z-dropdown min-w-11.5 border',
+            'z-dropdown min-w-11.5 border',
+            variant === 'dark'
+              ? 'border-primary-light/15 bg-primary-dark'
+              : 'border-edge bg-card',
             'shadow-[0_4px_12px_rgba(0,0,0,0.25)]',
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
