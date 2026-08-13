@@ -1,7 +1,6 @@
 'use client';
 
 import { MenuIcon } from '@/src/icons/base';
-
 import { TimeSignatureDef } from '@/src/lib/types/metronome.types';
 
 import TimeSignatureSelect from '../TimeSignatureSelect';
@@ -26,11 +25,11 @@ export default function MetronomeTopBar({
   signature,
 }: MetronomeTopBarProps) {
   return (
-    <div className="pli-4 plb-3 relative z-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
+    <div className="pli-4 plb-3 md:plb-4 relative z-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
       <div className="flex min-w-0 items-center">
         <button
           aria-label="Menu and practice history"
-          className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] flex size-8.5 shrink-0 items-center justify-center border-2 transition-[background-color] duration-100"
+          className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/12 flex size-8.5 shrink-0 items-center justify-center border-2 transition-[background-color] duration-100"
           onClick={onMenuOpen}
           type="button"
         >

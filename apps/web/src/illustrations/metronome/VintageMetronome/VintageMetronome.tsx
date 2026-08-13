@@ -11,9 +11,9 @@ import { GRAIN_PATHS, METRONOME_COLOR } from './metronome-illustration.const';
 export type VintageMetronomeVariant = 'compact' | 'detailed';
 
 export interface VintageMetronomeProps {
-  className?: string;
   /** Seconds per half-swing. Lower is faster; 0.7 reads as a brisk allegro. */
   beatSeconds?: number;
+  className?: string;
   /** Rendered height in px. Width follows the 180:268 aspect ratio. */
   height?: number;
   /**

@@ -37,15 +37,15 @@ interface SongChooserProps {
    * dismiss just closes this overlay onto the running metronome.
    */
   onBack: () => void;
+  onPick: (song: ChooserSong) => void;
+  onSkip: () => void;
+  songs: ChooserSong[];
   /**
    * Closes the overlay leaving the session untouched. Omit it when there is
    * nothing to go back to — on first open there's no previous selection, so
    * dismissing would strand the user on an empty metronome.
    */
   onDismiss?: () => void;
-  onPick: (song: ChooserSong) => void;
-  onSkip: () => void;
-  songs: ChooserSong[];
 }
 
 /**

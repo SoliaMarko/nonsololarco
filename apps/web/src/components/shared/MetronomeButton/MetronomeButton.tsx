@@ -42,9 +42,9 @@ const ILLUSTRATION_HEIGHT = {
  */
 export default function MetronomeButton({
   className,
-  variant = 'header',
+  variant: variantProp,
 }: MetronomeButtonProps) {
-  const resolvedVariant = variant ?? 'header';
+  const variant = variantProp ?? 'header';
 
   return (
     <Link
@@ -52,7 +52,7 @@ export default function MetronomeButton({
       className={cn(metronomeButtonVariants({ variant }), className)}
       href="/metronome"
     >
-      <VintageMetronome height={ILLUSTRATION_HEIGHT[resolvedVariant]} variant="compact" />
+      <VintageMetronome height={ILLUSTRATION_HEIGHT[variant]} variant="compact" />
     </Link>
   );
 }

@@ -48,7 +48,7 @@ export default function AppShell({
       {/* Mobile-only metronome shortcut. Fixed to the bottom-end corner —
           the natural thumb reach — and lifted clear of AppBottomNav plus the
           iPhone home indicator. Above md it lives in the header instead. */}
-      <MetronomeButton className="fixed inset-e-4 bottom-20 z-45 md:hidden" variant="fab" />
+      <MetronomeButton className="fixed inset-e-4 block-end-20 z-45 md:hidden" variant="fab" />
 
       <AppBottomNav activePath={activePath} />
     </div>

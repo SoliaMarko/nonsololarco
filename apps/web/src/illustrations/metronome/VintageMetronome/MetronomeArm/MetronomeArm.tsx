@@ -1,10 +1,10 @@
 import { METRONOME_COLOR } from '../metronome-illustration.const';
 
 export interface MetronomeArmProps {
-  /** Drives the swing. When false the arm rests upright. */
-  isSwinging: boolean;
   /** Seconds per half-swing — one tick of the beat. */
   beatSeconds: number;
+  /** Drives the swing. When false the arm rests upright. */
+  isSwinging: boolean;
   /** Hides the sliding weight; the compact variant keeps it, tiny sizes drop it. */
   showWeight?: boolean;
 }

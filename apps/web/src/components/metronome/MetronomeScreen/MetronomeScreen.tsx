@@ -193,22 +193,28 @@ export default function MetronomeScreen() {
         signature={signature}
       />
 
-      <BpmControl bpm={bpm} onBpmChange={setBpm} onTap={() => tap(setBpm)} />
+      {/* Main content — vertically centred in the remaining space so the
+          layout doesn't stretch on tall screens. Each child centres itself
+          horizontally; the wrapper stays full-width so BpmRuler spans edge
+          to edge. */}
+      <div className="flex min-h-0 flex-1 flex-col justify-center">
+        <BpmControl bpm={bpm} onBpmChange={setBpm} onTap={() => tap(setBpm)} />
 
-      <div className="relative z-4 flex min-h-0 flex-1 items-center justify-center">
-        <Pendulum getBeatPosition={getBeatPosition} playing={playing} />
-      </div>
+        <div className="relative z-4 flex min-h-0 flex-1 items-center justify-center" style={{ maxHeight: '22rem' }}>
+          <Pendulum getBeatPosition={getBeatPosition} playing={playing} />
+        </div>
 
-      <BeatDots activeBeat={beat} signature={signature} />
+        <BeatDots activeBeat={beat} signature={signature} />
 
-      <div className="pli-6 relative z-5 flex flex-col items-center gap-3">
-        <TrackBadge onChangeTrack={handleSwitchSong} tracked={tracked} />
-        <MetronomeTransport
-          onSave={handleSave}
-          onTogglePlay={() => setPlaying((p) => !p)}
-          playing={playing}
-          tracked={tracked}
-        />
+        <div className="pli-6 relative z-5 flex flex-col items-center gap-3">
+          <TrackBadge onChangeTrack={handleSwitchSong} tracked={tracked} />
+          <MetronomeTransport
+            onSave={handleSave}
+            onTogglePlay={() => setPlaying((p) => !p)}
+            playing={playing}
+            tracked={tracked}
+          />
+        </div>
       </div>
 
       {/* Bottom spacer — prevents controls from hugging the screen edge on
