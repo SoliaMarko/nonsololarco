@@ -2,11 +2,11 @@
 
 Project documentation. Three kinds, three folders.
 
-| Folder | Answers | Audience |
-| --- | --- | --- |
-| [`features/`](./features) | *What does this do and how do I use it?* | Anyone touching the feature |
-| [`architecture/`](./architecture) | *How is the system shaped?* | Anyone adding to it |
-| [`adr/`](./adr) | *Why was it built this way?* | Future you, in six months |
+| Folder                            | Answers                                  | Audience                    |
+| --------------------------------- | ---------------------------------------- | --------------------------- |
+| [`features/`](./features)         | _What does this do and how do I use it?_ | Anyone touching the feature |
+| [`architecture/`](./architecture) | _How is the system shaped?_              | Anyone adding to it         |
+| [`adr/`](./adr)                   | _Why was it built this way?_             | Future you, in six months   |
 
 ## Features
 
@@ -16,6 +16,8 @@ Project documentation. Three kinds, three folders.
   list with URL state, ellipsis collapsing, continuous row numbers.
 - [Internationalization (i18n)](./features/i18n.md) — locale switcher, next-intl
   setup, translation file structure, layout stability.
+- [Metronome (offline)](./features/metronome.md) — fullscreen practice
+  metronome with pendulum, tap tempo, song tracking, practice history.
 
 ## Architecture
 

@@ -92,7 +92,6 @@ export default function RepertoireFilterBar() {
   const { user } = useAuth();
   const { activeBand, activeBandId, isSpecificBandSelected } = useActiveBand();
   const t = useTranslations('pages');
-  const tCommon = useTranslations('common');
 
   const currentFilter = (searchParams.get('status') as TrackFilterParam) ?? 'all';
   const isMineActive = searchParams.get('onlyMine') === 'true';
@@ -171,7 +170,7 @@ export default function RepertoireFilterBar() {
   return (
     <div className="border-border-primary bg-base border-b">
       {/* Desktop layout */}
-      <div className="pli-4 plb-3 hidden items-center gap-3 sm:flex">
+      <div className="pli-4 plb-3 hidden flex-wrap items-center gap-3 sm:flex">
         {/* Status filter pills */}
         <fieldset className="flex items-center gap-2">
           <legend className="sr-only">{t('repertoire.filterLegend')}</legend>

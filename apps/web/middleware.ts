@@ -5,7 +5,7 @@ import { routing } from '@/i18n/routing';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const PUBLIC_PATHS = ['/login', '/signup'];
+const PUBLIC_PATHS = ['/login', '/signup', '/metronome'];
 
 // A file extension at the very end of the path — matches static assets
 // served from /public (favicon.ico, robots.txt, images, ...). Anchored to

@@ -1,8 +1,10 @@
 import { useTranslations } from 'next-intl';
 
 import Logo from '@/components/ui/Logo';
+import { Link, usePathname } from '@/i18n/navigation';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
 import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher';
+import MetronomeButton from '@/src/components/shared/MetronomeButton';
 import ThemeToggle from '@/src/components/shared/ThemeToggle';
 import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
@@ -13,8 +15,6 @@ import { useAuth } from '@/src/hooks/global/useAuth';
 import { BellIcon, LogOutIcon, ProfileOutlineIcon, SettingsOutlineIcon } from '@/src/icons/base';
 import { NAV_ITEMS, OPTIONS_POSITION } from '@/src/lib/constants/common.const';
 import { cn } from '@/src/utils/cn';
-
-import { Link, usePathname } from '@/i18n/navigation';
 
 export interface AppHeaderNavProps {
   activePath: string;
@@ -72,7 +72,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
             animated
             variant="nav"
             scrollable={false}
-            className="grid w-fit grid-flow-col auto-cols-fr"
+            className="grid w-fit auto-cols-fr grid-flow-col"
           >
             {NAV_ITEMS.map((item) => (
               <NavLink
@@ -110,6 +110,10 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               />
             ) : null}
 
+            {/* Below md the metronome moves to the floating button in
+                AppShell, where it sits in the thumb zone. */}
+            <MetronomeButton className="hidden md:inline-flex" />
+
             <LocaleSwitcher />
             <ThemeToggle />
             <Dropdown
@@ -124,7 +128,12 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
                 },
                 {
                   items: [
-                    { label: t('nav.signOut'), icon: LogOutIcon, onClick: logout, variant: 'danger' },
+                    {
+                      label: t('nav.signOut'),
+                      icon: LogOutIcon,
+                      onClick: logout,
+                      variant: 'danger',
+                    },
                   ],
                 },
               ]}

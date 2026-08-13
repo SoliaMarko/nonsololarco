@@ -1,0 +1,78 @@
+import { render, screen } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
+import { describe, expect, it, vi } from 'vitest';
+
+import TimeSignatureSelect from './TimeSignatureSelect';
+
+describe('TimeSignatureSelect', () => {
+  const defaults = {
+    denominator: 4,
+    numerator: 4,
+    onChange: vi.fn(),
+    variant: 'dark' as const,
+  };
+
+  it('renders a trigger for each half of the signature', () => {
+    render(<TimeSignatureSelect {...defaults} />);
+    expect(screen.getByLabelText('Time signature numerator')).toBeDefined();
+    expect(screen.getByLabelText('Time signature denominator')).toBeDefined();
+  });
+
+  it('shows the current values on the triggers', () => {
+    render(<TimeSignatureSelect {...defaults} denominator={8} numerator={6} />);
+    expect(screen.getByLabelText('Time signature numerator').textContent).toContain('6');
+    expect(screen.getByLabelText('Time signature denominator').textContent).toContain('8');
+  });
+
+  it('renders the slash separator', () => {
+    render(<TimeSignatureSelect {...defaults} />);
+    expect(screen.getByText('/')).toBeDefined();
+  });
+
+  it('hides the captions by default', () => {
+    render(<TimeSignatureSelect {...defaults} />);
+    expect(screen.queryByText('долі')).toBeNull();
+    expect(screen.queryByText('нота')).toBeNull();
+  });
+
+  it('shows the captions when asked', () => {
+    render(<TimeSignatureSelect {...defaults} showLabels />);
+    expect(screen.getByText('долі')).toBeDefined();
+    expect(screen.getByText('нота')).toBeDefined();
+  });
+
+  it('offers only the numerators valid for the current denominator', async () => {
+    render(<TimeSignatureSelect {...defaults} denominator={8} numerator={6} />);
+    await userEvent.click(screen.getByLabelText('Time signature numerator'));
+
+    const labels = screen.getAllByRole('menuitem').map((i) => i.textContent);
+    // /8 admits 3, 5, 6, 7, 9, 12 — never 4
+    expect(labels).toContain('3');
+    expect(labels).not.toContain('4');
+  });
+
+  it('reports the picked numerator with the unchanged denominator', async () => {
+    const onChange = vi.fn();
+    render(<TimeSignatureSelect {...defaults} onChange={onChange} />);
+    await userEvent.click(screen.getByLabelText('Time signature numerator'));
+    await userEvent.click(screen.getByRole('menuitem', { name: '3' }));
+    expect(onChange).toHaveBeenCalledWith(3, 4);
+  });
+
+  it('auto-corrects the numerator when the new denominator forbids it', async () => {
+    const onChange = vi.fn();
+    render(<TimeSignatureSelect {...defaults} onChange={onChange} />);
+    await userEvent.click(screen.getByLabelText('Time signature denominator'));
+    // 4 is invalid for /8, so it falls back to the first valid numerator
+    await userEvent.click(screen.getByRole('menuitem', { name: '8' }));
+    expect(onChange).toHaveBeenCalledWith(3, 8);
+  });
+
+  it('keeps the numerator when the new denominator still allows it', async () => {
+    const onChange = vi.fn();
+    render(<TimeSignatureSelect {...defaults} numerator={3} onChange={onChange} />);
+    await userEvent.click(screen.getByLabelText('Time signature denominator'));
+    await userEvent.click(screen.getByRole('menuitem', { name: '8' }));
+    expect(onChange).toHaveBeenCalledWith(3, 8);
+  });
+});

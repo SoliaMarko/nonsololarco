@@ -194,6 +194,44 @@ Applies to: `*.utils.ts`, hooks, Nest service and controller methods, exported
 constants whose meaning isn't self-evident, and any shared type where a field
 has a constraint the type can't express.
 
+### Prefer `const`
+
+Use `const` by default. Reach for `let` only when the variable truly needs
+reassignment — loop counters, accumulators inside `reduce` callbacks, or
+values that change across branches where restructuring would hurt readability.
+If a `let` can be replaced by destructuring, a ternary, or a helper that
+returns the value, prefer that.
+
+### No JSX in variables
+
+Don't store JSX fragments in local variables (`const header = <div>…</div>`).
+Extract them into their own component file instead — this keeps render trees
+scannable and makes each piece testable and reusable.
+
+**Exception:** a tiny, single-use fragment (2–3 lines) that won't be reused
+may stay in the parent file as a plain variable when extracting a full
+component folder would be overkill.
+
+```tsx
+// ❌ JSX stashed in a variable
+const checkmark = item.selected ? (
+  <CheckIcon size={16} className="text-emerald-main" />
+) : null;
+return <MenuItem>{label}{checkmark}</MenuItem>;
+
+// ✅ inline when trivial
+return (
+  <MenuItem>
+    {label}
+    {item.selected && <CheckIcon size={16} className="text-emerald-main" />}
+  </MenuItem>
+);
+
+// ✅ extract when non-trivial
+import SelectionMark from './SelectionMark';
+return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
+```
+
 ### General
 
 - TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
@@ -204,6 +242,20 @@ has a constraint the type can't express.
 - Prefer named exports; default export only for React components and
   Nest modules.
 - Comments explain *why*, not *what*. Delete commented-out code.
+
+### English-only in tests and accessibility props
+
+All `aria-label`, `aria-description`, `aria-placeholder`, `role` names, and
+similar accessibility props must be written **in English**, even though the
+UI is in Ukrainian. This keeps test selectors language-agnostic and matches
+the lang expected by assistive technology.
+
+In test files, everything is English: `describe()` and `it()` descriptions,
+variable names, comments, and mock data labels. The only place Ukrainian
+text may appear is in assertions or queries that match **rendered UI
+content** (e.g. `getByText('Без трекінгу')`) — that must match whatever the
+component actually renders. But test descriptions and aria-based queries
+use the English aria-labels, never Ukrainian.
 
 ---
 
@@ -370,6 +422,17 @@ missed:
   (`import PageButton from './PageButton'`).
 - **Logical CSS properties only**: `pli-`/`plb-`/`mli-`/`mbs-`/`mbe-`, never
   `pl-`/`pr-`/`pt-`/`pb-`/`px-`/`py-`/`ml-`/`mt-`.
+- **No `px` sizing.** Reach for the Tailwind scale first (`p-3`, `gap-2`,
+  `size-8`, `text-sm`), then arbitrary `rem` for in-between values
+  (`text-[0.6875rem]`). `px` is only for things that must *not* scale with the
+  reader's font size: border widths, hairline dividers, `box-shadow` offsets and
+  1px optical nudges. Prefer classes over inline `style` — that's where `px`
+  creeps back in, and inline styles bypass `tailwind-merge`.
+- **Design tokens go through `@theme`.** A new custom property in
+  `src/styles/tokens.css` is only half the job: map it in the `@theme` block of
+  `app/globals.css` (`--color-banner-label: var(--banner-label)`) and consume the
+  generated utility (`text-banner-label`). Never reach into the raw variable from
+  a component with `text-(--banner-label)` or `text-[var(--banner-label)]`.
 - **`cn()`** for all className merging; the external `className` prop goes last.
 - **CVA** for component variants, not ad-hoc conditional strings.
 - **Radix primitives** directly — this project does not use shadcn.
