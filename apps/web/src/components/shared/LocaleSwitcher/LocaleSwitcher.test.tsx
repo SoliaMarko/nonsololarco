@@ -91,7 +91,7 @@ describe('LocaleSwitcher', () => {
 
     await user.click(screen.getByLabelText('common.locale.switchLanguage'));
 
-    const englishItem = screen.getByText('English').closest('[role="menuitem"]');
+    const englishItem = screen.getByText('English').closest('[role="menuitemradio"]');
     expect(englishItem?.textContent).toContain('✓');
   });
 
@@ -101,7 +101,7 @@ describe('LocaleSwitcher', () => {
 
     await user.click(screen.getByLabelText('common.locale.switchLanguage'));
 
-    const italianoItem = screen.getByText('Italiano').closest('[role="menuitem"]');
+    const italianoItem = screen.getByText('Italiano').closest('[role="menuitemradio"]');
     expect(italianoItem?.textContent).not.toContain('✓');
   });
 

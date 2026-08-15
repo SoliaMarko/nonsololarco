@@ -65,7 +65,8 @@ describe('AiButton', () => {
   it('applies textClassName to the inner wrapper', () => {
     const { container } = render(<AiButton textClassName="custom-text" />);
 
-    const wrapper = container.querySelector('button > div') as HTMLElement;
-    expect(wrapper.className).toContain('custom-text');
+    const wrapper = container.querySelector('.custom-text') as HTMLElement;
+    expect(wrapper).not.toBeNull();
+    expect(wrapper.className).toContain('flex');
   });
 });
