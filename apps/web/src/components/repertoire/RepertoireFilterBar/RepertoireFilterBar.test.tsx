@@ -120,7 +120,7 @@ describe('RepertoireFilterBar', () => {
   it('updates URL when a filter pill is clicked', () => {
     render(<RepertoireFilterBar />);
 
-    fireEvent.click(getFirstButton('repertoire.statusReady'));
+    fireEvent.click(getFirstButton('pages.repertoire.statusReady'));
 
     expect(mockPush).toHaveBeenCalledWith('?status=ready', { scroll: false });
   });
@@ -129,7 +129,7 @@ describe('RepertoireFilterBar', () => {
     mockSearchParams = new URLSearchParams('status=ready');
     render(<RepertoireFilterBar />);
 
-    fireEvent.click(getFirstButton('repertoire.statusAll'));
+    fireEvent.click(getFirstButton('pages.repertoire.statusAll'));
 
     expect(mockPush).toHaveBeenCalledWith('?', { scroll: false });
   });

@@ -1,7 +1,6 @@
 'use client';
 
 import { useLocale, useTranslations } from 'next-intl';
-import { useSearchParams } from 'next/navigation';
 
 import { Locale, locales } from '@/i18n/config';
 import { usePathname, useRouter } from '@/i18n/navigation';
@@ -31,14 +30,16 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
   const currentLocale = useLocale() as Locale;
   const router = useRouter();
   const pathname = usePathname();
-  const searchParams = useSearchParams();
   const t = useTranslations('common');
 
   function handleLocaleChange(locale: Locale) {
     // Preserve existing query params (status, onlyMine, sort, order, etc.)
     // across the locale switch — `usePathname()` strips the query string.
-    const query = searchParams.toString();
-    const fullPath = query ? `${pathname}?${query}` : pathname;
+    // Read search params lazily from the URL rather than via the
+    // `useSearchParams()` hook, which would require a `<Suspense>` boundary
+    // and prevent the page from being statically generated.
+    const query = window.location.search;
+    const fullPath = query ? `${pathname}${query}` : pathname;
 
     // `scroll: false` keeps the reader where they were — switching language
     // shouldn't throw them back to the top of a long repertoire list.

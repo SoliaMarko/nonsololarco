@@ -30,6 +30,7 @@ Project documentation. Three kinds, three folders.
 
 - [0001 — Server-side sorting and filtering](./adr/0001-server-side-sorting-and-filtering.md)
 - [0002 — Track performers model](./adr/0002-track-performers-model.md)
+- [0003 — i18n library: next-intl](./adr/0003-i18n-library-next-intl.md)
 
 ---
 

@@ -28,7 +28,7 @@ const { middleware } = await import('./middleware');
 
 function createRequest(
   path: string,
-  options?: { token?: string; acceptLanguage?: string },
+  options?: { acceptLanguage?: string; token?: string },
 ): NextRequest {
   const url = new URL(path, 'http://localhost:3000');
   const headers = new Headers();
@@ -109,6 +109,15 @@ describe('middleware', () => {
       const response = middleware(createRequest('/repertoire'));
 
       expect(response.headers.get('Location')).toContain('/en/login');
+    });
+
+    it('honours Accept-Language for unprefixed protected paths', () => {
+      const response = middleware(
+        createRequest('/repertoire', { acceptLanguage: 'it-IT,it;q=0.9,en;q=0.8' }),
+      );
+
+      expect(response.status).toBe(307);
+      expect(response.headers.get('Location')).toContain('/it/login');
     });
 
     it('allows access when a token cookie is present', () => {

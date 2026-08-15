@@ -61,4 +61,11 @@ describe('AiButton', () => {
     const button = container.querySelector('button') as HTMLElement;
     expect(button.className).toContain('extra');
   });
+
+  it('applies textClassName to the inner wrapper', () => {
+    const { container } = render(<AiButton textClassName="custom-text" />);
+
+    const wrapper = container.querySelector('button > div') as HTMLElement;
+    expect(wrapper.className).toContain('custom-text');
+  });
 });

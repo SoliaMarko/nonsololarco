@@ -48,7 +48,22 @@ export function middleware(request: NextRequest) {
 
   if (!token) {
     const extracted = pathname.match(/^\/([a-z]{2})(?=\/|$)/)?.[1];
-    const locale = extracted && (locales as readonly string[]).includes(extracted) ? extracted : defaultLocale;
+    let locale: string;
+
+    if (extracted && (locales as readonly string[]).includes(extracted)) {
+      locale = extracted;
+    } else {
+      // No locale in path — honour Accept-Language so the login page
+      // renders in the visitor's preferred language.
+      const preferred = request.headers
+        .get('Accept-Language')
+        ?.split(',')
+        .map((entry) => (entry.split(';')[0] ?? '').trim().substring(0, 2))
+        .find((code) => (locales as readonly string[]).includes(code));
+
+      locale = preferred ?? defaultLocale;
+    }
+
     const loginUrl = new URL(`/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }
