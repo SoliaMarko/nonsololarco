@@ -232,6 +232,23 @@ import SelectionMark from './SelectionMark';
 return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
 ```
 
+### Self-descriptive variable names
+
+Use full, meaningful names — not single-letter abbreviations. A callback
+parameter should read as what it represents, not as a cryptic shorthand.
+
+```tsx
+// ❌
+groups.map((g) => <HistoryGroup key={g.songNumber} group={g} />)
+
+// ✅
+groups.map((group) => <HistoryGroup key={group.songNumber} group={group} />)
+```
+
+Short names are acceptable only for universally understood idioms: `i`/`j` in
+numeric loops, `_` for intentionally unused parameters, and `a`/`b` in sort
+comparators.
+
 ### General
 
 - TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
