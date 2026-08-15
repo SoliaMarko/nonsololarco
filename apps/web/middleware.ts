@@ -2,6 +2,7 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from '@/i18n/routing';
+import { defaultLocale, locales } from '@/i18n/config';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
@@ -46,7 +47,8 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
 
   if (!token) {
-    const locale = pathname.match(/^\/([a-z]{2})(?=\/|$)/)?.[1] ?? 'en';
+    const extracted = pathname.match(/^\/([a-z]{2})(?=\/|$)/)?.[1];
+    const locale = extracted && (locales as readonly string[]).includes(extracted) ? extracted : defaultLocale;
     const loginUrl = new URL(`/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }

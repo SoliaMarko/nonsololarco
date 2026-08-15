@@ -126,7 +126,7 @@
     "sortTitleAsc": "Title A→Z",
     "sortTitleDesc": "Title Z→A",
     "statReady": "ready",
-    "statTracks": "tracks",
+    "statTracks": "{count, plural, one {track} other {tracks}}",
     "statusAll": "All",
     "statusArchived": "Archived",
     "statusLearning": "Learning",

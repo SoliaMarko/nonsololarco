@@ -1,7 +1,7 @@
 import { useTranslations } from 'next-intl';
 
 import Logo from '@/components/ui/Logo';
-import { Link, usePathname } from '@/i18n/navigation';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
 import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher';
 import MetronomeButton from '@/src/components/shared/MetronomeButton';
@@ -24,6 +24,7 @@ export interface AppHeaderNavProps {
 
 export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const { user, logout } = useAuth();
+  const router = useRouter();
   const t = useTranslations('common');
 
   const initials = user?.name
@@ -121,9 +122,9 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               groups={[
                 {
                   items: [
-                    { label: t('nav.viewProfile'), icon: ProfileOutlineIcon, href: '/profile' },
-                    { label: t('nav.settings'), icon: SettingsOutlineIcon, href: '/settings' },
-                    { label: t('nav.notifications'), icon: BellIcon, href: '/notifications' },
+                    { label: t('nav.viewProfile'), icon: ProfileOutlineIcon, onClick: () => router.push('/profile') },
+                    { label: t('nav.settings'), icon: SettingsOutlineIcon, onClick: () => router.push('/settings') },
+                    { label: t('nav.notifications'), icon: BellIcon, onClick: () => router.push('/notifications') },
                   ],
                 },
                 {
