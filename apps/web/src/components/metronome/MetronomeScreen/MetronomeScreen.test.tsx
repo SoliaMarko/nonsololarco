@@ -41,7 +41,7 @@ describe('MetronomeScreen', () => {
 
   it('picking a song closes the chooser', async () => {
     render(<MetronomeScreen />);
-    await userEvent.click(screen.getByText('Ніч у депо'));
+    await userEvent.click(screen.getByText('Night at the Depot'));
     expect(screen.queryByText('pages.metronome.chooserTitle')).toBeNull();
   });
 
@@ -54,14 +54,14 @@ describe('MetronomeScreen', () => {
   it('adding a new song shows a confirmation toast', async () => {
     render(<MetronomeScreen />);
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Новий трек');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'New Track');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(screen.getByText(/pages\.metronome\.toastAdded/)).toBeDefined();
   });
 
   it('saving a tracked session shows a saved toast', async () => {
     render(<MetronomeScreen />);
-    await userEvent.click(screen.getByText('Ніч у депо'));
+    await userEvent.click(screen.getByText('Night at the Depot'));
     await userEvent.click(screen.getByRole('button', { name: 'Play' }));
     await userEvent.click(screen.getByText('pages.metronome.finishAndSave'));
     expect(screen.getByText(/pages\.metronome\.toastSaved/)).toBeDefined();

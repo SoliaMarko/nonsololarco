@@ -15,8 +15,8 @@ beforeEach(() => {
 });
 
 const SONGS: ChooserSong[] = [
-  { bpm: 92, key: 'Am', number: 1, ready: 'learning', title: 'Ніч у депо' },
-  { bpm: 120, key: 'G', number: 2, ready: 'ready', title: 'Тролейбус №7' },
+  { bpm: 92, key: 'Am', number: 1, ready: 'learning', title: 'Night at the Depot' },
+  { bpm: 120, key: 'G', number: 2, ready: 'ready', title: 'Trolleybus No. 7' },
 ];
 
 function setup(overrides: Partial<React.ComponentProps<typeof SongChooser>> = {}) {
@@ -41,13 +41,13 @@ describe('SongChooser', () => {
   it('renders the heading and songs', () => {
     setup();
     expect(screen.getByText('pages.metronome.chooserTitle')).toBeDefined();
-    expect(screen.getByText('Ніч у депо')).toBeDefined();
-    expect(screen.getByText('Тролейбус №7')).toBeDefined();
+    expect(screen.getByText('Night at the Depot')).toBeDefined();
+    expect(screen.getByText('Trolleybus No. 7')).toBeDefined();
   });
 
   it('calls onPick when a song is clicked', async () => {
     const { onPick } = setup();
-    await userEvent.click(screen.getByText('Ніч у депо'));
+    await userEvent.click(screen.getByText('Night at the Depot'));
     expect(onPick).toHaveBeenCalledWith(SONGS[0]);
   });
 
@@ -60,9 +60,9 @@ describe('SongChooser', () => {
   it('filters songs by search query', async () => {
     setup();
     const input = screen.getByPlaceholderText('pages.metronome.searchPlaceholder');
-    await userEvent.type(input, 'Трол');
-    expect(screen.queryByText('Ніч у депо')).toBeNull();
-    expect(screen.getByText('Тролейбус №7')).toBeDefined();
+    await userEvent.type(input, 'Trol');
+    expect(screen.queryByText('Night at the Depot')).toBeNull();
+    expect(screen.getByText('Trolleybus No. 7')).toBeDefined();
   });
 
   it('shows inline form when the add action is clicked', async () => {
@@ -75,24 +75,24 @@ describe('SongChooser', () => {
   it('calls onAdd with title and BPM when form is submitted', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Новий трек');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'New Track');
     await userEvent.type(screen.getByPlaceholderText('BPM'), '140');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
-    expect(onAdd).toHaveBeenCalledWith('Новий трек', 140, { beats: 4, label: '4/4' });
+    expect(onAdd).toHaveBeenCalledWith('New Track', 140, { beats: 4, label: '4/4' });
   });
 
   it('calls onAdd with title and no BPM when BPM is empty', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Без BPM');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'No BPM');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
-    expect(onAdd).toHaveBeenCalledWith('Без BPM', undefined, { beats: 4, label: '4/4' });
+    expect(onAdd).toHaveBeenCalledWith('No BPM', undefined, { beats: 4, label: '4/4' });
   });
 
   it('rejects a negative BPM and does not call onAdd', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Мінусовий');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Negative');
     await userEvent.type(screen.getByPlaceholderText('BPM'), '-5');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).not.toHaveBeenCalled();
@@ -102,7 +102,7 @@ describe('SongChooser', () => {
   it('rejects a zero BPM and does not call onAdd', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Нуль');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Zero');
     await userEvent.type(screen.getByPlaceholderText('BPM'), '0');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).not.toHaveBeenCalled();
@@ -112,7 +112,7 @@ describe('SongChooser', () => {
   it('clears the BPM error once the field is edited again', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Виправлення');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Correction');
     await userEvent.type(screen.getByPlaceholderText('BPM'), '0');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(screen.getByRole('alert')).toBeDefined();
@@ -121,7 +121,7 @@ describe('SongChooser', () => {
     await userEvent.type(screen.getByPlaceholderText('BPM'), '150');
     expect(screen.queryByRole('alert')).toBeNull();
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
-    expect(onAdd).toHaveBeenCalledWith('Виправлення', 150, { beats: 4, label: '4/4' });
+    expect(onAdd).toHaveBeenCalledWith('Correction', 150, { beats: 4, label: '4/4' });
   });
 
   it('disables submit button when title is empty', async () => {
@@ -193,7 +193,7 @@ describe('SongChooser', () => {
   it('discards the draft when the form is cancelled and reopened', async () => {
     setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Чернетка');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Draft');
     await userEvent.type(screen.getByPlaceholderText('BPM'), '175');
     await userEvent.click(screen.getByText('pages.metronome.cancel'));
 
@@ -205,7 +205,7 @@ describe('SongChooser', () => {
   it('discards the draft when Escape cancels the form and it is reopened', async () => {
     setup({ onDismiss: vi.fn() });
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Чернетка');
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Draft');
     await userEvent.keyboard('{Escape}');
 
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));

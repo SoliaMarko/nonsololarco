@@ -27,7 +27,7 @@ interface HistoryDrawerProps {
  */
 export default function HistoryDrawer({ history, onClose, onDelete, onExit }: HistoryDrawerProps) {
   const t = useTranslations('pages.metronome');
-  const [openSong, setOpenSong] = useState<string | null>(null);
+  const [openSong, setOpenSong] = useState<number | null>(null);
   const [undoEntry, setUndoEntry] = useState<PracticeSession | null>(null);
   const undoTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
@@ -42,11 +42,12 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
   const groups = useMemo(() => {
     const map: Record<string, { rows: PracticeSession[]; song: string; songNumber: number }> = {};
     history.forEach((h) => {
-      const existing = map[h.song];
+      const key = String(h.songNumber);
+      const existing = map[key];
       if (existing) {
         existing.rows.push(h);
       } else {
-        map[h.song] = { rows: [h], song: h.song, songNumber: h.songNumber };
+        map[key] = { rows: [h], song: h.song, songNumber: h.songNumber };
       }
     });
 
@@ -148,13 +149,13 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
               </div>
             </div>
           ) : (
-            groups.map((g) => (
+            groups.map((group) => (
               <HistoryGroup
-                key={g.song}
-                group={g}
+                key={group.songNumber}
+                group={group}
                 onDelete={handleDelete}
-                onToggle={() => setOpenSong(openSong === g.song ? null : g.song)}
-                open={openSong === g.song}
+                onToggle={() => setOpenSong(openSong === group.songNumber ? null : group.songNumber)}
+                open={openSong === group.songNumber}
               />
             ))
           )}
