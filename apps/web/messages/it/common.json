@@ -10,7 +10,8 @@
     "defaultTitle": "In arrivo"
   },
   "locale": {
-    "interfaceLanguage": "Lingua dell'interfaccia"
+    "interfaceLanguage": "Lingua dell'interfaccia",
+    "switchLanguage": "Cambia lingua"
   },
   "legal": {
     "agreementPrefix": "Continuando, accetti i",

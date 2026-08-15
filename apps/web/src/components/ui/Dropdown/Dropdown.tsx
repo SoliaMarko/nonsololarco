@@ -42,6 +42,12 @@ export type DropdownGroup = {
   items: DropdownItem[];
   /** Optional label rendered above the group in uppercase monospace. */
   label?: string;
+  /**
+   * When `'single'`, items render as `RadioItem` inside a `RadioGroup`,
+   * exposing `menuitemradio` role and `aria-checked` to assistive technology.
+   * Use for mutually exclusive choices (locale picker, sort order).
+   */
+  selectionMode?: 'single';
 };
 
 export type DropdownVariant = 'default' | 'stamp';
@@ -179,41 +185,73 @@ function Dropdown({
           sideOffset={6}
           className={cn(CONTENT_CLASS[variant], ANIMATE_CLASS, className)}
         >
-          {groups.map((group, groupIndex) => (
-            <Fragment key={groupIndex}>
-              {groupIndex > 0 ? <RadixDropdown.Separator className={SEPARATOR_CLASS[variant]} /> : null}
+          {groups.map((group, groupIndex) => {
+            const hasLabel = !!group.label;
+            const isRadio = group.selectionMode === 'single';
+            const selectedValue = isRadio
+              ? group.items.find((i) => i.selected)?.label ?? ''
+              : '';
 
-              {group.label ? (
-                <RadixDropdown.Label className={LABEL_CLASS[variant]}>{group.label}</RadixDropdown.Label>
-              ) : null}
+            const renderedItems = group.items.map((item, itemIndex) => {
+              const Icon = item.icon;
+              const cls = itemClass(variant, item, hasLabel);
+              const leading = item.leadingContent ?? (Icon ? <Icon size={15} aria-hidden="true" /> : null);
 
-              {group.items.map((item, itemIndex) => {
-                const Icon = item.icon;
-                const cls = itemClass(variant, item, !!group.label);
-                const leading = item.leadingContent ?? (Icon ? <Icon size={15} aria-hidden="true" /> : null);
-
-                if (item.href) {
-                  return (
-                    <RadixDropdown.Item key={itemIndex} asChild disabled={item.disabled}>
-                      <a href={item.href} className={cls}>
-                        {leading}
-                        {item.label}
-                        {item.selected ? <Checkmark variant={variant} /> : null}
-                      </a>
-                    </RadixDropdown.Item>
-                  );
-                }
-
+              if (item.href) {
                 return (
-                  <RadixDropdown.Item key={itemIndex} className={cls} disabled={item.disabled} onSelect={item.onClick}>
+                  <RadixDropdown.Item key={itemIndex} asChild disabled={item.disabled}>
+                    <a href={item.href} className={cls}>
+                      {leading}
+                      {item.label}
+                      {item.selected ? <Checkmark variant={variant} /> : null}
+                    </a>
+                  </RadixDropdown.Item>
+                );
+              }
+
+              if (isRadio) {
+                return (
+                  <RadixDropdown.RadioItem
+                    key={itemIndex}
+                    className={cls}
+                    disabled={item.disabled}
+                    onSelect={item.onClick}
+                    value={item.label}
+                  >
                     {leading}
                     {item.label}
                     {item.selected ? <Checkmark variant={variant} /> : null}
-                  </RadixDropdown.Item>
+                  </RadixDropdown.RadioItem>
                 );
-              })}
-            </Fragment>
-          ))}
+              }
+
+              return (
+                <RadixDropdown.Item key={itemIndex} className={cls} disabled={item.disabled} onSelect={item.onClick}>
+                  {leading}
+                  {item.label}
+                  {item.selected ? <Checkmark variant={variant} /> : null}
+                </RadixDropdown.Item>
+              );
+            });
+
+            return (
+              <Fragment key={groupIndex}>
+                {groupIndex > 0 ? <RadixDropdown.Separator className={SEPARATOR_CLASS[variant]} /> : null}
+
+                {group.label ? (
+                  <RadixDropdown.Label className={LABEL_CLASS[variant]}>{group.label}</RadixDropdown.Label>
+                ) : null}
+
+                {isRadio ? (
+                  <RadixDropdown.RadioGroup value={selectedValue}>
+                    {renderedItems}
+                  </RadixDropdown.RadioGroup>
+                ) : (
+                  renderedItems
+                )}
+              </Fragment>
+            );
+          })}
         </RadixDropdown.Content>
       </RadixDropdown.Portal>
     </RadixDropdown.Root>

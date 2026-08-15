@@ -243,19 +243,24 @@ return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
   Nest modules.
 - Comments explain *why*, not *what*. Delete commented-out code.
 
-### English-only in tests and accessibility props
+### Localized accessible names
 
-All `aria-label`, `aria-description`, `aria-placeholder`, `role` names, and
-similar accessibility props must be written **in English**, even though the
-UI is in Ukrainian. This keeps test selectors language-agnostic and matches
-the lang expected by assistive technology.
+User-facing `aria-label`, `aria-description`, and `aria-placeholder` values
+must be **translated** via `useTranslations()`, just like visible UI text.
+A hardcoded English aria-label on an Italian or Ukrainian page is announced
+using the document's language, which can mispronounce the label or make the
+control unclear. Add new keys to all three locale files (`en`, `it`, `uk`).
+
+`role` names (e.g. `"row"`, `"cell"`) are **spec-defined English tokens** —
+never translate those.
+
+### English-only in tests
 
 In test files, everything is English: `describe()` and `it()` descriptions,
-variable names, comments, and mock data labels. The only place Ukrainian
+variable names, comments, and mock data labels. The only place non-English
 text may appear is in assertions or queries that match **rendered UI
 content** (e.g. `getByText('Без трекінгу')`) — that must match whatever the
-component actually renders. But test descriptions and aria-based queries
-use the English aria-labels, never Ukrainian.
+component actually renders.
 
 ---
 
@@ -278,7 +283,8 @@ Cover the happy path, the empty/zero case, and each error branch. When fixing a
 bug, add the test that would have caught it — in the same commit as the fix.
 
 Tests render with the `en` locale so that `getByText` assertions match English
-translation strings. `aria-label` values stay in English and are not translated.
+translation strings. Since `aria-label` values are now translated via
+`useTranslations()`, test assertions use the `en` locale's translated keys.
 
 Prisma is mocked via `src/test/mocks/prisma.mock.ts`; never hit a real database
 in a unit test.
@@ -403,8 +409,10 @@ the feature. Groups themselves are also sorted alphabetically.
 - **English is the source of truth.** `it.json` and `uk.json` must contain an
   identical set of keys. A missing key is a bug, not a fallback.
 - **Placeholders** use ICU syntax: `"greeting": "Hello, {userName}"`.
-- **`aria-label` stays in English** — not translated, not in message files.
-  Screen readers get consistent identifiers regardless of locale.
+- **`aria-label` values are translated** — add keys to the message files and
+  use `useTranslations()`. Screen readers announce them in the document
+  language, so a mismatch between the label's language and the page language
+  causes mispronunciation.
 - Dates, numbers and relative time are formatted via `useFormatter()` from
   next-intl, not hand-rolled.
 

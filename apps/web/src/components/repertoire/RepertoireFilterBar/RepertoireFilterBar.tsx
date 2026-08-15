@@ -318,6 +318,7 @@ export default function RepertoireFilterBar() {
             }
             groups={[
               {
+                selectionMode: 'single',
                 items: mobileSortOptions.map((opt) => ({
                   label: t(opt.labelKey),
                   selected: opt.value === activeSortValue,

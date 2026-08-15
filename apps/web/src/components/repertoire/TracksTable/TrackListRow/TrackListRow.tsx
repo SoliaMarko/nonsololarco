@@ -4,7 +4,9 @@ import { useState } from 'react';
 
 import { useTranslations } from 'next-intl';
 
-import Text from '@/src/components/typography/Text';
+import { Track, TrackStatus } from '@nonsololarco/types';
+
+import { Link } from '@/i18n/navigation';
 import Badge from '@/src/components/ui/Badge';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useAuth } from '@/src/hooks/global/useAuth';
@@ -12,11 +14,8 @@ import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
 import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
-import { Track, TrackStatus } from '@nonsololarco/types';
 import { cn } from '@/src/utils/cn';
 import { getTrackPerformers } from '@/src/utils/track-performers.utils';
-
-import { Link } from '@/i18n/navigation';
 
 import TrackPerformerNames from '../TrackPerformerNames';
 import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
@@ -57,7 +56,8 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
   const performers = getTrackPerformers(track, user?.id);
 
   /** Accent stripe is shown for my tracks in a band view, for every track in "all bands" and solo views */
-  const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
+  const hasAccentBorder =
+    (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
 
   /** Tracks without a band are solo — labelled as such instead of showing a blank cell */
   const bandName = track.band?.name ?? t('repertoire.solo');
@@ -136,13 +136,23 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
               <>
                 <div className="flex min-w-0 items-center gap-1">
                   <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
-                  <span className="text-fg-secondary truncate text-sm tabular-nums">{bandName}</span>
+                  <span className="text-fg-secondary truncate text-sm tabular-nums">
+                    {bandName}
+                  </span>
                   <span className="shrink-0 whitespace-nowrap">
                     {' · '}
-                    <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                    <span
+                      className={cn(
+                        'font-black',
+                        isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
+                      )}
+                    >
                       {track.musicalKey}
                     </span>
-                    {' · '}{track.bpm}{' · '}{track.duration}
+                    {' · '}
+                    {track.bpm}
+                    {' · '}
+                    {track.duration}
                   </span>
                 </div>
                 <TrackPerformerNames
@@ -161,10 +171,18 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
                   performers={performers}
                 />
                 <span className="whitespace-nowrap">
-                  <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                  <span
+                    className={cn(
+                      'font-black',
+                      isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
+                    )}
+                  >
                     {track.musicalKey}
                   </span>
-                  {' · '}{track.bpm}{' · '}{track.duration}
+                  {' · '}
+                  {track.bpm}
+                  {' · '}
+                  {track.duration}
                 </span>
               </>
             )}
@@ -226,7 +244,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
         {/* Navigate button — always visible */}
         <div role="cell" className="mis-3 sm:mis-0 flex items-center justify-end">
           <Link
-            aria-label={`Open ${track.title}`}
+            aria-label={t('repertoire.openTrack', { title: track.title })}
             className="text-fg-tertiary hover:text-fg-primary hover:bg-edge rounded-lg p-1.5 transition-colors"
             href={`/repertoire/${track.id}`}
             onClick={(e) => e.stopPropagation()}

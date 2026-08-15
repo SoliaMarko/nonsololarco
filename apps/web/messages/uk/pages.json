@@ -115,6 +115,7 @@
     "newTrackButton": "Новий трек",
     "onlyMine": "Тільки мої",
     "onlyMineLegend": "моя участь",
+    "openTrack": "Відкрити {title}",
     "orderOption": "# Порядок",
     "solo": "Соло",
     "sortBpmAsc": "BPM ↑",

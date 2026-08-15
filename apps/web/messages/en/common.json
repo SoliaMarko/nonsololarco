@@ -10,7 +10,8 @@
     "defaultTitle": "Coming soon"
   },
   "locale": {
-    "interfaceLanguage": "Interface language"
+    "interfaceLanguage": "Interface language",
+    "switchLanguage": "Switch language"
   },
   "legal": {
     "agreementPrefix": "By continuing you agree to the",
