@@ -47,5 +47,10 @@
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=22"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/estree": "1.0.9"
+    }
   }
 }
