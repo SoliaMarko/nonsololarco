@@ -73,6 +73,13 @@ export default [
       'max-lines': 'off',
       'max-lines-per-function': 'off',
       'max-nested-callbacks': 'off',
+      'no-restricted-properties': [
+        'error',
+        { object: 'it', property: 'skip', message: 'Skipped test = broken test. Fix or remove.' },
+        { object: 'describe', property: 'skip', message: 'Skipped suite = broken test.' },
+        { object: 'it', property: 'only', message: '.only must not be committed.' },
+        { object: 'describe', property: 'only', message: '.only must not be committed.' },
+      ],
     },
   },
   {

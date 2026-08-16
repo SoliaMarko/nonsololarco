@@ -18,6 +18,14 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reportsDirectory: '../coverage',
+      reporter: ['text', 'json-summary', 'lcov'],
+      thresholds: {
+        autoUpdate: true,
+        lines: 10,
+        branches: 10,
+        functions: 10,
+        statements: 10,
+      },
     },
   },
 });

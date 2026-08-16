@@ -70,7 +70,16 @@ jobs:
           node-version: 22
           cache: "pnpm"
       - run: pnpm install
-      - run: pnpm test
+      - run: pnpm --filter web test:coverage
+      - run: pnpm --filter api test -- --coverage
+
+      - name: Coverage report (web)
+        if: github.event_name == 'pull_request'
+        uses: romeovs/lcov-reporter-action@v0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./apps/web/coverage/lcov.info
+          filter-changed-files: true
 
   e2e:
     runs-on: ubuntu-latest
