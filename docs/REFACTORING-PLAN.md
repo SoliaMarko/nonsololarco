@@ -835,7 +835,15 @@ enforced. Додати:
 
 ## Фаза 3 — Чистота коду: бекенд
 
-### 3.1 Дублювання в `RepertoireService` (найбільший борг API)
+### 3.1 Дублювання в `RepertoireService` (найбільший борг API) ✅ ЗРОБЛЕНО
+
+> **Виконано 2026-08-16.** Виділено інтерфейс `FindTracksArgs` і приватний
+> метод `findTracks` — єдина реалізація пайплайну
+> count → findMany → map → postSort → slice → meta. Три публічні методи
+> зведені до 5–10 рядків кожен (лише where/include/defaultOrderBy).
+> `let mapped` замінено на ланцюжок `const mapped → const sorted → const data`.
+> Додано JSDoc на всі публічні методи і `findTracks`. Додано юніт-тести
+> для `getSoloByUser` (3 нові тести). Всі 16 тестів зелені.
 
 Три методи — `getByUser`, `getSoloByUser`, `getByBand` — мають ідентичні тіла на
 ~25 рядків кожне. Відрізняються лише `where`, `include` і дефолтним `orderBy`:
@@ -1647,7 +1655,7 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | 5   | ✅ `ci: прибрати дублюючий api.yml, ci.yml вже покриває API`                 | 0.4      | низький     | високий                 |
 | 6   | ✅ `chore(web): sort interface keys required-first`                          | правило  | низький     | середній                |
 | 7   | ✅ `test: diff-coverage 90% + ratchet thresholds`                            | 1.4      | нульовий    | високий                 |
-| 8   | `refactor(api): злити три методи RepertoireService у findTracks`             | 3.1      | середній    | високий                 |
+| 8   | ✅ `refactor(api): злити три методи RepertoireService у findTracks`           | 3.1      | середній    | високий                 |
 | 9   | `test(api): інтеграційні тести з testcontainers`                             | 1.2      | низький     | **дуже високий**        |
 | 10  | `feat(db): durationSeconds + міграція бекфілу`                               | 4.1      | високий     | високий                 |
 | 11  | `fix(db): partial unique index для соло-треків`                              | 4.3      | середній    | високий                 |

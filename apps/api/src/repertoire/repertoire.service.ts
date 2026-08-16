@@ -225,86 +225,70 @@ export interface RepertoireQueryOptions {
   status?: TrackFilterField;
 }
 
+interface FindTracksArgs {
+  defaultOrderBy: TrackOrderBy[];
+  include: typeof TRACK_INCLUDE_ALL | typeof TRACK_INCLUDE_MEMBERS;
+  includeBand: boolean;
+  options: RepertoireQueryOptions;
+  where: Prisma.TrackWhereInput;
+}
+
 @Injectable()
 export class RepertoireService {
   constructor(private readonly prisma: PrismaService) {}
 
+  /**
+   * Returns all tracks the user participates in (as lead or performer),
+   * across all bands and solo repertoire. Includes band info on each track.
+   */
   async getByUser(
     userId: string,
     options: RepertoireQueryOptions = {},
   ): Promise<PaginatedResult<Track>> {
-    const { sort, order, status, page, pageSize } = options;
-    const orderBy = buildPrismaOrderBy(sort, order);
-    const statusFilter = buildStatusFilter(status);
-    const pa = resolvePagination(page, pageSize);
-
-    const where = {
-      ...participatesIn(userId),
-      ...statusFilter,
-    };
-
-    const total = await this.prisma.track.count({ where });
-
-    const needsPostSort = isPostQuerySortField(sort);
-    const tracks = await this.prisma.track.findMany({
-      where,
+    return this.findTracks({
+      defaultOrderBy: [{ bandId: 'asc' }, { order: 'asc' }, { id: 'asc' }],
       include: TRACK_INCLUDE_ALL,
-      orderBy: orderBy.length
-        ? orderBy
-        : [{ bandId: 'asc' }, { order: 'asc' }, { id: 'asc' }],
-      ...(pa.isPaginated && !needsPostSort
-        ? { skip: pa.offset, take: pa.pageSize }
-        : {}),
+      includeBand: true,
+      options,
+      where: {
+        ...participatesIn(userId),
+        ...buildStatusFilter(options.status),
+      },
     });
-
-    let mapped = tracks.map((track) => mapTrack(track, true));
-    mapped = postQuerySort(mapped, sort, order);
-    if (needsPostSort) mapped = applyPageSlice(mapped, pa);
-
-    return { data: mapped, ...buildMeta(total, pa) };
   }
 
+  /**
+   * Returns solo tracks owned by the user (bandId is null).
+   * Solo tracks have no band association — only lead member and performers.
+   */
   async getSoloByUser(
     userId: string,
     options: RepertoireQueryOptions = {},
   ): Promise<PaginatedResult<Track>> {
-    const { sort, order, status, page, pageSize } = options;
-    const orderBy = buildPrismaOrderBy(sort, order);
-    const statusFilter = buildStatusFilter(status);
-    const pa = resolvePagination(page, pageSize);
-
-    const where = {
-      leadMemberId: userId,
-      bandId: { equals: null },
-      ...statusFilter,
-    };
-
-    const total = await this.prisma.track.count({ where });
-
-    const needsPostSort = isPostQuerySortField(sort);
-    const tracks = await this.prisma.track.findMany({
-      where,
+    return this.findTracks({
+      defaultOrderBy: [{ order: 'asc' }, { id: 'asc' }],
       include: TRACK_INCLUDE_MEMBERS,
-      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }, { id: 'asc' }],
-      ...(pa.isPaginated && !needsPostSort
-        ? { skip: pa.offset, take: pa.pageSize }
-        : {}),
+      includeBand: false,
+      options,
+      where: {
+        bandId: { equals: null },
+        leadMemberId: userId,
+        ...buildStatusFilter(options.status),
+      },
     });
-
-    let mapped = tracks.map((track) => mapTrack(track));
-    mapped = postQuerySort(mapped, sort, order);
-    if (needsPostSort) mapped = applyPageSlice(mapped, pa);
-
-    return { data: mapped, ...buildMeta(total, pa) };
   }
 
+  /**
+   * Returns tracks belonging to a specific band.
+   * When `onlyMine` is set, filters to tracks the user participates in.
+   *
+   * @throws NotFoundException when the band does not exist.
+   */
   async getByBand(
     bandId: string,
     userId: string,
     options: RepertoireQueryOptions = {},
   ): Promise<PaginatedResult<Track>> {
-    const { sort, order, status, onlyMine, page, pageSize } = options;
-
     const band = await this.prisma.band.findUnique({
       where: { id: bandId },
     });
@@ -313,32 +297,53 @@ export class RepertoireService {
       throw new NotFoundException(`Band with id ${bandId} not found`);
     }
 
-    const orderBy = buildPrismaOrderBy(sort, order);
-    const statusFilter = buildStatusFilter(status);
-    const pa = resolvePagination(page, pageSize);
+    return this.findTracks({
+      defaultOrderBy: [{ order: 'asc' }, { id: 'asc' }],
+      include: TRACK_INCLUDE_MEMBERS,
+      includeBand: false,
+      options,
+      where: {
+        bandId,
+        ...(options.onlyMine ? participatesIn(userId) : {}),
+        ...buildStatusFilter(options.status),
+      },
+    });
+  }
 
-    const where = {
-      bandId,
-      ...(onlyMine ? participatesIn(userId) : {}),
-      ...statusFilter,
-    };
+  // ---------------------------------------------------------------------------
+  // Core query pipeline
+  // ---------------------------------------------------------------------------
+
+  /**
+   * Executes a track query with sorting, filtering, and pagination.
+   *
+   * Fields `status` and `time` are not sortable at the DB level, so for them
+   * the full matching set is loaded and sorted/sliced in memory — see
+   * `isPostQuerySortField`.
+   */
+  private async findTracks(args: FindTracksArgs): Promise<PaginatedResult<Track>> {
+    const { defaultOrderBy, include, includeBand, options, where } = args;
+    const { sort, order, page, pageSize } = options;
+
+    const orderBy = buildPrismaOrderBy(sort, order);
+    const pa = resolvePagination(page, pageSize);
+    const needsPostSort = isPostQuerySortField(sort);
 
     const total = await this.prisma.track.count({ where });
 
-    const needsPostSort = isPostQuerySortField(sort);
     const tracks = await this.prisma.track.findMany({
       where,
-      include: TRACK_INCLUDE_MEMBERS,
-      orderBy: orderBy.length ? orderBy : [{ order: 'asc' }, { id: 'asc' }],
+      include,
+      orderBy: orderBy.length ? orderBy : defaultOrderBy,
       ...(pa.isPaginated && !needsPostSort
         ? { skip: pa.offset, take: pa.pageSize }
         : {}),
     });
 
-    let mapped = tracks.map((track) => mapTrack(track));
-    mapped = postQuerySort(mapped, sort, order);
-    if (needsPostSort) mapped = applyPageSlice(mapped, pa);
+    const mapped = tracks.map((track) => mapTrack(track, includeBand));
+    const sorted = postQuerySort(mapped, sort, order);
+    const data = needsPostSort ? applyPageSlice(sorted, pa) : sorted;
 
-    return { data: mapped, ...buildMeta(total, pa) };
+    return { data, ...buildMeta(total, pa) };
   }
 }
