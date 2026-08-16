@@ -109,6 +109,14 @@
   /* --- DARK: Button fills --- */
   --bg-btn-fill: #37312b;
 
+  /* --- DARK: Raised controls ---
+   * Sits above --bg-surface so a control reads as lifted off the header.
+   * The base→elevated ramp runs light in dark mode and dark in light mode,
+   * so "lighter than the header" needs its own token per theme.
+   */
+  --control-surface: #362f26;
+  --control-surface-hover: #423a2f;
+
   /* --- DARK: Gradient --- */
   --gradient-card-overlay: rgb(10 8 6 / 92%);
 }
@@ -175,6 +183,10 @@
 
   /* --- LIGHT: Button fills --- */
   --bg-btn-fill: #e8e0d0;
+
+  /* --- LIGHT: Raised controls --- */
+  --control-surface: #faf7f1;
+  --control-surface-hover: #fffdf8;
 
   /* --- LIGHT: Gradient --- */
   --gradient-card-overlay: rgb(22 20 14 / 45%);

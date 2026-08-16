@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import NavLink from '@/src/components/ui/NavLink';
 import { NAV_ITEMS } from '@/src/lib/constants/common.const';
 import { cn } from '@/src/utils/cn';
@@ -7,7 +9,15 @@ export interface AppBottomNavProps {
   className?: string;
 }
 
+/**
+ * Sticky bottom navigation bar visible only on mobile (`md:hidden`).
+ * Renders each entry from `NAV_ITEMS` as a mobile `NavLink` with an
+ * optional badge count. Includes safe-area padding for the iPhone
+ * home indicator.
+ */
 export default function AppBottomNav({ activePath, className }: AppBottomNavProps) {
+  const t = useTranslations('common');
+
   return (
     <nav
       aria-label="Mobile nav"
@@ -25,7 +35,7 @@ export default function AppBottomNav({ activePath, className }: AppBottomNavProp
             key={item.href}
             href={item.href}
             icon={item.icon}
-            label={item.label}
+            label={t(item.labelKey)}
             badge={item.badge}
             variant="mobile"
             isActive={activePath === item.href}

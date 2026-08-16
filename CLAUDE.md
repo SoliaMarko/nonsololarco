@@ -232,6 +232,23 @@ import SelectionMark from './SelectionMark';
 return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
 ```
 
+### Self-descriptive variable names
+
+Use full, meaningful names — not single-letter abbreviations. A callback
+parameter should read as what it represents, not as a cryptic shorthand.
+
+```tsx
+// ❌
+groups.map((g) => <HistoryGroup key={g.songNumber} group={g} />)
+
+// ✅
+groups.map((group) => <HistoryGroup key={group.songNumber} group={group} />)
+```
+
+Short names are acceptable only for universally understood idioms: `i`/`j` in
+numeric loops, `_` for intentionally unused parameters, and `a`/`b` in sort
+comparators.
+
 ### General
 
 - TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
@@ -243,19 +260,24 @@ return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
   Nest modules.
 - Comments explain *why*, not *what*. Delete commented-out code.
 
-### English-only in tests and accessibility props
+### Localized accessible names
 
-All `aria-label`, `aria-description`, `aria-placeholder`, `role` names, and
-similar accessibility props must be written **in English**, even though the
-UI is in Ukrainian. This keeps test selectors language-agnostic and matches
-the lang expected by assistive technology.
+User-facing `aria-label`, `aria-description`, and `aria-placeholder` values
+must be **translated** via `useTranslations()`, just like visible UI text.
+A hardcoded English aria-label on an Italian or Ukrainian page is announced
+using the document's language, which can mispronounce the label or make the
+control unclear. Add new keys to all three locale files (`en`, `it`, `uk`).
+
+`role` names (e.g. `"row"`, `"cell"`) are **spec-defined English tokens** —
+never translate those.
+
+### English-only in tests
 
 In test files, everything is English: `describe()` and `it()` descriptions,
-variable names, comments, and mock data labels. The only place Ukrainian
+variable names, comments, and mock data labels. The only place non-English
 text may appear is in assertions or queries that match **rendered UI
 content** (e.g. `getByText('Без трекінгу')`) — that must match whatever the
-component actually renders. But test descriptions and aria-based queries
-use the English aria-labels, never Ukrainian.
+component actually renders.
 
 ---
 
@@ -276,6 +298,10 @@ Every new module ships with unit tests in the same commit. No exceptions for
 
 Cover the happy path, the empty/zero case, and each error branch. When fixing a
 bug, add the test that would have caught it — in the same commit as the fix.
+
+Tests render with the `en` locale so that `getByText` assertions match English
+translation strings. Since `aria-label` values are now translated via
+`useTranslations()`, test assertions use the `en` locale's translated keys.
 
 Prisma is mocked via `src/test/mocks/prisma.mock.ts`; never hit a real database
 in a unit test.
@@ -345,6 +371,67 @@ Walk the table above against the real diff:
 Keep docs short and current. A stale doc is worse than no doc — it actively
 misleads. If you change behaviour, update the doc in the same PR; if you
 rename something, grep the docs for the old name.
+
+---
+
+## Internationalization (i18n)
+
+Library: `next-intl`. Routing: URL prefix (`/en`, `/it`, `/uk`) with
+browser auto-detect on first visit. Default locale: `en`.
+
+### Translation files
+
+Three namespace files in `apps/web/messages/`:
+
+```text
+messages/
+  common.json    → navigation, shared buttons (Save, Cancel, Search), general UI
+  auth.json      → login, signup, auth errors
+  pages.json     → all page-specific content, grouped by feature
+```
+
+When a group inside `pages.json` grows past ~200 keys and becomes unwieldy,
+extract it into its own namespace file (e.g. `repertoire.json`). Until then,
+keep it together.
+
+### Key structure and sorting
+
+Keys use **camelCase** and are sorted **alphabetically at every level**. Within
+each namespace, related keys are grouped under a top-level object named after
+the feature. Groups themselves are also sorted alphabetically.
+
+```jsonc
+// pages.json
+{
+  "band": {
+    "memberCount": "...",
+    "name": "..."
+  },
+  "calendar": {
+    "noEvents": "...",
+    "title": "..."
+  },
+  "repertoire": {
+    "addTrack": "...",
+    "title": "..."
+  }
+}
+```
+
+### Rules
+
+- **Max nesting depth: 2 levels** (`group.key`). If you want
+  `repertoire.track.status.archived`, flatten it to
+  `repertoire.trackStatusArchived` or promote `repertoire` to its own namespace.
+- **English is the source of truth.** `it.json` and `uk.json` must contain an
+  identical set of keys. A missing key is a bug, not a fallback.
+- **Placeholders** use ICU syntax: `"greeting": "Hello, {userName}"`.
+- **`aria-label` values are translated** — add keys to the message files and
+  use `useTranslations()`. Screen readers announce them in the document
+  language, so a mismatch between the label's language and the page language
+  causes mispronunciation.
+- Dates, numbers and relative time are formatted via `useFormatter()` from
+  next-intl, not hand-rolled.
 
 ---
 

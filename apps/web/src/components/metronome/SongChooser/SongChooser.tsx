@@ -2,6 +2,8 @@
 
 import { useEffect, useRef, useState } from 'react';
 
+import { useTranslations } from 'next-intl';
+
 import {
   ArrowLeftSolidIcon,
   ArrowRightSolidIcon,
@@ -11,14 +13,15 @@ import {
 } from '@/src/icons/base';
 import { ChooserSong, TimeSignatureDef } from '@/src/lib/types/metronome.types';
 import { cn } from '@/src/utils/cn';
+import { MT_MAX, MT_MIN } from '@/src/utils/metronome.utils';
 
 import TimeSignatureSelect from '../TimeSignatureSelect';
 
-const STATUS_LABEL: Record<string, string> = {
-  archived: 'Архів',
-  learning: 'Вчу',
-  new: 'Нова',
-  ready: 'Готова',
+const STATUS_KEY: Record<string, string> = {
+  archived: 'statusArchived',
+  learning: 'statusLearning',
+  new: 'statusNew',
+  ready: 'statusReady',
 };
 
 /** Shared styling for the two footer actions, which sit side by side. */
@@ -37,19 +40,19 @@ interface SongChooserProps {
    * dismiss just closes this overlay onto the running metronome.
    */
   onBack: () => void;
-  onPick: (song: ChooserSong) => void;
-  onSkip: () => void;
-  songs: ChooserSong[];
   /**
    * Closes the overlay leaving the session untouched. Omit it when there is
    * nothing to go back to — on first open there's no previous selection, so
    * dismissing would strand the user on an empty metronome.
    */
   onDismiss?: () => void;
+  onPick: (song: ChooserSong) => void;
+  onSkip: () => void;
+  songs: ChooserSong[];
 }
 
 /**
- * Fullscreen overlay that asks "Що репетируєш?" — presents a searchable
+ * Fullscreen overlay that asks what the user is practising — presents a searchable
  * song list, an inline "new song" form, and a "just play" (skip tracking)
  * action. When `onDismiss` is provided, clicking the backdrop or pressing
  * Escape closes it without changing the current song or tempo.
@@ -62,6 +65,8 @@ export default function SongChooser({
   onSkip,
   songs,
 }: SongChooserProps) {
+  const t = useTranslations('pages.metronome');
+  const tStatus = useTranslations('pages.repertoire');
   const [query, setQuery] = useState('');
   const [addMode, setAddMode] = useState(false);
   const [newTitle, setNewTitle] = useState('');
@@ -89,7 +94,10 @@ export default function SongChooser({
 
     const raw = newBpm.trim();
     const parsed = raw ? Number(raw) : undefined;
-    if (parsed !== undefined && (!Number.isInteger(parsed) || parsed <= 0)) {
+    if (
+      parsed !== undefined &&
+      (!Number.isInteger(parsed) || parsed < MT_MIN || parsed > MT_MAX)
+    ) {
       setBpmError(true);
       return;
     }
@@ -120,16 +128,20 @@ export default function SongChooser({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSubmitNew();
-    if (e.key === 'Escape') handleCancelNew();
   };
 
-  // Escape closes the overlay, but only once the inline form is out of the
-  // way — there it means "cancel the form", handled by handleKeyDown.
+  // A single Escape handler covers both modes: in add mode it cancels the
+  // form (regardless of which control has focus), otherwise it dismisses
+  // the overlay. Attaching at the document level ensures it works even when
+  // focus is on the time-signature selector or the Cancel button.
   useEffect(() => {
-    if (!onDismiss || addMode) return;
-
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onDismiss();
+      if (e.key !== 'Escape') return;
+      if (addMode) {
+        handleCancelNew();
+      } else if (onDismiss) {
+        onDismiss();
+      }
     };
 
     document.addEventListener('keydown', handleEscape);
@@ -163,11 +175,11 @@ export default function SongChooser({
       </button>
 
       <div className="font-label text-yellow-main text-[0.6875rem] tracking-[0.25rem]">
-        МЕТРОНОМ · ПЕРЕД СТАРТОМ
+        {t('beforeStart')}
       </div>
 
       <div className="font-display text-primary-light mbs-2 mbe-6 text-center text-3xl">
-        Що репетируєш?
+        {t('chooserTitle')}
       </div>
 
       <div
@@ -180,7 +192,7 @@ export default function SongChooser({
           <input
             className="font-prose text-fg-primary placeholder:text-fg-tertiary min-w-0 flex-1 border-0 bg-transparent text-sm outline-none"
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Знайти твір у репертуарі…"
+            placeholder={t('searchPlaceholder')}
             value={query}
           />
         </div>
@@ -202,7 +214,7 @@ export default function SongChooser({
                   {s.title}
                 </div>
                 <div className="font-label text-fg-tertiary text-[0.625rem]">
-                  {s.key} · {s.bpm} BPM · {STATUS_LABEL[s.ready] ?? s.ready}
+                  {s.key} · {s.bpm} BPM · {tStatus(STATUS_KEY[s.ready] ?? 'statusNew')}
                 </div>
               </div>
               <ArrowRightSolidIcon size={16} className="text-fg-tertiary" />
@@ -210,7 +222,7 @@ export default function SongChooser({
           ))}
           {filtered.length === 0 && (
             <div className="pli-4 plb-3 font-label text-fg-tertiary text-xs">
-              Не знайдено в репертуарі
+              {t('notFound')}
             </div>
           )}
         </div>
@@ -225,7 +237,7 @@ export default function SongChooser({
                   className="font-ui border-edge text-fg-primary placeholder:text-fg-tertiary w-full border-be bg-transparent pbe-1 text-sm outline-none"
                   onChange={(e) => setNewTitle(e.target.value)}
                   onKeyDown={handleKeyDown}
-                  placeholder="Назва твору…"
+                  placeholder={t('newTitlePlaceholder')}
                   value={newTitle}
                 />
                 <span className="font-label text-accent-red absolute inset-e-0 top-0 text-sm">
@@ -263,7 +275,7 @@ export default function SongChooser({
 
               {bpmError && (
                 <div className="font-label text-accent-red text-[0.625rem]" role="alert">
-                  BPM має бути цілим числом більше нуля
+                  {t('bpmError')}
                 </div>
               )}
 
@@ -278,14 +290,14 @@ export default function SongChooser({
                   onClick={handleSubmitNew}
                   type="button"
                 >
-                  Додати і грати
+                  {t('addAndPlay')}
                 </button>
                 <button
                   className="pli-3 plb-2 font-label text-fg-tertiary hover:text-fg-secondary border-0 bg-transparent text-[0.6875rem] transition-colors duration-100"
                   onClick={handleCancelNew}
                   type="button"
                 >
-                  Скасувати
+                  {t('cancel')}
                 </button>
               </div>
             </div>
@@ -296,15 +308,15 @@ export default function SongChooser({
               type="button"
             >
               <PlusSolidIcon size={20} className="text-fg-primary" />
-              <span className={cn(FOOTER_TITLE, 'text-fg-primary')}>Новий твір</span>
-              <span className={FOOTER_CAPTION}>додати в репертуар</span>
+              <span className={cn(FOOTER_TITLE, 'text-fg-primary')}>{t('newTrack')}</span>
+              <span className={FOOTER_CAPTION}>{t('addToRepertoire')}</span>
             </button>
           )}
 
           <button className={cn(FOOTER_ACTION, 'hover:bg-elevated')} onClick={onSkip} type="button">
             <PlayIcon size={20} className="text-fg-tertiary" />
-            <span className={cn(FOOTER_TITLE, 'text-fg-tertiary')}>Просто грати</span>
-            <span className={FOOTER_CAPTION}>без трекінгу історії</span>
+            <span className={cn(FOOTER_TITLE, 'text-fg-tertiary')}>{t('justPlay')}</span>
+            <span className={FOOTER_CAPTION}>{t('justPlayCaption')}</span>
           </button>
         </div>
       </div>

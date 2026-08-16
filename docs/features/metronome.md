@@ -5,7 +5,7 @@
 
 **Status:** In progress
 **Added:** 2026-08
-**Code:** `apps/web/src/components/metronome/`, `apps/web/app/metronome/`,
+**Code:** `apps/web/src/components/metronome/`, `apps/web/app/[locale]/metronome/`,
 `apps/web/src/components/shared/MetronomeButton/`,
 `apps/web/src/illustrations/metronome/`
 
@@ -13,8 +13,10 @@
 
 ## Behaviour
 
-The metronome opens as a standalone fullscreen page at `/metronome` with a
-warm-dark stage aesthetic. It does not use the main app shell navigation.
+The metronome opens as a standalone fullscreen page at `/{locale}/metronome`
+(e.g. `/en/metronome`) with a warm-dark stage aesthetic. It lives under the
+`[locale]` segment so its UI is localized, but does not use the main app shell
+navigation.
 
 ### Song chooser (entry phase)
 
@@ -40,7 +42,10 @@ Options:
   a TAP button for tap tempo.
 - **Beat dots** — a row of dots that flash in sequence with the beat. The
   downbeat (first dot) flashes red; subsequent dots flash yellow.
-- **Time signature** — 4/4, 3/4, or 6/4, selectable from the top bar.
+- **Time signature** — selectable from the top bar. Supported signatures:
+  simple (2/4, 3/4, 4/4, 5/4, 6/4, 7/4), compound (6/8, 9/8, 12/8), and
+  half-note (2/2). Changing the denominator auto-corrects the numerator when
+  the current value is invalid for the new denominator.
 - **Transport** — large play/pause button. When a song is tracked and the
   metronome is playing, a "finish and save" button appears.
 - **Track badge** — shows which song is being tracked (emerald), or "no
@@ -99,14 +104,15 @@ None. All state is local to the component.
 None. This is a fully offline feature. Practice history is stored in
 component state (seeded with mock data). Sessions are created automatically
 when the user stops/saves the metronome while a song is tracked — each
-entry records `startedAt`, BPM, duration, and song. Navigating back to the
+entry records `startedAt`, BPM, `durationMs`, and song. Navigating back to the
 chooser while playing auto-saves the current session. Prepared for future API
 migration: the `PracticeSession` interface is the contract.
 
 `startedAt` is an ISO timestamp and the single source of truth for when a
 session happened — it is both the sort key and the input to the displayed
-label, via `formatSessionDate`. Storing a pre-formatted date string instead
-would leave nothing reliable to sort by.
+label, which is formatted per-locale at render time via next-intl's
+`useFormatter`. Storing a pre-formatted date string instead would leave
+nothing reliable to sort by.
 
 ## Implementation notes
 
@@ -115,9 +121,18 @@ would leave nothing reliable to sort by.
   on first play. Errors are silently caught so the feature works without audio
   permission.
 - **Fonts** — Alfa Slab One, Oswald, Space Mono, and Spectral are loaded via
-  `next/font/google` in `app/metronome/layout.tsx` and passed as CSS variables.
-- **Auth** — `/metronome` is listed in `PUBLIC_PATHS` in the middleware, so it
-  doesn't require login.
+  `next/font/google` in the `[locale]` root layout (`app/[locale]/layout.tsx`)
+  and shared across the app. The metronome inherits them through that layout,
+  so it no longer carries its own font-loading layout.
+- **i18n** — all UI copy lives in the `pages.metronome` group of
+  `messages/{en,it,uk}/pages.json` and is read via
+  `useTranslations('pages.metronome')`; track statuses reuse
+  `pages.repertoire.status*`. Dates and durations are formatted per-locale
+  (`useFormatter`, ICU plurals). The Italian tempo markings keep their name in
+  every language while the plain-language gloss after the `·` is translated.
+- **Auth** — `/metronome` is listed in `PUBLIC_PATHS` in the middleware; it
+  strips the locale prefix before matching, so `/en/metronome`,
+  `/it/metronome` and `/uk/metronome` are all public and need no login.
 - **Pendulum animation** — driven by a `requestAnimationFrame` loop that
   samples the audio clock each frame, not CSS keyframes. This avoids restarts
   on every beat and cannot drift from the click track. On short viewports
@@ -144,7 +159,9 @@ All paths are relative to `apps/web/`.
 - Unit: `src/components/metronome/BeatDots/BeatDots.test.tsx`
 - Unit: `src/components/metronome/BpmControl/BpmControl.test.tsx`
 - Unit: `src/components/metronome/BpmControl/BpmRuler/BpmRuler.test.tsx`
+- Unit: `src/components/metronome/HistoryDrawer/HistoryGroup/HistoryGroup.test.tsx`
 - Unit: `src/components/metronome/HistoryDrawer/HistoryDrawer.test.tsx`
+- Unit: `app/[locale]/metronome/page.test.tsx`
 - Unit: `src/components/metronome/MetronomeScreen/MetronomeScreen.test.tsx`
 - Unit: `src/components/metronome/MetronomeTopBar/MetronomeTopBar.test.tsx`
 - Unit: `src/components/metronome/MetronomeTransport/MetronomeTransport.test.tsx`

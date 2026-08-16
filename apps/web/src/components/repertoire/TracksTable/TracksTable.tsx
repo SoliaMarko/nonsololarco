@@ -1,5 +1,6 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import NoDataCard from '@/src/components/shared/NoDataCard';
@@ -25,36 +26,52 @@ interface EmptyStateCopy {
 }
 
 /**
- * Why the list came back empty, in the user's terms. Filtered-empty and
- * genuinely-empty are different situations and get different wording.
+ * Returns the appropriate empty-state translation keys depending on
+ * whether the list is filtered, mine-only, or genuinely empty.
  */
-function emptyStateCopy(hasFilters: boolean, onlyMine: boolean): EmptyStateCopy {
+function emptyStateCopyKeys(
+  hasFilters: boolean,
+  onlyMine: boolean,
+): { descriptionKey: string; titleKey: string } {
   if (onlyMine) {
     return {
-      title: 'You are not involved yet',
-      description:
-        'No tracks with your part match the current filter. Reset to see the full repertoire.',
+      titleKey: 'repertoire.unmatchedMineTitle',
+      descriptionKey: 'repertoire.unmatchedMineDescription',
     };
   }
 
   if (hasFilters) {
     return {
-      title: 'No tracks match',
-      description: 'No tracks match the selected filter. Try a different one or reset.',
+      titleKey: 'repertoire.filteredEmptyTitle',
+      descriptionKey: 'repertoire.filteredEmptyDescription',
     };
   }
 
   return {
-    title: 'Nothing here yet',
-    description: 'This repertoire has no tracks.',
+    titleKey: 'repertoire.genuinelyEmptyTitle',
+    descriptionKey: 'repertoire.genuinelyEmptyDescription',
   };
 }
 
+/**
+ * Server-state-driven repertoire table with sorting, status filtering,
+ * "only mine" toggle, and cursor pagination.
+ *
+ * Sort and filter state lives in the URL search params so the view is
+ * shareable and survives navigation. On the initial load a skeleton is
+ * shown; subsequent refetches dim the outgoing rows and overlay a spinner
+ * to read as "updating" rather than "starting over". When the result set
+ * is empty, a contextual empty-state card explains why (no tracks at all,
+ * active filter matched nothing, or "only mine" matched nothing) with an
+ * optional reset button.
+ */
 export default function TracksTable() {
   const { user } = useAuth();
   const { activeBandId, isSpecificBandSelected } = useActiveBand();
   const searchParams = useSearchParams();
   const router = useRouter();
+  const t = useTranslations('pages');
+  const tCommon = useTranslations('common');
 
   const rawSortField = (searchParams.get('sort') as SortField) ?? undefined;
   const sortField =
@@ -145,18 +162,24 @@ export default function TracksTable() {
 
           {isEmptyResult ? (
             <div className="pli-4 plb-12 flex items-center justify-center" role="presentation">
-              <NoDataCard
-                className="w-full max-w-md"
-                icon={<StarOutlineIcon size={48} className="text-fg-tertiary" />}
-                {...emptyStateCopy(hasFilters, onlyMine)}
-                action={
-                  hasFilters ? (
-                    <Button variant="retro-primary" onClick={resetFilters}>
-                      Reset
-                    </Button>
-                  ) : undefined
-                }
-              />
+              {(() => {
+                const keys = emptyStateCopyKeys(hasFilters, onlyMine);
+                return (
+                  <NoDataCard
+                    className="w-full max-w-md"
+                    icon={<StarOutlineIcon size={48} className="text-fg-tertiary" />}
+                    title={t(keys.titleKey)}
+                    description={t(keys.descriptionKey)}
+                    action={
+                      hasFilters ? (
+                        <Button variant="retro-primary" onClick={resetFilters}>
+                          {tCommon('actions.reset')}
+                        </Button>
+                      ) : undefined
+                    }
+                  />
+                );
+              })()}
             </div>
           ) : null}
 

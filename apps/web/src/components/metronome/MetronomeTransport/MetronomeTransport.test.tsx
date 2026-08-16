@@ -1,8 +1,16 @@
 import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
+
+import { mockIntl } from '@/src/test/intl-mock';
 
 import MetronomeTransport from './MetronomeTransport';
+
+vi.mock('next-intl', () => mockIntl.nextIntl);
+
+beforeEach(() => {
+  mockIntl.reset();
+});
 
 const MOCK_SONG = { bpm: 120, key: 'Am', number: 1, ready: 'ready' as const, title: 'Test Song' };
 
@@ -11,14 +19,14 @@ describe('MetronomeTransport', () => {
     render(
       <MetronomeTransport onSave={() => {}} onTogglePlay={() => {}} playing={false} tracked={null} />,
     );
-    expect(screen.getByRole('button', { name: 'Play' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'pages.metronome.ariaPlay' })).toBeDefined();
   });
 
   it('shows pause button when playing', () => {
     render(
       <MetronomeTransport onSave={() => {}} onTogglePlay={() => {}} playing={true} tracked={null} />,
     );
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'pages.metronome.ariaPause' })).toBeDefined();
   });
 
   it('shows save button when tracking a song and playing', () => {
@@ -30,7 +38,7 @@ describe('MetronomeTransport', () => {
         tracked={MOCK_SONG}
       />,
     );
-    expect(screen.getByText('Завершити та зберегти')).toBeDefined();
+    expect(screen.getByText('pages.metronome.finishAndSave')).toBeDefined();
   });
 
   it('hides save button when not playing', () => {
@@ -69,7 +77,7 @@ describe('MetronomeTransport', () => {
         tracked={null}
       />,
     );
-    await userEvent.click(screen.getByRole('button', { name: 'Play' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaPlay' }));
     expect(onTogglePlay).toHaveBeenCalledOnce();
   });
 
@@ -83,7 +91,7 @@ describe('MetronomeTransport', () => {
         tracked={MOCK_SONG}
       />,
     );
-    await userEvent.click(screen.getByText('Завершити та зберегти'));
+    await userEvent.click(screen.getByText('pages.metronome.finishAndSave'));
     expect(onSave).toHaveBeenCalledOnce();
   });
 });

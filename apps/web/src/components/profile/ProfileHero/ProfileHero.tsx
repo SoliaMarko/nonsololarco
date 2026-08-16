@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import DownloadIcon from '@/src/icons/base/DownloadIcon';
 import EditIcon from '@/src/icons/base/EditIcon';
 import LocationPinIcon from '@/src/icons/base/LocationPinIcon';
@@ -20,6 +22,9 @@ interface ProfileHeroProps {
 }
 
 export default function ProfileHero({ profile }: ProfileHeroProps) {
+  const t = useTranslations('pages');
+  const tCommon = useTranslations('common');
+
   return (
     <div className="bg-accent-dark-green bg-dots plb-8 pli-9 flex min-h-80 w-full flex-col items-center justify-center gap-6 text-white md:flex-row md:justify-between">
       <div className="flex flex-col items-center justify-center gap-8 md:flex-row md:justify-start">
@@ -29,7 +34,7 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
           initials={profile.initials}
         />
         <div className="flex flex-col items-center gap-4 md:items-start">
-          <Text className="text-yellow-main">MUSICIAN PROFILE · PORTFOLIO</Text>
+          <Text className="text-yellow-main">{t('profile.profileTag')}</Text>
           <Heading tag="h1" className="text-primary-light text-3xl md:text-5xl">
             {profile.name}
           </Heading>
@@ -52,7 +57,7 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
               className="text-emerald-light hover-fade hidden sm:block"
               style={{ animation: 'text-glow 0.8s ease-out 0.3s both' }}
             >
-              on nonsololarco since {profile.memberSince}
+              {t('profile.memberSince', { memberSince: profile.memberSince })}
             </Text>
           </div>
 
@@ -60,7 +65,7 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
             className="text-emerald-light hover-fade sm:hidden"
             style={{ animation: 'text-glow 0.8s ease-out 0.3s both' }}
           >
-            on nonsololarco since {profile.memberSince}
+            {t('profile.memberSince', { memberSince: profile.memberSince })}
           </Text>
         </div>
       </div>
@@ -70,7 +75,7 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
           <div className="flex flex-row items-center gap-2">
             <DownloadIcon className="text-primary-dark" size={16} />
             <Text className="text-primary-dark text-xs uppercase sm:text-[0.8rem]">
-              Export portfolio
+              {t('profile.exportPortfolio')}
             </Text>
           </div>
         </Button>
@@ -79,7 +84,7 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
           <div className="flex flex-row items-center gap-2">
             <UploadIcon className="text-primary-dark" size={16} />
             <Text className="text-primary-dark hidden uppercase sm:block sm:text-[0.8rem]">
-              Share
+              {tCommon('actions.share')}
             </Text>
           </div>
         </Button>
@@ -88,7 +93,7 @@ export default function ProfileHero({ profile }: ProfileHeroProps) {
           <div className="flex flex-row items-center gap-2">
             <EditIcon className="text-primary-dark" size={16} />
             <Text className="text-primary-dark hidden uppercase sm:block sm:text-[0.8rem]">
-              Edit
+              {tCommon('actions.edit')}
             </Text>
           </div>
         </Button>

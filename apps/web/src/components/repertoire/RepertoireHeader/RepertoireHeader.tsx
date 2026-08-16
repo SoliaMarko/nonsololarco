@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { Band, RepertoireStats } from '@nonsololarco/types';
 
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
@@ -29,6 +31,7 @@ export default function RepertoireHeader({
   className,
 }: RepertoireHeaderProps) {
   const { activeBand } = useActiveBand();
+  const t = useTranslations('pages');
 
   const isSpecificBandSelected = activeBand?.id && activeBand?.id !== 'solo';
 
@@ -58,7 +61,7 @@ export default function RepertoireHeader({
         <div>
           <div className="mbe-1 tracking-widest">
             <Text className="text-danger-deep text-xs font-medium uppercase">
-              {isSpecificBandSelected ? 'Band repertoire' : 'Repertoire'}
+              {isSpecificBandSelected ? t('repertoire.bandRepertoire') : t('repertoire.title')}
             </Text>
           </div>
           <Heading

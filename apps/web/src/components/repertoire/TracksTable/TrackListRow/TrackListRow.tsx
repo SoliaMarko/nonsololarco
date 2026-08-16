@@ -2,9 +2,11 @@
 
 import { useState } from 'react';
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 
-import Text from '@/src/components/typography/Text';
+import { Track, TrackStatus } from '@nonsololarco/types';
+
+import { Link } from '@/i18n/navigation';
 import Badge from '@/src/components/ui/Badge';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useAuth } from '@/src/hooks/global/useAuth';
@@ -12,7 +14,6 @@ import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
 import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
-import { Track, TrackStatus } from '@nonsololarco/types';
 import { cn } from '@/src/utils/cn';
 import { getTrackPerformers } from '@/src/utils/track-performers.utils';
 
@@ -29,11 +30,11 @@ const STATUS_VARIANT: Record<
   archived: 'stamp-archived',
 };
 
-const STATUS_LABEL: Record<TrackStatus, string> = {
-  ready: 'Ready',
-  learning: 'Learning',
-  new: 'New',
-  archived: 'Archived',
+const STATUS_LABEL_KEY: Record<TrackStatus, string> = {
+  ready: 'repertoire.statusReady',
+  learning: 'repertoire.statusLearning',
+  new: 'repertoire.statusNew',
+  archived: 'repertoire.statusArchived',
 };
 
 export interface TrackListRowProps {
@@ -46,6 +47,7 @@ export interface TrackListRowProps {
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
   const { activeBandId, getVinylColor, isSpecificBandSelected } = useActiveBand();
   const { user } = useAuth();
+  const t = useTranslations('pages');
   const [isSelected, setIsSelected] = useState(false);
 
   const isArchived = track.status === 'archived';
@@ -54,10 +56,11 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
   const performers = getTrackPerformers(track, user?.id);
 
   /** Accent stripe is shown for my tracks in a band view, for every track in "all bands" and solo views */
-  const hasAccentBorder = (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
+  const hasAccentBorder =
+    (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
 
   /** Tracks without a band are solo — labelled as such instead of showing a blank cell */
-  const bandName = track.band?.name ?? 'Solo';
+  const bandName = track.band?.name ?? t('repertoire.solo');
 
   /** Border width is always reserved so selecting a row never shifts its content */
   const borderColor = isSelected
@@ -133,13 +136,23 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
               <>
                 <div className="flex min-w-0 items-center gap-1">
                   <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
-                  <span className="text-fg-secondary truncate text-sm tabular-nums">{bandName}</span>
+                  <span className="text-fg-secondary truncate text-sm tabular-nums">
+                    {bandName}
+                  </span>
                   <span className="shrink-0 whitespace-nowrap">
                     {' · '}
-                    <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                    <span
+                      className={cn(
+                        'font-black',
+                        isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
+                      )}
+                    >
                       {track.musicalKey}
                     </span>
-                    {' · '}{track.bpm}{' · '}{track.duration}
+                    {' · '}
+                    {track.bpm}
+                    {' · '}
+                    {track.duration}
                   </span>
                 </div>
                 <TrackPerformerNames
@@ -158,10 +171,18 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
                   performers={performers}
                 />
                 <span className="whitespace-nowrap">
-                  <span className={cn('font-black', isArchived ? 'text-fg-tertiary' : 'text-emerald-main')}>
+                  <span
+                    className={cn(
+                      'font-black',
+                      isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
+                    )}
+                  >
                     {track.musicalKey}
                   </span>
-                  {' · '}{track.bpm}{' · '}{track.duration}
+                  {' · '}
+                  {track.bpm}
+                  {' · '}
+                  {track.duration}
                 </span>
               </>
             )}
@@ -176,11 +197,11 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           </div>
         ) : null}
 
-        {/* Musical key */}
+        {/* Musical key — centred to match its column header */}
         <span
           role="cell"
           className={cn(
-            'hidden text-sm font-black tabular-nums sm:inline',
+            'hidden text-center text-sm font-black tabular-nums sm:inline',
             isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
           )}
         >
@@ -205,7 +226,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             variant={STATUS_VARIANT[track.status]}
             size="sm"
           >
-            {STATUS_LABEL[track.status]}
+            {t(STATUS_LABEL_KEY[track.status])}
           </Badge>
         </div>
 
@@ -223,7 +244,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
         {/* Navigate button — always visible */}
         <div role="cell" className="mis-3 sm:mis-0 flex items-center justify-end">
           <Link
-            aria-label={`Open ${track.title}`}
+            aria-label={t('repertoire.openTrack', { title: track.title })}
             className="text-fg-tertiary hover:text-fg-primary hover:bg-edge rounded-lg p-1.5 transition-colors"
             href={`/repertoire/${track.id}`}
             onClick={(e) => e.stopPropagation()}

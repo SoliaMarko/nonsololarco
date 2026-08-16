@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import Text from '@/src/components/typography/Text';
 import Button from '@/src/components/ui/Button';
 import { PlusSolidIcon } from '@/src/icons/base';
@@ -9,13 +11,22 @@ interface AddTrackButtonProps {
   className?: string;
 }
 
+/**
+ * Retro-press "Add track" CTA. The label is responsive: a short translated
+ * verb on mobile, extended with a noun on `md+` screens via a hidden
+ * `<span>`. Both parts are translated independently so each locale can
+ * phrase the short and long forms naturally.
+ */
 export default function AddTrackButton({ className }: AddTrackButtonProps) {
+  const t = useTranslations('pages');
+
   return (
     <Button className="bg-accent-red" variant="retro-primary">
       <div className={cn('text-primary-light flex flex-row items-center gap-2', className)}>
         <PlusSolidIcon size={16} />
         <Text className="text-sm font-medium text-inherit uppercase sm:text-[0.8rem]">
-          New <span className="hidden md:inline">track</span>
+          {t('repertoire.addTrackButton')}{' '}
+          <span className="hidden md:inline">{t('repertoire.addTrackButtonFull')}</span>
         </Text>
       </div>
     </Button>

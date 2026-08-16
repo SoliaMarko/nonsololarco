@@ -1,0 +1,17 @@
+'use client';
+
+import { useTranslations } from 'next-intl';
+
+import AppShell from '@/src/components/layout/AppShell';
+import EmptyState from '@/src/components/shared/EmptyState';
+
+/** Placeholder page for the band detail view. Shown while the feature is in development. */
+export default function BandPage() {
+  const t = useTranslations('pages');
+
+  return (
+    <AppShell activePath="/band" mainClassName="flex flex-col">
+      <EmptyState title={t('band.title')} description={t('band.comingSoonDescription')} />
+    </AppShell>
+  );
+}

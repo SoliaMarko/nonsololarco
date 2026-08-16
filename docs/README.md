@@ -2,11 +2,11 @@
 
 Project documentation. Three kinds, three folders.
 
-| Folder | Answers | Audience |
-| --- | --- | --- |
-| [`features/`](./features) | *What does this do and how do I use it?* | Anyone touching the feature |
-| [`architecture/`](./architecture) | *How is the system shaped?* | Anyone adding to it |
-| [`adr/`](./adr) | *Why was it built this way?* | Future you, in six months |
+| Folder                            | Answers                                  | Audience                    |
+| --------------------------------- | ---------------------------------------- | --------------------------- |
+| [`features/`](./features)         | _What does this do and how do I use it?_ | Anyone touching the feature |
+| [`architecture/`](./architecture) | _How is the system shaped?_              | Anyone adding to it         |
+| [`adr/`](./adr)                   | _Why was it built this way?_             | Future you, in six months   |
 
 ## Features
 
@@ -14,6 +14,8 @@ Project documentation. Three kinds, three folders.
   filters, "only mine", column sorting, counts.
 - [Repertoire pagination](./features/repertoire-pagination.md) — paged track
   list with URL state, ellipsis collapsing, continuous row numbers.
+- [Internationalization (i18n)](./features/i18n.md) — locale switcher, next-intl
+  setup, translation file structure, layout stability.
 - [Metronome (offline)](./features/metronome.md) — fullscreen practice
   metronome with pendulum, tap tempo, song tracking, practice history.
 
@@ -28,6 +30,7 @@ Project documentation. Three kinds, three folders.
 
 - [0001 — Server-side sorting and filtering](./adr/0001-server-side-sorting-and-filtering.md)
 - [0002 — Track performers model](./adr/0002-track-performers-model.md)
+- [0003 — i18n library: next-intl](./adr/0003-i18n-library-next-intl.md)
 
 ---
 

@@ -1,6 +1,6 @@
 import { type ElementType } from 'react';
 
-import Link from 'next/link';
+import { Link } from '@/i18n/navigation';
 
 import { type VariantProps } from 'class-variance-authority';
 
@@ -49,7 +49,9 @@ export default function NavLink({
               </span>
             )}
           </span>
-          <span>{label}</span>
+          {/* Truncates rather than overflowing when the tab is given a fixed
+              share of its container and the translated label runs long. */}
+          <span className="truncate">{label}</span>
         </Link>
       </TabItem>
     );

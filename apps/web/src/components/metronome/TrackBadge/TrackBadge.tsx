@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { EyeOffIcon, VinylIcon } from '@/src/icons/base';
 import { cn } from '@/src/utils/cn';
 
@@ -18,6 +20,7 @@ const ACTION_CLASS =
  * (emerald border for a linked song, muted border for "no tracking").
  */
 export default function TrackBadge({ onChangeTrack, tracked }: TrackBadgeProps) {
+  const t = useTranslations('pages.metronome');
   const isSong = tracked && tracked !== 'skip';
 
   return (
@@ -32,17 +35,20 @@ export default function TrackBadge({ onChangeTrack, tracked }: TrackBadgeProps) 
       {isSong ? (
         <>
           <VinylIcon size={14} />
-          Трекається у <b className="text-primary-light">{tracked.title}</b>
+          {t.rich('trackingIn', {
+            b: (chunks) => <b className="text-primary-light">{chunks}</b>,
+            title: tracked.title,
+          })}
           <button className={ACTION_CLASS} onClick={onChangeTrack} type="button">
-            змінити
+            {t('change')}
           </button>
         </>
       ) : (
         <>
           <EyeOffIcon size={14} />
-          Без трекінгу
+          {t('noTracking')}
           <button className={ACTION_CLASS} onClick={onChangeTrack} type="button">
-            обрати твір
+            {t('chooseTrack')}
           </button>
         </>
       )}

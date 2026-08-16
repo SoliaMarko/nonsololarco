@@ -2,7 +2,9 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useTranslations } from 'next-intl';
+
+import { useRouter } from '@/i18n/navigation';
 
 import { MOCK_PRACTICE_HISTORY, MOCK_REPERTOIRE_SONGS } from '@/src/data/metronome/metronome.mock';
 import { useMetronomeEngine } from '@/src/hooks/useMetronomeEngine';
@@ -28,16 +30,6 @@ import TrackBadge from '../TrackBadge';
 let nextId = 100;
 
 /**
- * Formats a duration in milliseconds as a human-readable Ukrainian string
- * — e.g. "3 хв" or "< 1 хв".
- */
-function formatDurationMs(ms: number): string {
-  const minutes = Math.round(ms / 60000);
-  if (minutes < 1) return '< 1 хв';
-  return `${minutes} хв`;
-}
-
-/**
  * Top-level metronome screen that manages all local state: phase
  * (choose vs play), BPM, time signature, playback, beat tracking,
  * practice history, song list, and overlay/drawer visibility.
@@ -57,6 +49,7 @@ export default function MetronomeScreen() {
   const playStartRef = useRef<number | null>(null);
   const toastTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const router = useRouter();
+  const t = useTranslations('pages.metronome');
 
   const tap = useTapTempo();
 
@@ -131,7 +124,7 @@ export default function MetronomeScreen() {
     if (inputSignature) setSignature(inputSignature);
     setPhase('play');
     if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-    setToast(`«${title}» додано в репертуар`);
+    setToast(t('toastAdded', { title }));
     toastTimerRef.current = setTimeout(() => setToast(null), 2200);
   };
 
@@ -143,7 +136,6 @@ export default function MetronomeScreen() {
       const durationMs = Date.now() - startedAtMs;
       const entry: PracticeSession = {
         bpm,
-        duration: formatDurationMs(durationMs),
         durationMs,
         id: `h-${nextId++}`,
         song: tracked.title,
@@ -152,7 +144,7 @@ export default function MetronomeScreen() {
       };
       setHistory((prev) => [entry, ...prev]);
       if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
-      setToast(`Сесію збережено · «${tracked.title}»`);
+      setToast(t('toastSaved', { title: tracked.title }));
       toastTimerRef.current = setTimeout(() => setToast(null), 2600);
     }
 

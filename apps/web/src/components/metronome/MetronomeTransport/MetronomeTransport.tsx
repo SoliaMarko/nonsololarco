@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { PauseIcon, PlayIcon, SaveIcon } from '@/src/icons/base';
 import { ChooserSong } from '@/src/lib/types/metronome.types';
 import { cn } from '@/src/utils/cn';
@@ -22,12 +24,13 @@ export default function MetronomeTransport({
   playing,
   tracked,
 }: MetronomeTransportProps) {
+  const t = useTranslations('pages.metronome');
   const isSong = tracked && tracked !== 'skip';
 
   return (
     <div className="flex items-center gap-4">
       <button
-        aria-label={playing ? 'Pause' : 'Play'}
+        aria-label={playing ? t('ariaPause') : t('ariaPlay')}
         className={cn(
           'border-primary-dark flex size-18 items-center justify-center rounded-full border-3',
           'shadow-[2px_2px_0_rgba(0,0,0,0.5)]',
@@ -59,7 +62,7 @@ export default function MetronomeTransport({
           type="button"
         >
           <SaveIcon size={15} />
-          Завершити та зберегти
+          {t('finishAndSave')}
         </button>
       )}
     </div>

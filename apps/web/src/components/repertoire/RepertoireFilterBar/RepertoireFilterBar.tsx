@@ -1,6 +1,6 @@
 'use client';
 
-import Link from 'next/link';
+import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import Dropdown from '@/src/components/ui/Dropdown';
@@ -16,19 +16,13 @@ import {
 import { cn } from '@/src/utils/cn';
 import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
 
+import { Link } from '@/i18n/navigation';
+
 import FilterPill from './FilterPill';
 
-const STATUS_FILTERS: { label: string; value: TrackFilterParam }[] = [
-  { label: 'All', value: 'all' },
-  { label: 'Ready', value: 'ready' },
-  { label: 'Learning', value: 'learning' },
-  { label: 'New', value: 'new' },
-];
+const STATUS_FILTER_VALUES: TrackFilterParam[] = ['all', 'ready', 'learning', 'new'];
 
-const EXTRA_FILTERS: { label: string; value: TrackFilterParam }[] = [
-  { label: 'Active', value: 'active' },
-  { label: 'Archive', value: 'archived' },
-];
+const EXTRA_FILTER_VALUES: TrackFilterParam[] = ['active', 'archived'];
 
 const ACTIVE_STYLE: Record<TrackFilterParam, string> = {
   all: 'border-fg-primary text-fg-primary bg-base',
@@ -37,6 +31,15 @@ const ACTIVE_STYLE: Record<TrackFilterParam, string> = {
   new: 'border-accent-red text-accent-red bg-danger-subtle',
   active: 'border-fg-primary text-fg-primary bg-base',
   archived: 'border-fg-tertiary text-fg-tertiary bg-base',
+};
+
+const STATUS_LABEL_KEY: Record<TrackFilterParam, string> = {
+  all: 'repertoire.statusAll',
+  ready: 'repertoire.statusReady',
+  learning: 'repertoire.statusLearning',
+  new: 'repertoire.statusNew',
+  active: 'repertoire.extraFilterActive',
+  archived: 'repertoire.extraFilterArchive',
 };
 
 /** Encodes sort field + order into a single dropdown value, e.g. `"bpm:asc"` */
@@ -51,31 +54,40 @@ function decodeSortValue(value: string): { field: SortField; order: SortOrder } 
   return { field, order };
 }
 
-const SORT_OPTIONS_COMMON = [
-  { label: 'Title A→Z', value: encodeSortValue('title', 'asc') },
-  { label: 'Title Z→A', value: encodeSortValue('title', 'desc') },
-  { label: 'BPM ↑', value: encodeSortValue('bpm', 'asc') },
-  { label: 'BPM ↓', value: encodeSortValue('bpm', 'desc') },
-  { label: 'Status', value: encodeSortValue('status', 'desc') },
-  { label: 'Time ↑', value: encodeSortValue('time', 'asc') },
-  { label: 'Time ↓', value: encodeSortValue('time', 'desc') },
+type SortOptionKey =
+  | 'repertoire.sortTitleAsc'
+  | 'repertoire.sortTitleDesc'
+  | 'repertoire.sortBpmAsc'
+  | 'repertoire.sortBpmDesc'
+  | 'repertoire.sortStatus'
+  | 'repertoire.sortTimeAsc'
+  | 'repertoire.sortTimeDesc';
+
+const SORT_OPTIONS_COMMON: { labelKey: SortOptionKey; value: string }[] = [
+  { labelKey: 'repertoire.sortTitleAsc', value: encodeSortValue('title', 'asc') },
+  { labelKey: 'repertoire.sortTitleDesc', value: encodeSortValue('title', 'desc') },
+  { labelKey: 'repertoire.sortBpmAsc', value: encodeSortValue('bpm', 'asc') },
+  { labelKey: 'repertoire.sortBpmDesc', value: encodeSortValue('bpm', 'desc') },
+  { labelKey: 'repertoire.sortStatus', value: encodeSortValue('status', 'desc') },
+  { labelKey: 'repertoire.sortTimeAsc', value: encodeSortValue('time', 'asc') },
+  { labelKey: 'repertoire.sortTimeDesc', value: encodeSortValue('time', 'desc') },
 ];
 
-/** Set of recognised composite sort values for fast lookup. */
-const KNOWN_SORT_VALUES = new Set(SORT_OPTIONS_COMMON.map((o) => o.value));
+/** All recognised sort values — used to validate URL params at runtime. */
+const ALL_SORT_VALUES = new Set([
+  ...SORT_OPTIONS_COMMON.map((o) => o.value),
+  encodeSortValue('trackOrder', 'asc'),
+]);
 
 /**
- * Maps the current URL params to the composite dropdown value.
- *
- * Returns `'default'` when `sortField` is absent **or** when the encoded
- * value doesn't match any entry in `SORT_OPTIONS_COMMON` — this covers
- * legacy bookmarks (e.g. `?sort=trackOrder`) and any other unsupported
- * values that may appear in browser history.
+ * Maps the current URL params to a composite dropdown value, normalizing
+ * unsupported or tampered pairs to `"default"` so the UI never displays an
+ * undefined label.
  */
 function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
   if (!sortField) return 'default';
-  const encoded = encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
-  return KNOWN_SORT_VALUES.has(encoded) ? encoded : 'default';
+  const encoded = `${sortField}:${sortOrder ?? 'asc'}`;
+  return ALL_SORT_VALUES.has(encoded) ? encoded : 'default';
 }
 
 /**
@@ -90,6 +102,7 @@ export default function RepertoireFilterBar() {
   const router = useRouter();
   const { user } = useAuth();
   const { activeBand, activeBandId, isSpecificBandSelected } = useActiveBand();
+  const t = useTranslations('pages');
 
   const currentFilter = (searchParams.get('status') as TrackFilterParam) ?? 'all';
   const isMineActive = searchParams.get('onlyMine') === 'true';
@@ -116,8 +129,18 @@ export default function RepertoireFilterBar() {
     tracks?.filter((t) => t.leadMember.id === user?.id || t.members.some((m) => m.id === user?.id))
       .length ?? 0;
 
+  const orderOption = {
+    labelKey: 'repertoire.orderOption' as const,
+    value: encodeSortValue('trackOrder', 'asc'),
+  };
+
+  const mobileSortOptions = isRealBand
+    ? [orderOption, ...SORT_OPTIONS_COMMON]
+    : SORT_OPTIONS_COMMON;
+
   const activeSortValue = currentSortDropdownValue(sortField, sortOrder);
-  const activeSortLabel = SORT_OPTIONS_COMMON.find((o) => o.value === activeSortValue)?.label;
+  const activeSortOption = mobileSortOptions.find((o) => o.value === activeSortValue);
+  const activeSortLabel = activeSortOption ? t(activeSortOption.labelKey) : undefined;
 
   function setFilter(value: TrackFilterParam) {
     const params = new URLSearchParams(searchParams.toString());
@@ -161,12 +184,12 @@ export default function RepertoireFilterBar() {
       <div className="pli-4 plb-3 hidden flex-wrap items-center gap-3 sm:flex">
         {/* Status filter pills */}
         <fieldset className="flex items-center gap-2">
-          <legend className="sr-only">Filter by status</legend>
-          {STATUS_FILTERS.map(({ label, value }) => (
+          <legend className="sr-only">{t('repertoire.filterLegend')}</legend>
+          {STATUS_FILTER_VALUES.map((value) => (
             <FilterPill
               key={value}
               isActive={currentFilter === value}
-              label={label}
+              label={t(STATUS_LABEL_KEY[value])}
               onClick={() => setFilter(value)}
               activeStyle={ACTIVE_STYLE[value]}
             />
@@ -177,12 +200,12 @@ export default function RepertoireFilterBar() {
 
         {/* Extra filters with counts */}
         <fieldset className="flex items-center gap-2">
-          <legend className="sr-only">Activity filter</legend>
-          {EXTRA_FILTERS.map(({ label, value }) => (
+          <legend className="sr-only">{t('repertoire.filterLegendActivity')}</legend>
+          {EXTRA_FILTER_VALUES.map((value) => (
             <FilterPill
               key={value}
               isActive={currentFilter === value}
-              label={label}
+              label={t(STATUS_LABEL_KEY[value])}
               count={value === 'archived' ? archivedCount : activeCount}
               onClick={() => setFilter(value)}
               activeStyle={ACTIVE_STYLE[value]}
@@ -203,7 +226,7 @@ export default function RepertoireFilterBar() {
               )}
             >
               <StarOutlineIcon size={14} />
-              <span>Only mine</span>
+              <span>{t('repertoire.onlyMine')}</span>
               <span className={onlyMineCountVariants({ active: isMineActive })}>
                 {mineCount}
               </span>
@@ -220,7 +243,7 @@ export default function RepertoireFilterBar() {
             href={`/band/${activeBandId}`}
             className="bg-contrast text-primary-light dark:text-primary-dark plb-2 pli-4 flex items-center gap-2 text-xs font-bold tracking-wider uppercase transition-colors hover:opacity-90"
           >
-            <span>Page &laquo; {activeBand.name} &raquo;</span>
+            <span>{t('repertoire.bandPageLink', { bandName: activeBand.name })}</span>
             <ArrowRightSolidIcon size={12} />
           </Link>
         ) : null}
@@ -229,7 +252,7 @@ export default function RepertoireFilterBar() {
         {isRealBand ? (
           <div className="flex items-center gap-2 text-xs font-medium tracking-wider">
             <span className="bg-emerald-subtle border-emerald-main inline-block size-4 border" />
-            <span className="text-fg-tertiary uppercase">my participation</span>
+            <span className="text-fg-tertiary uppercase">{t('repertoire.onlyMineLegend')}</span>
           </div>
         ) : null}
       </div>
@@ -242,28 +265,28 @@ export default function RepertoireFilterBar() {
             href={`/band/${activeBandId}`}
             className="bg-yellow-deep text-primary-dark plb-2.5 pli-4 flex items-center justify-center gap-2 text-xs font-bold tracking-wider uppercase"
           >
-            <span>Page &laquo; {activeBand.name} &raquo;</span>
+            <span>{t('repertoire.bandPageLink', { bandName: activeBand.name })}</span>
             <ArrowRightSolidIcon size={12} />
           </Link>
         ) : null}
 
         {/* Scrollable filter pills */}
         <div className="pli-4 plb-3 flex scrollbar-none items-center gap-2 overflow-x-auto">
-          {STATUS_FILTERS.map(({ label, value }) => (
+          {STATUS_FILTER_VALUES.map((value) => (
             <FilterPill
               key={value}
               isActive={currentFilter === value}
-              label={label}
+              label={t(STATUS_LABEL_KEY[value])}
               onClick={() => setFilter(value)}
               activeStyle={ACTIVE_STYLE[value]}
             />
           ))}
           <div className="bg-border-primary h-6 w-px shrink-0" />
-          {EXTRA_FILTERS.map(({ label, value }) => (
+          {EXTRA_FILTER_VALUES.map((value) => (
             <FilterPill
               key={value}
               isActive={currentFilter === value}
-              label={label}
+              label={t(STATUS_LABEL_KEY[value])}
               count={value === 'archived' ? archivedCount : activeCount}
               onClick={() => setFilter(value)}
               activeStyle={ACTIVE_STYLE[value]}
@@ -280,7 +303,7 @@ export default function RepertoireFilterBar() {
               className={onlyMineToggleVariants({ active: isMineActive })}
             >
               <StarOutlineIcon size={14} />
-              <span>Only mine</span>
+              <span>{t('repertoire.onlyMine')}</span>
               <span className={onlyMineCountVariants({ active: isMineActive })}>
                 {mineCount}
               </span>
@@ -300,14 +323,15 @@ export default function RepertoireFilterBar() {
                 )}
               >
                 <SortIcon size={14} />
-                <span>{activeSortLabel ?? 'Sort'}</span>
+                <span>{activeSortLabel ?? t('repertoire.sortButton')}</span>
                 <ChevronIcon size={10} direction="down" />
               </button>
             }
             groups={[
               {
-                items: SORT_OPTIONS_COMMON.map((opt) => ({
-                  label: opt.label,
+                selectionMode: 'single',
+                items: mobileSortOptions.map((opt) => ({
+                  label: t(opt.labelKey),
                   selected: opt.value === activeSortValue,
                   onClick: () => handleMobileSort(opt.value),
                 })),
@@ -316,7 +340,7 @@ export default function RepertoireFilterBar() {
           />
 
           <span className="text-fg-tertiary mis-auto text-xs tabular-nums">
-            {tracks?.length ?? 0} in group
+            {t('repertoire.mobileTrackCount', { count: tracks?.length ?? 0 })}
           </span>
         </div>
       </div>

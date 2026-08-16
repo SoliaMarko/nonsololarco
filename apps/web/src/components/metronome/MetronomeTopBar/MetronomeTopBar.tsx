@@ -1,5 +1,7 @@
 'use client';
 
+import { useTranslations } from 'next-intl';
+
 import { MenuIcon } from '@/src/icons/base';
 import { TimeSignatureDef } from '@/src/lib/types/metronome.types';
 
@@ -12,7 +14,7 @@ interface MetronomeTopBarProps {
 }
 
 /**
- * Top navigation bar: practice-history menu, the centred "МЕТРОНОМ" title,
+ * Top navigation bar: practice-history menu, the centred metronome title,
  * and the time signature selector.
  *
  * Laid out as a three-column grid (`1fr auto 1fr`) rather than absolute
@@ -24,11 +26,13 @@ export default function MetronomeTopBar({
   onSignatureChange,
   signature,
 }: MetronomeTopBarProps) {
+  const t = useTranslations('pages.metronome');
+
   return (
     <div className="pli-4 plb-3 md:plb-4 relative z-5 grid grid-cols-[1fr_auto_1fr] items-center gap-2">
       <div className="flex min-w-0 items-center">
         <button
-          aria-label="Menu and practice history"
+          aria-label={t('ariaMenu')}
           className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/12 flex size-8.5 shrink-0 items-center justify-center border-2 transition-[background-color] duration-100"
           onClick={onMenuOpen}
           type="button"
@@ -38,7 +42,7 @@ export default function MetronomeTopBar({
       </div>
 
       <span className="font-display text-yellow-main text-[0.9375rem] tracking-[0.125rem] whitespace-nowrap">
-        МЕТРОНОМ
+        {t('title')}
       </span>
 
       <div className="flex justify-end">

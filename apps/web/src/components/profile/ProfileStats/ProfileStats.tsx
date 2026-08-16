@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { PROFILE_STATS } from '@/src/lib/constants/profile/profile.const';
 import { ProfileType } from '@/src/lib/types/profile.types';
 import { cn } from '@/src/utils/cn';
@@ -8,6 +10,8 @@ export interface ProfileStatsProps {
 }
 
 export default function ProfileStats({ className, profile }: ProfileStatsProps) {
+  const t = useTranslations('pages');
+
   return (
     <div
       className={cn(
@@ -45,7 +49,7 @@ export default function ProfileStats({ className, profile }: ProfileStatsProps) 
             </div>
 
             <span className="text-fg-tertiary text-xs font-medium tracking-widest uppercase">
-              {stat.label}
+              {t(stat.labelKey)}
             </span>
           </div>
         );

@@ -13,6 +13,15 @@ type TrackColumnHeaderProps =
   | (BaseProps & { field: SortField; isSortable: true })
   | (BaseProps & { isSortable?: false });
 
+/**
+ * Sortable or static column header cell for the repertoire table.
+ *
+ * When `isSortable` is true the header renders as a button that cycles the
+ * `sort` / `order` search params. The active column shows an accent chevron;
+ * inactive columns show a muted chevron. The header text is always truncated
+ * rather than wrapping, so a long translation cannot push the header row to a
+ * second line and shift every data row beneath it.
+ */
 export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   const { className, isSortable, title } = props;
 
@@ -54,12 +63,15 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
       <div
         role="columnheader"
         aria-sort={ariaSortValue}
-        className={cn('text-[10px] font-bold tracking-widest uppercase', className)}
+        // `min-w-0` is required for `truncate` to take effect: a grid item
+        // defaults to `min-width: auto` and would overflow instead of clipping.
+        className={cn('min-w-0 truncate text-[10px] font-bold tracking-widest uppercase', className)}
+        title={title}
       >
         <button
           onClick={() => handleSort(props.field)}
           className={cn(
-            'flex items-center gap-1',
+            'flex items-center gap-1 whitespace-nowrap',
             'transition-colors',
             isActive ? 'text-fg-primary' : 'text-fg-tertiary hover:text-fg-secondary',
           )}
@@ -74,7 +86,13 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   return (
     <div
       role="columnheader"
-      className={cn('text-fg-tertiary text-[10px] font-bold tracking-widest uppercase', className)}
+      // `truncate` rather than wrapping: a header that grows to a second line
+      // in one locale changes the height of the whole header row.
+      className={cn(
+        'text-fg-tertiary min-w-0 truncate text-[10px] font-bold tracking-widest uppercase',
+        className,
+      )}
+      title={title}
     >
       {title}
     </div>
