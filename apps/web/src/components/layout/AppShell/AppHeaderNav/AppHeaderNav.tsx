@@ -1,8 +1,10 @@
 import { useTranslations } from 'next-intl';
 
 import Logo from '@/components/ui/Logo';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
 import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher';
+import MetronomeButton from '@/src/components/shared/MetronomeButton';
 import ThemeToggle from '@/src/components/shared/ThemeToggle';
 import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
@@ -14,16 +16,21 @@ import { BellIcon, LogOutIcon, ProfileOutlineIcon, SettingsOutlineIcon } from '@
 import { NAV_ITEMS, OPTIONS_POSITION } from '@/src/lib/constants/common.const';
 import { cn } from '@/src/utils/cn';
 
-import { Link, usePathname } from '@/i18n/navigation';
-
 export interface AppHeaderNavProps {
   activePath: string;
   activeTitle?: string;
   className?: string;
 }
 
+/**
+ * Sticky desktop header with logo, main nav tabs, metronome/locale/theme
+ * controls, and a user avatar dropdown. On mobile the nav tabs are hidden;
+ * the active-page title appears inline and the repertoire AI button surfaces
+ * in the header instead of the bottom bar.
+ */
 export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const { user, logout } = useAuth();
+  const router = useRouter();
   const t = useTranslations('common');
 
   const initials = user?.name
@@ -72,7 +79,7 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
             animated
             variant="nav"
             scrollable={false}
-            className="grid w-fit grid-flow-col auto-cols-fr"
+            className="grid w-fit auto-cols-fr grid-flow-col"
           >
             {NAV_ITEMS.map((item) => (
               <NavLink
@@ -110,6 +117,10 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               />
             ) : null}
 
+            {/* Below md the metronome moves to the floating button in
+                AppShell, where it sits in the thumb zone. */}
+            <MetronomeButton className="hidden md:inline-flex" />
+
             <LocaleSwitcher />
             <ThemeToggle />
             <Dropdown
@@ -117,14 +128,19 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               groups={[
                 {
                   items: [
-                    { label: t('nav.viewProfile'), icon: ProfileOutlineIcon, href: '/profile' },
-                    { label: t('nav.settings'), icon: SettingsOutlineIcon, href: '/settings' },
-                    { label: t('nav.notifications'), icon: BellIcon, href: '/notifications' },
+                    { label: t('nav.viewProfile'), icon: ProfileOutlineIcon, onClick: () => router.push('/profile') },
+                    { label: t('nav.settings'), icon: SettingsOutlineIcon, onClick: () => router.push('/settings') },
+                    { label: t('nav.notifications'), icon: BellIcon, onClick: () => router.push('/notifications') },
                   ],
                 },
                 {
                   items: [
-                    { label: t('nav.signOut'), icon: LogOutIcon, onClick: logout, variant: 'danger' },
+                    {
+                      label: t('nav.signOut'),
+                      icon: LogOutIcon,
+                      onClick: logout,
+                      variant: 'danger',
+                    },
                   ],
                 },
               ]}

@@ -6,6 +6,13 @@ import { cn } from '@/src/utils/cn';
 import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 import TrackColumnHeader from './TrackColumnHeader';
 
+/**
+ * Header row for the repertoire tracks table.
+ *
+ * Columns are conditional: when a specific band is selected the "band"
+ * column is hidden and the `#` column becomes sortable by `trackOrder`.
+ * On mobile (`< sm`) only the title and status columns are visible.
+ */
 export default function TrackListHeader() {
   const { isSpecificBandSelected } = useActiveBand();
   const t = useTranslations('pages');

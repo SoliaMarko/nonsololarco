@@ -13,6 +13,10 @@ interface BandRowProps {
   isLastItem?: boolean;
 }
 
+/**
+ * Linked row in the profile sidebar bands list.
+ * Shows the band's vinyl avatar, name, the user's role, and the year they joined.
+ */
 export default function BandRow({ band, className, isLastItem }: BandRowProps) {
   const t = useTranslations('pages');
 

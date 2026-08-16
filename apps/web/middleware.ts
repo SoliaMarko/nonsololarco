@@ -2,10 +2,11 @@ import createIntlMiddleware from 'next-intl/middleware';
 import { NextRequest, NextResponse } from 'next/server';
 
 import { routing } from '@/i18n/routing';
+import { defaultLocale, locales } from '@/i18n/config';
 
 const intlMiddleware = createIntlMiddleware(routing);
 
-const PUBLIC_PATHS = ['/login', '/signup'];
+const PUBLIC_PATHS = ['/login', '/signup', '/metronome'];
 
 // A file extension at the very end of the path — matches static assets
 // served from /public (favicon.ico, robots.txt, images, ...). Anchored to
@@ -46,7 +47,23 @@ export function middleware(request: NextRequest) {
   const token = request.cookies.get('token')?.value;
 
   if (!token) {
-    const locale = pathname.match(/^\/([a-z]{2})(?=\/|$)/)?.[1] ?? 'en';
+    const extracted = pathname.match(/^\/([a-z]{2})(?=\/|$)/)?.[1];
+    let locale: string;
+
+    if (extracted && (locales as readonly string[]).includes(extracted)) {
+      locale = extracted;
+    } else {
+      // No locale in path — honour Accept-Language so the login page
+      // renders in the visitor's preferred language.
+      const preferred = request.headers
+        .get('Accept-Language')
+        ?.split(',')
+        .map((entry) => (entry.split(';')[0] ?? '').trim().substring(0, 2))
+        .find((code) => (locales as readonly string[]).includes(code));
+
+      locale = preferred ?? defaultLocale;
+    }
+
     const loginUrl = new URL(`/${locale}/login`, request.url);
     return NextResponse.redirect(loginUrl);
   }

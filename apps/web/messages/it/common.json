@@ -10,11 +10,12 @@
     "defaultTitle": "In arrivo"
   },
   "locale": {
-    "interfaceLanguage": "Lingua dell'interfaccia"
+    "interfaceLanguage": "Lingua dell'interfaccia",
+    "switchLanguage": "Cambia lingua"
   },
   "legal": {
-    "agreementPrefix": "Continuando accetti i",
-    "and": "e",
+    "agreementPrefix": "Continuando, accetti i",
+    "and": "e l'",
     "privacyPolicy": "Informativa sulla privacy",
     "terms": "Termini"
   },

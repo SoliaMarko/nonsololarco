@@ -10,7 +10,8 @@
     "defaultTitle": "Скоро буде"
   },
   "locale": {
-    "interfaceLanguage": "Мова інтерфейсу"
+    "interfaceLanguage": "Мова інтерфейсу",
+    "switchLanguage": "Змінити мову"
   },
   "legal": {
     "agreementPrefix": "Продовжуючи, ви погоджуєтесь з",

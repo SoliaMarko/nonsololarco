@@ -10,15 +10,15 @@ session. Detail lives elsewhere and is read on demand.
 
 ## Where to look
 
-| You need | File |
-| --- | --- |
-| Cold start: core rules, repo traps, routing | **[`docs/ai/ORIENTATION.md`](./docs/ai/ORIENTATION.md)** ← start here |
-| Step by step: add a component / endpoint / migration / translation | [`docs/ai/RECIPES.md`](./docs/ai/RECIPES.md) |
-| Branches, commit messages, commit size, rebase vs merge | [`docs/ai/GIT.md`](./docs/ai/GIT.md) |
-| Does this component / util / route / type already exist? | [`docs/ai/MAP.md`](./docs/ai/MAP.md) — generated, `pnpm ai:map` |
-| How code should look: styles, tokens, CVA, naming | `nonsololarco-conventions` skill |
-| Features, API, DB schema, decisions | `docs/features/`, `docs/architecture/`, `docs/adr/` |
-| What is planned to change and why | [`docs/REFACTORING-PLAN.md`](./docs/REFACTORING-PLAN.md) |
+| You need                                                           | File                                                                  |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Cold start: core rules, repo traps, routing                        | **[`docs/ai/ORIENTATION.md`](./docs/ai/ORIENTATION.md)** ← start here |
+| Step by step: add a component / endpoint / migration / translation | [`docs/ai/RECIPES.md`](./docs/ai/RECIPES.md)                          |
+| Branches, commit messages, commit size, rebase vs merge            | [`docs/ai/GIT.md`](./docs/ai/GIT.md)                                  |
+| Does this component / util / route / type already exist?           | [`docs/ai/MAP.md`](./docs/ai/MAP.md) — generated, `pnpm ai:map`       |
+| How code should look: styles, tokens, CVA, naming                  | `nonsololarco-conventions` skill                                      |
+| Features, API, DB schema, decisions                                | `docs/features/`, `docs/architecture/`, `docs/adr/`                   |
+| What is planned to change and why                                  | [`docs/REFACTORING-PLAN.md`](./docs/REFACTORING-PLAN.md)              |
 
 **Before writing anything, check `MAP.md` for an existing implementation.**
 A duplicate drifts from the original and doubles the maintenance.
@@ -28,24 +28,202 @@ A duplicate drifts from the original and doubles the maintenance.
 A task is not finished when the code works. It is finished when the next
 person can find it, understand it and change it.
 
-1. **Tests written** — unit tests for every new module, in the same commit.
-   E2E if the feature meets the criteria below. Integration if real database
-   behaviour is involved (ordering, constraints, cascades, enum mapping).
-2. **JSDoc written** — on every exported util, hook and service method.
-   Explain what the types cannot say: units and format (`"m:ss"`, seconds),
-   behaviour for `[]`, `null`, an unknown id, why the thing exists, surprising
-   coupling. Do not restate the signature — TypeScript already said that.
-3. **Docs updated** per the table below, checked against the **real** diff.
-4. **Index updated** — a new doc file is linked from `docs/README.md`.
-5. **Checks green** — `pnpm typecheck && pnpm lint && pnpm test`.
-6. **Map regenerated** — `pnpm ai:map` if files were added or removed.
+1. **Tests written.** Unit tests for every new module, in the same commit. E2E
+   if the feature meets the criteria in [Testing policy](#testing-policy).
+2. **JSDoc written.** Every utility, hook and service method — see
+   [JSDoc](#jsdoc--required-on-every-utility).
+3. **Docs updated.** Check the table in
+   [Documentation policy](#documentation-policy) against what changed, and
+   update or create the file it points to. This is not optional and not
+   "later".
+4. **Index updated.** A new doc file must be linked from `docs/README.md`,
+   or nobody will find it.
+5. **Checks pass.** `pnpm typecheck && pnpm lint && pnpm test`.
 
-If a step does not apply (a pure refactor needs no feature doc), say so
-explicitly in the summary rather than skipping it silently. That way it is
-visible that it was weighed, not forgotten.
+If a step doesn't apply — a pure refactor needs no feature doc — say so
+explicitly in the summary rather than skipping it silently. That way the person
+reviewing knows it was considered, not forgotten.
 
-Never report completion with a failing typecheck, a skipped test, or a doc
-that describes behaviour the code no longer has.
+Never mark work complete with a failing typecheck, a skipped test, or a doc
+that now describes behaviour the code no longer has.
+
+---
+
+## Project
+
+**nonsololarco** ("non solo arco" — not only the bow) is a musician social
+platform and practice tool with a retro/vintage aesthetic. Turborepo monorepo,
+pnpm workspaces.
+
+```text
+apps/
+  web/            Next.js 15 App Router, React 19, Tailwind v4
+  api/            NestJS 11, Prisma 7, PostgreSQL
+packages/
+  types/          @nonsololarco/types — shared TS types (source of truth)
+  db/             @nonsololarco/db — Prisma schema, migrations, seed
+  ui/             @repo/ui — shared React components
+docs/             Feature docs, architecture, ADRs
+```
+
+## Commands
+
+Run from the repo root unless noted.
+
+```sh
+pnpm dev                  # all apps (web :3000, api :3001)
+pnpm build                # build everything
+pnpm typecheck            # tsc --noEmit across the monorepo
+pnpm lint
+pnpm test                 # unit tests, all packages
+pnpm format               # prettier
+```
+
+Per-app:
+
+```sh
+pnpm --filter web test            # web unit tests (vitest, jsdom)
+pnpm --filter web test:watch
+pnpm --filter web storybook
+pnpm --filter web e2e             # Playwright e2e
+pnpm --filter api test            # api unit tests (vitest)
+pnpm --filter api test:e2e        # api e2e (supertest)
+pnpm --filter api start:dev
+```
+
+Database (`packages/db`):
+
+```sh
+pnpm --filter @nonsololarco/db db:migrate    # create + apply migration
+pnpm --filter @nonsololarco/db db:generate   # regenerate Prisma client
+pnpm --filter @nonsololarco/db db:seed       # seed dev data
+pnpm --filter @nonsololarco/db db:studio     # Prisma Studio
+pnpm --filter @nonsololarco/db db:reset      # drop, re-migrate, regenerate
+```
+
+**After any `schema.prisma` change:** `db:migrate` (applies to DB) **and**
+`db:generate` (regenerates the TS client). Running only one of them produces
+confusing runtime errors — a missing table, or `Cannot read properties of
+undefined`.
+
+Seeding preserves your OAuth account when `SEED_USER_EMAIL` is set:
+
+```sh
+SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+```
+
+---
+
+## Code quality rules
+
+### No nested ternaries
+
+A ternary may not contain another ternary in either branch. Extract a helper,
+a lookup map, or an early return instead.
+
+```tsx
+// ❌
+const color = isSelected ? "red" : isArchived ? "grey" : "green";
+
+// ✅ lookup map
+const STATUS_COLOR = {
+  selected: "red",
+  archived: "grey",
+  default: "green",
+} as const;
+const color = STATUS_COLOR[resolveState(track)];
+
+// ✅ or a small named helper
+function borderColor(track: Track, isSelected: boolean): string {
+  if (isSelected) return "red";
+  if (track.status === "archived") return "grey";
+  return "green";
+}
+```
+
+A single ternary is fine, including in JSX (`{cond ? <A /> : null}`).
+
+### No nested `if`
+
+Do not nest an `if` inside another `if`. Use guard clauses, early returns, or
+combine the conditions.
+
+```ts
+// ❌
+if (user) {
+  if (user.isActive) {
+    doThing();
+  }
+}
+
+// ✅
+if (!user?.isActive) return;
+doThing();
+```
+
+Applies to the JSX equivalent too — don't nest conditional blocks. If a
+component needs three or more branches of markup, split it into components.
+
+### JSDoc — required on every utility
+
+Every exported utility, hook, service method and non-trivial helper carries a
+JSDoc block. No exceptions for one-liners: if it's worth exporting, it's worth
+explaining.
+
+**Document what the types can't say.** TypeScript already states the shapes —
+repeating them adds noise. Spend the comment on intent, units, edge-case
+behaviour, and the reason the function exists at all.
+
+```ts
+// ❌ restates the signature, says nothing
+/**
+ * Formats a duration.
+ * @param totalSeconds The total seconds
+ * @returns A string
+ */
+
+// ✅ says what the caller can't infer
+/**
+ * Formats a second count as human-readable text — `"3 hr 20 min"`, or
+ * `"45 min"` under an hour.
+ *
+ * Rounds to the nearest minute, carrying 60 up to the next hour so callers
+ * never see `"2 hr 60 min"`.
+ */
+export function formatDuration(totalSeconds: number): string {
+```
+
+**Rules**
+
+- Open with one sentence saying what it does, in the present tense.
+- State units and formats explicitly — `"m:ss"`, seconds, basis points. Most
+  bugs in this repo have come from an ambiguous duration.
+- Document the empty, zero and error cases: what does it return for `[]`, for
+  an unknown id, for `null`?
+- Use `@param` / `@returns` **only** when the name doesn't already make it
+  obvious. Don't pad.
+- Add `@example` for anything with non-obvious call shape or output.
+- Note surprising constraints or coupling: "the lead member is not included",
+  "must be called after the query, not in `orderBy`".
+- React components take a JSDoc on the component plus comments on any prop
+  whose purpose isn't clear from its name.
+
+Applies to: `*.utils.ts`, hooks, Nest service and controller methods, exported
+constants whose meaning isn't self-evident, and any shared type where a field
+has a constraint the type can't express.
+
+### General
+
+- TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
+- Shared types go in `packages/types` and are imported by both apps. Never
+  duplicate a shape that already exists there.
+- Sort interface keys alphabetically (enforced by
+  `eslint-plugin-typescript-sort-keys`).
+- Prefer named exports; default export only for React components and
+  Nest modules.
+- Comments explain _why_, not _what_. Delete commented-out code.
+
+---
 
 ## Testing policy
 
@@ -54,24 +232,19 @@ commit, with no exception for "simple" code. Cover the happy path, the
 empty/zero case, and every error branch. When fixing a bug, write the failing
 test first.
 
-| What | Where | Tool |
-| --- | --- | --- |
-| React components | `Component.test.tsx` alongside | Vitest + Testing Library |
-| Hooks | `useThing.test.ts` alongside | Vitest + `renderHook` |
-| Utils | `thing.utils.test.ts` alongside | Vitest |
-| Nest services | `thing.service.spec.ts` alongside | Vitest + `@nestjs/testing` |
-| Nest controllers | `thing.controller.spec.ts` | Vitest, service mocked |
-| API integration | `thing.service.int-spec.ts` | Vitest + real database |
+| What             | Where                             | Tool                       |
+| ---------------- | --------------------------------- | -------------------------- |
+| React components | `Component.test.tsx` alongside    | Vitest + Testing Library   |
+| Hooks            | `useThing.test.ts` alongside      | Vitest + `renderHook`      |
+| Utils            | `thing.utils.test.ts` alongside   | Vitest                     |
+| Nest services    | `thing.service.spec.ts` alongside | Vitest + `@nestjs/testing` |
+| Nest controllers | `thing.controller.spec.ts`        | Vitest, service mocked     |
 
-**Tests and `aria-label` are always English.** Render with the `en` locale so
-`getByText` matches English strings. The one exception is a test that checks
-locale switching itself; then it is visible from the test name.
+Cover the happy path, the empty/zero case, and each error branch. When fixing a
+bug, add the test that would have caught it — in the same commit as the fix.
 
-**Never assert on** CSS classes (`toHaveClass`), `data-testid` (and never add
-one to production code), or DOM structure. Those are implementation details —
-they change with every refactor and break tests for no reason. Use
-`getByRole`, `getByText`, `getByLabelText`. Prefer native Vitest matchers
-(`toBe`, `toBeDefined`) over jest-dom.
+Tests render with the `en` locale so that `getByText` assertions match English
+translation strings. `aria-label` values stay in English and are not translated.
 
 Prisma is mocked in unit tests via `src/test/mocks/prisma.mock.ts` — never
 touch a real database there.
@@ -108,13 +281,13 @@ docs/
   adr/            why X over Y (immutable once accepted)
 ```
 
-| Change | Doc required |
-| --- | --- |
-| New user-facing feature | `docs/features/<feature>.md` |
-| New or changed endpoint / query param | `docs/architecture/api-*.md` |
-| `schema.prisma` change | `docs/architecture/data-model.md` |
-| Non-trivial decision with a real alternative | new `docs/adr/NNNN-<slug>.md` |
-| Bug fix, refactor, styling tweak | none |
+| Change                                       | Doc required                      |
+| -------------------------------------------- | --------------------------------- |
+| New user-facing feature                      | `docs/features/<feature>.md`      |
+| New or changed endpoint / query param        | `docs/architecture/api-*.md`      |
+| `schema.prisma` change                       | `docs/architecture/data-model.md` |
+| Non-trivial decision with a real alternative | new `docs/adr/NNNN-<slug>.md`     |
+| Bug fix, refactor, styling tweak             | none                              |
 
 Templates: `docs/features/_template.md`, `docs/adr/_template.md`.
 
@@ -124,71 +297,96 @@ actually changed, including the things that were not in the plan.
 Keep docs short and current. A stale doc is worse than no doc — it actively
 misleads. If you rename something, grep the docs for the old name.
 
-ADRs are numbered sequentially and **immutable once accepted**. To reverse a
-decision, write a new ADR and add a `Superseded by 00NN` line to the old one.
-That history is the whole point.
+---
 
-## Commands
+## Internationalization (i18n)
 
-```sh
-pnpm dev          # web :3000, api :3001
-pnpm build
-pnpm typecheck    # tsc --noEmit across the monorepo
-pnpm lint
-pnpm stylelint
-pnpm test         # unit tests, all packages
-pnpm e2e
-pnpm check        # lint + stylelint + typecheck + test + build
-pnpm check:full   # check + e2e
-pnpm format
-pnpm ai:map       # regenerate docs/ai/MAP.md
-pnpm pr           # run checks, push, open the PR
+Library: `next-intl`. Routing: URL prefix (`/en`, `/it`, `/uk`) with
+browser auto-detect on first visit. Default locale: `en`.
 
-pnpm --filter web test | test:watch | storybook | e2e
-pnpm --filter api test | test:e2e | start:dev
+### Translation files
 
-pnpm --filter @nonsololarco/db db:migrate    # create + apply a migration
-pnpm --filter @nonsololarco/db db:generate   # regenerate the TS client
-pnpm --filter @nonsololarco/db db:seed
-pnpm --filter @nonsololarco/db db:studio
-pnpm --filter @nonsololarco/db db:reset
+Three namespace files in `apps/web/messages/`:
+
+```text
+messages/
+  common.json    → navigation, shared buttons (Save, Cancel, Search), general UI
+  auth.json      → login, signup, auth errors
+  pages.json     → all page-specific content, grouped by feature
 ```
 
-**Any `schema.prisma` change needs both commands** — `db:migrate` **and**
-`db:generate`. One without the other gives either a missing table or
-`Cannot read properties of undefined`.
+When a group inside `pages.json` grows past ~200 keys and becomes unwieldy,
+extract it into its own namespace file (e.g. `repertoire.json`). Until then,
+keep it together.
 
-Seeding preserves your OAuth account when `SEED_USER_EMAIL` is set:
+### Key structure and sorting
 
-```sh
-SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+Keys use **camelCase** and are sorted **alphabetically at every level**. Within
+each namespace, related keys are grouped under a top-level object named after
+the feature. Groups themselves are also sorted alphabetically.
+
+```jsonc
+// pages.json
+{
+  "band": {
+    "memberCount": "...",
+    "name": "...",
+  },
+  "calendar": {
+    "noEvents": "...",
+    "title": "...",
+  },
+  "repertoire": {
+    "addTrack": "...",
+    "title": "...",
+  },
+}
 ```
 
-## Language
+### Rules
 
-Code, comments, test names, `aria-label` and commit messages are **English
-only**. These docs are English too: they load on every session, and English
-costs roughly half the tokens of Cyrillic for the same content.
+- **Max nesting depth: 2 levels** (`group.key`). If you want
+  `repertoire.track.status.archived`, flatten it to
+  `repertoire.trackStatusArchived` or promote `repertoire` to its own namespace.
+- **English is the source of truth.** `it.json` and `uk.json` must contain an
+  identical set of keys. A missing key is a bug, not a fallback.
+- **Placeholders** use ICU syntax: `"greeting": "Hello, {userName}"`.
+- **`aria-label` stays in English** — not translated, not in message files.
+  Screen readers get consistent identifiers regardless of locale.
+- Dates, numbers and relative time are formatted via `useFormatter()` from
+  next-intl, not hand-rolled.
 
-Conversation with the user is in Ukrainian.
+---
 
-## Git
+## Conventions quick reference
 
-Full rules in [`docs/ai/GIT.md`](./docs/ai/GIT.md). The essentials:
+Full detail is in the `nonsololarco-conventions` skill. The rules most often
+missed:
 
-- Branch: `<type>/<TICKET>-<slug>` off `develop` —
-  `feature/CLEF-177-reusable-tabs-component`.
-- Commit: `<type>(<scope>): <what changed>` — lowercase, imperative, no
-  trailing period. **The scope is mandatory.**
-  `feat(web): add RepertoireFilterBar component`.
-- Scopes: `web`, `api`, `packages`, `types`, `db`, `ui`, `config`, `docs`, `ci`.
-- **Commit size:** target ≤5 files / ≤150 lines, hard limit **20 files / 500
-  lines** (lockfiles, migrations and generated files excluded). Bigger than
-  that gets split, or is mechanical-only and says so in the subject.
-- One commit, one logical change. A new module and its tests are one change,
-  so they go in one commit.
-- **Update a branch with `git rebase origin/develop`, never `git merge`.**
-  Force-push only with `--force-with-lease`.
-- **PRs into `develop` are squash-merged**, with a hand-written message.
-  `develop` → `main` uses a merge commit.
-- Never rebase `develop` or `main`; never commit to them directly.
+- **One component per file, one file per folder.** Every component — including a
+  sub-component used by a single parent — gets its own folder with a matching
+  `PascalCase.tsx` and a barrel `index.ts`. Never declare a second component in
+  the same file; extract it to its own folder and import it
+  (`import PageButton from './PageButton'`).
+- **Logical CSS properties only**: `pli-`/`plb-`/`mli-`/`mbs-`/`mbe-`, never
+  `pl-`/`pr-`/`pt-`/`pb-`/`px-`/`py-`/`ml-`/`mt-`.
+- **`cn()`** for all className merging; the external `className` prop goes last.
+- **CVA** for component variants, not ad-hoc conditional strings.
+- **Radix primitives** directly — this project does not use shadcn.
+- **React Query** for server state, **Zustand** for client UI state.
+- Never animate with bare `transition-all` — it animates `cursor` as a discrete
+  property and causes flicker. Name the properties:
+  `transition-[background-color,border-color]`.
+- The band route is `/band/[id]` (singular).
+
+## API conventions
+
+- Global prefix `api`; Swagger UI at `/api/docs`.
+- Query params are camelCase and self-describing: `?status=new&onlyMine=true`.
+  Prefer the field name being filtered (`status`) over a generic `filter`.
+  Booleans are `true`/`false`, not `1`/`0`.
+- Validation lives in DTOs with `class-validator`; enums are exported from the
+  DTO and reused by the service.
+- Filtering and sorting are **server-side** — the frontend passes params
+  through and never sorts a fetched list, so pagination can be added without
+  reworking the UI.

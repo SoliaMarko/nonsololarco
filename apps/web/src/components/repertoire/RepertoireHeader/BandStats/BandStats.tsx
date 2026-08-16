@@ -22,14 +22,14 @@ export default function BandStats({ stats }: BandStatsProps) {
         <strong className="text-yellow-deep dark:text-emerald-deep md:text-primary-dark md:dark:text-primary-dark font-black">
           {statsSource.totalTracks}
         </strong>{' '}
-        {t('repertoire.statTracks')}
+        {t('repertoire.statTracks', { count: statsSource.totalTracks })}
       </span>
       <span className="text-primary-dark">·</span>
       <span className="md:text-primary-dark">
         <strong className="text-yellow-deep dark:text-emerald-deep md:text-primary-dark md:dark:text-primary-dark font-black">
           {statsSource.readyTracks}
         </strong>{' '}
-        {t('repertoire.statReady')}
+        {t('repertoire.statReady', { count: statsSource.readyTracks })}
       </span>
       <span className="text-primary-dark">·</span>
       <span>

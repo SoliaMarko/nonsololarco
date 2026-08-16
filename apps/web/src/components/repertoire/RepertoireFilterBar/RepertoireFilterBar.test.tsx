@@ -3,6 +3,8 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { Track } from '@nonsololarco/types';
 
+import { mockIntl } from '@/src/test/intl-mock';
+
 import RepertoireFilterBar from './RepertoireFilterBar';
 
 const mockPush = vi.fn();
@@ -13,18 +15,8 @@ vi.mock('next/navigation', () => ({
   useSearchParams: () => mockSearchParams,
 }));
 
-vi.mock('next-intl', () => ({
-  useTranslations: () => (key: string, params?: Record<string, unknown>) => {
-    if (params) return `${key} ${JSON.stringify(params)}`;
-    return key;
-  },
-}));
-
-vi.mock('@/i18n/navigation', () => ({
-  Link: ({ children, href, ...rest }: { children: React.ReactNode; href: string }) => (
-    <a href={href} {...rest}>{children}</a>
-  ),
-}));
+vi.mock('next-intl', () => mockIntl.nextIntl);
+vi.mock('@/i18n/navigation', () => mockIntl.navigation);
 
 vi.mock('next/link', () => ({
   default: ({ children, href }: { children: React.ReactNode; href: string }) => (
@@ -99,6 +91,7 @@ function getFirstButton(text: string) {
 
 beforeEach(() => {
   vi.clearAllMocks();
+  mockIntl.reset();
   mockSearchParams = new URLSearchParams();
   mockActiveBand.activeBand = undefined;
   mockActiveBand.activeBandId = '';
@@ -110,24 +103,24 @@ describe('RepertoireFilterBar', () => {
   it('renders all status filter pills', () => {
     render(<RepertoireFilterBar />);
 
-    expect(findButtons('repertoire.statusAll').length).toBeGreaterThan(0);
-    expect(findButtons('repertoire.statusReady').length).toBeGreaterThan(0);
-    expect(findButtons('repertoire.statusLearning').length).toBeGreaterThan(0);
-    expect(findButtons('repertoire.statusNew').length).toBeGreaterThan(0);
+    expect(findButtons('pages.repertoire.statusAll').length).toBeGreaterThan(0);
+    expect(findButtons('pages.repertoire.statusReady').length).toBeGreaterThan(0);
+    expect(findButtons('pages.repertoire.statusLearning').length).toBeGreaterThan(0);
+    expect(findButtons('pages.repertoire.statusNew').length).toBeGreaterThan(0);
   });
 
   it('marks the active filter as pressed', () => {
     mockSearchParams = new URLSearchParams('status=ready');
     render(<RepertoireFilterBar />);
 
-    const readyPills = findButtons('repertoire.statusReady');
+    const readyPills = findButtons('pages.repertoire.statusReady');
     expect(readyPills.some((b) => b.getAttribute('aria-pressed') === 'true')).toBe(true);
   });
 
   it('updates URL when a filter pill is clicked', () => {
     render(<RepertoireFilterBar />);
 
-    fireEvent.click(getFirstButton('repertoire.statusReady'));
+    fireEvent.click(getFirstButton('pages.repertoire.statusReady'));
 
     expect(mockPush).toHaveBeenCalledWith('?status=ready', { scroll: false });
   });
@@ -136,7 +129,7 @@ describe('RepertoireFilterBar', () => {
     mockSearchParams = new URLSearchParams('status=ready');
     render(<RepertoireFilterBar />);
 
-    fireEvent.click(getFirstButton('repertoire.statusAll'));
+    fireEvent.click(getFirstButton('pages.repertoire.statusAll'));
 
     expect(mockPush).toHaveBeenCalledWith('?', { scroll: false });
   });
@@ -144,8 +137,8 @@ describe('RepertoireFilterBar', () => {
   it('shows archived and active counts on extra filters', () => {
     render(<RepertoireFilterBar />);
 
-    const archiveBtns = findButtons('repertoire.extraFilterArchive');
-    const activeBtns = findButtons('repertoire.extraFilterActive');
+    const archiveBtns = findButtons('pages.repertoire.extraFilterArchive');
+    const activeBtns = findButtons('pages.repertoire.extraFilterActive');
 
     expect(archiveBtns[0]?.textContent).toContain('1');
     expect(activeBtns[0]?.textContent).toContain('2');
@@ -155,7 +148,7 @@ describe('RepertoireFilterBar', () => {
     mockTracks = [];
     render(<RepertoireFilterBar />);
 
-    expect(findButtons('repertoire.extraFilterArchive')[0]?.textContent).toContain('0');
+    expect(findButtons('pages.repertoire.extraFilterArchive')[0]?.textContent).toContain('0');
   });
 
   describe('Only mine toggle', () => {
@@ -168,27 +161,27 @@ describe('RepertoireFilterBar', () => {
     it('is visible for a real band', () => {
       render(<RepertoireFilterBar />);
 
-      expect(findButtons('repertoire.onlyMine').length).toBeGreaterThan(0);
+      expect(findButtons('pages.repertoire.onlyMine').length).toBeGreaterThan(0);
     });
 
     it('is hidden for solo band', () => {
       mockActiveBand.activeBandId = 'solo';
       render(<RepertoireFilterBar />);
 
-      expect(findButtons('repertoire.onlyMine').length).toBe(0);
+      expect(findButtons('pages.repertoire.onlyMine').length).toBe(0);
     });
 
     it('is hidden when no specific band is selected', () => {
       mockActiveBand.isSpecificBandSelected = false;
       render(<RepertoireFilterBar />);
 
-      expect(findButtons('repertoire.onlyMine').length).toBe(0);
+      expect(findButtons('pages.repertoire.onlyMine').length).toBe(0);
     });
 
     it('toggles onlyMine param in URL', () => {
       render(<RepertoireFilterBar />);
 
-      fireEvent.click(getFirstButton('repertoire.onlyMine'));
+      fireEvent.click(getFirstButton('pages.repertoire.onlyMine'));
 
       expect(mockPush).toHaveBeenCalledWith('?onlyMine=true', { scroll: false });
     });
@@ -197,7 +190,7 @@ describe('RepertoireFilterBar', () => {
       mockSearchParams = new URLSearchParams('onlyMine=true');
       render(<RepertoireFilterBar />);
 
-      fireEvent.click(getFirstButton('repertoire.onlyMine'));
+      fireEvent.click(getFirstButton('pages.repertoire.onlyMine'));
 
       expect(mockPush).toHaveBeenCalledWith('?', { scroll: false });
     });
@@ -205,7 +198,27 @@ describe('RepertoireFilterBar', () => {
     it('shows count of tracks where user participates', () => {
       render(<RepertoireFilterBar />);
 
-      expect(findButtons('repertoire.onlyMine')[0]?.textContent).toContain('2');
+      expect(findButtons('pages.repertoire.onlyMine')[0]?.textContent).toContain('2');
+    });
+  });
+
+  describe('sort normalization', () => {
+    it('treats unsupported sort values as default', () => {
+      mockSearchParams = new URLSearchParams('sort=trackOrder&order=asc');
+      render(<RepertoireFilterBar />);
+
+      const sortBtns = findButtons('pages.repertoire.sortButton');
+      expect(sortBtns.length).toBeGreaterThan(0);
+      expect(sortBtns[0]?.textContent).toContain('pages.repertoire.sortButton');
+      expect(sortBtns[0]?.textContent).not.toContain('pages.repertoire.orderOption');
+    });
+
+    it('treats completely unknown sort fields as default', () => {
+      mockSearchParams = new URLSearchParams('sort=foobar&order=desc');
+      render(<RepertoireFilterBar />);
+
+      const sortBtns = findButtons('pages.repertoire.sortButton');
+      expect(sortBtns.length).toBeGreaterThan(0);
     });
   });
 

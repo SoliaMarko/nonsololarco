@@ -73,10 +73,21 @@ const SORT_OPTIONS_COMMON: { labelKey: SortOptionKey; value: string }[] = [
   { labelKey: 'repertoire.sortTimeDesc', value: encodeSortValue('time', 'desc') },
 ];
 
-/** Maps the current URL params to the composite dropdown value */
+/** All recognised sort values — used to validate URL params at runtime. */
+const ALL_SORT_VALUES = new Set([
+  ...SORT_OPTIONS_COMMON.map((o) => o.value),
+  encodeSortValue('trackOrder', 'asc'),
+]);
+
+/**
+ * Maps the current URL params to a composite dropdown value, normalizing
+ * unsupported or tampered pairs to `"default"` so the UI never displays an
+ * undefined label.
+ */
 function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
   if (!sortField) return 'default';
-  return encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+  const encoded = `${sortField}:${sortOrder ?? 'asc'}`;
+  return ALL_SORT_VALUES.has(encoded) ? encoded : 'default';
 }
 
 /**
@@ -92,7 +103,6 @@ export default function RepertoireFilterBar() {
   const { user } = useAuth();
   const { activeBand, activeBandId, isSpecificBandSelected } = useActiveBand();
   const t = useTranslations('pages');
-  const tCommon = useTranslations('common');
 
   const currentFilter = (searchParams.get('status') as TrackFilterParam) ?? 'all';
   const isMineActive = searchParams.get('onlyMine') === 'true';
@@ -124,7 +134,7 @@ export default function RepertoireFilterBar() {
     value: encodeSortValue('trackOrder', 'asc'),
   };
 
-  const mobileSortOptions = isSpecificBandSelected
+  const mobileSortOptions = isRealBand
     ? [orderOption, ...SORT_OPTIONS_COMMON]
     : SORT_OPTIONS_COMMON;
 
@@ -171,7 +181,7 @@ export default function RepertoireFilterBar() {
   return (
     <div className="border-border-primary bg-base border-b">
       {/* Desktop layout */}
-      <div className="pli-4 plb-3 hidden items-center gap-3 sm:flex">
+      <div className="pli-4 plb-3 hidden flex-wrap items-center gap-3 sm:flex">
         {/* Status filter pills */}
         <fieldset className="flex items-center gap-2">
           <legend className="sr-only">{t('repertoire.filterLegend')}</legend>
@@ -319,6 +329,7 @@ export default function RepertoireFilterBar() {
             }
             groups={[
               {
+                selectionMode: 'single',
                 items: mobileSortOptions.map((opt) => ({
                   label: t(opt.labelKey),
                   selected: opt.value === activeSortValue,

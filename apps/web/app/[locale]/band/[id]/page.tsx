@@ -1,13 +1,12 @@
 'use client';
 
-// import { useParams } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import AppShell from '@/src/components/layout/AppShell';
 import EmptyState from '@/src/components/shared/EmptyState';
 
+/** Placeholder page for the band detail view. Shown while the feature is in development. */
 export default function BandPage() {
-  // const { id } = useParams<{ id: string }>();
   const t = useTranslations('pages');
 
   return (

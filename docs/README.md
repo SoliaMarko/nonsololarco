@@ -2,12 +2,12 @@
 
 Project documentation. Four kinds, four folders.
 
-| Folder | Answers | Audience |
-| --- | --- | --- |
-| [`ai/`](./ai) | *Where is everything and how do I do X?* | AI assistants, new contributors |
-| [`features/`](./features) | *What does this do and how do I use it?* | Anyone touching the feature |
-| [`architecture/`](./architecture) | *How is the system shaped?* | Anyone adding to it |
-| [`adr/`](./adr) | *Why was it built this way?* | Future you, in six months |
+| Folder                            | Answers                                  | Audience                        |
+| --------------------------------- | ---------------------------------------- | ------------------------------- |
+| [`ai/`](./ai)                     | _Where is everything and how do I do X?_ | AI assistants, new contributors |
+| [`features/`](./features)         | _What does this do and how do I use it?_ | Anyone touching the feature     |
+| [`architecture/`](./architecture) | _How is the system shaped?_              | Anyone adding to it             |
+| [`adr/`](./adr)                   | _Why was it built this way?_             | Future you, in six months       |
 
 ## AI context
 
@@ -34,6 +34,8 @@ Read in this order on a cold start — each one routes to the next.
   list with URL state, ellipsis collapsing, continuous row numbers.
 - [Internationalization (i18n)](./features/i18n.md) — locale switcher, next-intl
   setup, translation file structure, layout stability.
+- [Metronome (offline)](./features/metronome.md) — fullscreen practice
+  metronome with pendulum, tap tempo, song tracking, practice history.
 
 ## Architecture
 

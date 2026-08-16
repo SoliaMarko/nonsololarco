@@ -41,7 +41,13 @@ describe('Dropdown — default variant', () => {
   it('renders a trigger', () => {
     renderDropdown(groups);
 
-    expect(screen.getByText('Open')).toBeDefined();
+    expect(screen.getByRole('button', { name: 'Open' })).toBeDefined();
+  });
+
+  it('renders with empty groups without crashing', () => {
+    renderDropdown([]);
+
+    expect(screen.getByRole('button', { name: 'Open' })).toBeDefined();
   });
 
   it('shows items when opened', async () => {
@@ -171,6 +177,6 @@ describe('Dropdown — stamp variant', () => {
 
     // If modal were true, Radix would add aria-hidden to sibling elements.
     // With modal={false}, the trigger should remain accessible.
-    expect(screen.getByText('Open').getAttribute('aria-hidden')).toBeNull();
+    expect(screen.getByRole('button', { name: 'Open' })).toBeDefined();
   });
 });

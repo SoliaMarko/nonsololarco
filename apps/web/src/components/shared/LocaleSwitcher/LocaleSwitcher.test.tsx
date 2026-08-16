@@ -2,34 +2,25 @@ import { render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { mockIntl } from '@/src/test/intl-mock';
+
 import LocaleSwitcher from './LocaleSwitcher';
 
 /* ------------------------------------------------------------------ */
 /*  Mocks                                                              */
 /* ------------------------------------------------------------------ */
 
-const mockReplace = vi.fn();
-
-vi.mock('next-intl', () => ({
-  useLocale: () => mockLocale,
-  useTranslations: () => (key: string) => {
-    const translations: Record<string, string> = {
-      'locale.interfaceLanguage': 'Interface language',
-    };
-    return translations[key] ?? key;
-  },
-}));
-
-vi.mock('@/i18n/navigation', () => ({
-  usePathname: () => '/repertoire',
-  useRouter: () => ({ replace: mockReplace }),
-}));
-
-let mockLocale = 'en';
+vi.mock('next-intl', () => mockIntl.nextIntl);
+vi.mock('@/i18n/navigation', () => mockIntl.navigation);
 
 beforeEach(() => {
-  mockLocale = 'en';
-  mockReplace.mockClear();
+  mockIntl.reset();
+  mockIntl.setPathname('/repertoire');
+  // LocaleSwitcher reads window.location.search lazily in the click handler
+  Object.defineProperty(window, 'location', {
+    value: { ...window.location, search: '' },
+    writable: true,
+  });
 });
 
 /* ------------------------------------------------------------------ */
@@ -40,7 +31,7 @@ describe('LocaleSwitcher', () => {
   it('renders a trigger with the current locale code', () => {
     render(<LocaleSwitcher />);
 
-    expect(screen.getByLabelText('Switch language')).toBeDefined();
+    expect(screen.getByLabelText('common.locale.switchLanguage')).toBeDefined();
     expect(screen.getByText('EN')).toBeDefined();
   });
 
@@ -48,7 +39,7 @@ describe('LocaleSwitcher', () => {
     const user = userEvent.setup();
     render(<LocaleSwitcher />);
 
-    await user.click(screen.getByLabelText('Switch language'));
+    await user.click(screen.getByLabelText('common.locale.switchLanguage'));
 
     expect(screen.getByText('English')).toBeDefined();
     expect(screen.getByText('Italiano')).toBeDefined();
@@ -59,32 +50,48 @@ describe('LocaleSwitcher', () => {
     const user = userEvent.setup();
     render(<LocaleSwitcher />);
 
-    await user.click(screen.getByLabelText('Switch language'));
+    await user.click(screen.getByLabelText('common.locale.switchLanguage'));
 
-    expect(screen.getByText('Interface language')).toBeDefined();
+    expect(screen.getByText('common.locale.interfaceLanguage')).toBeDefined();
   });
 
   it('calls router.replace with the selected locale and scroll: false', async () => {
     const user = userEvent.setup();
     render(<LocaleSwitcher />);
 
-    await user.click(screen.getByLabelText('Switch language'));
+    await user.click(screen.getByLabelText('common.locale.switchLanguage'));
     await user.click(screen.getByText('Italiano'));
 
-    expect(mockReplace).toHaveBeenCalledWith('/repertoire', {
+    expect(mockIntl.replace).toHaveBeenCalledWith('/repertoire', {
       locale: 'it',
       scroll: false,
     });
+  });
+
+  it('preserves query params across a locale switch', async () => {
+    const user = userEvent.setup();
+    Object.defineProperty(window, 'location', {
+      value: { ...window.location, search: '?status=ready&onlyMine=true' },
+      writable: true,
+    });
+    render(<LocaleSwitcher />);
+
+    await user.click(screen.getByLabelText('common.locale.switchLanguage'));
+    await user.click(screen.getByText('Italiano'));
+
+    expect(mockIntl.replace).toHaveBeenCalledWith(
+      '/repertoire?status=ready&onlyMine=true',
+      { locale: 'it', scroll: false },
+    );
   });
 
   it('shows a checkmark on the active locale', async () => {
     const user = userEvent.setup();
     render(<LocaleSwitcher />);
 
-    await user.click(screen.getByLabelText('Switch language'));
+    await user.click(screen.getByLabelText('common.locale.switchLanguage'));
 
-    // The active locale item (English) should have a checkmark character
-    const englishItem = screen.getByText('English').closest('[role="menuitem"]');
+    const englishItem = screen.getByText('English').closest('[role="menuitemradio"]');
     expect(englishItem?.textContent).toContain('✓');
   });
 
@@ -92,9 +99,9 @@ describe('LocaleSwitcher', () => {
     const user = userEvent.setup();
     render(<LocaleSwitcher />);
 
-    await user.click(screen.getByLabelText('Switch language'));
+    await user.click(screen.getByLabelText('common.locale.switchLanguage'));
 
-    const italianoItem = screen.getByText('Italiano').closest('[role="menuitem"]');
+    const italianoItem = screen.getByText('Italiano').closest('[role="menuitemradio"]');
     expect(italianoItem?.textContent).not.toContain('✓');
   });
 
@@ -107,12 +114,12 @@ describe('LocaleSwitcher', () => {
   it('applies className to the trigger', () => {
     render(<LocaleSwitcher className="custom-class" />);
 
-    const trigger = screen.getByLabelText('Switch language');
+    const trigger = screen.getByLabelText('common.locale.switchLanguage');
     expect(trigger.className).toContain('custom-class');
   });
 
   it('renders a different locale code when the active locale changes', () => {
-    mockLocale = 'uk';
+    mockIntl.setLocale('uk');
     render(<LocaleSwitcher />);
 
     expect(screen.getByText('UK')).toBeDefined();

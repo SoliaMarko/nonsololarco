@@ -6,7 +6,7 @@ import { textVariants } from './text.variants';
 
 describe('textVariants', () => {
   it('emits font-normal for the default weight', () => {
-    const classes = textVariants({ weight: 'regular' });
+    const classes = textVariants();
 
     expect(classes).toContain('font-normal');
   });

@@ -2,15 +2,15 @@
 
 import { useEffect } from 'react';
 
-import { useRouter } from 'next/navigation';
 import { useTranslations } from 'next-intl';
 
 import AuthPageLayout from '@/src/components/auth/AuthPageLayout';
 import Text from '@/src/components/typography/Text';
 import { useAuth } from '@/src/hooks/global/useAuth';
 
-import { Link } from '@/i18n/navigation';
+import { Link, useRouter } from '@/i18n/navigation';
 
+/** Login page — redirects to `/` if the user is already authenticated, otherwise renders the auth layout with login form. */
 export default function LoginPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();
@@ -33,6 +33,7 @@ export default function LoginPage() {
           </Link>
         </Text>
         <Text size="xs" color="tertiary" className="text-center">
+          {/* TODO: create app/[locale]/terms and app/[locale]/privacy routes */}
           {tCommon('legal.agreementPrefix')}{' '}
           <Link href="/terms" className="text-emerald-main hover:text-accent-red">
             {tCommon('legal.terms')}

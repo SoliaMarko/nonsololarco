@@ -41,6 +41,14 @@ function getQueryClient(): QueryClient {
   return browserQueryClient;
 }
 
+/**
+ * Root provider tree wrapping every page via `app/[locale]/layout.tsx`.
+ *
+ * Composes `QueryClientProvider` (React Query) and `AuthProvider`
+ * (JWT + OAuth context). The `QueryClient` is module-scoped in the
+ * browser so the cache survives locale switches, and per-request on
+ * the server to prevent cross-user data leaks.
+ */
 export function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = getQueryClient();
 

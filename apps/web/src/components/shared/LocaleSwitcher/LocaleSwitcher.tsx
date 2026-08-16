@@ -33,9 +33,17 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
   const t = useTranslations('common');
 
   function handleLocaleChange(locale: Locale) {
+    // Preserve existing query params (status, onlyMine, sort, order, etc.)
+    // across the locale switch — `usePathname()` strips the query string.
+    // Read search params lazily from the URL rather than via the
+    // `useSearchParams()` hook, which would require a `<Suspense>` boundary
+    // and prevent the page from being statically generated.
+    const query = window.location.search;
+    const fullPath = query ? `${pathname}${query}` : pathname;
+
     // `scroll: false` keeps the reader where they were — switching language
     // shouldn't throw them back to the top of a long repertoire list.
-    router.replace(pathname, { locale, scroll: false });
+    router.replace(fullPath, { locale, scroll: false });
   }
 
   return (
@@ -45,10 +53,11 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
       // Pinned, not `w-fit`: the group label is translated, so an intrinsic
       // width would make the panel — and its border — a different size in
       // every language.
-      className="w-[14.75rem]"
+      className="w-59"
       groups={[
         {
           label: t('locale.interfaceLanguage'),
+          selectionMode: 'single',
           items: locales.map((locale) => ({
             label: LOCALE_LABEL[locale],
             leadingContent: <LocaleStamp locale={locale} />,
@@ -59,12 +68,12 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
       ]}
       trigger={
         <button
-          aria-label="Switch language"
+          aria-label={t('locale.switchLanguage')}
           className={cn(
             'relative inline-flex items-center gap-2 overflow-hidden',
             'bg-control-surface border-fg-secondary border-2',
             'font-label text-xs font-bold tracking-[0.08em]',
-            'cursor-pointer px-2.25 py-1.25',
+            'cursor-pointer pli-[0.5625rem] plb-[0.3125rem]',
             // Static by design — no press transform or transition. The hover
             // tint is an instant colour swap, kept purely for affordance.
             'shadow-[2px_2px_0_0_var(--color-fg-secondary)]',

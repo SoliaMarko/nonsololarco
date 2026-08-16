@@ -19,14 +19,17 @@ import {
   CalendarIcon,
   ChatOutlineIcon,
   ChatSolidIcon,
+  CheckCircleIcon,
   CheckSolidIcon,
   ChevronIcon,
+  CloseCircleIcon,
   CloseSolidIcon,
   DisconnectOutlineIcon,
   DisconnectSolidIcon,
   DotsIcon,
   DownloadIcon,
   EditIcon,
+  EyeOffIcon,
   GlobeOutlineIcon,
   HomeOutlineIcon,
   HomeSolidIcon,
@@ -34,15 +37,20 @@ import {
   LinkIcon,
   LocationPinIcon,
   LogOutIcon,
+  MenuIcon,
+  MetronomeIcon,
   MicrophoneIcon,
+  MinusIcon,
   MoonOutlineIcon,
   NotesIcon,
+  PauseIcon,
   PickIcon,
   PlayIcon,
   PlusSolidIcon,
   ProfileOutlineIcon,
   ProfileSolidIcon,
   RepertoireIcon,
+  SaveIcon,
   SearchOutlineIcon,
   SearchSolidIcon,
   SettingsOutlineIcon,
@@ -50,7 +58,9 @@ import {
   ShareOutlineIcon,
   ShareSolidIcon,
   SunOutlineIcon,
+  TrashIcon,
   UploadIcon,
+  VinylIcon,
 } from '@/src/icons/base';
 import { BouquetIcon, FireIcon, MusicPlantIcon, PianoKeysIcon } from '@/src/icons/colorful';
 import {
@@ -250,6 +260,36 @@ function IconGallery({ size, color }: { color: string; size: string }) {
         </IconCard>
         <IconCard label="PlayIcon" copyText={toJsx('PlayIcon')} {...cardProps}>
           <PlayIcon size={size} />
+        </IconCard>
+        <IconCard label="PauseIcon" copyText={toJsx('PauseIcon')} {...cardProps}>
+          <PauseIcon size={size} />
+        </IconCard>
+        <IconCard label="SaveIcon" copyText={toJsx('SaveIcon')} {...cardProps}>
+          <SaveIcon size={size} />
+        </IconCard>
+        <IconCard label="TrashIcon" copyText={toJsx('TrashIcon')} {...cardProps}>
+          <TrashIcon size={size} />
+        </IconCard>
+        <IconCard label="MinusIcon" copyText={toJsx('MinusIcon')} {...cardProps}>
+          <MinusIcon size={size} />
+        </IconCard>
+        <IconCard label="MenuIcon" copyText={toJsx('MenuIcon')} {...cardProps}>
+          <MenuIcon size={size} />
+        </IconCard>
+        <IconCard label="EyeOffIcon" copyText={toJsx('EyeOffIcon')} {...cardProps}>
+          <EyeOffIcon size={size} />
+        </IconCard>
+        <IconCard label="CheckCircleIcon" copyText={toJsx('CheckCircleIcon')} {...cardProps}>
+          <CheckCircleIcon size={size} />
+        </IconCard>
+        <IconCard label="CloseCircleIcon" copyText={toJsx('CloseCircleIcon')} {...cardProps}>
+          <CloseCircleIcon size={size} />
+        </IconCard>
+        <IconCard label="MetronomeIcon" copyText={toJsx('MetronomeIcon')} {...cardProps}>
+          <MetronomeIcon size={size} />
+        </IconCard>
+        <IconCard label="VinylIcon" copyText={toJsx('VinylIcon')} {...cardProps}>
+          <VinylIcon size={size} />
         </IconCard>
       </Section>
 
