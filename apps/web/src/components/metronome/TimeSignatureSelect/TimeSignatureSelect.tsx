@@ -63,7 +63,7 @@ export default function TimeSignatureSelect({
           value={numerator}
           variant={variant}
         />
-        {showLabels && <span className={captionClass}>{t('beatsLabel')}</span>}
+        {showLabels ? <span className={captionClass}>{t('beatsLabel')}</span> : null}
       </div>
 
       <span
@@ -88,7 +88,7 @@ export default function TimeSignatureSelect({
           value={denominator}
           variant={variant}
         />
-        {showLabels && <span className={captionClass}>{t('noteLabel')}</span>}
+        {showLabels ? <span className={captionClass}>{t('noteLabel')}</span> : null}
       </div>
     </div>
   );

@@ -19,6 +19,14 @@ export default [
     rules: {
       semi: ['error', 'always'],
 
+      // Code style — documented in CLAUDE.md, now enforced
+      'no-nested-ternary': 'error',
+      'no-var': 'error',
+      'prefer-const': 'error',
+
+      // JSX: always use ternary for conditional rendering, never &&
+      'react/jsx-no-leaked-render': ['error', { validStrategies: ['ternary'] }],
+
       // No console.log in production code
       'no-console': ['error', { allow: ['warn', 'error'] }],
 

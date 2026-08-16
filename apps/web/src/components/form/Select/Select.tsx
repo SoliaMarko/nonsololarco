@@ -65,7 +65,12 @@ function Select({
 }: SelectProps) {
   const flatOptions: SelectOption[] = options ?? groups.flatMap((group) => group.options);
   const selectedLabel = flatOptions.find((option) => option.value === value)?.label;
-  const triggerState = disabled ? 'disabled' : error ? 'error' : 'default';
+  const getTriggerState = () => {
+    if (disabled) return 'disabled';
+    if (error) return 'error';
+    return 'default';
+  };
+  const triggerState = getTriggerState();
 
   return (
     <div className={cn('flex flex-col gap-1', className)}>
@@ -139,11 +144,8 @@ function Select({
         ) : null}
       </div>
 
-      {error ? (
-        <span className="text-label text-danger">{error}</span>
-      ) : hint ? (
-        <span className="text-label text-fg-disabled">{hint}</span>
-      ) : null}
+      {error ? <span className="text-label text-danger">{error}</span> : null}
+      {!error && hint ? <span className="text-label text-fg-disabled">{hint}</span> : null}
     </div>
   );
 }

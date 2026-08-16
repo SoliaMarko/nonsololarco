@@ -7,41 +7,41 @@
 > `nonsololarco-conventions` skill; step-by-step task guides in
 > [`RECIPES.md`](./RECIPES.md).
 
-Updated: 2026-08-12
+Updated: 2026-08-16
 
 ## Coverage at a glance
 
-| Category       | Total | Tested                 | With story |
-| -------------- | ----- | ---------------------- | ---------- |
-| Web components | 135   | 13 (10%)               | 24 (18%)   |
-| Utils + hooks  | 14    | 4 (29%)                | —          |
-| API services   | 4     | 2 unit / 0 integration | —          |
+| Category | Total | Tested | With story |
+| --- | --- | --- | --- |
+| Web components | 164 | 31 (19%) | 27 (16%) |
+| Utils + hooks | 19 | 9 (47%) | — |
+| API services | 4 | 2 unit / 0 integration | — |
 
-Stories live centrally in `apps/web/stories/` (25 files), not next to components.
+Stories live centrally in `apps/web/stories/` (28 files), not next to components.
 
 ## API routes
 
-| Method | Path                            | Handler             | File                                                                |
-| ------ | ------------------------------- | ------------------- | ------------------------------------------------------------------- |
-| GET    | `/api/auth/github`              | githubLogin         | `apps/api/src/auth/auth.controller.ts`                              |
-| GET    | `/api/auth/github/callback`     | githubCallback      | `apps/api/src/auth/auth.controller.ts`                              |
-| GET    | `/api/auth/google`              | googleLogin         | `apps/api/src/auth/auth.controller.ts`                              |
-| GET    | `/api/auth/google/callback`     | googleCallback      | `apps/api/src/auth/auth.controller.ts`                              |
-| POST   | `/api/auth/logout`              | logout              | `apps/api/src/auth/auth.controller.ts`                              |
-| GET    | `/api/auth/me`                  | getMe               | `apps/api/src/auth/auth.controller.ts`                              |
-| GET    | `/api/bands/:id/repertoire`     | getBandRepertoire   | `apps/api/src/repertoire/controllers/band-repertoire.controller.ts` |
-| GET    | `/api/users/me/bands`           | getMyBands          | `apps/api/src/bands/bands.controller.ts`                            |
-| GET    | `/api/users/me/repertoire`      | getMyRepertoire     | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
-| GET    | `/api/users/me/repertoire/solo` | getMySoloRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
+| Method | Path | Handler | File |
+| --- | --- | --- | --- |
+| GET | `/api/auth/github` | githubLogin | `apps/api/src/auth/auth.controller.ts` |
+| GET | `/api/auth/github/callback` | githubCallback | `apps/api/src/auth/auth.controller.ts` |
+| GET | `/api/auth/google` | googleLogin | `apps/api/src/auth/auth.controller.ts` |
+| GET | `/api/auth/google/callback` | googleCallback | `apps/api/src/auth/auth.controller.ts` |
+| POST | `/api/auth/logout` | logout | `apps/api/src/auth/auth.controller.ts` |
+| GET | `/api/auth/me` | getMe | `apps/api/src/auth/auth.controller.ts` |
+| GET | `/api/bands/:id/repertoire` | getBandRepertoire | `apps/api/src/repertoire/controllers/band-repertoire.controller.ts` |
+| GET | `/api/users/me/bands` | getMyBands | `apps/api/src/bands/bands.controller.ts` |
+| GET | `/api/users/me/repertoire` | getMyRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
+| GET | `/api/users/me/repertoire/solo` | getMySoloRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
 
 ## API services
 
-| Service            | unit | int | File                                            |
-| ------------------ | ---- | --- | ----------------------------------------------- |
-| auth.service       | ·    | ·   | `apps/api/src/auth/auth.service.ts`             |
-| bands.service      | ✓    | ·   | `apps/api/src/bands/bands.service.ts`           |
-| prisma.service     | ·    | ·   | `apps/api/src/prisma/prisma.service.ts`         |
-| repertoire.service | ✓    | ·   | `apps/api/src/repertoire/repertoire.service.ts` |
+| Service | unit | int | File |
+| --- | --- | --- | --- |
+| auth.service | · | · | `apps/api/src/auth/auth.service.ts` |
+| bands.service | ✓ | · | `apps/api/src/bands/bands.service.ts` |
+| prisma.service | · | · | `apps/api/src/prisma/prisma.service.ts` |
+| repertoire.service | ✓ | · | `apps/api/src/repertoire/repertoire.service.ts` |
 
 ## Database
 
@@ -81,6 +81,23 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `··` **AppBottomNav** — `apps/web/src/components/layout/AppShell/AppBottomNav/AppBottomNav.tsx`
 - `··` **AppHeaderNav** — `apps/web/src/components/layout/AppShell/AppHeaderNav/AppHeaderNav.tsx`
 - `·✓` **AppShell** — `apps/web/src/components/layout/AppShell/AppShell.tsx`
+
+### `src/components/metronome/`
+
+- `✓·` **BeatDots** — `apps/web/src/components/metronome/BeatDots/BeatDots.tsx`
+- `✓·` **BpmControl** — `apps/web/src/components/metronome/BpmControl/BpmControl.tsx`
+- `✓·` **BpmRuler** — `apps/web/src/components/metronome/BpmControl/BpmRuler/BpmRuler.tsx`
+- `✓·` **HistoryDrawer** — `apps/web/src/components/metronome/HistoryDrawer/HistoryDrawer.tsx`
+- `✓·` **HistoryGroup** — `apps/web/src/components/metronome/HistoryDrawer/HistoryGroup/HistoryGroup.tsx`
+- `✓·` **MetronomeFab** — `apps/web/src/components/metronome/MetronomeFab/MetronomeFab.tsx`
+- `✓·` **MetronomeScreen** — `apps/web/src/components/metronome/MetronomeScreen/MetronomeScreen.tsx`
+- `✓·` **MetronomeTopBar** — `apps/web/src/components/metronome/MetronomeTopBar/MetronomeTopBar.tsx`
+- `✓·` **MetronomeTransport** — `apps/web/src/components/metronome/MetronomeTransport/MetronomeTransport.tsx`
+- `✓·` **Pendulum** — `apps/web/src/components/metronome/Pendulum/Pendulum.tsx`
+- `✓·` **SongChooser** — `apps/web/src/components/metronome/SongChooser/SongChooser.tsx`
+- `✓·` **SigDropdown** — `apps/web/src/components/metronome/TimeSignatureSelect/SigDropdown/SigDropdown.tsx`
+- `✓·` **TimeSignatureSelect** — `apps/web/src/components/metronome/TimeSignatureSelect/TimeSignatureSelect.tsx`
+- `✓·` **TrackBadge** — `apps/web/src/components/metronome/TrackBadge/TrackBadge.tsx`
 
 ### `src/components/profile/`
 
@@ -126,6 +143,7 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `··` **InstrumentChip** — `apps/web/src/components/shared/InstrumentChip/InstrumentChip.tsx`
 - `✓·` **LocaleStamp** — `apps/web/src/components/shared/LocaleSwitcher/LocaleStamp/LocaleStamp.tsx`
 - `✓✓` **LocaleSwitcher** — `apps/web/src/components/shared/LocaleSwitcher/LocaleSwitcher.tsx`
+- `✓✓` **MetronomeButton** — `apps/web/src/components/shared/MetronomeButton/MetronomeButton.tsx`
 - `··` **NoDataCard** — `apps/web/src/components/shared/NoDataCard/NoDataCard.tsx`
 - `✓·` **PageLoader** — `apps/web/src/components/shared/PageLoader/PageLoader.tsx`
 - `··` **ThemeToggle** — `apps/web/src/components/shared/ThemeToggle/ThemeToggle.tsx`
@@ -158,6 +176,7 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `✓·` **TabItem** — `apps/web/src/components/ui/Tabs/TabItem/TabItem.tsx`
 - `✓✓` **Tabs** — `apps/web/src/components/ui/Tabs/Tabs.tsx`
 - `··` **TabsIndicator** — `apps/web/src/components/ui/Tabs/TabsIndicator/TabsIndicator.tsx`
+- `✓✓` **Toast** — `apps/web/src/components/ui/Toast/Toast.tsx`
 
 ### `src/icons/achievements/`
 
@@ -178,14 +197,17 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `··` **CalendarIcon** — `apps/web/src/icons/base/CalendarIcon.tsx`
 - `··` **ChatOutlineIcon** — `apps/web/src/icons/base/ChatOutlineIcon.tsx`
 - `··` **ChatSolidIcon** — `apps/web/src/icons/base/ChatSolidIcon.tsx`
+- `··` **CheckCircleIcon** — `apps/web/src/icons/base/CheckCircleIcon.tsx`
 - `··` **CheckSolidIcon** — `apps/web/src/icons/base/CheckSolidIcon.tsx`
 - `··` **ChevronIcon** — `apps/web/src/icons/base/ChevronIcon.tsx`
+- `··` **CloseCircleIcon** — `apps/web/src/icons/base/CloseCircleIcon.tsx`
 - `··` **CloseSolidIcon** — `apps/web/src/icons/base/CloseSolidIcon.tsx`
 - `··` **DisconnectOutlineIcon** — `apps/web/src/icons/base/DisconnectOutlineIcon.tsx`
 - `··` **DisconnectSolidIcon** — `apps/web/src/icons/base/DisconnectSolidIcon.tsx`
 - `··` **DotsIcon** — `apps/web/src/icons/base/DotsIcon.tsx`
 - `··` **DownloadIcon** — `apps/web/src/icons/base/DownloadIcon.tsx`
 - `··` **EditIcon** — `apps/web/src/icons/base/EditIcon.tsx`
+- `··` **EyeOffIcon** — `apps/web/src/icons/base/EyeOffIcon.tsx`
 - `··` **GlobeOutlineIcon** — `apps/web/src/icons/base/GlobeOutlineIcon.tsx`
 - `··` **HomeOutlineIcon** — `apps/web/src/icons/base/HomeOutlineIcon.tsx`
 - `··` **HomeSolidIcon** — `apps/web/src/icons/base/HomeSolidIcon.tsx`
@@ -193,15 +215,20 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `··` **LinkIcon** — `apps/web/src/icons/base/LinkIcon.tsx`
 - `··` **LocationPinIcon** — `apps/web/src/icons/base/LocationPinIcon.tsx`
 - `··` **LogOutIcon** — `apps/web/src/icons/base/LogOutIcon.tsx`
+- `✓·` **MenuIcon** — `apps/web/src/icons/base/MenuIcon.tsx`
+- `··` **MetronomeIcon** — `apps/web/src/icons/base/MetronomeIcon.tsx`
 - `··` **MicrophoneIcon** — `apps/web/src/icons/base/MicrophoneIcon.tsx`
+- `··` **MinusIcon** — `apps/web/src/icons/base/MinusIcon.tsx`
 - `··` **MoonOutlineIcon** — `apps/web/src/icons/base/MoonOutlineIcon.tsx`
 - `··` **NotesIcon** — `apps/web/src/icons/base/NotesIcon.tsx`
+- `··` **PauseIcon** — `apps/web/src/icons/base/PauseIcon.tsx`
 - `··` **PickIcon** — `apps/web/src/icons/base/PickIcon.tsx`
 - `··` **PlayIcon** — `apps/web/src/icons/base/PlayIcon.tsx`
 - `··` **PlusSolidIcon** — `apps/web/src/icons/base/PlusSolidIcon.tsx`
 - `··` **ProfileOutlineIcon** — `apps/web/src/icons/base/ProfileOutlineIcon.tsx`
 - `··` **ProfileSolidIcon** — `apps/web/src/icons/base/ProfileSolidIcon.tsx`
 - `··` **RepertoireIcon** — `apps/web/src/icons/base/RepertoireIcon.tsx`
+- `··` **SaveIcon** — `apps/web/src/icons/base/SaveIcon.tsx`
 - `··` **SearchOutlineIcon** — `apps/web/src/icons/base/SearchOutlineIcon.tsx`
 - `··` **SearchSolidIcon** — `apps/web/src/icons/base/SearchSolidIcon.tsx`
 - `··` **SettingsOutlineIcon** — `apps/web/src/icons/base/SettingsOutlineIcon.tsx`
@@ -210,7 +237,9 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `··` **ShareSolidIcon** — `apps/web/src/icons/base/ShareSolidIcon.tsx`
 - `··` **SortIcon** — `apps/web/src/icons/base/SortIcon.tsx`
 - `··` **SunOutlineIcon** — `apps/web/src/icons/base/SunOutlineIcon.tsx`
+- `··` **TrashIcon** — `apps/web/src/icons/base/TrashIcon.tsx`
 - `··` **UploadIcon** — `apps/web/src/icons/base/UploadIcon.tsx`
+- `··` **VinylIcon** — `apps/web/src/icons/base/VinylIcon.tsx`
 
 ### `src/icons/brand/`
 
@@ -236,6 +265,12 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 
 - `·✓` **AchievementBadge** — `apps/web/src/illustrations/achievements/AchievementBadge/AchievementBadge.tsx`
 
+### `src/illustrations/metronome/`
+
+- `··` **MetronomeArm** — `apps/web/src/illustrations/metronome/VintageMetronome/MetronomeArm/MetronomeArm.tsx`
+- `··` **MetronomeScale** — `apps/web/src/illustrations/metronome/VintageMetronome/MetronomeScale/MetronomeScale.tsx`
+- `✓✓` **VintageMetronome** — `apps/web/src/illustrations/metronome/VintageMetronome/VintageMetronome.tsx`
+
 ### `src/illustrations/picks/`
 
 - `·✓` **MediatorBadge** — `apps/web/src/illustrations/picks/MediatorBadge/MediatorBadge.tsx`
@@ -251,22 +286,27 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 
 ## Utils, hooks, queries
 
-| T   | Kind  | Name                   | File                                                        |
-| --- | ----- | ---------------------- | ----------------------------------------------------------- |
-| ·   | hook  | useActiveBand          | `apps/web/src/hooks/global/useActiveBand/useActiveBand.tsx` |
-| ·   | hook  | useAuth                | `apps/web/src/hooks/global/useAuth/useAuth.tsx`             |
-| ·   | hook  | useBandColors          | `apps/web/src/hooks/global/useBandColors/useBandColors.tsx` |
-| ·   | hook  | useTheme               | `apps/web/src/hooks/global/useTheme/useTheme.tsx`           |
-| ✓   | hook  | useLockedHeight        | `apps/web/src/hooks/useLockedHeight/useLockedHeight.ts`     |
-| ·   | query | useBands               | `apps/web/src/lib/hooks/useBands.ts`                        |
-| ·   | query | useRepertoire          | `apps/web/src/lib/hooks/useRepertoire.ts`                   |
-| ·   | util  | cn                     | `apps/web/src/utils/cn.ts`                                  |
-| ·   | util  | duration.utils         | `apps/web/src/utils/duration.utils.ts`                      |
-| ✓   | util  | pagination.utils       | `apps/web/src/utils/pagination.utils.ts`                    |
-| ·   | util  | svg.utils              | `apps/web/src/utils/svg.utils.ts`                           |
-| ✓   | util  | track-performers.utils | `apps/web/src/utils/track-performers.utils.ts`              |
-| ·   | util  | tracks-sort.utils      | `apps/web/src/utils/tracks-sort.utils.ts`                   |
-| ✓   | util  | vinyl.utils            | `apps/web/src/utils/vinyl.utils.ts`                         |
+| T | Kind | Name | File |
+| --- | --- | --- | --- |
+| · | hook | useActiveBand | `apps/web/src/hooks/global/useActiveBand/useActiveBand.tsx` |
+| · | hook | useAuth | `apps/web/src/hooks/global/useAuth/useAuth.tsx` |
+| · | hook | useBandColors | `apps/web/src/hooks/global/useBandColors/useBandColors.tsx` |
+| · | hook | useTheme | `apps/web/src/hooks/global/useTheme/useTheme.tsx` |
+| ✓ | hook | useLockedHeight | `apps/web/src/hooks/useLockedHeight/useLockedHeight.ts` |
+| ✓ | hook | useMetronomeClicker | `apps/web/src/hooks/useMetronomeClicker/useMetronomeClicker.ts` |
+| ✓ | hook | useMetronomeEngine | `apps/web/src/hooks/useMetronomeEngine/useMetronomeEngine.ts` |
+| ✓ | hook | useTapTempo | `apps/web/src/hooks/useTapTempo/useTapTempo.ts` |
+| · | query | useBands | `apps/web/src/lib/hooks/useBands.ts` |
+| · | query | useRepertoire | `apps/web/src/lib/hooks/useRepertoire.ts` |
+| ✓ | util | audio.utils | `apps/web/src/utils/audio.utils.ts` |
+| · | util | cn | `apps/web/src/utils/cn.ts` |
+| · | util | duration.utils | `apps/web/src/utils/duration.utils.ts` |
+| ✓ | util | metronome.utils | `apps/web/src/utils/metronome.utils.ts` |
+| ✓ | util | pagination.utils | `apps/web/src/utils/pagination.utils.ts` |
+| · | util | svg.utils | `apps/web/src/utils/svg.utils.ts` |
+| ✓ | util | track-performers.utils | `apps/web/src/utils/track-performers.utils.ts` |
+| · | util | tracks-sort.utils | `apps/web/src/utils/tracks-sort.utils.ts` |
+| ✓ | util | vinyl.utils | `apps/web/src/utils/vinyl.utils.ts` |
 
 ## Stories without a matching component
 
@@ -276,11 +316,11 @@ Either the story covers several components, or the component was renamed.
 
 ## Translations
 
-| Namespace   | en  | it  | uk  |
-| ----------- | --- | --- | --- |
-| auth.json   | 14  | 14  | 14  |
-| common.json | 25  | 25  | 25  |
-| pages.json  | 80  | 80  | 80  |
+| Namespace | en | it | uk |
+| --- | --- | --- | --- |
+| auth.json | 14 | 14 | 14 |
+| common.json | 26 | 26 | 26 |
+| pages.json | 133 | 133 | 133 |
 
 ⚠ = key count differs from `en`. English is the source of truth, so a
 mismatch means a missing key — that is a bug, not a fallback.

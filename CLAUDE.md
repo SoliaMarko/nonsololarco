@@ -164,6 +164,38 @@ doThing();
 Applies to the JSX equivalent too — don't nest conditional blocks. If a
 component needs three or more branches of markup, split it into components.
 
+### Arrow functions for local helpers
+
+Inside React components, local helper functions use arrow function expressions
+(`const fn = () => {}`), not function declarations. This prevents hoisting
+surprises and keeps a consistent style. Component declarations themselves
+remain function declarations (`export default function Component`).
+
+```tsx
+// ❌
+function handleSort(field: SortField) { ... }
+
+// ✅
+const handleSort = (field: SortField) => { ... };
+```
+
+### JSX conditional rendering — ternary only
+
+Always use the ternary pattern for conditional rendering in JSX, never `&&`.
+Enforced by `react/jsx-no-leaked-render` in ESLint.
+
+```tsx
+// ❌
+{
+  isVisible && <Panel />;
+}
+
+// ✅
+{
+  isVisible ? <Panel /> : null;
+}
+```
+
 ### JSDoc — required on every utility
 
 Every exported utility, hook, service method and non-trivial helper carries a
