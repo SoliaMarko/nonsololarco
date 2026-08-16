@@ -29,25 +29,25 @@ describe('BpmControl', () => {
 
   it('increments the BPM by one', async () => {
     const { onBpmChange } = setup(92);
-    await userEvent.click(screen.getByRole('button', { name: 'Increase BPM' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaIncreaseBpm' }));
     expect(onBpmChange).toHaveBeenCalledWith(93);
   });
 
   it('decrements the BPM by one', async () => {
     const { onBpmChange } = setup(92);
-    await userEvent.click(screen.getByRole('button', { name: 'Decrease BPM' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaDecreaseBpm' }));
     expect(onBpmChange).toHaveBeenCalledWith(91);
   });
 
   it('clamps at the maximum when incrementing', async () => {
     const { onBpmChange } = setup(240);
-    await userEvent.click(screen.getByRole('button', { name: 'Increase BPM' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaIncreaseBpm' }));
     expect(onBpmChange).toHaveBeenCalledWith(240);
   });
 
   it('clamps at the minimum when decrementing', async () => {
     const { onBpmChange } = setup(40);
-    await userEvent.click(screen.getByRole('button', { name: 'Decrease BPM' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaDecreaseBpm' }));
     expect(onBpmChange).toHaveBeenCalledWith(40);
   });
 

@@ -62,7 +62,7 @@ describe('MetronomeScreen', () => {
   it('saving a tracked session shows a saved toast', async () => {
     render(<MetronomeScreen />);
     await userEvent.click(screen.getByText('Night at the Depot'));
-    await userEvent.click(screen.getByRole('button', { name: 'Play' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaPlay' }));
     await userEvent.click(screen.getByText('pages.metronome.finishAndSave'));
     expect(screen.getByText(/pages\.metronome\.toastSaved/)).toBeDefined();
   });
@@ -70,7 +70,7 @@ describe('MetronomeScreen', () => {
   it('exiting from an empty history stack routes home', async () => {
     render(<MetronomeScreen />);
     await userEvent.click(screen.getByText('pages.metronome.justPlay'));
-    await userEvent.click(screen.getByRole('button', { name: 'Menu and practice history' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaMenu' }));
     await userEvent.click(screen.getByText('pages.metronome.exit'));
     // jsdom starts with a single history entry, so exit pushes home rather
     // than calling router.back().

@@ -49,7 +49,7 @@ export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps)
 
       <div className="mbs-3 inline-flex gap-2">
         <button
-          aria-label="Decrease BPM"
+          aria-label={t('ariaDecreaseBpm')}
           className={STEP_BUTTON}
           onClick={() => onBpmChange(clampBpm(bpm - 1))}
           type="button"
@@ -66,7 +66,7 @@ export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps)
         </button>
 
         <button
-          aria-label="Increase BPM"
+          aria-label={t('ariaIncreaseBpm')}
           className={STEP_BUTTON}
           onClick={() => onBpmChange(clampBpm(bpm + 1))}
           type="button"

@@ -80,7 +80,7 @@ describe('HistoryDrawer', () => {
     const { onDelete } = setup();
     // Expand the first group to reveal its session rows.
     await userEvent.click(screen.getByText('Trolleybus'));
-    await userEvent.click(screen.getByRole('button', { name: 'Delete entry' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaDeleteEntry' }));
     expect(onDelete).toHaveBeenCalledWith('c');
 
     // Undo bar appears; clicking it restores the entry.

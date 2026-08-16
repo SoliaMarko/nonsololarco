@@ -22,14 +22,14 @@ describe('TimeSignatureSelect', () => {
 
   it('renders a trigger for each half of the signature', () => {
     render(<TimeSignatureSelect {...defaults} />);
-    expect(screen.getByLabelText('Time signature numerator')).toBeDefined();
-    expect(screen.getByLabelText('Time signature denominator')).toBeDefined();
+    expect(screen.getByLabelText('pages.metronome.ariaTimeSigNumerator')).toBeDefined();
+    expect(screen.getByLabelText('pages.metronome.ariaTimeSigDenominator')).toBeDefined();
   });
 
   it('shows the current values on the triggers', () => {
     render(<TimeSignatureSelect {...defaults} denominator={8} numerator={6} />);
-    expect(screen.getByLabelText('Time signature numerator').textContent).toContain('6');
-    expect(screen.getByLabelText('Time signature denominator').textContent).toContain('8');
+    expect(screen.getByLabelText('pages.metronome.ariaTimeSigNumerator').textContent).toContain('6');
+    expect(screen.getByLabelText('pages.metronome.ariaTimeSigDenominator').textContent).toContain('8');
   });
 
   it('renders the slash separator', () => {
@@ -51,7 +51,7 @@ describe('TimeSignatureSelect', () => {
 
   it('offers only the numerators valid for the current denominator', async () => {
     render(<TimeSignatureSelect {...defaults} denominator={8} numerator={6} />);
-    await userEvent.click(screen.getByLabelText('Time signature numerator'));
+    await userEvent.click(screen.getByLabelText('pages.metronome.ariaTimeSigNumerator'));
 
     const labels = screen.getAllByRole('menuitem').map((i) => i.textContent);
     // /8 admits 3, 5, 6, 7, 9, 12 — never 4
@@ -62,7 +62,7 @@ describe('TimeSignatureSelect', () => {
   it('reports the picked numerator with the unchanged denominator', async () => {
     const onChange = vi.fn();
     render(<TimeSignatureSelect {...defaults} onChange={onChange} />);
-    await userEvent.click(screen.getByLabelText('Time signature numerator'));
+    await userEvent.click(screen.getByLabelText('pages.metronome.ariaTimeSigNumerator'));
     await userEvent.click(screen.getByRole('menuitem', { name: '3' }));
     expect(onChange).toHaveBeenCalledWith(3, 4);
   });
@@ -70,7 +70,7 @@ describe('TimeSignatureSelect', () => {
   it('auto-corrects the numerator when the new denominator forbids it', async () => {
     const onChange = vi.fn();
     render(<TimeSignatureSelect {...defaults} onChange={onChange} />);
-    await userEvent.click(screen.getByLabelText('Time signature denominator'));
+    await userEvent.click(screen.getByLabelText('pages.metronome.ariaTimeSigDenominator'));
     // 4 is invalid for /8, so it falls back to the first valid numerator
     await userEvent.click(screen.getByRole('menuitem', { name: '8' }));
     expect(onChange).toHaveBeenCalledWith(3, 8);
@@ -79,7 +79,7 @@ describe('TimeSignatureSelect', () => {
   it('keeps the numerator when the new denominator still allows it', async () => {
     const onChange = vi.fn();
     render(<TimeSignatureSelect {...defaults} numerator={3} onChange={onChange} />);
-    await userEvent.click(screen.getByLabelText('Time signature denominator'));
+    await userEvent.click(screen.getByLabelText('pages.metronome.ariaTimeSigDenominator'));
     await userEvent.click(screen.getByRole('menuitem', { name: '8' }));
     expect(onChange).toHaveBeenCalledWith(3, 8);
   });

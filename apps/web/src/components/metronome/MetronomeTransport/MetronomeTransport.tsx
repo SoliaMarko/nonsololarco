@@ -30,7 +30,7 @@ export default function MetronomeTransport({
   return (
     <div className="flex items-center gap-4">
       <button
-        aria-label={playing ? 'Pause' : 'Play'}
+        aria-label={playing ? t('ariaPause') : t('ariaPlay')}
         className={cn(
           'border-primary-dark flex size-18 items-center justify-center rounded-full border-3',
           'shadow-[2px_2px_0_rgba(0,0,0,0.5)]',

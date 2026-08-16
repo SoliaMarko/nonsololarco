@@ -58,7 +58,7 @@ export default function TimeSignatureSelect({
     <div className={cn('flex gap-1', showLabels ? 'items-end' : 'items-center')}>
       <div className="flex flex-col items-center">
         <SigDropdown
-          ariaLabel="Time signature numerator"
+          ariaLabel={t('ariaTimeSigNumerator')}
           onSelect={(n) => onChange(n, denominator)}
           options={validNums}
           value={numerator}
@@ -79,7 +79,7 @@ export default function TimeSignatureSelect({
 
       <div className="flex flex-col items-center">
         <SigDropdown
-          ariaLabel="Time signature denominator"
+          ariaLabel={t('ariaTimeSigDenominator')}
           onSelect={(d) => {
             const nums = VALID_NUMERATORS[d] ?? [4];
             const corrected = nums.includes(numerator) ? numerator : (nums[0] ?? 4);

@@ -73,10 +73,21 @@ const SORT_OPTIONS_COMMON: { labelKey: SortOptionKey; value: string }[] = [
   { labelKey: 'repertoire.sortTimeDesc', value: encodeSortValue('time', 'desc') },
 ];
 
-/** Maps the current URL params to the composite dropdown value */
+/** All recognised sort values — used to validate URL params at runtime. */
+const ALL_SORT_VALUES = new Set([
+  ...SORT_OPTIONS_COMMON.map((o) => o.value),
+  encodeSortValue('trackOrder', 'asc'),
+]);
+
+/**
+ * Maps the current URL params to a composite dropdown value, normalizing
+ * unsupported or tampered pairs to `"default"` so the UI never displays an
+ * undefined label.
+ */
 function currentSortDropdownValue(sortField: string | null, sortOrder: string | null): string {
   if (!sortField) return 'default';
-  return encodeSortValue(sortField as SortField, (sortOrder as SortOrder) ?? 'asc');
+  const encoded = `${sortField}:${sortOrder ?? 'asc'}`;
+  return ALL_SORT_VALUES.has(encoded) ? encoded : 'default';
 }
 
 /**
@@ -123,7 +134,7 @@ export default function RepertoireFilterBar() {
     value: encodeSortValue('trackOrder', 'asc'),
   };
 
-  const mobileSortOptions = isSpecificBandSelected
+  const mobileSortOptions = isRealBand
     ? [orderOption, ...SORT_OPTIONS_COMMON]
     : SORT_OPTIONS_COMMON;
 

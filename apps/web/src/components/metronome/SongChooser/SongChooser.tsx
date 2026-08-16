@@ -13,6 +13,7 @@ import {
 } from '@/src/icons/base';
 import { ChooserSong, TimeSignatureDef } from '@/src/lib/types/metronome.types';
 import { cn } from '@/src/utils/cn';
+import { MT_MAX, MT_MIN } from '@/src/utils/metronome.utils';
 
 import TimeSignatureSelect from '../TimeSignatureSelect';
 
@@ -93,7 +94,10 @@ export default function SongChooser({
 
     const raw = newBpm.trim();
     const parsed = raw ? Number(raw) : undefined;
-    if (parsed !== undefined && (!Number.isInteger(parsed) || parsed <= 0)) {
+    if (
+      parsed !== undefined &&
+      (!Number.isInteger(parsed) || parsed < MT_MIN || parsed > MT_MAX)
+    ) {
       setBpmError(true);
       return;
     }
@@ -124,16 +128,20 @@ export default function SongChooser({
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === 'Enter') handleSubmitNew();
-    if (e.key === 'Escape') handleCancelNew();
   };
 
-  // Escape closes the overlay, but only once the inline form is out of the
-  // way — there it means "cancel the form", handled by handleKeyDown.
+  // A single Escape handler covers both modes: in add mode it cancels the
+  // form (regardless of which control has focus), otherwise it dismisses
+  // the overlay. Attaching at the document level ensures it works even when
+  // focus is on the time-signature selector or the Cancel button.
   useEffect(() => {
-    if (!onDismiss || addMode) return;
-
     const handleEscape = (e: KeyboardEvent) => {
-      if (e.key === 'Escape') onDismiss();
+      if (e.key !== 'Escape') return;
+      if (addMode) {
+        handleCancelNew();
+      } else if (onDismiss) {
+        onDismiss();
+      }
     };
 
     document.addEventListener('keydown', handleEscape);

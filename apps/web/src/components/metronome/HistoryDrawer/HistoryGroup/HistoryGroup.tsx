@@ -89,7 +89,7 @@ export default function HistoryGroup({ group, onDelete, onToggle, open }: Histor
                   {minutes < 1 ? t('durationUnderMin') : t('durationMin', { minutes })}
                 </span>
                 <button
-                  aria-label="Delete entry"
+                  aria-label={t('ariaDeleteEntry')}
                   className="border-edge bg-surface text-fg-tertiary hover:border-danger-deep hover:bg-danger-subtle hover:text-danger-deep flex size-6.5 shrink-0 items-center justify-center border-[1.5px] transition-[background-color,border-color,color] duration-100"
                   onClick={() => onDelete(r)}
                   type="button"

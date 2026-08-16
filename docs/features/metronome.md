@@ -42,7 +42,10 @@ Options:
   a TAP button for tap tempo.
 - **Beat dots** — a row of dots that flash in sequence with the beat. The
   downbeat (first dot) flashes red; subsequent dots flash yellow.
-- **Time signature** — 4/4, 3/4, or 6/4, selectable from the top bar.
+- **Time signature** — selectable from the top bar. Supported signatures:
+  simple (2/4, 3/4, 4/4, 5/4, 6/4, 7/4), compound (6/8, 9/8, 12/8), and
+  half-note (2/2). Changing the denominator auto-corrects the numerator when
+  the current value is invalid for the new denominator.
 - **Transport** — large play/pause button. When a song is tracked and the
   metronome is playing, a "finish and save" button appears.
 - **Track badge** — shows which song is being tracked (emerald), or "no
@@ -156,7 +159,9 @@ All paths are relative to `apps/web/`.
 - Unit: `src/components/metronome/BeatDots/BeatDots.test.tsx`
 - Unit: `src/components/metronome/BpmControl/BpmControl.test.tsx`
 - Unit: `src/components/metronome/BpmControl/BpmRuler/BpmRuler.test.tsx`
+- Unit: `src/components/metronome/HistoryDrawer/HistoryGroup/HistoryGroup.test.tsx`
 - Unit: `src/components/metronome/HistoryDrawer/HistoryDrawer.test.tsx`
+- Unit: `app/[locale]/metronome/page.test.tsx`
 - Unit: `src/components/metronome/MetronomeScreen/MetronomeScreen.test.tsx`
 - Unit: `src/components/metronome/MetronomeTopBar/MetronomeTopBar.test.tsx`
 - Unit: `src/components/metronome/MetronomeTransport/MetronomeTransport.test.tsx`

@@ -19,14 +19,14 @@ describe('MetronomeTransport', () => {
     render(
       <MetronomeTransport onSave={() => {}} onTogglePlay={() => {}} playing={false} tracked={null} />,
     );
-    expect(screen.getByRole('button', { name: 'Play' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'pages.metronome.ariaPlay' })).toBeDefined();
   });
 
   it('shows pause button when playing', () => {
     render(
       <MetronomeTransport onSave={() => {}} onTogglePlay={() => {}} playing={true} tracked={null} />,
     );
-    expect(screen.getByRole('button', { name: 'Pause' })).toBeDefined();
+    expect(screen.getByRole('button', { name: 'pages.metronome.ariaPause' })).toBeDefined();
   });
 
   it('shows save button when tracking a song and playing', () => {
@@ -77,7 +77,7 @@ describe('MetronomeTransport', () => {
         tracked={null}
       />,
     );
-    await userEvent.click(screen.getByRole('button', { name: 'Play' }));
+    await userEvent.click(screen.getByRole('button', { name: 'pages.metronome.ariaPlay' }));
     expect(onTogglePlay).toHaveBeenCalledOnce();
   });
 

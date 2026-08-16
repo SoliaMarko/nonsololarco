@@ -109,6 +109,26 @@ describe('SongChooser', () => {
     expect(screen.getByRole('alert')).toBeDefined();
   });
 
+  it('rejects a BPM below the minimum (39) and does not call onAdd', async () => {
+    const { onAdd } = setup();
+    await userEvent.click(screen.getByText('pages.metronome.newTrack'));
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Too Slow');
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '39');
+    await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
+    expect(onAdd).not.toHaveBeenCalled();
+    expect(screen.getByRole('alert')).toBeDefined();
+  });
+
+  it('rejects a BPM above the maximum (241) and does not call onAdd', async () => {
+    const { onAdd } = setup();
+    await userEvent.click(screen.getByText('pages.metronome.newTrack'));
+    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Too Fast');
+    await userEvent.type(screen.getByPlaceholderText('BPM'), '241');
+    await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
+    expect(onAdd).not.toHaveBeenCalled();
+    expect(screen.getByRole('alert')).toBeDefined();
+  });
+
   it('clears the BPM error once the field is edited again', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
@@ -170,6 +190,17 @@ describe('SongChooser', () => {
     const onDismiss = vi.fn();
     setup({ onDismiss });
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
+    await userEvent.keyboard('{Escape}');
+    expect(onDismiss).not.toHaveBeenCalled();
+    expect(screen.queryByPlaceholderText('pages.metronome.newTitlePlaceholder')).toBeNull();
+  });
+
+  it('Escape cancels the inline form even when focus is on a non-input control', async () => {
+    const onDismiss = vi.fn();
+    setup({ onDismiss });
+    await userEvent.click(screen.getByText('pages.metronome.newTrack'));
+    // Focus the Cancel button rather than one of the text inputs
+    screen.getByText('pages.metronome.cancel').focus();
     await userEvent.keyboard('{Escape}');
     expect(onDismiss).not.toHaveBeenCalled();
     expect(screen.queryByPlaceholderText('pages.metronome.newTitlePlaceholder')).toBeNull();
