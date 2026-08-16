@@ -15,7 +15,7 @@ Updated: 2026-08-16
 | --- | --- | --- | --- |
 | Web components | 164 | 31 (19%) | 27 (16%) |
 | Utils + hooks | 19 | 9 (47%) | — |
-| API services | 4 | 2 unit / 0 integration | — |
+| API services | 4 | 2 unit / 1 integration | — |
 
 Stories live centrally in `apps/web/stories/` (28 files), not next to components.
 
@@ -41,7 +41,7 @@ Stories live centrally in `apps/web/stories/` (28 files), not next to components
 | auth.service | · | · | `apps/api/src/auth/auth.service.ts` |
 | bands.service | ✓ | · | `apps/api/src/bands/bands.service.ts` |
 | prisma.service | · | · | `apps/api/src/prisma/prisma.service.ts` |
-| repertoire.service | ✓ | · | `apps/api/src/repertoire/repertoire.service.ts` |
+| repertoire.service | ✓ | ✓ | `apps/api/src/repertoire/repertoire.service.ts` |
 
 ## Database
 

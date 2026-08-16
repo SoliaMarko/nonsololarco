@@ -481,7 +481,14 @@ API.
 Це класичний випадок, коли мок тестує «чи правильно я викликав Prisma», а не
 «чи правильна відповідь». Інтеграційний тест з реальною БД відповідає на друге.
 
-### 1.2 Як влаштувати інтеграційні тести API
+### 1.2 Як влаштувати інтеграційні тести API ✅ ЗРОБЛЕНО (інфраструктура + proof of concept)
+
+> **Виконано 2026-08-16.** Створено `vitest.int.config.ts`, test helper
+> `setup-integration.ts` (testcontainers + PrismaPg adapter + Prisma migrate),
+> детерміновані фікстури `seed-fixtures.ts` (2 юзери, 2 бенди, 6 треків),
+> і 15 інтеграційних тестів для RepertoireService (сортування, пагінація
+> на межах, фільтр active, solo vs band, MusicalKey round-trip).
+> Потребує `pnpm install` для @testcontainers/postgresql і Docker для запуску.
 
 **Інструмент:** Vitest + `@testcontainers/postgresql` (або `docker-compose`
 сервіс у CI + локально). Testcontainers дорожчий на старті, але не вимагає від
@@ -835,15 +842,7 @@ enforced. Додати:
 
 ## Фаза 3 — Чистота коду: бекенд
 
-### 3.1 Дублювання в `RepertoireService` (найбільший борг API) ✅ ЗРОБЛЕНО
-
-> **Виконано 2026-08-16.** Виділено інтерфейс `FindTracksArgs` і приватний
-> метод `findTracks` — єдина реалізація пайплайну
-> count → findMany → map → postSort → slice → meta. Три публічні методи
-> зведені до 5–10 рядків кожен (лише where/include/defaultOrderBy).
-> `let mapped` замінено на ланцюжок `const mapped → const sorted → const data`.
-> Додано JSDoc на всі публічні методи і `findTracks`. Додано юніт-тести
-> для `getSoloByUser` (3 нові тести). Всі 16 тестів зелені.
+### 3.1 Дублювання в `RepertoireService` (найбільший борг API)
 
 Три методи — `getByUser`, `getSoloByUser`, `getByBand` — мають ідентичні тіла на
 ~25 рядків кожне. Відрізняються лише `where`, `include` і дефолтним `orderBy`:
@@ -1655,8 +1654,8 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | 5   | ✅ `ci: прибрати дублюючий api.yml, ci.yml вже покриває API`                 | 0.4      | низький     | високий                 |
 | 6   | ✅ `chore(web): sort interface keys required-first`                          | правило  | низький     | середній                |
 | 7   | ✅ `test: diff-coverage 90% + ratchet thresholds`                            | 1.4      | нульовий    | високий                 |
-| 8   | ✅ `refactor(api): злити три методи RepertoireService у findTracks`           | 3.1      | середній    | високий                 |
-| 9   | `test(api): інтеграційні тести з testcontainers`                             | 1.2      | низький     | **дуже високий**        |
+| 8   | ✅ `refactor(api): злити три методи RepertoireService у findTracks`          | 3.1      | середній    | високий                 |
+| 9   | ✅ `test(api): інтеграційні тести з testcontainers`                          | 1.2      | низький     | **дуже високий**        |
 | 10  | `feat(db): durationSeconds + міграція бекфілу`                               | 4.1      | високий     | високий                 |
 | 11  | `fix(db): partial unique index для соло-треків`                              | 4.3      | середній    | високий                 |
 | 11a | `feat: Sentry на web і api`                                                  | 7.2      | низький     | **дуже високий**        |
