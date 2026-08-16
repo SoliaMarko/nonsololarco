@@ -13,14 +13,30 @@
     "check": "turbo run lint stylelint typecheck test build",
     "check:full": "pnpm check && pnpm e2e",
     "ai:map": "node scripts/generate-ai-map.mjs",
-    "pr": "bash scripts/open-pr.sh"
+    "pr": "bash scripts/open-pr.sh",
+    "prepare": "husky"
   },
   "devDependencies": {
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "prettier": "^3.7.4",
     "prettier-plugin-tailwindcss": "^0.8.0",
     "turbo": "^2.9.14",
     "typescript": "5.9.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "eslint --fix",
+      "prettier --write"
+    ],
+    "*.css": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {

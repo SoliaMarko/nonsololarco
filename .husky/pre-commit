@@ -1,0 +1,8 @@
+pnpm exec lint-staged
+
+# Regenerate AI map if any source file changed
+CHANGED=$(git diff --cached --name-only -- 'apps/*/src/**' 'packages/*/src/**')
+if [ -n "$CHANGED" ]; then
+  node scripts/generate-ai-map.mjs
+  git add docs/ai/MAP.md
+fi

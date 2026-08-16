@@ -261,7 +261,11 @@ CLAUDE.md каже «no `any`» — але в API це вимкнено явно
    а `commonjs` тут просто успадковано з шаблону.
 4. Порушення, що спливуть, чинити пачками по модулях, а не одним PR.
 
-### 0.3 Pre-commit hooks (husky)
+### 0.3 Pre-commit hooks (husky) ✅ ЗРОБЛЕНО
+
+> **Виконано 2026-08-16.** Додано `husky` і `lint-staged` у root
+> `devDependencies`. Pre-commit: lint-staged (eslint --fix + prettier --write
+> на staged файлах) + автогенерація MAP.md. Pre-push: typecheck.
 
 **Що дає husky конкретно тут.** Це не «ще один інструмент» — він закриває
 три реальні діри:
@@ -385,7 +389,13 @@ unit tests, e2e and build; all six gate the final `ci` check». Для API це
 4. Або — краще — прибрати `api.yml` зовсім і додати API-кроки в `ci.yml`,
    щоб гейт був один і його не можна було обійти пушем у `main`.
 
-### 0.5 Prettier конфіг
+### 0.5 Prettier конфіг ✅ ЗРОБЛЕНО
+
+> **Виконано 2026-08-16.** Створено `.prettierrc.json` у корені. Плагіни
+> `@trivago/prettier-plugin-sort-imports` і `prettier-plugin-tailwindcss`
+> піднято в root `devDependencies`. Прибрано дублікат `prettier` з API.
+> Прибрано `eslint-plugin-prettier` з API (застарілий підхід — Prettier через
+> ESLint), замінено на прямий імпорт `eslint-config-prettier`.
 
 `@trivago/prettier-plugin-sort-imports` встановлений у `apps/web`, але
 конфігураційного файлу prettier у корені немає — порядок імпортів залежить від
@@ -1592,8 +1602,8 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | #   | PR                                                                           | Фаза     | Ризик       | Ефект                   |
 | --- | ---------------------------------------------------------------------------- | -------- | ----------- | ----------------------- |
 | 0   | ✅ `docs: середовище для AI (ORIENTATION, RECIPES, MAP, slim CLAUDE.md)`     | 6.4      | нульовий    | **дуже високий**        |
-| 1   | `chore: prettier config + hoist sort-imports`                                | 0.5      | нульовий    | високий                 |
-| 2   | `chore: husky + lint-staged`                                                 | 0.3      | нульовий    | високий                 |
+| 1   | ✅ `chore: prettier config + hoist sort-imports`                             | 0.5      | нульовий    | високий                 |
+| 2   | ✅ `chore: husky + lint-staged`                                              | 0.3      | нульовий    | високий                 |
 | 2a  | `chore: commitlint + .gitattributes + захист гілок`                          | 0.3.2    | нульовий    | високий                 |
 | 3   | `chore(web): enforce no-nested-ternary, prefer-const` + фікс 3 порушень      | 0.1      | низький     | високий                 |
 | 3a  | `fix(web): mis-0.25/mie-0.25 у Button не генерують CSS` + lint-гард          | 0.1.1    | низький     | високий                 |
