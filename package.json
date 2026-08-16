@@ -17,6 +17,8 @@
     "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
     "@trivago/prettier-plugin-sort-imports": "^6.0.2",
     "husky": "^9.1.7",
     "lint-staged": "^15.5.1",

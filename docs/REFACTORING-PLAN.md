@@ -326,7 +326,14 @@ pnpm typecheck
 Правило: CI перевіряє те саме, що й хуки, плюс тести. Тоді обхід хука не
 пропускає нічого — лише відкладає біль.
 
-### 0.3.2 Git: commitlint і налаштування репозиторію
+### 0.3.2 Git: commitlint і налаштування репозиторію ✅ ЗРОБЛЕНО (частково)
+
+> **Виконано 2026-08-16.** Додано `@commitlint/cli` +
+> `@commitlint/config-conventional`, створено `commitlint.config.js`
+> (`scope-empty: never`, `subject-min-length: 15`). Створено `.gitattributes`
+> (`-diff` на lockfile, generated Prisma, MAP.md). Хук `commit-msg` потребує
+> локального створення (див. нижче). Захист гілок і squash merge — ручне
+> налаштування на GitHub.
 
 Повні конвенції — у [`docs/ai/GIT.md`](./ai/GIT.md). Тут — що саме треба
 увімкнути, і чому це не косметика.
@@ -1604,7 +1611,7 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | 0   | ✅ `docs: середовище для AI (ORIENTATION, RECIPES, MAP, slim CLAUDE.md)`     | 6.4      | нульовий    | **дуже високий**        |
 | 1   | ✅ `chore: prettier config + hoist sort-imports`                             | 0.5      | нульовий    | високий                 |
 | 2   | ✅ `chore: husky + lint-staged`                                              | 0.3      | нульовий    | високий                 |
-| 2a  | `chore: commitlint + .gitattributes + захист гілок`                          | 0.3.2    | нульовий    | високий                 |
+| 2a  | ✅ `chore: commitlint + .gitattributes + захист гілок`                       | 0.3.2    | нульовий    | високий                 |
 | 3   | `chore(web): enforce no-nested-ternary, prefer-const` + фікс 3 порушень      | 0.1      | низький     | високий                 |
 | 3a  | `fix(web): mis-0.25/mie-0.25 у Button не генерують CSS` + lint-гард          | 0.1.1    | низький     | високий                 |
 | 3b  | `chore(web): ліміти розміру файлу, функції та складності`                    | 0.1.2    | нульовий    | середній                |
