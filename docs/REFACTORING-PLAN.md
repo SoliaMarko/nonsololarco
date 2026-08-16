@@ -252,7 +252,13 @@ CVA-рядків нормальний; файл на 80 рядків, що ро�
 проекту без класів поза NestJS. `max-len` теж не потрібен — Prettier уже
 тримає ширину.
 
-### 0.2 Вирівняти суворість API з web
+### 0.2 Вирівняти суворість API з web ✅ ЗРОБЛЕНО
+
+> **Виконано 2026-08-16.** Створено `packages/eslint-config/nest.js` —
+> shared ESLint конфіг для NestJS. Увімкнено `no-explicit-any: error`,
+> `no-floating-promises: error`, `no-console`, complexity-ліміти.
+> Прибрано `sourceType: 'commonjs'`. API eslint.config.mjs тепер
+> імпортує shared конфіг.
 
 Зараз конфіги розійшлися драматично:
 
@@ -1627,7 +1633,7 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | 3   | ✅ `chore(web): enforce no-nested-ternary, prefer-const` + фікс 3 порушень   | 0.1      | низький     | високий                 |
 | 3a  | ✅ `fix(web): mis-0.25/mie-0.25 у Button не генерують CSS` + lint-гард       | 0.1.1    | низький     | високий                 |
 | 3b  | ✅ `chore(web): ліміти розміру файлу, функції та складності`                 | 0.1.2    | нульовий    | середній                |
-| 4   | `chore: eslint-config/nest + вирівняти суворість api`                        | 0.2      | середній    | високий                 |
+| 4   | ✅ `chore: eslint-config/nest + вирівняти суворість api`                     | 0.2      | середній    | високий                 |
 | 5   | `ci: додати тести api в ci.yml, прибрати api.yml`                            | 0.4      | низький     | високий                 |
 | 6   | `chore(web): sort interface keys required-first`                             | правило  | низький     | середній                |
 | 7   | `test: diff-coverage 90% + ratchet thresholds`                               | 1.4      | нульовий    | високий                 |
