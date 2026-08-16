@@ -5,8 +5,8 @@ import Text from '@/src/components/typography/Text';
 import { cn } from '@/src/utils/cn';
 
 interface LeadRowProps {
-  hasMoreLeads?: boolean;
   track: TrackSummary;
+  hasMoreLeads?: boolean;
 }
 
 export default function LeadRow({ hasMoreLeads, track }: LeadRowProps) {

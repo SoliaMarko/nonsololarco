@@ -28,14 +28,14 @@ type ChipVariantProps = Omit<VariantProps<typeof chipVariants>, 'isInteractive'>
  */
 export interface ChipProps
   extends Omit<HTMLAttributes<HTMLElement>, 'color' | 'onClick'>, ChipVariantProps {
+  label: string;
   className?: string;
   disabled?: boolean;
   isSelected?: boolean;
-  label: string;
 }
 
 type ChipWithClick = { onClick: () => void; onRemove?: never };
-type ChipWithRemove = { onClick?: never; onRemove: () => void };
+type ChipWithRemove = { onRemove: () => void; onClick?: never };
 type ChipStatic = { onClick?: never; onRemove?: never };
 type ChipInteractiveProps = ChipWithClick | ChipWithRemove | ChipStatic;
 

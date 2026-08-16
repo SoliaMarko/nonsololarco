@@ -4,10 +4,10 @@ import { cn } from '@/src/utils/cn';
 
 interface FilterPillProps {
   activeStyle: string;
-  count?: number;
   isActive: boolean;
   label: string;
   onClick: () => void;
+  count?: number;
 }
 
 /**

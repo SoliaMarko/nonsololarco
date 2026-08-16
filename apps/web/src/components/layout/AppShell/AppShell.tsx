@@ -8,8 +8,8 @@ import AppHeaderNav from './AppHeaderNav';
 
 export interface AppShellProps {
   activePath: string;
-  activeTitle?: string;
   children: ReactNode;
+  activeTitle?: string;
   className?: string;
   mainClassName?: string;
 }

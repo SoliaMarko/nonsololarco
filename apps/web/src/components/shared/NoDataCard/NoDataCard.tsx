@@ -7,13 +7,13 @@ import Heading from '../../typography/Heading';
 import Text from '../../typography/Text';
 
 export interface NoDataCardProps {
+  description: string;
+  title: string;
   /** Action button rendered at the bottom of the card */
   action?: ReactNode;
   className?: string;
-  description: string;
   /** Icon or illustration inside the dashed circle. Defaults to VinylRecord. */
   icon?: ReactNode;
-  title: string;
 }
 
 export default function NoDataCard({

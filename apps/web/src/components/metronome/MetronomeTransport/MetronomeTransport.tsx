@@ -50,7 +50,7 @@ export default function MetronomeTransport({
         )}
       </button>
 
-      {isSong && playing && (
+      {isSong && playing ? (
         <button
           className={cn(
             'pli-4 plb-3 border-emerald-main bg-emerald-main text-primary-light',
@@ -64,7 +64,7 @@ export default function MetronomeTransport({
           <SaveIcon size={15} />
           {t('finishAndSave')}
         </button>
-      )}
+      ) : null}
     </div>
   );
 }

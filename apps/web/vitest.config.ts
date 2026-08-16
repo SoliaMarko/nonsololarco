@@ -21,6 +21,26 @@ const alias = [
 // More info at: https://storybook.js.org/docs/next/writing-tests/integrations/vitest-addon
 export default defineConfig({
   test: {
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary', 'lcov'],
+      reportsDirectory: path.join(dirname, 'coverage'),
+      exclude: [
+        '**/*.stories.tsx',
+        '**/index.ts',
+        '**/*.d.ts',
+        'src/data/**',
+        'src/icons/**',
+        'src/illustrations/**',
+      ],
+      thresholds: {
+        autoUpdate: true,
+        lines: 10,
+        branches: 10,
+        functions: 10,
+        statements: 10,
+      },
+    },
     projects: [
       {
         // Unit/integration tests (jsdom + React Testing Library).

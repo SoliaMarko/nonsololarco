@@ -21,13 +21,13 @@ interface TimeSignatureSelectProps {
    * before calling this.
    */
   onChange: (numerator: number, denominator: number) => void;
+  variant: TimeSignatureSelectVariant;
   /**
    * Renders the "beats" / "note" captions under each dropdown. Off by
    * default so the control fits a single toolbar line; turn it on inside
    * forms, where the extra explanation is worth the vertical space.
    */
   showLabels?: boolean;
-  variant: TimeSignatureSelectVariant;
 }
 
 const MUTED_VARIANT = {

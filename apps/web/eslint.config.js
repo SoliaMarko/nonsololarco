@@ -47,7 +47,7 @@ export default [
       'import/newline-after-import': 'error',
 
       // TypeScript interface key sorting
-      'typescript-sort-keys/interface': 'error',
+      'typescript-sort-keys/interface': ['error', 'asc', { requiredFirst: true }],
       'typescript-sort-keys/string-enum': 'error',
 
       // Size & complexity limits — proxy metrics, warn to guide not block

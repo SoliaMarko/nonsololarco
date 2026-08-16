@@ -26,12 +26,12 @@ interface IndicatorRect {
 
 export interface TabsProps
   extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>, VariantProps<typeof tabsListVariants> {
+  children: ReactNode;
   /**
    * Enables the sliding indicator animation — a background highlight and
    * accent underline that smoothly transition between active tabs.
    */
   animated?: boolean;
-  children: ReactNode;
   className?: string;
   /**
    * Accessible label for the tab list — required when the purpose isn't

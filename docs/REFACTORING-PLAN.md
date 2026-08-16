@@ -1640,7 +1640,7 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | 3b  | ✅ `chore(web): ліміти розміру файлу, функції та складності`                 | 0.1.2    | нульовий    | середній                |
 | 4   | ✅ `chore: eslint-config/nest + вирівняти суворість api`                     | 0.2      | середній    | високий                 |
 | 5   | ✅ `ci: прибрати дублюючий api.yml, ci.yml вже покриває API`                 | 0.4      | низький     | високий                 |
-| 6   | `chore(web): sort interface keys required-first`                             | правило  | низький     | середній                |
+| 6   | ✅ `chore(web): sort interface keys required-first`                          | правило  | низький     | середній                |
 | 7   | `test: diff-coverage 90% + ratchet thresholds`                               | 1.4      | нульовий    | високий                 |
 | 8   | `refactor(api): злити три методи RepertoireService у findTracks`             | 3.1      | середній    | високий                 |
 | 9   | `test(api): інтеграційні тести з testcontainers`                             | 1.2      | низький     | **дуже високий**        |

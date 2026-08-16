@@ -20,10 +20,10 @@ export interface AuthPageLayoutProps {
   children: ReactNode;
   /** Divider label above the OAuth buttons */
   heading: string;
-  /** Show a spinner overlay on top of the card content while loading. */
-  loading?: boolean;
   /** Divider label between buttons and bottom section */
   switchLabel: string;
+  /** Show a spinner overlay on top of the card content while loading. */
+  loading?: boolean;
 }
 
 export default function AuthPageLayout({
@@ -49,11 +49,11 @@ export default function AuthPageLayout({
           <LoginHero />
 
           <div className="relative">
-            {loading && (
+            {loading ? (
               <div className="bg-card/80 absolute inset-0 z-10 flex items-center justify-center backdrop-blur-[2px]">
                 <Spinner size="lg" label={tCommon('status.loading')} />
               </div>
-            )}
+            ) : null}
 
             <div className="pli-8 plb-8 flex flex-col gap-5">
               <Divider

@@ -91,13 +91,13 @@ export default function SigDropdown({
               onSelect={() => onSelect(opt)}
             >
               {opt}
-              {opt === value && (
+              {opt === value ? (
                 <CheckSolidIcon
                   size={13}
                   className="text-emerald-main shrink-0"
                   aria-hidden="true"
                 />
-              )}
+              ) : null}
             </RadixDropdown.Item>
           ))}
         </RadixDropdown.Content>

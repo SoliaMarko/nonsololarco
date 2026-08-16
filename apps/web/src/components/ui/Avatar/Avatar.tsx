@@ -13,10 +13,10 @@ import { badgeVariants } from '@/src/lib/variants/badge.variants';
 import { cn } from '@/src/utils/cn';
 
 export interface AvatarProps extends HTMLAttributes<HTMLDivElement> {
+  initials: string;
   alt?: string;
   className?: string;
   frame?: AvatarFrame;
-  initials: string;
   size?: AvatarSize;
   src?: string;
   status?: BadgeStatus;

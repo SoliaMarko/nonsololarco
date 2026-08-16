@@ -38,10 +38,10 @@ const STATUS_LABEL_KEY: Record<TrackStatus, string> = {
 };
 
 export interface TrackListRowProps {
+  track: Track;
   index?: number;
   /** Whether this track belongs to current user — shows ★ and green highlight */
   isMyTrack?: boolean;
-  track: Track;
 }
 
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {

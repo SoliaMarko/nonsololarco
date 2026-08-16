@@ -10,9 +10,9 @@ import { cn } from '@/src/utils/cn';
 import SelectItem from './SelectItem';
 
 export type SelectOption = {
-  disabled?: boolean;
   label: string;
   value: string;
+  disabled?: boolean;
 };
 
 export type SelectGroup = {
@@ -21,19 +21,19 @@ export type SelectGroup = {
 };
 
 interface SelectBaseProps {
+  onChange: (value: string | null) => void;
+  value: string | null;
   className?: string;
   disabled?: boolean;
   error?: string;
   hint?: string;
   isClearable?: boolean;
   label?: string;
-  onChange: (value: string | null) => void;
   placeholder?: string;
-  value: string | null;
 }
 
 type SelectProps = SelectBaseProps &
-  ({ groups?: never; options: SelectOption[] } | { groups: SelectGroup[]; options?: never });
+  ({ options: SelectOption[]; groups?: never } | { groups: SelectGroup[]; options?: never });
 
 /**
  * Accessible select component built on Radix UI.

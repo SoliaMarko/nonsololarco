@@ -12,9 +12,9 @@ import { cn } from '@/src/utils/cn';
 type DropdownVariantProps = VariantProps<typeof dropdownItemVariants>;
 
 type DropdownItemBase = DropdownVariantProps & {
+  label: string;
   disabled?: boolean;
   icon?: ElementType;
-  label: string;
   /**
    * Arbitrary ReactNode rendered before the label — use when the leading
    * visual is a parameterised element (e.g. a locale stamp) rather than a
@@ -27,8 +27,8 @@ type DropdownItemBase = DropdownVariantProps & {
 };
 
 type DropdownItemWithClick = DropdownItemBase & {
-  href?: never;
   onClick: () => void;
+  href?: never;
 };
 
 type DropdownItemWithHref = DropdownItemBase & {
@@ -53,14 +53,14 @@ export type DropdownGroup = {
 export type DropdownVariant = 'default' | 'stamp';
 
 export interface DropdownProps {
-  align?: OptionsPositionType;
-  className?: string;
   /** Groups of items — groups are separated by a dotted divider */
   groups: DropdownGroup[];
-  /** Which side of the trigger the menu opens on. Defaults to `"bottom"`. */
-  side?: 'bottom' | 'top';
   /** Trigger element — button, avatar, icon, anything */
   trigger: ReactNode;
+  align?: OptionsPositionType;
+  className?: string;
+  /** Which side of the trigger the menu opens on. Defaults to `"bottom"`. */
+  side?: 'bottom' | 'top';
   /**
    * Visual variant.
    * - `"default"` — rounded card with subtle shadow (profile menus, context actions)

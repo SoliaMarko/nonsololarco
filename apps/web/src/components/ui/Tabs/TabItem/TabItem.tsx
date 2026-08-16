@@ -12,13 +12,13 @@ type TabItemVariantProps = VariantProps<typeof tabItemVariants>;
 
 export interface TabItemProps
   extends Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children'>, TabItemVariantProps {
+  children: ReactNode;
   /**
    * When true, merges props onto the immediate child element instead of
    * rendering a `<button>`. Use this to render a `<Link>` or any other
    * element as the tab trigger.
    */
   asChild?: boolean;
-  children: ReactNode;
   className?: string;
 }
 

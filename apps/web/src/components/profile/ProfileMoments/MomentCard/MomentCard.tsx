@@ -6,10 +6,10 @@ import { MomentType } from '@/src/lib/types/profile/profile.types';
 import { cn } from '@/src/utils/cn';
 
 export interface MomentCardProps {
+  moment: MomentType;
   className?: string;
   /** Owner can add/replace media; visitors only view */
   isOwnProfile?: boolean;
-  moment: MomentType;
 }
 
 export default function MomentCard({ className, isOwnProfile, moment }: MomentCardProps) {

@@ -71,7 +71,7 @@ export default function HistoryGroup({ group, onDelete, onToggle, open }: Histor
       </button>
 
       {/* Expanded rows */}
-      {open && (
+      {open ? (
         <div className="pli-4 pbe-2">
           {group.rows.map((r) => {
             const minutes = Math.round(r.durationMs / 60000);
@@ -100,7 +100,7 @@ export default function HistoryGroup({ group, onDelete, onToggle, open }: Histor
             );
           })}
         </div>
-      )}
+      ) : null}
     </div>
   );
 }

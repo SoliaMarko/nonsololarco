@@ -22,7 +22,7 @@ export default function MetronomeFab() {
 
   return (
     <div className="relative size-16">
-      {animate && (
+      {animate ? (
         <>
           <span
             className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
@@ -45,7 +45,7 @@ export default function MetronomeFab() {
             }}
           />
         </>
-      )}
+      ) : null}
       <button
         aria-label="Metronome"
         className="border-primary-dark bg-yellow-main absolute inset-0 z-3 flex items-center justify-center rounded-full border-[2.5px] shadow-[2px_2px_0_rgba(0,0,0,0.5)] transition-transform duration-100 hover:-translate-x-px hover:-translate-y-px"

@@ -3,14 +3,14 @@ import { ElementType, ReactNode } from 'react';
 import { ProfileType } from '../profile.types';
 
 export type ProfileStatsConfig = {
-  color?: string;
   icon: ElementType;
-  isPicks?: boolean;
   labelKey: string;
   valueKey: keyof Pick<
     ProfileType,
     'picks' | 'rehearsalsCount' | 'tracksCount' | 'performancesCount'
   >;
+  color?: string;
+  isPicks?: boolean;
 };
 
 export type MomentKind = 'photo' | 'video';
@@ -18,14 +18,14 @@ export type MomentKind = 'photo' | 'video';
 export type MomentType = {
   /** Caption shown at bottom */
   caption: string;
-  /** Only for video: display duration */
-  duration?: string;
   id: string;
-  /** The single featured (large) moment is rendered bigger */
-  isFeatured?: boolean;
   kind: MomentKind;
   /** Image URL (photo) or video thumbnail URL (video). Null = empty placeholder. */
   thumbnailUrl: string | null;
+  /** Only for video: display duration */
+  duration?: string;
+  /** The single featured (large) moment is rendered bigger */
+  isFeatured?: boolean;
   /** Only for video: external link (YouTube/Vimeo) opened on click */
   videoUrl?: string;
 };
@@ -50,21 +50,21 @@ export interface Instrument {
 }
 
 export interface Band {
-  avatarUrl?: string;
   id: string;
   name: string;
   role: string;
+  avatarUrl?: string;
   since?: number;
 }
 
 export type AchievementKind = 'streak' | 'solo' | 'top3' | 'fire';
 
 export interface Achievement {
-  count?: number;
   icon: ReactNode;
   id: string;
   kind: AchievementKind;
   label: string | [string, string?];
+  count?: number;
 }
 
 export interface ProfileSidebar {

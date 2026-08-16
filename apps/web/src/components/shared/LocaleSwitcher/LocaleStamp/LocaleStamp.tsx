@@ -4,8 +4,8 @@ import { cn } from '@/src/utils/cn';
 import { LOCALE_FLAG_GRADIENT } from '../locale-switcher.const';
 
 export interface LocaleStampProps {
-  className?: string;
   locale: Locale;
+  className?: string;
 }
 
 /**

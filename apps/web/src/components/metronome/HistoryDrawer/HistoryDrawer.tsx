@@ -174,7 +174,7 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
         </button>
 
         {/* Undo bar */}
-        {undoEntry && (
+        {undoEntry ? (
           <div className="pli-4 plb-2 bg-card flex items-center justify-between gap-2">
             <span className="font-label text-fg-secondary text-[0.6875rem]">
               {t('entryDeleted', { song: undoEntry.song })}
@@ -187,7 +187,7 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
               {t('undo')}
             </button>
           </div>
-        )}
+        ) : null}
       </div>
     </>
   );

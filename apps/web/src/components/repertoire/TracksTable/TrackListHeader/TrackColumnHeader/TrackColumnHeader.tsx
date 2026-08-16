@@ -5,8 +5,8 @@ import { cn } from '@/src/utils/cn';
 import { SortField, SortOrder } from '@/src/utils/tracks-sort.utils';
 
 type BaseProps = {
-  className?: string;
   title: string;
+  className?: string;
 };
 
 type TrackColumnHeaderProps =

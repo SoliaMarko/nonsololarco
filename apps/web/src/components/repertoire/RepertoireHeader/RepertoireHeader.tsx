@@ -16,11 +16,11 @@ import BandTabs from './BandTabs';
 
 export interface RepertoireHeaderProps {
   bands: Band[];
+  stats: RepertoireStats;
   className?: string;
   // TODO: implement soon
   isAIOpen?: boolean;
   onAIToggle?: () => void;
-  stats: RepertoireStats;
 }
 
 export default function RepertoireHeader({

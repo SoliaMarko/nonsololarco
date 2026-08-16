@@ -40,15 +40,15 @@ interface SongChooserProps {
    * dismiss just closes this overlay onto the running metronome.
    */
   onBack: () => void;
+  onPick: (song: ChooserSong) => void;
+  onSkip: () => void;
+  songs: ChooserSong[];
   /**
    * Closes the overlay leaving the session untouched. Omit it when there is
    * nothing to go back to — on first open there's no previous selection, so
    * dismissing would strand the user on an empty metronome.
    */
   onDismiss?: () => void;
-  onPick: (song: ChooserSong) => void;
-  onSkip: () => void;
-  songs: ChooserSong[];
 }
 
 /**
@@ -217,9 +217,9 @@ export default function SongChooser({
               <ArrowRightSolidIcon size={16} className="text-fg-tertiary" />
             </button>
           ))}
-          {filtered.length === 0 && (
+          {filtered.length === 0 ? (
             <div className="pli-4 plb-3 font-label text-fg-tertiary text-xs">{t('notFound')}</div>
-          )}
+          ) : null}
         </div>
 
         {/* Footer actions */}
@@ -268,11 +268,11 @@ export default function SongChooser({
                 />
               </div>
 
-              {bpmError && (
+              {bpmError ? (
                 <div className="font-label text-accent-red text-[0.625rem]" role="alert">
                   {t('bpmError')}
                 </div>
-              )}
+              ) : null}
 
               <div className="flex gap-2">
                 <button

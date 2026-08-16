@@ -215,16 +215,16 @@ export default function MetronomeScreen() {
           tall viewports while staying flush on compact ones. */}
       <div className="max-h-16 min-h-4 flex-1" />
 
-      {menuOpen && (
+      {menuOpen ? (
         <HistoryDrawer
           history={history}
           onClose={() => setMenuOpen(false)}
           onDelete={deleteEntry}
           onExit={handleExit}
         />
-      )}
+      ) : null}
 
-      {phase === 'choose' && (
+      {phase === 'choose' ? (
         <SongChooser
           onAdd={handleAdd}
           onBack={handleExit}
@@ -233,15 +233,15 @@ export default function MetronomeScreen() {
           onSkip={handleSkip}
           songs={songs}
         />
-      )}
+      ) : null}
 
-      {toast && (
+      {toast ? (
         <Toast
           className="absolute inset-x-0 bottom-5.5 z-40 mx-auto w-fit"
           message={toast}
           style={{ animation: 'toast-in 0.3s ease-out' }}
         />
-      )}
+      ) : null}
     </div>
   );
 }

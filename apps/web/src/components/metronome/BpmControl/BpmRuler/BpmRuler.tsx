@@ -85,9 +85,9 @@ export default function BpmRuler({ bpm, onBpmChange }: BpmRulerProps) {
                   isMajor ? 'bg-primary-light/70 h-5' : 'bg-primary-light/40 h-2.5',
                 )}
               />
-              {v % 20 === 0 && (
+              {v % 20 === 0 ? (
                 <span className="font-label text-primary-light/50 mbs-1 text-[0.5625rem]">{v}</span>
-              )}
+              ) : null}
             </div>
           );
         })}

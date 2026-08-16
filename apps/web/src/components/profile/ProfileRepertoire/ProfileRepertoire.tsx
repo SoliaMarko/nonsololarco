@@ -10,12 +10,12 @@ import LeadRow from './LeadRow';
 import WishlistRow from './WishlistRow';
 
 export interface ProfileRepertoireProps {
+  profileId: string;
   className?: string;
   /** Max leads shown before "see all" */
   maxLeads?: number;
   /** Max items in wishlist shown before "see all" */
   maxWishes?: number;
-  profileId: string;
   /** Redirects to repertoire page */
   repertoireHref?: string;
   /** Redirects to wishlist section on repertoire page */

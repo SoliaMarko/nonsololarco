@@ -249,8 +249,8 @@ has a constraint the type can't express.
 - TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
 - Shared types go in `packages/types` and are imported by both apps. Never
   duplicate a shape that already exists there.
-- Sort interface keys alphabetically (enforced by
-  `eslint-plugin-typescript-sort-keys`).
+- Sort interface keys with required properties first, then alphabetically within each group (enforced by
+  `typescript-sort-keys/interface` with `requiredFirst: true`).
 - Prefer named exports; default export only for React components and
   Nest modules.
 - Comments explain _why_, not _what_. Delete commented-out code.
