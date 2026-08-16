@@ -11,10 +11,7 @@ export default function SettingsPage() {
 
   return (
     <AppShell activePath="/settings" mainClassName="flex flex-col">
-      <EmptyState
-        title={t('settings.title')}
-        description={t('settings.comingSoonDescription')}
-      />
+      <EmptyState title={t('settings.title')} description={t('settings.comingSoonDescription')} />
     </AppShell>
   );
 }

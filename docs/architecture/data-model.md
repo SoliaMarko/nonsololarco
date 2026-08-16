@@ -66,7 +66,7 @@ erDiagram
 ### User
 
 One person, one row. OAuth identities hang off `Account`, so the same user can
-link Google *and* GitHub without duplicate rows. `passwordHash` is nullable —
+link Google _and_ GitHub without duplicate rows. `passwordHash` is nullable —
 it stays null until email+password auth is added.
 
 ### Band / BandMember
@@ -81,7 +81,7 @@ index.
 
 ### Track
 
-`bandId` is **nullable**. A track with `bandId = null` is a *solo* track — part
+`bandId` is **nullable**. A track with `bandId = null` is a _solo_ track — part
 of the user's personal repertoire, not any band's. This is why "Solo" is a
 pseudo-band in the UI rather than a real `Band` row.
 
@@ -107,7 +107,9 @@ the lead.
 Any "does this user participate?" query must therefore check both:
 
 ```ts
-{ OR: [{ leadMemberId: userId }, { performers: { some: { userId } } }] }
+{
+  OR: [{ leadMemberId: userId }, { performers: { some: { userId } } }];
+}
 ```
 
 That predicate is the `participatesIn()` helper in `repertoire.service.ts` —

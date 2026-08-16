@@ -28,10 +28,7 @@ export function buildBandColorMap(bandIds: readonly string[]): Map<string, Vinyl
     paletteIndex++;
 
     // If the next color would be the same as this one (palette wrapped), skip it
-    if (
-      realBandIds.length > 1 &&
-      VINYL_COLORS[paletteIndex % VINYL_COLORS.length] === color
-    ) {
+    if (realBandIds.length > 1 && VINYL_COLORS[paletteIndex % VINYL_COLORS.length] === color) {
       paletteIndex++;
     }
   }

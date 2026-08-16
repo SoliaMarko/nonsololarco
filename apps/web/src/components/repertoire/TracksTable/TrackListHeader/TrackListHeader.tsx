@@ -30,7 +30,11 @@ export default function TrackListHeader() {
       <span className="hidden sm:inline" role="columnheader" aria-hidden="true" />
 
       {isSpecificBandSelected ? (
-        <TrackColumnHeader field="trackOrder" title={t('repertoire.columnNumber')} isSortable={true} />
+        <TrackColumnHeader
+          field="trackOrder"
+          title={t('repertoire.columnNumber')}
+          isSortable={true}
+        />
       ) : (
         <TrackColumnHeader title={t('repertoire.columnNumber')} />
       )}
@@ -42,9 +46,19 @@ export default function TrackListHeader() {
         className="hidden justify-center text-center sm:flex"
         title={t('repertoire.columnKey')}
       />
-      <TrackColumnHeader className="hidden sm:flex" field="bpm" isSortable={true} title={t('repertoire.columnBpm')} />
+      <TrackColumnHeader
+        className="hidden sm:flex"
+        field="bpm"
+        isSortable={true}
+        title={t('repertoire.columnBpm')}
+      />
       <TrackColumnHeader field="status" isSortable={true} title={t('repertoire.columnStatus')} />
-      <TrackColumnHeader className="hidden sm:flex" field="time" isSortable={true} title={t('repertoire.columnTime')} />
+      <TrackColumnHeader
+        className="hidden sm:flex"
+        field="time"
+        isSortable={true}
+        title={t('repertoire.columnTime')}
+      />
 
       <span role="columnheader" aria-hidden="true" />
     </div>

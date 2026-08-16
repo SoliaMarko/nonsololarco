@@ -8,11 +8,9 @@ export const toastVariants = cva(
   {
     variants: {
       variant: {
-        error:
-          'border-primary-dark bg-danger-deep text-primary-light',
+        error: 'border-primary-dark bg-danger-deep text-primary-light',
         info: 'border-primary-dark bg-surface text-fg-primary',
-        success:
-          'border-primary-dark bg-emerald-deep text-primary-light',
+        success: 'border-primary-dark bg-emerald-deep text-primary-light',
       },
     },
     defaultVariants: {

@@ -1,8 +1,8 @@
-import Text from '@/src/components/typography/Text';
 import { TrackSummary } from '@nonsololarco/types';
-import { cn } from '@/src/utils/cn';
 
 import { Link } from '@/i18n/navigation';
+import Text from '@/src/components/typography/Text';
+import { cn } from '@/src/utils/cn';
 
 interface LeadRowProps {
   hasMoreLeads?: boolean;

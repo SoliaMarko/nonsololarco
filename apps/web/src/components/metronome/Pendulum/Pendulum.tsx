@@ -52,8 +52,7 @@ function Pendulum({ getBeatPosition, playing }: PendulumProps) {
       const position = getBeatPosition();
       // Before the first beat lands, hold at the left extreme so the
       // opening swing covers the same arc as every one after it.
-      const angle =
-        position === null ? -SWING_ANGLE : -SWING_ANGLE * Math.cos(Math.PI * position);
+      const angle = position === null ? -SWING_ANGLE : -SWING_ANGLE * Math.cos(Math.PI * position);
 
       arm.style.transform = `rotate(${angle.toFixed(2)}deg)`;
       rafId = requestAnimationFrame(frame);
@@ -64,10 +63,10 @@ function Pendulum({ getBeatPosition, playing }: PendulumProps) {
   }, [playing, getBeatPosition]);
 
   return (
-    <div className="relative size-50 [@media(min-height:36.0625rem)_and_(max-height:44rem)]:scale-[0.78] [@media(max-height:36rem)]:scale-[0.6]">
+    <div className="relative size-50 [@media(max-height:36rem)]:scale-[0.6] [@media(min-height:36.0625rem)_and_(max-height:44rem)]:scale-[0.78]">
       {/* Trapezoid body */}
       <div
-        className="mli-auto border-primary-dark absolute inset-x-0 block-end-0 h-52.5 w-40 border-3 bg-[linear-gradient(180deg,#e7dcc4,#d8c8a8)] shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
+        className="mli-auto border-primary-dark block-end-0 absolute inset-x-0 h-52.5 w-40 border-3 bg-[linear-gradient(180deg,#e7dcc4,#d8c8a8)] shadow-[2px_2px_0_rgba(0,0,0,0.5)]"
         style={{ clipPath: 'polygon(30% 0, 70% 0, 100% 100%, 0 100%)' }}
       />
 
@@ -76,17 +75,17 @@ function Pendulum({ getBeatPosition, playing }: PendulumProps) {
           its initial value on every parent re-render. */}
       <div
         ref={armRef}
-        className="bg-primary-dark absolute block-end-7.5 inset-s-1/2 z-3 h-45 w-1.25 origin-bottom rounded-sm will-change-transform"
+        className="bg-primary-dark block-end-7.5 absolute inset-s-1/2 z-3 h-45 w-1.25 origin-bottom rounded-sm will-change-transform"
         // Half the arm's width, to centre it on the pivot. A `-translate-x-1/2`
         // can't be used here: the rAF loop owns `transform`.
         style={{ marginInlineStart: '-2.5px' }}
       >
         {/* Weight */}
-        <div className="border-primary-dark bg-yellow-main absolute block-start-7 inset-s-1/2 h-5 w-7.5 -translate-x-1/2 border-[2.5px]" />
+        <div className="border-primary-dark bg-yellow-main block-start-7 absolute inset-s-1/2 h-5 w-7.5 -translate-x-1/2 border-[2.5px]" />
       </div>
 
       {/* Pivot */}
-      <div className="bg-primary-dark absolute block-end-6.5 inset-s-1/2 z-4 size-4 -translate-x-1/2 rounded-full" />
+      <div className="bg-primary-dark block-end-6.5 absolute inset-s-1/2 z-4 size-4 -translate-x-1/2 rounded-full" />
     </div>
   );
 }

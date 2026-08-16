@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
-import { Alfa_Slab_One, Oswald, Space_Mono, Spectral } from 'next/font/google';
-import { notFound } from 'next/navigation';
 import { NextIntlClientProvider } from 'next-intl';
 import { getMessages, setRequestLocale } from 'next-intl/server';
+import { Alfa_Slab_One, Oswald, Space_Mono, Spectral } from 'next/font/google';
+import { notFound } from 'next/navigation';
 
 import { Locale, locales } from '@/i18n/config';
 

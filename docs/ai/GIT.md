@@ -2,8 +2,8 @@
 
 > These rules exist so that `git log` on `develop` reads like a changelog, and
 > so that `git bisect` can find a regression. Both stop working the moment
-> history becomes a record of *how the work happened* rather than *what
-> changed*.
+> history becomes a record of _how the work happened_ rather than _what
+> changed_.
 
 Every number below is calibrated against this repo's actual history (last 120
 commits), not copied from a generic guide.
@@ -57,17 +57,17 @@ Conventional Commits. Lowercase, imperative present tense, no trailing period.
 **The scope is mandatory.** In the last 120 commits, 78 had one and 42 did not
 — that inconsistency is what makes the log hard to scan.
 
-| Type | For |
-| --- | --- |
-| `feat` | new user-visible capability |
-| `fix` | bug fix |
+| Type       | For                                    |
+| ---------- | -------------------------------------- |
+| `feat`     | new user-visible capability            |
+| `fix`      | bug fix                                |
 | `refactor` | restructuring with no behaviour change |
-| `test` | adding or fixing tests only |
-| `docs` | documentation only |
-| `chore` | tooling, deps, config |
-| `ci` | pipelines and workflows |
-| `perf` | performance work |
-| `style` | formatting only, no code change |
+| `test`     | adding or fixing tests only            |
+| `docs`     | documentation only                     |
+| `chore`    | tooling, deps, config                  |
+| `ci`       | pipelines and workflows                |
+| `perf`     | performance work                       |
+| `style`    | formatting only, no code change        |
 
 Scopes: `web`, `api`, `packages`, `types`, `db`, `ui`, `config`, `docs`, `ci`.
 
@@ -105,7 +105,7 @@ Two ways out, and you need both:
 
 ### Body and footer
 
-A one-line subject is enough for most commits. Add a body when the *why* is
+A one-line subject is enough for most commits. Add a body when the _why_ is
 not obvious:
 
 ```
@@ -128,11 +128,11 @@ subject — the branch name already carries it.
 A commit is a unit of review and a unit of `git revert`. Both break when it is
 too large to hold in your head.
 
-| | Files | Lines changed |
-| --- | --- | --- |
-| **Target** (current median: 3 files / 57 lines) | ≤ 5 | ≤ 150 |
-| **Soft limit** — justify in the body | ≤ 10 | ≤ 300 |
-| **Hard limit** — split it | **20** | **500** |
+|                                                 | Files  | Lines changed |
+| ----------------------------------------------- | ------ | ------------- |
+| **Target** (current median: 3 files / 57 lines) | ≤ 5    | ≤ 150         |
+| **Soft limit** — justify in the body            | ≤ 10   | ≤ 300         |
+| **Hard limit** — split it                       | **20** | **500**       |
 
 **Excluded from the count**, because they are generated or bulk-mechanical:
 
@@ -145,7 +145,7 @@ too large to hold in your head.
 
 **Why documentation is exempt from the line count.** A prose document is not
 reviewed line by line the way code is; a 600-line doc is read once, top to
-bottom, and splitting it across commits makes it *harder* to review, not
+bottom, and splitting it across commits makes it _harder_ to review, not
 easier. The file-count limit still applies — a commit touching fifteen doc
 files is a dumping ground, whatever its line count.
 
@@ -157,7 +157,7 @@ worst is `chore: fix file structure in lib folder` — 119 files. A commit like
 that cannot be reviewed and cannot be reverted cleanly.
 
 **When a change genuinely is that big** — a repo-wide rename, a formatting
-pass — it must be *mechanical only*, contain nothing else, and say so in the
+pass — it must be _mechanical only_, contain nothing else, and say so in the
 subject: `chore(web): move lib/** to src/api, src/queries (no logic change)`.
 Never mix a mechanical change with a behavioural one; the behavioural part
 becomes invisible.
@@ -190,7 +190,7 @@ Merge branch 'develop' into feature/CLEF-163-...
 
 The first is `git pull` creating a merge with your own remote branch. The
 second is merging `develop` into a feature branch. Both add commits that
-describe *the mechanics of syncing*, not any change, and both make the diff
+describe _the mechanics of syncing_, not any change, and both make the diff
 harder to read.
 
 **Configure this once, and the first kind disappears forever:**
@@ -224,14 +224,14 @@ that mistake lives inside the merge commit. GitHub does not show merge-commit
 diffs in the PR file view by default, so no reviewer will ever look at it. The
 bug reaches production having been "reviewed".
 
-Rebase replays *your* commits onto the new base, so the same resolution appears
+Rebase replays _your_ commits onto the new base, so the same resolution appears
 as ordinary lines in an ordinary commit, inside the PR diff, where a reviewer
 sees it.
 
 **2. Conflicts get resolved with context, one commit at a time.** A merge dumps
 every conflict from every incoming change into one lump, out of order, with no
 indication which of your commits it relates to. A rebase stops at the specific
-commit that conflicts, so you are answering "how does *this* change interact
+commit that conflicts, so you are answering "how does _this_ change interact
 with what landed on develop", not "reconcile these two trees somehow".
 
 **3. CI tests what will actually ship.** After a rebase your branch is
@@ -240,7 +240,7 @@ merge. With a merge-based branch, CI tested a tree that never exists again once
 the PR is squashed.
 
 Add to that the smaller ones: no `Merge branch 'develop' into feature/...`
-commits recording *when you happened to sync*, and `git log` on the branch
+commits recording _when you happened to sync_, and `git log` on the branch
 reads as the story of the feature.
 
 **When merge is the right call instead:** if someone else has commits on your
@@ -365,11 +365,11 @@ Closes CLEF-163
 squash. There the individual feature commits are exactly what you want to
 preserve; squashing a release would collapse a month of work into one line.
 
-| Merge | Strategy |
-| --- | --- |
-| feature branch → `develop` | **Squash** |
-| `develop` → `main` (release) | **Merge commit** |
-| hotfix → `main` | **Squash**, then cherry-pick or rebase back onto `develop` |
+| Merge                        | Strategy                                                   |
+| ---------------------------- | ---------------------------------------------------------- |
+| feature branch → `develop`   | **Squash**                                                 |
+| `develop` → `main` (release) | **Merge commit**                                           |
+| hotfix → `main`              | **Squash**, then cherry-pick or rebase back onto `develop` |
 
 Turn off "Allow merge commits" and "Allow rebase merging" for PRs into
 `develop` in the repo settings, so the rule is enforced rather than remembered.
@@ -404,10 +404,10 @@ The only exception is a hotfix — see below.
 There is no correct interval; there is a correct **trigger**. Ship when a
 user-visible slice is coherent and green, not on a calendar.
 
-| Phase | Cadence | Why |
-| --- | --- | --- |
-| Pre-launch (now) | when a slice is done, roughly weekly | Nobody is depending on the schedule. Batching a month makes each release scary. |
-| After launch | fixed weekly slot + hotfixes as needed | Predictability matters more than speed; a known window lets you avoid Friday deploys. |
+| Phase            | Cadence                                | Why                                                                                   |
+| ---------------- | -------------------------------------- | ------------------------------------------------------------------------------------- |
+| Pre-launch (now) | when a slice is done, roughly weekly   | Nobody is depending on the schedule. Batching a month makes each release scary.       |
+| After launch     | fixed weekly slot + hotfixes as needed | Predictability matters more than speed; a known window lets you avoid Friday deploys. |
 
 Recent history is roughly this already: 2026-07-09, 07-12, 07-31, 08-03 — a
 few times a month, irregular. That is fine for the current phase. What is
@@ -531,7 +531,8 @@ export default {
   rules: {
     'scope-empty': [2, 'never'],
     'scope-enum': [
-      2, 'always',
+      2,
+      'always',
       ['web', 'api', 'packages', 'types', 'db', 'ui', 'config', 'docs', 'ci'],
     ],
     'subject-min-length': [2, 'always', 15],

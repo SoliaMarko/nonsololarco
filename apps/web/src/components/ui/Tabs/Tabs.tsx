@@ -1,6 +1,13 @@
 'use client';
 
-import { type HTMLAttributes, type ReactNode, useCallback, useEffect, useRef, useState } from 'react';
+import {
+  type HTMLAttributes,
+  type ReactNode,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 import { type VariantProps } from 'class-variance-authority';
 
@@ -18,8 +25,7 @@ interface IndicatorRect {
 }
 
 export interface TabsProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
-    VariantProps<typeof tabsListVariants> {
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>, VariantProps<typeof tabsListVariants> {
   /**
    * Enables the sliding indicator animation — a background highlight and
    * accent underline that smoothly transition between active tabs.
@@ -133,11 +139,7 @@ export default function Tabs({
       <TabsContext.Provider value={{ animated, variant: variant ?? 'panel' }}>
         <div ref={listRef} className={cn(tabsListVariants({ variant }), animated && 'relative')}>
           {animated && rect ? (
-            <TabsIndicator
-              animate={hasTransitioned}
-              rect={rect}
-              variant={variant ?? 'panel'}
-            />
+            <TabsIndicator animate={hasTransitioned} rect={rect} variant={variant ?? 'panel'} />
           ) : null}
           {children}
         </div>

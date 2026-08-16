@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { TimeSignatureDef } from '@/src/lib/types/metronome.types';
-
 import { mockIntl } from '@/src/test/intl-mock';
 
 import MetronomeTopBar from './MetronomeTopBar';

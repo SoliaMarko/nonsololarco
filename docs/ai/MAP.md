@@ -11,37 +11,37 @@ Updated: 2026-08-12
 
 ## Coverage at a glance
 
-| Category | Total | Tested | With story |
-| --- | --- | --- | --- |
-| Web components | 135 | 13 (10%) | 24 (18%) |
-| Utils + hooks | 14 | 4 (29%) | — |
-| API services | 4 | 2 unit / 0 integration | — |
+| Category       | Total | Tested                 | With story |
+| -------------- | ----- | ---------------------- | ---------- |
+| Web components | 135   | 13 (10%)               | 24 (18%)   |
+| Utils + hooks  | 14    | 4 (29%)                | —          |
+| API services   | 4     | 2 unit / 0 integration | —          |
 
 Stories live centrally in `apps/web/stories/` (25 files), not next to components.
 
 ## API routes
 
-| Method | Path | Handler | File |
-| --- | --- | --- | --- |
-| GET | `/api/auth/github` | githubLogin | `apps/api/src/auth/auth.controller.ts` |
-| GET | `/api/auth/github/callback` | githubCallback | `apps/api/src/auth/auth.controller.ts` |
-| GET | `/api/auth/google` | googleLogin | `apps/api/src/auth/auth.controller.ts` |
-| GET | `/api/auth/google/callback` | googleCallback | `apps/api/src/auth/auth.controller.ts` |
-| POST | `/api/auth/logout` | logout | `apps/api/src/auth/auth.controller.ts` |
-| GET | `/api/auth/me` | getMe | `apps/api/src/auth/auth.controller.ts` |
-| GET | `/api/bands/:id/repertoire` | getBandRepertoire | `apps/api/src/repertoire/controllers/band-repertoire.controller.ts` |
-| GET | `/api/users/me/bands` | getMyBands | `apps/api/src/bands/bands.controller.ts` |
-| GET | `/api/users/me/repertoire` | getMyRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
-| GET | `/api/users/me/repertoire/solo` | getMySoloRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
+| Method | Path                            | Handler             | File                                                                |
+| ------ | ------------------------------- | ------------------- | ------------------------------------------------------------------- |
+| GET    | `/api/auth/github`              | githubLogin         | `apps/api/src/auth/auth.controller.ts`                              |
+| GET    | `/api/auth/github/callback`     | githubCallback      | `apps/api/src/auth/auth.controller.ts`                              |
+| GET    | `/api/auth/google`              | googleLogin         | `apps/api/src/auth/auth.controller.ts`                              |
+| GET    | `/api/auth/google/callback`     | googleCallback      | `apps/api/src/auth/auth.controller.ts`                              |
+| POST   | `/api/auth/logout`              | logout              | `apps/api/src/auth/auth.controller.ts`                              |
+| GET    | `/api/auth/me`                  | getMe               | `apps/api/src/auth/auth.controller.ts`                              |
+| GET    | `/api/bands/:id/repertoire`     | getBandRepertoire   | `apps/api/src/repertoire/controllers/band-repertoire.controller.ts` |
+| GET    | `/api/users/me/bands`           | getMyBands          | `apps/api/src/bands/bands.controller.ts`                            |
+| GET    | `/api/users/me/repertoire`      | getMyRepertoire     | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
+| GET    | `/api/users/me/repertoire/solo` | getMySoloRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
 
 ## API services
 
-| Service | unit | int | File |
-| --- | --- | --- | --- |
-| auth.service | · | · | `apps/api/src/auth/auth.service.ts` |
-| bands.service | ✓ | · | `apps/api/src/bands/bands.service.ts` |
-| prisma.service | · | · | `apps/api/src/prisma/prisma.service.ts` |
-| repertoire.service | ✓ | · | `apps/api/src/repertoire/repertoire.service.ts` |
+| Service            | unit | int | File                                            |
+| ------------------ | ---- | --- | ----------------------------------------------- |
+| auth.service       | ·    | ·   | `apps/api/src/auth/auth.service.ts`             |
+| bands.service      | ✓    | ·   | `apps/api/src/bands/bands.service.ts`           |
+| prisma.service     | ·    | ·   | `apps/api/src/prisma/prisma.service.ts`         |
+| repertoire.service | ✓    | ·   | `apps/api/src/repertoire/repertoire.service.ts` |
 
 ## Database
 
@@ -251,22 +251,22 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 
 ## Utils, hooks, queries
 
-| T | Kind | Name | File |
-| --- | --- | --- | --- |
-| · | hook | useActiveBand | `apps/web/src/hooks/global/useActiveBand/useActiveBand.tsx` |
-| · | hook | useAuth | `apps/web/src/hooks/global/useAuth/useAuth.tsx` |
-| · | hook | useBandColors | `apps/web/src/hooks/global/useBandColors/useBandColors.tsx` |
-| · | hook | useTheme | `apps/web/src/hooks/global/useTheme/useTheme.tsx` |
-| ✓ | hook | useLockedHeight | `apps/web/src/hooks/useLockedHeight/useLockedHeight.ts` |
-| · | query | useBands | `apps/web/src/lib/hooks/useBands.ts` |
-| · | query | useRepertoire | `apps/web/src/lib/hooks/useRepertoire.ts` |
-| · | util | cn | `apps/web/src/utils/cn.ts` |
-| · | util | duration.utils | `apps/web/src/utils/duration.utils.ts` |
-| ✓ | util | pagination.utils | `apps/web/src/utils/pagination.utils.ts` |
-| · | util | svg.utils | `apps/web/src/utils/svg.utils.ts` |
-| ✓ | util | track-performers.utils | `apps/web/src/utils/track-performers.utils.ts` |
-| · | util | tracks-sort.utils | `apps/web/src/utils/tracks-sort.utils.ts` |
-| ✓ | util | vinyl.utils | `apps/web/src/utils/vinyl.utils.ts` |
+| T   | Kind  | Name                   | File                                                        |
+| --- | ----- | ---------------------- | ----------------------------------------------------------- |
+| ·   | hook  | useActiveBand          | `apps/web/src/hooks/global/useActiveBand/useActiveBand.tsx` |
+| ·   | hook  | useAuth                | `apps/web/src/hooks/global/useAuth/useAuth.tsx`             |
+| ·   | hook  | useBandColors          | `apps/web/src/hooks/global/useBandColors/useBandColors.tsx` |
+| ·   | hook  | useTheme               | `apps/web/src/hooks/global/useTheme/useTheme.tsx`           |
+| ✓   | hook  | useLockedHeight        | `apps/web/src/hooks/useLockedHeight/useLockedHeight.ts`     |
+| ·   | query | useBands               | `apps/web/src/lib/hooks/useBands.ts`                        |
+| ·   | query | useRepertoire          | `apps/web/src/lib/hooks/useRepertoire.ts`                   |
+| ·   | util  | cn                     | `apps/web/src/utils/cn.ts`                                  |
+| ·   | util  | duration.utils         | `apps/web/src/utils/duration.utils.ts`                      |
+| ✓   | util  | pagination.utils       | `apps/web/src/utils/pagination.utils.ts`                    |
+| ·   | util  | svg.utils              | `apps/web/src/utils/svg.utils.ts`                           |
+| ✓   | util  | track-performers.utils | `apps/web/src/utils/track-performers.utils.ts`              |
+| ·   | util  | tracks-sort.utils      | `apps/web/src/utils/tracks-sort.utils.ts`                   |
+| ✓   | util  | vinyl.utils            | `apps/web/src/utils/vinyl.utils.ts`                         |
 
 ## Stories without a matching component
 
@@ -276,11 +276,11 @@ Either the story covers several components, or the component was renamed.
 
 ## Translations
 
-| Namespace | en | it | uk |
-| --- | --- | --- | --- |
-| auth.json | 14 | 14 | 14 |
-| common.json | 25 | 25 | 25 |
-| pages.json | 80 | 80 | 80 |
+| Namespace   | en  | it  | uk  |
+| ----------- | --- | --- | --- |
+| auth.json   | 14  | 14  | 14  |
+| common.json | 25  | 25  | 25  |
+| pages.json  | 80  | 80  | 80  |
 
 ⚠ = key count differs from `en`. English is the source of truth, so a
 mismatch means a missing key — that is a bug, not a fallback.

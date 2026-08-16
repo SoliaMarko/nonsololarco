@@ -32,8 +32,8 @@ page 2 starts at 11 — on every tab, so the count never restarts mid-list.
 
 ## URL state
 
-| Param | Values | Default | Meaning |
-| --- | --- | --- | --- |
+| Param  | Values      | Default           | Meaning                                |
+| ------ | ----------- | ----------------- | -------------------------------------- |
 | `page` | integer ≥ 1 | absent (= page 1) | Which page of the current list to show |
 
 `page` is omitted from the URL when it would be `1`, keeping the default view's
@@ -42,11 +42,11 @@ params.
 
 ## API
 
-| Method | Endpoint | Notes |
-| --- | --- | --- |
-| GET | `/api/users/me/repertoire` | Accepts `page` / `pageSize` |
-| GET | `/api/users/me/repertoire/solo` | Accepts `page` / `pageSize` |
-| GET | `/api/bands/:id/repertoire` | Accepts `page` / `pageSize` |
+| Method | Endpoint                        | Notes                       |
+| ------ | ------------------------------- | --------------------------- |
+| GET    | `/api/users/me/repertoire`      | Accepts `page` / `pageSize` |
+| GET    | `/api/users/me/repertoire/solo` | Accepts `page` / `pageSize` |
+| GET    | `/api/bands/:id/repertoire`     | Accepts `page` / `pageSize` |
 
 All three return a `PaginatedResult<Track>` envelope. Pagination is opt-in: omit
 `page` to get every match as one page. Full detail in
@@ -59,7 +59,7 @@ All three return a `PaginatedResult<Track>` envelope. Pagination is opt-in: omit
   and writes it back. The component renders `null` for a single page, so it can
   be mounted unconditionally.
 - **Two fetches, by design.** `TracksTable` requests a page; `RepertoireFilterBar`
-  and the band-tab stats fetch the same list *without* `page` to count the whole
+  and the band-tab stats fetch the same list _without_ `page` to count the whole
   set (archived/active/mine badges, "N in group", tab totals). React Query keys
   differ by param, so these are separate cache entries.
 - **Sorting and pagination interact.** `status` and `time` sort in memory across

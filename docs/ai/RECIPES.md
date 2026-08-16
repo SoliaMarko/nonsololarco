@@ -62,7 +62,9 @@ is cheap; extracting a half-general component back out of it is not.
 
 ```tsx
 // ❌ a second dropdown because the design has a dashed border
-function FilterDropdown() { /* portalling, outside-click, Escape, arrow keys… */ }
+function FilterDropdown() {
+  /* portalling, outside-click, Escape, arrow keys… */
+}
 
 // ✅ a variant on the existing Radix-based one
 const dropdownVariants = cva(base, {

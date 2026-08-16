@@ -2,9 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 
-import { cn } from '@/src/utils/cn';
-
 import { DENOMINATORS, VALID_NUMERATORS } from '@/src/lib/types/metronome.types';
+import { cn } from '@/src/utils/cn';
 
 import SigDropdown from './SigDropdown';
 

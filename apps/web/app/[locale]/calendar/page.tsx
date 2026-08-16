@@ -11,10 +11,7 @@ export default function CalendarPage() {
 
   return (
     <AppShell activePath="/calendar" mainClassName="flex flex-col">
-      <EmptyState
-        title={t('calendar.title')}
-        description={t('calendar.comingSoonDescription')}
-      />
+      <EmptyState title={t('calendar.title')} description={t('calendar.comingSoonDescription')} />
     </AppShell>
   );
 }

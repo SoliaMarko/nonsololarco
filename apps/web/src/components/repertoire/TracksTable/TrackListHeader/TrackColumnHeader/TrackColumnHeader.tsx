@@ -65,7 +65,10 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
         aria-sort={ariaSortValue}
         // `min-w-0` is required for `truncate` to take effect: a grid item
         // defaults to `min-width: auto` and would overflow instead of clipping.
-        className={cn('min-w-0 truncate text-[10px] font-bold tracking-widest uppercase', className)}
+        className={cn(
+          'min-w-0 truncate text-[10px] font-bold tracking-widest uppercase',
+          className,
+        )}
         title={title}
       >
         <button

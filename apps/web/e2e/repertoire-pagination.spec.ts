@@ -66,9 +66,10 @@ test('the current page survives a reload', async ({ page }) => {
 
   await tracksTable(page);
   await expect(page).toHaveURL(/page=2/);
-  await expect(
-    page.getByRole('button', { name: 'Go to page 2' }).first(),
-  ).toHaveAttribute('aria-current', 'page');
+  await expect(page.getByRole('button', { name: 'Go to page 2' }).first()).toHaveAttribute(
+    'aria-current',
+    'page',
+  );
 });
 
 test('changing a filter resets back to page 1', async ({ page }) => {

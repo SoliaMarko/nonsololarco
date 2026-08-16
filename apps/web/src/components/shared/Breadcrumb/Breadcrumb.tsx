@@ -2,9 +2,8 @@
 
 import { useTranslations } from 'next-intl';
 
-import { HomeOutlineIcon } from '@/src/icons/base';
-
 import { Link } from '@/i18n/navigation';
+import { HomeOutlineIcon } from '@/src/icons/base';
 
 import Text from '../../typography/Text';
 

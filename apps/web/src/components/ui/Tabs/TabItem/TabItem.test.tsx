@@ -50,9 +50,7 @@ describe('TabItem', () => {
   });
 
   it('merges className with variant classes', () => {
-    const { container } = render(
-      <TabItem className="custom-class">Tab</TabItem>,
-    );
+    const { container } = render(<TabItem className="custom-class">Tab</TabItem>);
 
     const tab = container.querySelector('[role="tab"]') as HTMLElement;
     expect(tab.className).toContain('custom-class');

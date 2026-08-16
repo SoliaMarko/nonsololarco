@@ -152,7 +152,9 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
                 key={group.songNumber}
                 group={group}
                 onDelete={handleDelete}
-                onToggle={() => setOpenSong(openSong === group.songNumber ? null : group.songNumber)}
+                onToggle={() =>
+                  setOpenSong(openSong === group.songNumber ? null : group.songNumber)
+                }
                 open={openSong === group.songNumber}
               />
             ))
@@ -174,9 +176,11 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
         {/* Undo bar */}
         {undoEntry && (
           <div className="pli-4 plb-2 bg-card flex items-center justify-between gap-2">
-            <span className="font-label text-fg-secondary text-[0.6875rem]">{t('entryDeleted', { song: undoEntry.song })}</span>
+            <span className="font-label text-fg-secondary text-[0.6875rem]">
+              {t('entryDeleted', { song: undoEntry.song })}
+            </span>
             <button
-              className="font-ui border-0 bg-transparent text-xs font-semibold tracking-wider text-accent-red uppercase underline underline-offset-2 opacity-90 transition-opacity duration-100 hover:opacity-100"
+              className="font-ui text-accent-red border-0 bg-transparent text-xs font-semibold tracking-wider uppercase underline underline-offset-2 opacity-90 transition-opacity duration-100 hover:opacity-100"
               onClick={handleUndo}
               type="button"
             >

@@ -25,16 +25,24 @@ export default function MetronomeFab() {
       {animate && (
         <>
           <span
-            className="absolute inset-0 rounded-full border-[2.5px] border-yellow-main"
+            className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
             style={{ animation: 'fab-pulse 1.6s ease-out infinite', zIndex: 1 }}
           />
           <span
-            className="absolute inset-0 rounded-full border-[2.5px] border-yellow-main"
-            style={{ animation: 'fab-pulse 1.6s ease-out infinite', animationDelay: '0.5s', zIndex: 1 }}
+            className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
+            style={{
+              animation: 'fab-pulse 1.6s ease-out infinite',
+              animationDelay: '0.5s',
+              zIndex: 1,
+            }}
           />
           <span
-            className="absolute inset-0 rounded-full border-[2.5px] border-yellow-main"
-            style={{ animation: 'fab-pulse 1.6s ease-out infinite', animationDelay: '1s', zIndex: 1 }}
+            className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
+            style={{
+              animation: 'fab-pulse 1.6s ease-out infinite',
+              animationDelay: '1s',
+              zIndex: 1,
+            }}
           />
         </>
       )}

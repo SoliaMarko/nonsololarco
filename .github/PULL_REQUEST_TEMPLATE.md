@@ -82,13 +82,13 @@
   For the reviewer to reproduce. Delete rows that do not apply.
 -->
 
-| | |
-| --- | --- |
-| **How to test** | <!-- 1. run `pnpm dev` 2. open /en/repertoire 3. … --> |
+|                 |                                                            |
+| --------------- | ---------------------------------------------------------- |
+| **How to test** | <!-- 1. run `pnpm dev` 2. open /en/repertoire 3. … -->     |
 | **Seed needed** | <!-- `pnpm --filter @nonsololarco/db db:seed`, or "no" --> |
-| **Migration** | <!-- yes → `db:migrate && db:generate` first, or "no" --> |
-| **Env vars** | <!-- new variables, or "none" --> |
-| **Breaking** | <!-- what breaks for existing data or callers, or "no" --> |
+| **Migration**   | <!-- yes → `db:migrate && db:generate` first, or "no" -->  |
+| **Env vars**    | <!-- new variables, or "none" -->                          |
+| **Breaking**    | <!-- what breaks for existing data or callers, or "no" --> |
 
 ### Checked manually
 

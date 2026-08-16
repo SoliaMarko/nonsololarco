@@ -226,13 +226,13 @@ convention `dependency-cruiser` can check.
 
 ## Keeping these current
 
-| Diagram | Risk of going stale | Mitigation |
-| --- | --- | --- |
-| System overview | Low — changes rarely | Review when a package is added |
-| Data model | **High** — every schema change | Generate from `schema.prisma` with `prisma-erd-generator` |
-| Request flow | Medium | Review when a layer is added |
-| Branching | None | Fixed by ADR 0004 |
-| Frontend layering | Medium | Enforce with `dependency-cruiser`, which also emits the graph |
+| Diagram           | Risk of going stale            | Mitigation                                                    |
+| ----------------- | ------------------------------ | ------------------------------------------------------------- |
+| System overview   | Low — changes rarely           | Review when a package is added                                |
+| Data model        | **High** — every schema change | Generate from `schema.prisma` with `prisma-erd-generator`     |
+| Request flow      | Medium                         | Review when a layer is added                                  |
+| Branching         | None                           | Fixed by ADR 0004                                             |
+| Frontend layering | Medium                         | Enforce with `dependency-cruiser`, which also emits the graph |
 
 The two marked as generatable should be generated. A hand-drawn ERD is wrong
 within a month, and nobody notices until it misleads someone.

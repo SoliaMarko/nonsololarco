@@ -3,6 +3,7 @@
 import { useTranslations } from 'next-intl';
 import { useRouter, useSearchParams } from 'next/navigation';
 
+import { Link } from '@/i18n/navigation';
 import Dropdown from '@/src/components/ui/Dropdown';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useAuth } from '@/src/hooks/global/useAuth';
@@ -15,8 +16,6 @@ import {
 } from '@/src/lib/variants/only-mine-toggle.variants';
 import { cn } from '@/src/utils/cn';
 import { SortField, SortOrder, TrackFilterParam } from '@/src/utils/tracks-sort.utils';
-
-import { Link } from '@/i18n/navigation';
 
 import FilterPill from './FilterPill';
 
@@ -227,9 +226,7 @@ export default function RepertoireFilterBar() {
             >
               <StarOutlineIcon size={14} />
               <span>{t('repertoire.onlyMine')}</span>
-              <span className={onlyMineCountVariants({ active: isMineActive })}>
-                {mineCount}
-              </span>
+              <span className={onlyMineCountVariants({ active: isMineActive })}>{mineCount}</span>
             </button>
           </>
         ) : null}
@@ -304,9 +301,7 @@ export default function RepertoireFilterBar() {
             >
               <StarOutlineIcon size={14} />
               <span>{t('repertoire.onlyMine')}</span>
-              <span className={onlyMineCountVariants({ active: isMineActive })}>
-                {mineCount}
-              </span>
+              <span className={onlyMineCountVariants({ active: isMineActive })}>{mineCount}</span>
             </button>
           ) : null}
 

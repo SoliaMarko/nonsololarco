@@ -40,10 +40,7 @@ const ILLUSTRATION_HEIGHT = {
  * // Mobile FAB, positioned by its wrapper
  * <MetronomeButton variant="fab" />
  */
-export default function MetronomeButton({
-  className,
-  variant: variantProp,
-}: MetronomeButtonProps) {
+export default function MetronomeButton({ className, variant: variantProp }: MetronomeButtonProps) {
   const variant = variantProp ?? 'header';
 
   return (

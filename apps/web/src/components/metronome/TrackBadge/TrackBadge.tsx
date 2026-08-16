@@ -3,9 +3,8 @@
 import { useTranslations } from 'next-intl';
 
 import { EyeOffIcon, VinylIcon } from '@/src/icons/base';
-import { cn } from '@/src/utils/cn';
-
 import { ChooserSong } from '@/src/lib/types/metronome.types';
+import { cn } from '@/src/utils/cn';
 
 interface TrackBadgeProps {
   onChangeTrack: () => void;

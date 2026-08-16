@@ -1,9 +1,8 @@
 import { type ElementType } from 'react';
 
-import { Link } from '@/i18n/navigation';
-
 import { type VariantProps } from 'class-variance-authority';
 
+import { Link } from '@/i18n/navigation';
 import TabItem from '@/src/components/ui/Tabs/TabItem';
 import { navLinkVariants } from '@/src/lib/variants/navlink.variants';
 import { cn } from '@/src/utils/cn';
@@ -33,11 +32,7 @@ export default function NavLink({
   if (variant === 'desktop') {
     return (
       <TabItem asChild variant="nav" isActive={isActive ?? false} className={className}>
-        <Link
-          href={href}
-          aria-current={isActive ? 'page' : undefined}
-          {...props}
-        >
+        <Link href={href} aria-current={isActive ? 'page' : undefined} {...props}>
           <span className="relative shrink-0">
             <Icon className="size-5 transition-colors" aria-hidden="true" />
             {badge !== undefined && badge > 0 && (
@@ -70,10 +65,7 @@ export default function NavLink({
     >
       <span className="relative shrink-0">
         <Icon
-          className={cn(
-            'size-5 transition-colors',
-            isActive ? 'text-accent-red' : '',
-          )}
+          className={cn('size-5 transition-colors', isActive ? 'text-accent-red' : '')}
           aria-hidden="true"
         />
         {badge !== undefined && badge > 0 && (

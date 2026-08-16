@@ -17,15 +17,15 @@ detail here.
 
 If the feature reads or writes query params:
 
-| Param | Values | Default | Meaning |
-| --- | --- | --- | --- |
-| `example` | `a` \| `b` | `a` | What it controls |
+| Param     | Values     | Default | Meaning          |
+| --------- | ---------- | ------- | ---------------- |
+| `example` | `a` \| `b` | `a`     | What it controls |
 
 ## API
 
-| Method | Endpoint | Notes |
-| --- | --- | --- |
-| GET | `/api/...` | |
+| Method | Endpoint   | Notes |
+| ------ | ---------- | ----- |
+| GET    | `/api/...` |       |
 
 ## Implementation notes
 

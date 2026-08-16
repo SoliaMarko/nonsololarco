@@ -28,8 +28,12 @@ describe('TimeSignatureSelect', () => {
 
   it('shows the current values on the triggers', () => {
     render(<TimeSignatureSelect {...defaults} denominator={8} numerator={6} />);
-    expect(screen.getByLabelText('pages.metronome.ariaTimeSigNumerator').textContent).toContain('6');
-    expect(screen.getByLabelText('pages.metronome.ariaTimeSigDenominator').textContent).toContain('8');
+    expect(screen.getByLabelText('pages.metronome.ariaTimeSigNumerator').textContent).toContain(
+      '6',
+    );
+    expect(screen.getByLabelText('pages.metronome.ariaTimeSigDenominator').textContent).toContain(
+      '8',
+    );
   });
 
   it('renders the slash separator', () => {

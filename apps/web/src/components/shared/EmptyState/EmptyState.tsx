@@ -12,11 +12,7 @@ export interface EmptyStateProps {
   title?: string;
 }
 
-export default function EmptyState({
-  className,
-  description,
-  title,
-}: EmptyStateProps) {
+export default function EmptyState({ className, description, title }: EmptyStateProps) {
   const t = useTranslations('common');
 
   const resolvedTitle = title ?? t('comingSoon.defaultTitle');

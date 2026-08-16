@@ -128,9 +128,21 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
               groups={[
                 {
                   items: [
-                    { label: t('nav.viewProfile'), icon: ProfileOutlineIcon, onClick: () => router.push('/profile') },
-                    { label: t('nav.settings'), icon: SettingsOutlineIcon, onClick: () => router.push('/settings') },
-                    { label: t('nav.notifications'), icon: BellIcon, onClick: () => router.push('/notifications') },
+                    {
+                      label: t('nav.viewProfile'),
+                      icon: ProfileOutlineIcon,
+                      onClick: () => router.push('/profile'),
+                    },
+                    {
+                      label: t('nav.settings'),
+                      icon: SettingsOutlineIcon,
+                      onClick: () => router.push('/settings'),
+                    },
+                    {
+                      label: t('nav.notifications'),
+                      icon: BellIcon,
+                      onClick: () => router.push('/notifications'),
+                    },
                   ],
                 },
                 {

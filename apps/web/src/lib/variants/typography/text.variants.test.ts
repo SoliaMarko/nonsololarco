@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { twMerge } from 'tailwind-merge';
+import { describe, expect, it } from 'vitest';
 
 import { textVariants } from './text.variants';
 

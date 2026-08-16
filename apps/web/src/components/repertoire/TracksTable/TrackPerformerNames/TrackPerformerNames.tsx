@@ -1,5 +1,5 @@
-import { TrackPerformer, shouldHighlightLead } from '@/src/utils/track-performers.utils';
 import { cn } from '@/src/utils/cn';
+import { TrackPerformer, shouldHighlightLead } from '@/src/utils/track-performers.utils';
 
 /**
  * Props for TrackPerformerNames. Expects performers pre-sorted by

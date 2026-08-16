@@ -94,10 +94,7 @@ export default function SongChooser({
 
     const raw = newBpm.trim();
     const parsed = raw ? Number(raw) : undefined;
-    if (
-      parsed !== undefined &&
-      (!Number.isInteger(parsed) || parsed < MT_MIN || parsed > MT_MAX)
-    ) {
+    if (parsed !== undefined && (!Number.isInteger(parsed) || parsed < MT_MIN || parsed > MT_MAX)) {
       setBpmError(true);
       return;
     }
@@ -162,7 +159,7 @@ export default function SongChooser({
     >
       <button
         aria-label="Exit metronome"
-        className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] absolute block-start-5 inset-s-5 flex size-9 items-center justify-center border-2 transition-[background-color] duration-100"
+        className="border-primary-light/30 bg-primary-light/5 text-primary-light hover:bg-primary-light/[.12] block-start-5 absolute inset-s-5 flex size-9 items-center justify-center border-2 transition-[background-color] duration-100"
         // Stop the click reaching the backdrop handler, which would otherwise
         // also fire onDismiss on the way up.
         onClick={(e) => {
@@ -221,9 +218,7 @@ export default function SongChooser({
             </button>
           ))}
           {filtered.length === 0 && (
-            <div className="pli-4 plb-3 font-label text-fg-tertiary text-xs">
-              {t('notFound')}
-            </div>
+            <div className="pli-4 plb-3 font-label text-fg-tertiary text-xs">{t('notFound')}</div>
           )}
         </div>
 

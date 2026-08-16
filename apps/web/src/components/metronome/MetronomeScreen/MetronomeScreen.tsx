@@ -5,7 +5,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import { useTranslations } from 'next-intl';
 
 import { useRouter } from '@/i18n/navigation';
-
+import Toast from '@/src/components/ui/Toast';
 import { MOCK_PRACTICE_HISTORY, MOCK_REPERTOIRE_SONGS } from '@/src/data/metronome/metronome.mock';
 import { useMetronomeEngine } from '@/src/hooks/useMetronomeEngine';
 import { useTapTempo } from '@/src/hooks/useTapTempo';
@@ -20,7 +20,6 @@ import {
 import BeatDots from '../BeatDots';
 import BpmControl from '../BpmControl';
 import HistoryDrawer from '../HistoryDrawer';
-import Toast from '@/src/components/ui/Toast';
 import MetronomeTopBar from '../MetronomeTopBar';
 import MetronomeTransport from '../MetronomeTransport';
 import Pendulum from '../Pendulum';
@@ -192,7 +191,10 @@ export default function MetronomeScreen() {
       <div className="flex min-h-0 flex-1 flex-col justify-center">
         <BpmControl bpm={bpm} onBpmChange={setBpm} onTap={() => tap(setBpm)} />
 
-        <div className="relative z-4 flex min-h-0 flex-1 items-center justify-center" style={{ maxHeight: '22rem' }}>
+        <div
+          className="relative z-4 flex min-h-0 flex-1 items-center justify-center"
+          style={{ maxHeight: '22rem' }}
+        >
           <Pendulum getBeatPosition={getBeatPosition} playing={playing} />
         </div>
 
@@ -211,7 +213,7 @@ export default function MetronomeScreen() {
 
       {/* Bottom spacer — prevents controls from hugging the screen edge on
           tall viewports while staying flush on compact ones. */}
-      <div className="min-h-4 max-h-16 flex-1" />
+      <div className="max-h-16 min-h-4 flex-1" />
 
       {menuOpen && (
         <HistoryDrawer

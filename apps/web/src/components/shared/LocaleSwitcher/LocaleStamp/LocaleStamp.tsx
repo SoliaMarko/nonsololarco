@@ -24,10 +24,10 @@ export default function LocaleStamp({ className, locale }: LocaleStampProps) {
       aria-hidden="true"
       className={cn(
         'relative inline-flex items-center justify-center overflow-hidden',
-        'border-2 border-fg-primary font-label text-[0.6875rem] font-bold tracking-[0.06em]',
+        'border-fg-primary font-label border-2 text-[0.6875rem] font-bold tracking-[0.06em]',
         // Fixed width so every badge lines up, whatever the code's glyph
         // widths are — the codes sit in a column and must share an edge.
-        'w-9 plb-[2px]',
+        'plb-[2px] w-9',
         className,
       )}
     >

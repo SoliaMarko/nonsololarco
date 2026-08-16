@@ -9,13 +9,7 @@ import Dropdown, { type DropdownGroup } from './Dropdown';
 /* ------------------------------------------------------------------ */
 
 function renderDropdown(groups: DropdownGroup[], variant?: 'default' | 'stamp') {
-  return render(
-    <Dropdown
-      variant={variant}
-      trigger={<button>Open</button>}
-      groups={groups}
-    />,
-  );
+  return render(<Dropdown variant={variant} trigger={<button>Open</button>} groups={groups} />);
 }
 
 async function openMenu() {
@@ -78,7 +72,9 @@ describe('Dropdown — default variant', () => {
 
   it('renders an icon when provided', async () => {
     const FakeIcon = ({ size, ...props }: { size: number }) => (
-      <svg data-testid="icon" {...props}><rect width={size} height={size} /></svg>
+      <svg data-testid="icon" {...props}>
+        <rect width={size} height={size} />
+      </svg>
     );
     renderDropdown([{ items: [{ label: 'Settings', icon: FakeIcon, onClick: vi.fn() }] }]);
     await openMenu();
@@ -111,10 +107,7 @@ describe('Dropdown — default variant', () => {
 
 describe('Dropdown — stamp variant', () => {
   it('renders a group label', async () => {
-    renderDropdown(
-      [{ label: 'Sort by', items: [{ label: 'Title', onClick: vi.fn() }] }],
-      'stamp',
-    );
+    renderDropdown([{ label: 'Sort by', items: [{ label: 'Title', onClick: vi.fn() }] }], 'stamp');
     await openMenu();
 
     expect(screen.getByText('Sort by')).toBeDefined();
@@ -145,10 +138,7 @@ describe('Dropdown — stamp variant', () => {
   });
 
   it('renders a text checkmark (✓) for selected stamp items', async () => {
-    renderDropdown(
-      [{ items: [{ label: 'English', onClick: vi.fn(), selected: true }] }],
-      'stamp',
-    );
+    renderDropdown([{ items: [{ label: 'English', onClick: vi.fn(), selected: true }] }], 'stamp');
     await openMenu();
 
     const item = screen.getByText('English').closest('[role="menuitem"]');
@@ -156,10 +146,7 @@ describe('Dropdown — stamp variant', () => {
   });
 
   it('applies stamp content styles', async () => {
-    renderDropdown(
-      [{ items: [{ label: 'Test', onClick: vi.fn() }] }],
-      'stamp',
-    );
+    renderDropdown([{ items: [{ label: 'Test', onClick: vi.fn() }] }], 'stamp');
     await openMenu();
 
     // Radix renders content in a portal — query the document, not container
@@ -169,10 +156,7 @@ describe('Dropdown — stamp variant', () => {
   });
 
   it('uses non-modal mode to avoid scroll jump', async () => {
-    renderDropdown(
-      [{ items: [{ label: 'Item', onClick: vi.fn() }] }],
-      'stamp',
-    );
+    renderDropdown([{ items: [{ label: 'Item', onClick: vi.fn() }] }], 'stamp');
     await openMenu();
 
     // If modal were true, Radix would add aria-hidden to sibling elements.

@@ -32,8 +32,24 @@ function TrashIcon(
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <line x1="10" y1="10" x2="10" y2="18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-      <line x1="14" y1="10" x2="14" y2="18" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <line
+        x1="10"
+        y1="10"
+        x2="10"
+        y2="18"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
+      <line
+        x1="14"
+        y1="10"
+        x2="14"
+        y2="18"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

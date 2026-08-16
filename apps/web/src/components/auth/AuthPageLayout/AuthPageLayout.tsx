@@ -26,7 +26,12 @@ export interface AuthPageLayoutProps {
   switchLabel: string;
 }
 
-export default function AuthPageLayout({ children, heading, loading, switchLabel }: AuthPageLayoutProps) {
+export default function AuthPageLayout({
+  children,
+  heading,
+  loading,
+  switchLabel,
+}: AuthPageLayoutProps) {
   const t = useTranslations('auth');
   const tCommon = useTranslations('common');
 

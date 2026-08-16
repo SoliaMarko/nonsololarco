@@ -1,6 +1,6 @@
 # nonsololarco
 
-*"non solo arco"* — not only the bow.
+_"non solo arco"_ — not only the bow.
 
 A social platform and practice tool for musicians: shared band repertoires,
 track status tracking, and practice tooling, in a retro/vintage interface built
@@ -8,12 +8,12 @@ around vinyl records, stamps and monospace labels.
 
 ## Stack
 
-| | |
-| --- | --- |
+|          |                                                                           |
+| -------- | ------------------------------------------------------------------------- |
 | Frontend | Next.js 15 (App Router), React 19, Tailwind CSS v4, Radix UI, React Query |
-| Backend | NestJS 11, Prisma 7, PostgreSQL |
-| Monorepo | Turborepo + pnpm workspaces |
-| Testing | Vitest (unit), Playwright (web e2e), supertest (api e2e), Storybook |
+| Backend  | NestJS 11, Prisma 7, PostgreSQL                                           |
+| Monorepo | Turborepo + pnpm workspaces                                               |
+| Testing  | Vitest (unit), Playwright (web e2e), supertest (api e2e), Storybook       |
 
 ```text
 apps/
@@ -68,7 +68,7 @@ pnpm --filter api test:e2e           # API e2e
 pnpm --filter @nonsololarco/db db:studio
 ```
 
-**After editing `schema.prisma`,** run both `db:migrate` *and* `db:generate` —
+**After editing `schema.prisma`,** run both `db:migrate` _and_ `db:generate` —
 the first updates the database, the second the TypeScript client. Doing only one
 produces confusing runtime errors.
 

@@ -1,7 +1,6 @@
+import { Track } from '@nonsololarco/types';
 import { fireEvent, render, screen } from '@testing-library/react';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
-
-import { Track } from '@nonsololarco/types';
 
 import { mockIntl } from '@/src/test/intl-mock';
 
@@ -42,19 +41,40 @@ vi.mock('@/src/hooks/global/useAuth', () => ({
 
 const tracks: Track[] = [
   {
-    id: 't-1', order: 1, title: 'Song A', bpm: 120, musicalKey: 'C',
-    duration: '3:20', side: 'a', status: 'ready',
-    leadMember: { id: 'user-1', name: 'Solomiia' }, members: [],
+    id: 't-1',
+    order: 1,
+    title: 'Song A',
+    bpm: 120,
+    musicalKey: 'C',
+    duration: '3:20',
+    side: 'a',
+    status: 'ready',
+    leadMember: { id: 'user-1', name: 'Solomiia' },
+    members: [],
   },
   {
-    id: 't-2', order: 2, title: 'Song B', bpm: 100, musicalKey: 'D',
-    duration: '4:00', side: 'a', status: 'learning',
-    leadMember: { id: 'user-2', name: 'Anna' }, members: [{ id: 'user-1', name: 'Solomiia' }],
+    id: 't-2',
+    order: 2,
+    title: 'Song B',
+    bpm: 100,
+    musicalKey: 'D',
+    duration: '4:00',
+    side: 'a',
+    status: 'learning',
+    leadMember: { id: 'user-2', name: 'Anna' },
+    members: [{ id: 'user-1', name: 'Solomiia' }],
   },
   {
-    id: 't-3', order: 3, title: 'Song C', bpm: 90, musicalKey: 'E',
-    duration: '2:50', side: 'b', status: 'archived',
-    leadMember: { id: 'user-2', name: 'Anna' }, members: [],
+    id: 't-3',
+    order: 3,
+    title: 'Song C',
+    bpm: 90,
+    musicalKey: 'E',
+    duration: '2:50',
+    side: 'b',
+    status: 'archived',
+    leadMember: { id: 'user-2', name: 'Anna' },
+    members: [],
   },
 ];
 
@@ -229,7 +249,9 @@ describe('RepertoireFilterBar', () => {
       mockActiveBand.isSpecificBandSelected = true;
       render(<RepertoireFilterBar />);
 
-      const links = screen.getAllByRole('link').filter((a) => a.getAttribute('href') === '/band/band-1');
+      const links = screen
+        .getAllByRole('link')
+        .filter((a) => a.getAttribute('href') === '/band/band-1');
       expect(links.length).toBeGreaterThan(0);
     });
 

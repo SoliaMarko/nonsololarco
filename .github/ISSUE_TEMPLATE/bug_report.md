@@ -1,7 +1,7 @@
 ---
 name: Bug report
 about: Something is broken
-title: "fix: "
+title: 'fix: '
 labels: bug
 ---
 

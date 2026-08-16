@@ -1,9 +1,10 @@
 import { NextIntlClientProvider } from 'next-intl';
+
 import type { Meta, StoryObj } from '@storybook/nextjs-vite';
 
-import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher/LocaleSwitcher';
-import LocaleStamp from '@/src/components/shared/LocaleSwitcher/LocaleStamp/LocaleStamp';
 import enCommon from '@/messages/en/common.json';
+import LocaleStamp from '@/src/components/shared/LocaleSwitcher/LocaleStamp/LocaleStamp';
+import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher/LocaleSwitcher';
 
 const withIntl = (Story: React.ComponentType) => (
   <NextIntlClientProvider locale="en" messages={{ common: enCommon }}>
@@ -40,7 +41,7 @@ export const LocaleStamps: StoryObj = {
       {(['en', 'it', 'uk'] as const).map((locale) => (
         <div key={locale} className="flex flex-col items-center gap-3">
           <LocaleStamp locale={locale} />
-          <span className="font-label text-fg-secondary text-[0.625rem] font-bold uppercase tracking-widest">
+          <span className="font-label text-fg-secondary text-[0.625rem] font-bold tracking-widest uppercase">
             {locale}
           </span>
         </div>

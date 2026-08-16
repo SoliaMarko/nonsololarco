@@ -67,7 +67,7 @@ export default function BpmRuler({ bpm, onBpmChange }: BpmRulerProps) {
 
   return (
     <div
-      className="mli-6 mbs-2 relative h-14 cursor-grab touch-none overflow-hidden select-none active:cursor-grabbing"
+      className="mli-6 relative mbs-2 h-14 cursor-grab touch-none overflow-hidden select-none active:cursor-grabbing"
       onPointerDown={onPointerDown}
       style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
     >
@@ -86,9 +86,7 @@ export default function BpmRuler({ bpm, onBpmChange }: BpmRulerProps) {
                 )}
               />
               {v % 20 === 0 && (
-                <span className="font-label text-primary-light/50 mbs-1 text-[0.5625rem]">
-                  {v}
-                </span>
+                <span className="font-label text-primary-light/50 mbs-1 text-[0.5625rem]">{v}</span>
               )}
             </div>
           );

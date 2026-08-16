@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PracticeSession } from '@/src/lib/types/metronome.types';
-
 import { mockIntl } from '@/src/test/intl-mock';
 
 import HistoryGroup from './HistoryGroup';
@@ -92,14 +91,18 @@ describe('HistoryGroup', () => {
   it('calls onDelete with the session when the delete button is clicked', async () => {
     const onDelete = vi.fn();
     render(<HistoryGroup group={GROUP} onDelete={onDelete} onToggle={vi.fn()} open={true} />);
-    const deleteButtons = screen.getAllByRole('button', { name: 'pages.metronome.ariaDeleteEntry' });
+    const deleteButtons = screen.getAllByRole('button', {
+      name: 'pages.metronome.ariaDeleteEntry',
+    });
     await userEvent.click(deleteButtons[0]!);
     expect(onDelete).toHaveBeenCalledWith(SESSION_A);
   });
 
   it('renders a delete button for each session row', () => {
     render(<HistoryGroup group={GROUP} onDelete={vi.fn()} onToggle={vi.fn()} open={true} />);
-    const deleteButtons = screen.getAllByRole('button', { name: 'pages.metronome.ariaDeleteEntry' });
+    const deleteButtons = screen.getAllByRole('button', {
+      name: 'pages.metronome.ariaDeleteEntry',
+    });
     expect(deleteButtons).toHaveLength(2);
   });
 });

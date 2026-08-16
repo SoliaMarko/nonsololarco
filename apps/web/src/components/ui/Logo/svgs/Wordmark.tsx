@@ -41,14 +41,7 @@ export function WordmarkSvg({ colors, scale }: { colors: LogoColors; scale: numb
       >
         so
       </text>
-      <ellipse
-        cx="116"
-        cy="34"
-        rx="4.2"
-        ry="3"
-        fill={colors.note}
-        transform="rotate(-12,116,34)"
-      />
+      <ellipse cx="116" cy="34" rx="4.2" ry="3" fill={colors.note} transform="rotate(-12,116,34)" />
       <line
         x1="119.5"
         y1="33"
@@ -68,14 +61,7 @@ export function WordmarkSvg({ colors, scale }: { colors: LogoColors; scale: numb
       >
         o
       </text>
-      <ellipse
-        cx="142"
-        cy="34"
-        rx="4.2"
-        ry="3"
-        fill={colors.note}
-        transform="rotate(-12,142,34)"
-      />
+      <ellipse cx="142" cy="34" rx="4.2" ry="3" fill={colors.note} transform="rotate(-12,142,34)" />
       <line
         x1="145.5"
         y1="33"

@@ -16,18 +16,18 @@ Turborepo + pnpm. `apps/web` — Next.js 15 App Router, React 19, Tailwind v4.
 
 ## Where to go, by task
 
-| Task | Read this |
-| --- | --- |
-| "Does component / util X already exist?" | [`MAP.md`](./MAP.md) — full inventory |
+| Task                                                   | Read this                                           |
+| ------------------------------------------------------ | --------------------------------------------------- |
+| "Does component / util X already exist?"               | [`MAP.md`](./MAP.md) — full inventory               |
 | "Add a component / endpoint / translation / migration" | [`RECIPES.md`](./RECIPES.md) — file lists, in order |
-| How code should look (styles, tokens, CVA, naming) | `nonsololarco-conventions` skill |
-| Process: DoD, commands, tests, docs | `CLAUDE.md` |
-| What a feature does for the user | `docs/features/<feature>.md` |
-| API shape, query params | `docs/architecture/api-repertoire.md` |
-| DB schema, relations, constraints | `docs/architecture/data-model.md` |
-| Why something was built this way | `docs/adr/` |
-| Branches, commits, rebase vs merge | [`GIT.md`](./GIT.md) |
-| What is planned to change | `docs/REFACTORING-PLAN.md` |
+| How code should look (styles, tokens, CVA, naming)     | `nonsololarco-conventions` skill                    |
+| Process: DoD, commands, tests, docs                    | `CLAUDE.md`                                         |
+| What a feature does for the user                       | `docs/features/<feature>.md`                        |
+| API shape, query params                                | `docs/architecture/api-repertoire.md`               |
+| DB schema, relations, constraints                      | `docs/architecture/data-model.md`                   |
+| Why something was built this way                       | `docs/adr/`                                         |
+| Branches, commits, rebase vs merge                     | [`GIT.md`](./GIT.md)                                |
+| What is planned to change                              | `docs/REFACTORING-PLAN.md`                          |
 
 **Do not read everything.** `MAP.md` is ~4k tokens, the skill ~8k. Take what
 the task calls for.
@@ -58,7 +58,9 @@ for.
 
 ```tsx
 // ❌ a second dropdown because the design has a different border
-function FilterDropdown() { /* 150 lines of portalling, outside-click, Escape */ }
+function FilterDropdown() {
+  /* 150 lines of portalling, outside-click, Escape */
+}
 
 // ✅ a new variant on the existing one
 const dropdownVariants = cva(base, {
@@ -73,10 +75,10 @@ considered and rejected.
 
 **3. Nothing suitable exists? Decide where it goes.**
 
-| Will more than one feature want it? | Where |
-| --- | --- |
+| Will more than one feature want it?                        | Where                                 |
+| ---------------------------------------------------------- | ------------------------------------- |
 | Yes, or it is a generic primitive (button, field, overlay) | `src/components/ui/<Name>/` + a story |
-| No, it is specific to this feature | `src/components/<feature>/<Name>/` |
+| No, it is specific to this feature                         | `src/components/<feature>/<Name>/`    |
 
 When unsure, start in the feature folder. Promoting to the design system later
 is a cheap move; pulling a half-general component back out of it is not.
@@ -137,7 +139,9 @@ Not general advice — things that have already gone wrong here.
 consistent with everything else, and **rem is preserved**:
 
 ```css
-.w-59 { width: calc(var(--spacing) * 59); }   /* --spacing = 0.25rem → 14.75rem */
+.w-59 {
+  width: calc(var(--spacing) * 59);
+} /* --spacing = 0.25rem → 14.75rem */
 ```
 
 The number is a count of `0.25rem` steps, not pixels, so it scales with the
@@ -147,10 +151,10 @@ reader's font-size setting exactly like the arbitrary value would. Conversion:
 **But this only holds for Tailwind's core utilities.** Logical properties come
 from the `tailwindcss-logical` plugin, which generates a **fixed** set.
 
-| Group | Examples | Accepts |
-| --- | --- | --- |
-| Tailwind v4 core | `w-` `h-` `size-` `gap-` `min-w-` `inset-` | **any** number: `w-59`, `w-85`, `size-8.5` |
-| Logical plugin | `pli-` `plb-` `pis-` `pie-` `pbs-` `pbe-` `mli-` `mlb-` `mis-` `mie-` `mbs-` `mbe-` | **only the scale** below |
+| Group            | Examples                                                                            | Accepts                                    |
+| ---------------- | ----------------------------------------------------------------------------------- | ------------------------------------------ |
+| Tailwind v4 core | `w-` `h-` `size-` `gap-` `min-w-` `inset-`                                          | **any** number: `w-59`, `w-85`, `size-8.5` |
+| Logical plugin   | `pli-` `plb-` `pis-` `pie-` `pbs-` `pbe-` `mli-` `mlb-` `mis-` `mie-` `mbs-` `mbe-` | **only the scale** below                   |
 
 ```
 0  0.5  1  1.5  2  2.5  3  3.5  4  5  6  7  8  9  10  11  12
