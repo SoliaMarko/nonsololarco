@@ -49,6 +49,14 @@ export default [
       // TypeScript interface key sorting
       'typescript-sort-keys/interface': 'error',
       'typescript-sort-keys/string-enum': 'error',
+
+      // Size & complexity limits — proxy metrics, warn to guide not block
+      'max-lines': ['warn', { max: 250, skipBlankLines: true, skipComments: true }],
+      'max-lines-per-function': ['warn', { max: 60, skipBlankLines: true, skipComments: true }],
+      complexity: ['warn', 12],
+      'max-depth': ['error', 3],
+      'max-nested-callbacks': ['error', 3],
+      'max-params': ['warn', 4],
     },
     settings: {
       'import/resolver': {
@@ -56,6 +64,22 @@ export default [
           project: resolve(__dirname, './tsconfig.json'),
         },
       },
+    },
+  },
+  {
+    // Tests and stories are long by nature — that's fine.
+    files: ['**/*.{test,spec}.{ts,tsx}', 'stories/**', '**/*.stories.tsx'],
+    rules: {
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+      'max-nested-callbacks': 'off',
+    },
+  },
+  {
+    // SVG components are pure markup — size limits don't apply.
+    files: ['**/icons/**/*.tsx', '**/svg/**/*.tsx'],
+    rules: {
+      'max-lines-per-function': 'off',
     },
   },
 ];
