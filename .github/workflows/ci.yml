@@ -13,7 +13,7 @@ env:
   # `prisma generate` (run via packages/db's postinstall hook on every
   # `pnpm install`) needs DATABASE_URL to resolve, even though none of these
   # jobs touch a real database — codegen only reads schema.prisma.
-  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public"
+  DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public'
 
 jobs:
   lint:
@@ -26,8 +26,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
+      - run: pnpm --filter @nonsololarco/db build
       - run: pnpm lint
 
   stylelint:
@@ -40,7 +41,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
       - run: cd apps/web && pnpm stylelint "src/**/*.css" "app/**/*.css"
 
@@ -54,8 +55,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
+      - run: pnpm --filter @nonsololarco/db build
       - run: pnpm typecheck
 
   test:
@@ -68,8 +70,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
+      - run: pnpm --filter @nonsololarco/db build
       - run: pnpm --filter web test:coverage
       - run: pnpm --filter api test -- --coverage
 
@@ -124,7 +127,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
 
       - name: Apply migrations and seed
@@ -166,8 +169,8 @@ jobs:
       - name: Run e2e
         run: pnpm --filter web e2e
         env:
-          E2E_START_SERVER: "1"
-          E2E_WEB_COMMAND: "pnpm --filter web start"
+          E2E_START_SERVER: '1'
+          E2E_WEB_COMMAND: 'pnpm --filter web start'
 
       - name: Upload report
         if: ${{ !cancelled() }}
@@ -188,7 +191,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
       - run: pnpm build
 
