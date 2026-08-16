@@ -20,11 +20,6 @@ const TRIGGER_VARIANT = {
   light: 'border border-edge bg-elevated text-fg-primary hover:bg-surface',
 } as const;
 
-const ITEM_VARIANT = {
-  dark: 'text-primary-light/60 data-highlighted:text-primary-light data-highlighted:bg-primary-light/10',
-  light: 'text-fg-secondary data-highlighted:text-fg-primary data-highlighted:bg-base',
-} as const;
-
 /**
  * Compact numeric picker for one half of a time signature.
  *
@@ -33,6 +28,11 @@ const ITEM_VARIANT = {
  * min-width — far too bulky for a 1–2 digit number. This keeps portalling,
  * outside-click, Escape and arrow-key navigation while trimming the chrome
  * to fit the toolbar.
+ *
+ * The trigger inherits the `variant` prop so it matches the surface it sits
+ * on (the always-dark metronome toolbar). The portalled dropdown content
+ * uses theme-aware tokens instead, because the Radix portal renders at the
+ * document root and inherits the active `data-theme`.
  */
 export default function SigDropdown({
   ariaLabel,
@@ -73,10 +73,7 @@ export default function SigDropdown({
           align="start"
           sideOffset={4}
           className={cn(
-            'z-dropdown min-w-11.5 border',
-            variant === 'dark'
-              ? 'border-primary-light/15 bg-primary-dark'
-              : 'border-edge bg-card',
+            'z-dropdown min-w-11.5 border border-edge bg-card',
             'shadow-[0_4px_12px_rgba(0,0,0,0.25)]',
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
@@ -88,7 +85,7 @@ export default function SigDropdown({
               className={cn(
                 'font-label flex cursor-pointer items-center justify-between gap-2 pli-2.5 plb-1.5 text-sm outline-none select-none',
                 'transition-colors duration-75',
-                ITEM_VARIANT[variant],
+                'text-fg-secondary data-highlighted:text-fg-primary data-highlighted:bg-elevated',
                 opt === value && 'font-semibold',
               )}
               onSelect={() => onSelect(opt)}

@@ -97,13 +97,11 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
         className="border-ie-[2.5px] border-primary-dark bg-surface text-fg-primary absolute inset-y-0 inset-s-0 z-36 flex w-85 max-w-[86%] flex-col shadow-[6px_0_0_rgba(0,0,0,0.35)]"
         style={{ animation: 'mt-drawer-in 0.24s ease-out' }}
       >
-        {/* Header — an inverted banner. It must pair `bg-contrast` with
-            `text-on-contrast`; using `text-primary-light` here renders
-            invisible in dark mode, where that token and `fg-primary`
-            resolve to the same cream. */}
-        <div className="pli-4 plb-4 border-fg-primary bg-contrast text-on-contrast flex items-end justify-between border-b-[2.5px]">
+        {/* Header — always dark regardless of theme, so the metronome
+            journal keeps its branded look in both light and dark modes. */}
+        <div className="pli-4 plb-4 border-primary-light bg-primary-dark text-primary-light flex items-end justify-between border-b-[2.5px]">
           <div>
-            <div className="font-label text-banner-label dark:text-danger text-[0.625rem] tracking-[0.1875rem]">
+            <div className="font-label text-yellow-main text-[0.625rem] tracking-[0.1875rem]">
               {t('journalLabel')}
             </div>
             <h2 className="font-display mbs-1 text-2xl leading-[0.95]">{t('journalTitle')}</h2>
@@ -175,10 +173,10 @@ export default function HistoryDrawer({ history, onClose, onDelete, onExit }: Hi
 
         {/* Undo bar */}
         {undoEntry && (
-          <div className="pli-4 plb-2 bg-contrast text-on-contrast flex items-center justify-between gap-2">
-            <span className="font-label text-[0.6875rem]">{t('entryDeleted', { song: undoEntry.song })}</span>
+          <div className="pli-4 plb-2 bg-card flex items-center justify-between gap-2">
+            <span className="font-label text-fg-secondary text-[0.6875rem]">{t('entryDeleted', { song: undoEntry.song })}</span>
             <button
-              className="font-ui border-0 bg-transparent text-xs font-semibold tracking-wider text-current uppercase underline underline-offset-2 opacity-80 transition-opacity duration-100 hover:opacity-100"
+              className="font-ui border-0 bg-transparent text-xs font-semibold tracking-wider text-accent-red uppercase underline underline-offset-2 opacity-90 transition-opacity duration-100 hover:opacity-100"
               onClick={handleUndo}
               type="button"
             >
