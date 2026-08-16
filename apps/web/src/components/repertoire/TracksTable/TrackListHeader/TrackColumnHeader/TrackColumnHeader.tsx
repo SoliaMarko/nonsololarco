@@ -13,6 +13,15 @@ type TrackColumnHeaderProps =
   | (BaseProps & { field: SortField; isSortable: true })
   | (BaseProps & { isSortable?: false });
 
+/**
+ * Sortable or static column header cell for the repertoire table.
+ *
+ * When `isSortable` is true the header renders as a button that cycles the
+ * `sort` / `order` search params. The active column shows an accent chevron;
+ * inactive columns show a muted chevron. The header text is always truncated
+ * rather than wrapping, so a long translation cannot push the header row to a
+ * second line and shift every data row beneath it.
+ */
 export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   const { className, isSortable, title } = props;
 

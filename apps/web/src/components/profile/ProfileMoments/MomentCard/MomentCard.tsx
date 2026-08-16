@@ -16,6 +16,7 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
   const t = useTranslations('pages');
   const isVideo = moment.kind === 'video';
   const isEmpty = moment.thumbnailUrl === null;
+  const mediaLabel = isVideo ? t('profile.momentsVideo') : t('profile.momentsPhoto');
 
   const handleClick = () => {
     if (isVideo && moment.videoUrl) {
@@ -60,9 +61,7 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
           <div className="text-fg-tertiary flex flex-col items-center gap-2">
             {!isVideo ? <ImageIcon size={36} aria-hidden="true" /> : null}
             <span className="text-sm">
-              {isOwnProfile
-                ? `↓ ${isVideo ? t('profile.momentsVideo') : t('profile.momentsPhoto')}`
-                : ''}
+              {isOwnProfile ? `↓ ${mediaLabel}` : ''}
             </span>
           </div>
         ) : (

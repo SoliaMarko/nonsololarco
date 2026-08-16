@@ -1,5 +1,7 @@
 'use client';
 
+import { cva } from 'class-variance-authority';
+
 import Text from '@/src/components/typography/Text';
 import Button from '@/src/components/ui/Button';
 import { NotesIcon } from '@/src/icons/base';
@@ -23,24 +25,28 @@ interface AiButtonProps {
 }
 
 /**
- * Overrides that align `sm` with the `LocaleSwitcher` trigger it sits beside
- * in the mobile header.
+ * Size-variant overrides for the underlying `Button`.
  *
- * Besides the geometry, this re-colours the border and shadow from the
- * variant's fixed `primary-dark` to the theme-aware `fg-secondary`. The border
- * separates the button from the *page*, not from its own fill, so a colour
- * that stays dark in both themes disappears against a dark background — the
- * button reads as borderless next to the switcher.
- *
- * The hover/active overrides cancel the variant's press animation, since the
- * switcher next to it is static.
+ * The `sm` overrides align the button with the `LocaleSwitcher` trigger it
+ * sits beside in the mobile header — matching geometry and a theme-aware
+ * `fg-secondary` border/shadow instead of the variant's fixed `primary-dark`,
+ * which disappears against a dark background. The hover/active overrides cancel
+ * the variant's press animation, since the switcher next to it is static.
  */
-const SM_BUTTON = cn(
-  'pli-[9px] plb-[5px] min-h-0 border-2',
-  'border-fg-primary shadow-[2px_2px_0_0_var(--color-fg-primary)]',
-  'hover:translate-x-0 hover:translate-y-0 hover:shadow-[2px_2px_0_0_var(--color-fg-primary)]',
-  'active:translate-x-0 active:translate-y-0 active:shadow-[2px_2px_0_0_var(--color-fg-primary)]',
-);
+const aiButtonVariants = cva('bg-accent-dark-green', {
+  variants: {
+    size: {
+      md: '',
+      sm: cn(
+        'pli-[9px] plb-[5px] min-h-0 border-2',
+        'border-fg-primary shadow-[2px_2px_0_0_var(--color-fg-primary)]',
+        'hover:translate-x-0 hover:translate-y-0 hover:shadow-[2px_2px_0_0_var(--color-fg-primary)]',
+        'active:translate-x-0 active:translate-y-0 active:shadow-[2px_2px_0_0_var(--color-fg-primary)]',
+      ),
+    },
+  },
+  defaultVariants: { size: 'md' },
+});
 
 const ICON_SIZE: Record<AiButtonSize, number> = {
   md: 16,
@@ -67,10 +73,15 @@ const TEXT_WEIGHT: Record<AiButtonSize, 'bold' | 'medium'> = {
   sm: 'bold',
 };
 
+/**
+ * Retro-press AI shortcut button. Available in `"md"` (desktop default,
+ * paired with `AddTrackButton`) and `"sm"` (mobile header, paired with
+ * `LocaleSwitcher`).
+ */
 export default function AiButton({ className, size = 'md', textClassName }: AiButtonProps) {
   return (
     <Button
-      className={cn('bg-accent-dark-green', size === 'sm' && SM_BUTTON, className)}
+      className={cn(aiButtonVariants({ size }), className)}
       variant="retro-primary"
     >
       <div className={cn('text-primary-light flex flex-row items-center gap-2', textClassName)}>

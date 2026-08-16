@@ -53,6 +53,18 @@ function emptyStateCopyKeys(
   };
 }
 
+/**
+ * Server-state-driven repertoire table with sorting, status filtering,
+ * "only mine" toggle, and cursor pagination.
+ *
+ * Sort and filter state lives in the URL search params so the view is
+ * shareable and survives navigation. On the initial load a skeleton is
+ * shown; subsequent refetches dim the outgoing rows and overlay a spinner
+ * to read as "updating" rather than "starting over". When the result set
+ * is empty, a contextual empty-state card explains why (no tracks at all,
+ * active filter matched nothing, or "only mine" matched nothing) with an
+ * optional reset button.
+ */
 export default function TracksTable() {
   const { user } = useAuth();
   const { activeBandId, isSpecificBandSelected } = useActiveBand();

@@ -2,18 +2,19 @@ import { cva } from 'class-variance-authority';
 
 import { alignVariants, colorVariants, sizeVariants, truncateVariant } from '../common.variants';
 
+/**
+ * CVA definition for the `Text` component.
+ *
+ * The `weight` values map to stock Tailwind weight utilities so
+ * `tailwind-merge` can recognise them. This matters for the default: when it
+ * emitted the custom `font-regular`, tailwind-merge could not classify it as a
+ * font-weight and so never dropped it, causing a `font-medium` passed through
+ * `className` to silently lose. The prop value stays `regular` — only the
+ * emitted class changed.
+ */
 export const textVariants = cva('leading-normal', {
   variants: {
     size: sizeVariants,
-    /**
-     * Every value maps to a stock Tailwind weight utility so `tailwind-merge`
-     * can recognise it. This matters for the default: when it emitted the
-     * custom `font-regular`, tailwind-merge could not classify it as a
-     * font-weight and so never dropped it, and a `font-medium` passed through
-     * `className` silently lost to it.
-     *
-     * The prop value stays `regular` — only the class it emits changed.
-     */
     weight: {
       regular: 'font-normal',
       medium: 'font-medium',

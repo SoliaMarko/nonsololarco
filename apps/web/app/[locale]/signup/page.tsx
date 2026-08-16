@@ -10,6 +10,7 @@ import { useAuth } from '@/src/hooks/global/useAuth';
 
 import { Link, useRouter } from '@/i18n/navigation';
 
+/** Sign-up page — redirects to `/` if the user is already authenticated, otherwise renders the auth layout with registration form. */
 export default function SignupPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();

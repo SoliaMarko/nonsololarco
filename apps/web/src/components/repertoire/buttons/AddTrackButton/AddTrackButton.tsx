@@ -11,6 +11,12 @@ interface AddTrackButtonProps {
   className?: string;
 }
 
+/**
+ * Retro-press "Add track" CTA. The label is responsive: a short translated
+ * verb on mobile, extended with a noun on `md+` screens via a hidden
+ * `<span>`. Both parts are translated independently so each locale can
+ * phrase the short and long forms naturally.
+ */
 export default function AddTrackButton({ className }: AddTrackButtonProps) {
   const t = useTranslations('pages');
 

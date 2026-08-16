@@ -22,6 +22,12 @@ export interface AppHeaderNavProps {
   className?: string;
 }
 
+/**
+ * Sticky desktop header with logo, main nav tabs, metronome/locale/theme
+ * controls, and a user avatar dropdown. On mobile the nav tabs are hidden;
+ * the active-page title appears inline and the repertoire AI button surfaces
+ * in the header instead of the bottom bar.
+ */
 export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const { user, logout } = useAuth();
   const router = useRouter();

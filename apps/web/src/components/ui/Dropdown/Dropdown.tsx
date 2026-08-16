@@ -93,14 +93,14 @@ const LABEL_CLASS: Record<DropdownVariant, string> = {
   default:
     'text-fg-tertiary font-label pli-3 plb-2 pbs-3 text-[0.625rem] font-bold uppercase tracking-widest select-none',
   stamp:
-    'text-fg-tertiary font-label pli-3 pbs-2 pbe-[6px] text-[0.625rem] font-bold uppercase tracking-[0.18em] select-none border-b border-dotted border-edge',
+    'text-fg-tertiary font-label pli-3 pbs-2 pbe-[6px] text-[0.625rem] font-bold uppercase tracking-[0.18em] select-none border-be border-dotted border-edge',
 };
 
 /* ---------- separator ---------- */
 
 const SEPARATOR_CLASS: Record<DropdownVariant, string> = {
-  default: 'border-t-edge mlb-1 border-t border-dotted',
-  stamp: 'border-t-edge border-t border-dotted',
+  default: 'border-edge mlb-1 border-bs border-dotted',
+  stamp: 'border-edge border-bs border-dotted',
 };
 
 /* ---------- item ---------- */
@@ -110,7 +110,7 @@ function itemClass(variant: DropdownVariant, item: DropdownItem, hasLabel: boole
     return cn(
       'flex items-center gap-[10px] w-full pli-3 plb-[9px] cursor-pointer outline-none select-none',
       'font-prose text-[0.875rem] text-fg-primary',
-      'border-b border-dotted border-edge last:border-b-0',
+      'border-be border-dotted border-edge last:border-be-0',
       'data-highlighted:bg-control-surface-hover',
       'data-[disabled]:opacity-40 data-[disabled]:cursor-not-allowed data-[disabled]:pointer-events-none',
       item.selected && 'font-semibold',
@@ -121,7 +121,7 @@ function itemClass(variant: DropdownVariant, item: DropdownItem, hasLabel: boole
   return cn(
     dropdownItemVariants({ variant: cvVariant }),
     item.selected && 'text-fg-primary font-semibold',
-    hasLabel && 'first:pbs-2 first:rounded-t-none',
+    hasLabel && 'first:pbs-2 first:rounded-ss-none first:rounded-se-none',
   );
 }
 

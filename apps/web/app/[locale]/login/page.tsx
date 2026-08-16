@@ -10,6 +10,7 @@ import { useAuth } from '@/src/hooks/global/useAuth';
 
 import { Link, useRouter } from '@/i18n/navigation';
 
+/** Login page — redirects to `/` if the user is already authenticated, otherwise renders the auth layout with login form. */
 export default function LoginPage() {
   const { isAuthenticated, isLoading } = useAuth();
   const router = useRouter();

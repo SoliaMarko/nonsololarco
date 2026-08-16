@@ -1,3 +1,5 @@
+import { cva } from 'class-variance-authority';
+
 import { cn } from '@/src/utils/cn';
 
 interface FilterPillProps {
@@ -17,9 +19,26 @@ interface FilterPillProps {
  * Two reservations, because a pill carrying a count needs the extra room:
  * without it the count would push the pill wider again and defeat the point.
  */
-const MIN_WIDTH_WITH_COUNT = 'min-w-30';
-const MIN_WIDTH_PLAIN = 'min-w-24';
+const filterPillVariants = cva(
+  'plb-1.5 pli-3 shrink-0 border-2 text-xs font-bold tracking-wider whitespace-nowrap uppercase transition-colors',
+  {
+    variants: {
+      layout: {
+        withCount: 'min-w-30',
+        plain: 'min-w-24',
+      },
+    },
+    defaultVariants: { layout: 'plain' },
+  },
+);
 
+/**
+ * Stamp-style toggle pill used in the repertoire filter bar.
+ *
+ * Renders a fixed-minimum-width button to keep the row stable across
+ * locales. When `count` is provided an extra `min-w-30` reservation
+ * prevents the badge from overflowing the pill.
+ */
 export default function FilterPill({
   activeStyle,
   count,
@@ -28,14 +47,14 @@ export default function FilterPill({
   onClick,
 }: FilterPillProps) {
   const hasCount = count !== undefined;
+  const layout = hasCount ? 'withCount' : 'plain';
 
   return (
     <button
       onClick={onClick}
       aria-pressed={isActive}
       className={cn(
-        'plb-1.5 pli-3 shrink-0 border-2 text-xs font-bold tracking-wider whitespace-nowrap uppercase transition-colors',
-        hasCount ? MIN_WIDTH_WITH_COUNT : MIN_WIDTH_PLAIN,
+        filterPillVariants({ layout }),
         isActive
           ? activeStyle
           : 'border-border-primary text-fg-tertiary hover:text-fg-secondary hover:border-fg-tertiary',

@@ -73,7 +73,7 @@ export default function LocaleSwitcher({ className }: LocaleSwitcherProps) {
             'relative inline-flex items-center gap-2 overflow-hidden',
             'bg-control-surface border-fg-secondary border-2',
             'font-label text-xs font-bold tracking-[0.08em]',
-            'cursor-pointer px-2.25 py-1.25',
+            'cursor-pointer pli-[0.5625rem] plb-[0.3125rem]',
             // Static by design — no press transform or transition. The hover
             // tint is an instant colour swap, kept purely for affordance.
             'shadow-[2px_2px_0_0_var(--color-fg-secondary)]',

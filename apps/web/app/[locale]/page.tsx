@@ -5,6 +5,7 @@ import { useTranslations } from 'next-intl';
 import AppShell from '@/src/components/layout/AppShell';
 import EmptyState from '@/src/components/shared/EmptyState';
 
+/** Feed home page — the root `/` route. Placeholder shown while the feature is in development. */
 export default function Home() {
   const t = useTranslations('pages');
 

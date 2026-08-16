@@ -9,6 +9,12 @@ export interface AppBottomNavProps {
   className?: string;
 }
 
+/**
+ * Sticky bottom navigation bar visible only on mobile (`md:hidden`).
+ * Renders each entry from `NAV_ITEMS` as a mobile `NavLink` with an
+ * optional badge count. Includes safe-area padding for the iPhone
+ * home indicator.
+ */
 export default function AppBottomNav({ activePath, className }: AppBottomNavProps) {
   const t = useTranslations('common');
 
