@@ -399,7 +399,12 @@ pnpm typecheck
 існують (згенероване, масові перейменування). Поріг: 20 файлів після
 виключення lockfile, міграцій і згенерованого.
 
-### 0.4 Полагодити CI
+### 0.4 Полагодити CI ✅ ЗРОБЛЕНО
+
+> **Виконано 2026-08-16.** Видалено дублюючий `api.yml` (Node 20, pnpm v2,
+> без тестів). `ci.yml` вже покриває API повністю: `pnpm test` через turbo
+> запускає тести по всіх packages, `pnpm lint` лінтить все, e2e job піднімає
+> Postgres і API.
 
 `.github/workflows/api.yml` зараз запускає тільки `build` і `lint` для API —
 **жодного тесту**. CLAUDE.md стверджує, що «CI runs lint, stylelint, typecheck,
@@ -1634,7 +1639,7 @@ v0.5.0» зі згенерованим CHANGELOG і піднятою версі�
 | 3a  | ✅ `fix(web): mis-0.25/mie-0.25 у Button не генерують CSS` + lint-гард       | 0.1.1    | низький     | високий                 |
 | 3b  | ✅ `chore(web): ліміти розміру файлу, функції та складності`                 | 0.1.2    | нульовий    | середній                |
 | 4   | ✅ `chore: eslint-config/nest + вирівняти суворість api`                     | 0.2      | середній    | високий                 |
-| 5   | `ci: додати тести api в ci.yml, прибрати api.yml`                            | 0.4      | низький     | високий                 |
+| 5   | ✅ `ci: прибрати дублюючий api.yml, ci.yml вже покриває API`                 | 0.4      | низький     | високий                 |
 | 6   | `chore(web): sort interface keys required-first`                             | правило  | низький     | середній                |
 | 7   | `test: diff-coverage 90% + ratchet thresholds`                               | 1.4      | нульовий    | високий                 |
 | 8   | `refactor(api): злити три методи RepertoireService у findTracks`             | 3.1      | середній    | високий                 |
