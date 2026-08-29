@@ -1,66 +1,66 @@
-# План приведення nonsololarco до професійного стандарту
+# Bringing nonsololarco to a professional standard
 
-> Складено на основі аудиту реального стану коду станом на 2026-08-12.
-> Кожен пункт містить **факт** (що зараз), **проблему** (чому це болить)
-> і **дію** (що конкретно зробити).
-
----
-
-## Зміст
-
-- [Резюме аудиту](#резюме-аудиту)
-- [Фаза 0 — Зупинити регрес (тиждень 1)](#фаза-0--зупинити-регрес-тиждень-1)
-- [Фаза 1 — Тестова стратегія](#фаза-1--тестова-стратегія)
-- [Фаза 2 — Чистота коду: фронтенд](#фаза-2--чистота-коду-фронтенд)
-- [Фаза 3 — Чистота коду: бекенд](#фаза-3--чистота-коду-бекенд)
-- [Фаза 4 — База даних](#фаза-4--база-даних)
-- [Фаза 5 — Структура папок](#фаза-5--структура-папок)
-- [Фаза 6 — Документація і середовище для AI](#фаза-6--документація-і-claudemd)
-- [Фаза 7 — Спостережуваність і релізні нотатки](#фаза-7--спостережуваність-і-релізні-нотатки)
-- [Нове правило: сортування пропсів](#нове-правило-сортування-пропсів)
-- [Порядок виконання](#порядок-виконання)
+> Written from an audit of the actual code on 2026-08-12.
+> Every item states the **fact** (what is true now), the **problem** (why it
+> hurts) and the **action** (what to do about it).
 
 ---
 
-## Резюме аудиту
+## Contents
 
-| Метрика                             | Зараз                             | Ціль                         |
-| ----------------------------------- | --------------------------------- | ---------------------------- |
-| Компонентів web (без тестів/сторіз) | 141                               | —                            |
-| Файлів unit-тестів web              | 19 (~13%)                         | 100% нових, 70%+ загалом     |
-| Storybook stories                   | 25 файлів (24 компоненти)         | Всі DS-компоненти            |
-| API файлів / `.spec.ts`             | 35 / 4 (~11%)                     | 100% сервісів і контролерів  |
-| Інтеграційних тестів                | **0**                             | Кожен модуль API             |
-| E2E web                             | 2 спеки                           | +auth, +i18n, +profile       |
-| E2E API                             | 1 boilerplate                     | Реальні контрактні тести     |
-| Coverage thresholds                 | **немає**                         | 90% diff-coverage + ratchet  |
-| Pre-commit hooks                    | **немає**                         | husky + lint-staged          |
-| Контекст для AI щосесії             | ~12k токенів, розходиться з кодом | ~2.5k, мапа генерується      |
-| Логування в API                     | **1 рядок** (`console.error`)     | Sentry + структуровані логи  |
-| Відстеження помилок                 | **немає**                         | Sentry на web і api          |
-| CHANGELOG / теги                    | **немає жодного**                 | release-please, тег на реліз |
-
-**Головний висновок.** Проект має відмінну _документацію намірів_ (CLAUDE.md +
-skill), але слабкий _механічний примус_. Правила описані словами, а не
-конфігами — тому вони порушуються навіть у власному коді проекту. Пріоритет №1
-не в тому, щоб написати більше правил, а в тому, щоб перетворити наявні правила
-на lint-помилки і CI-гейти.
+- [Audit summary](#audit-summary)
+- [Phase 0 — Stop the bleeding (week 1)](#phase-0--stop-the-bleeding-week-1)
+- [Phase 1 — Testing strategy](#phase-1--testing-strategy)
+- [Phase 2 — Code quality: frontend](#phase-2--code-quality-frontend)
+- [Phase 3 — Code quality: backend](#phase-3--code-quality-backend)
+- [Phase 4 — Database](#phase-4--database)
+- [Phase 5 — Folder structure](#phase-5--folder-structure)
+- [Phase 6 — Documentation and the AI environment](#phase-6--documentation-and-the-ai-environment)
+- [Phase 7 — Observability and release notes](#phase-7--observability-and-release-notes)
+- [New rule: prop sorting](#new-rule-prop-sorting)
+- [Execution order](#execution-order)
 
 ---
 
-## Фаза 0 — Зупинити регрес (тиждень 1)
+## Audit summary
 
-Перш ніж чистити старе, треба закрити двері для нового безладу. Ця фаза не
-чіпає жодного компонента — тільки конфіги.
+| Metric                                   | Now                                 | Target                            |
+| ---------------------------------------- | ----------------------------------- | --------------------------------- |
+| Web components (excluding tests/stories) | 141                                 | —                                 |
+| Web unit test files                      | 19 (~13%)                           | 100% of new code, 70%+ overall    |
+| Storybook stories                        | 25 files (24 components)            | Every DS component                |
+| API files / `.spec.ts`                   | 35 / 4 (~11%)                       | 100% of services and controllers  |
+| Integration tests                        | **0**                               | Every API module                  |
+| Web E2E                                  | 2 specs                             | +auth, +i18n, +profile            |
+| API E2E                                  | 1 boilerplate                       | Real contract tests               |
+| Coverage thresholds                      | **none**                            | 90% diff coverage + ratchet       |
+| Pre-commit hooks                         | **none**                            | husky + lint-staged               |
+| AI context per session                   | ~12k tokens, drifting from the code | ~2.5k, map generated              |
+| API logging                              | **one line** (`console.error`)      | Sentry + structured logs          |
+| Error tracking                           | **none**                            | Sentry on web and api             |
+| CHANGELOG / tags                         | **none at all**                     | release-please, a tag per release |
 
-### 0.1 Правила, які документовані, але не enforced ✅ ЗРОБЛЕНО
+**The headline finding.** The project has excellent _documentation of intent_
+(CLAUDE.md + the skill) and weak _mechanical enforcement_. The rules are written
+in prose rather than config, so they get broken in the project's own code.
+Priority one is not writing more rules — it is turning the existing ones into
+lint errors and CI gates.
 
-> **Виконано 2026-08-16.** Додано `no-nested-ternary`, `no-var`,
-> `prefer-const` в ESLint конфіг web. Пофіксовано вкладені тернарники
-> в Select.tsx (2 місця) і Button.tsx (1 місце).
+---
 
-Це найдешевша перемога в усьому плані. CLAUDE.md забороняє вкладені тернарники —
-але ESLint їх дозволяє, і в коді зараз є три реальні порушення:
+## Phase 0 — Stop the bleeding (week 1)
+
+Before cleaning up the old mess, close the door on new mess. This phase touches
+no components — only configuration.
+
+### 0.1 Rules that are documented but not enforced ✅ DONE
+
+> **Completed 2026-08-16.** Added `no-nested-ternary`, `no-var` and
+> `prefer-const` to the web ESLint config. Fixed the nested ternaries in
+> Select.tsx (2) and Button.tsx (1).
+
+The cheapest win in the whole plan. CLAUDE.md forbids nested ternaries, but
+ESLint allows them, and there were three real violations:
 
 ```
 apps/web/src/components/form/Select/Select.tsx:68
@@ -73,7 +73,7 @@ apps/web/src/components/ui/Button/Button.tsx:~52
   size === 'xs' ? (position === 'start' ? 'mie-0.25' : 'mis-0.25') : ...
 ```
 
-Додати в `apps/web/eslint.config.js`:
+Add to `apps/web/eslint.config.js`:
 
 ```js
 rules: {
@@ -84,46 +84,45 @@ rules: {
     'error',
     {
       selector: 'IfStatement > BlockStatement > IfStatement',
-      message: 'Вкладений if заборонено — використай guard clause або early return.',
+      message: 'Nested if is forbidden — use a guard clause or an early return.',
     },
   ],
 },
 ```
 
-Заборонити фізичні CSS-властивості механічно (зараз це тільки словесне правило):
+Forbid physical CSS properties mechanically — today it is prose only:
 
 ```js
 'no-restricted-syntax': [
   'error',
   {
     selector: "Literal[value=/\\b(p[lrtb]|m[lrtb]|px|py|mx|my)-[0-9]/]",
-    message: 'Використовуй логічні властивості: pli-/plb-/mli-/mbs-/mbe-.',
+    message: 'Use logical properties: pli-/plb-/mli-/mbs-/mbe-.',
   },
 ],
 ```
 
-> **Примітка.** Такий selector дає хибні спрацювання на рядках типу
-> `'flex-1'`. Надійніший варіант — власне ESLint-правило або перевірка
-> в `stylelint` через `tailwindcss/no-arbitrary-value`. Почни з regex-версії
-> і додай `eslint-disable` там, де вона помиляється; якщо шуму багато —
-> винеси в окремий `packages/eslint-plugin-nonsololarco`.
+> **Note.** That selector produces false positives on strings like `'flex-1'`.
+> A custom ESLint rule, or a stylelint check, is more reliable. Start with the
+> regex version and add `eslint-disable` where it misfires; if the noise grows,
+> move it into a dedicated `packages/eslint-plugin-nonsololarco`.
 
-### 0.1.1 Логічні утиліти поза шкалою — мовчазна втрата стилю ✅ ЗРОБЛЕНО
+### 0.1.1 Logical utilities off the scale — silently lost styling ✅ DONE
 
-> **Виконано 2026-08-16.** Замінено `mie-0.25`/`mis-0.25` на `mie-0.5`/`mis-0.5`
-> у Button.tsx через lookup-мапу `ICON_MARGIN`.
+> **Completed 2026-08-16.** Replaced `mie-0.25`/`mis-0.25` with
+> `mie-0.5`/`mis-0.5` in Button.tsx via an `ICON_MARGIN` lookup map.
 
-**Знайдено реальний баг.** `apps/web/src/components/ui/Button/Button.tsx:57–58`
-використовує `mie-0.25` і `mis-0.25`. Значення `0.25` немає у шкалі, з якої
-плагін `tailwindcss-logical` генерує класи, тому **жодного CSS не
-створюється**: клас потрапляє в розмітку, відступ біля іконки зникає, помилки
-немає. Перевірено емпіричним прогоном PostCSS на реальному конфігу проекту.
+**A real bug was found.** `apps/web/src/components/ui/Button/Button.tsx:57–58`
+used `mie-0.25` and `mis-0.25`. The value `0.25` is not on the scale the
+`tailwindcss-logical` plugin generates from, so **no CSS is emitted at all**:
+the class lands in the markup, the margin beside the icon disappears, and
+nothing errors. Verified by running PostCSS against the project's real config.
 
-Це той самий блок коду, що містить вкладений тернарник із 0.1 — два дефекти в
-шести рядках.
+It is the same block of code that held the nested ternary from 0.1 — two
+defects in six lines.
 
 ```tsx
-// зараз — для size="xs" відступу немає взагалі
+// before — for size="xs" there was no margin whatsoever
 const marginClass =
   size === 'xs'
     ? position === 'start'
@@ -133,7 +132,7 @@ const marginClass =
       ? 'mie-0.5'
       : 'mis-0.5';
 
-// має бути — lookup-мапа + значення зі шкали
+// after — lookup map plus values that exist on the scale
 const ICON_MARGIN = {
   'xs:start': 'mie-0.5',
   'xs:end': 'mis-0.5',
@@ -142,26 +141,27 @@ const ICON_MARGIN = {
 } as const;
 ```
 
-**Чому це важливо системно.** Помилка не діагностується нічим: ні typecheck,
-ні lint, ні тест (тести не перевіряють класи — і правильно роблять). Єдиний
-спосіб її помітити — подивитися очима на кнопку розміру `xs`.
+**Why this matters systemically.** Nothing diagnoses the mistake: not
+typecheck, not lint, not tests (tests do not assert on classes, and rightly
+so). The only way to notice is to look at an `xs` button.
 
-**Захист** — lint-правило, що звіряє значення логічних утиліт зі шкалою:
+**The guard** is a lint rule that checks logical-utility values against the
+scale:
 
 ```js
-// eslint.config.js — шкала плагіна tailwindcss-logical
+// eslint.config.js — the tailwindcss-logical plugin's scale
 {
   selector:
     "Literal[value=/\\b(p|m)(li|lb|is|ie|bs|be)-(?!(0|0\\.5|1|1\\.5|2|2\\.5|3|3\\.5|4|5|6|7|8|9|1[0-2]|14|16|20|24|28|32|36|40|44|48|52|56|60|64|72|80|96|px|\\[)\\b)/]",
   message:
-    'Значення немає у шкалі логічних утиліт — клас не згенерується. Візьми найближче зі шкали або довільне значення в rem: mis-[0.0625rem].',
+    'Value is not on the logical-utility scale — no class will be generated. Use the nearest scale step, or an arbitrary rem value: mis-[0.0625rem].',
 }
 ```
 
-Повний перелік валідних значень і пояснення різниці між утилітами ядра й
-плагіна — у `docs/ai/ORIENTATION.md`, розділ «Розміри».
+The full list of valid values, and the difference between core and plugin
+utilities, is in `docs/ai/ORIENTATION.md` under "Sizing".
 
-**Разова перевірка всієї бази** (знайшла рівно ці два випадки):
+**One-off sweep of the codebase** (it found exactly those two cases):
 
 ```sh
 node -e '
@@ -170,55 +170,56 @@ const {execSync}=require("child_process");
 execSync("grep -rnoE \"(p|m)(li|lb|is|ie|bs|be)-[0-9.]+\" apps/web/src",{encoding:"utf8"})
   .split("\n").filter(Boolean)
   .filter(l=>!S.has(l.split(":").pop().split("-").pop()))
-  .forEach(l=>console.log("ПОЗА ШКАЛОЮ:",l));
+  .forEach(l=>console.log("OFF SCALE:",l));
 '
 ```
 
-### 0.1.2 Ліміти розміру файлу і функції ✅ ЗРОБЛЕНО
+### 0.1.2 File and function size limits ✅ DONE
 
-> **Виконано 2026-08-16.** Додано `max-lines`, `max-lines-per-function`,
-> `complexity`, `max-depth`, `max-nested-callbacks`, `max-params` до ESLint.
-> Всі як `warn` (complexity теж warn — 8 існуючих порушень, підвищити до
-> error після рефакторингу). Overrides для тестів, stories та SVG.
+> **Completed 2026-08-16.** Added `max-lines`, `max-lines-per-function`,
+> `complexity`, `max-depth`, `max-nested-callbacks` and `max-params` to ESLint.
+> All as `warn` (complexity too — 8 existing violations; raise to error after
+> the refactor). Overrides for tests, stories and SVG.
 
-**Чи це хороше правило — коротка відповідь: так, але як `warn`, і не саме по
-собі.** Довжина файлу — це _проксі-метрика_. Вона корелює з «забагато
-відповідальностей», але не є нею. Файл на 300 рядків із п'ятнадцяти плоских
-CVA-рядків нормальний; файл на 80 рядків, що робить роутинг, фетч і
-форматування одночасно, — ні. Тому поріг має підказувати, а не забороняти.
+**Is this a good rule? Short answer: yes, but as a `warn`, and not on its
+own.** File length is a _proxy metric_. It correlates with "too many
+responsibilities" but is not the same thing. A 300-line file of fifteen flat
+CVA strings is fine; an 80-line file doing routing, fetching and formatting at
+once is not. So the threshold should prompt, not forbid.
 
-**Реальний стан кодової бази — він дуже здоровий:**
+**The actual state of the codebase — which is very healthy:**
 
-| Група              | Файлів | Медіана | p90 | Max |
-| ------------------ | ------ | ------- | --- | --- |
-| `components/ui`    | 41     | 22      | 105 | 223 |
-| Компоненти фіч     | 104    | 20      | 91  | 338 |
-| Хуки, утиліти, lib | 152    | 39      | 66  | 204 |
-| API                | 35     | 32      | 92  | 344 |
+| Group              | Files | Median | p90 | Max |
+| ------------------ | ----- | ------ | --- | --- |
+| `components/ui`    | 41    | 22     | 105 | 223 |
+| Feature components | 104   | 20     | 91  | 338 |
+| Hooks, utils, lib  | 152   | 39     | 66  | 204 |
+| API                | 35    | 32     | 92  | 344 |
 
-Понад 150 рядків — 8 файлів із 332. Понад 250 — **два**:
+Over 150 lines: 8 files out of 332. Over 250: **two**.
 
 ```
 344  apps/api/src/repertoire/repertoire.service.ts
 338  apps/web/src/components/repertoire/RepertoireFilterBar/RepertoireFilterBar.tsx
 ```
 
-**І це найкращий аргумент за правило.** Обидва файли я до того незалежно
-позначив як борг: сервіс — за потрійне дублювання методів (§3.1), фільтр-бар
-— бо 338 рядків для панелі фільтрів означає, що всередині сидять невиділені
-компоненти. Метрика знайшла рівно те саме, без жодного знання про проект.
+**And that is the best argument for the rule.** Both files had already been
+flagged as debt independently: the service for its threefold method
+duplication (§3.1), the filter bar because 338 lines for a filter panel means
+there are unextracted components inside it. The metric found exactly the same
+two, knowing nothing about the project.
 
-Поріг у 250 рядків дає **два спрацювання і нуль хибних**. Це рідкісний
-випадок, коли правило можна вмикати одразу, без періоду «розгрібання».
+A 250-line threshold produces **two warnings and zero false positives** — a
+rare case where a rule can be switched on immediately, with no cleanup period.
 
 ```js
 // eslint.config.js
 {
   rules: {
-    // Проксі-метрика: підказує, не забороняє.
+    // Proxy metric: prompts, does not forbid.
     'max-lines': ['warn', { max: 250, skipBlankLines: true, skipComments: true }],
 
-    // Ось це — справжні сигнали складності, тому error.
+    // These are the real complexity signals, hence error.
     'max-lines-per-function': ['warn', { max: 60, skipBlankLines: true, skipComments: true }],
     'complexity': ['error', 12],
     'max-depth': ['error', 3],
@@ -227,7 +228,7 @@ CVA-рядків нормальний; файл на 80 рядків, що ро�
   },
 },
 {
-  // Тести й сторі довгі за природою — і це нормально.
+  // Tests and stories are long by nature, and that is fine.
   files: ['**/*.{test,spec}.{ts,tsx}', 'stories/**', '**/*.stories.tsx'],
   rules: {
     'max-lines': 'off',
@@ -237,71 +238,70 @@ CVA-рядків нормальний; файл на 80 рядків, що ро�
 },
 ```
 
-**Чому саме такий набір.** `max-lines` ловить «файл розрісся», але не скаже
-чому. `complexity` і `max-depth` ловлять власне заплутаність — функцію з
-дванадцятьма гілками важко тримати в голові незалежно від того, займає вона
-30 рядків чи 300. Разом вони працюють; окремо `max-lines` легко обійти,
-розрізавши файл навпіл без жодного покращення.
+**Why this particular set.** `max-lines` catches "this file grew" but cannot
+say why. `complexity` and `max-depth` catch the tangling itself — a function
+with twelve branches is hard to hold in your head whether it is 30 lines or 300. Together they work; alone, `max-lines` is trivially defeated by cutting a
+file in half with no improvement.
 
-`max-params: 4` варте окремої згадки: воно природно підштовхує до
-об'єкта-параметра, а той у цьому проекті ще й підпадає під правило сортування
-ключів «обов'язкові перед опціональними».
+`max-params: 4` deserves a mention: it naturally pushes toward an options
+object, which in this project then falls under the required-before-optional key
+sorting rule.
 
-**Чого свідомо не додаю.** `max-statements` і `max-classes-per-file` — шум:
-перший карає лінійний, цілком читабельний код, другий нерелевантний для
-проекту без класів поза NestJS. `max-len` теж не потрібен — Prettier уже
-тримає ширину.
+**Deliberately not added.** `max-statements` and `max-classes-per-file` are
+noise: the first punishes linear, perfectly readable code, the second is
+irrelevant to a project with no classes outside NestJS. `max-len` is unneeded
+too — Prettier already controls width.
 
-### 0.2 Вирівняти суворість API з web ✅ ЗРОБЛЕНО
+### 0.2 Bring API lint strictness in line with web ✅ DONE
 
-> **Виконано 2026-08-16.** Створено `packages/eslint-config/nest.js` —
-> shared ESLint конфіг для NestJS. Увімкнено `no-explicit-any: error`,
-> `no-floating-promises: error`, `no-console`, complexity-ліміти.
-> Прибрано `sourceType: 'commonjs'`. API eslint.config.mjs тепер
-> імпортує shared конфіг.
+> **Completed 2026-08-16.** Created `packages/eslint-config/nest.js`, a shared
+> ESLint config for NestJS. Enabled `no-explicit-any: error`,
+> `no-floating-promises: error`, `no-console` and the complexity limits.
+> Removed `sourceType: 'commonjs'`. The API's eslint.config.mjs now imports the
+> shared config.
 
-Зараз конфіги розійшлися драматично:
+The configs had drifted badly apart:
 
-| Правило                | web                | api       |
-| ---------------------- | ------------------ | --------- |
-| `no-explicit-any`      | error (з tseslint) | **off**   |
-| `no-floating-promises` | —                  | **warn**  |
-| `typescript-sort-keys` | error              | **немає** |
-| `no-console`           | error              | **немає** |
-| `import/*`             | error              | **немає** |
+| Rule                   | web                  | api        |
+| ---------------------- | -------------------- | ---------- |
+| `no-explicit-any`      | error (via tseslint) | **off**    |
+| `no-floating-promises` | —                    | **warn**   |
+| `typescript-sort-keys` | error                | **absent** |
+| `no-console`           | error                | **absent** |
+| `import/*`             | error                | **absent** |
 
-CLAUDE.md каже «no `any`» — але в API це вимкнено явно. Дії:
+CLAUDE.md says "no `any`" — but the API disabled it explicitly. Actions:
 
-1. Створити `packages/eslint-config/nest.js` за зразком `next.js`.
-2. Увімкнути в ньому: `no-explicit-any: error`, `no-floating-promises: error`,
-   `typescript-sort-keys`, `no-console` (allow `warn`/`error`), `import/*`.
-3. Прибрати `sourceType: 'commonjs'` — NestJS 11 на Node 22 працює з ESM,
-   а `commonjs` тут просто успадковано з шаблону.
-4. Порушення, що спливуть, чинити пачками по модулях, а не одним PR.
+1. Create `packages/eslint-config/nest.js` modelled on `next.js`.
+2. Enable there: `no-explicit-any: error`, `no-floating-promises: error`,
+   `typescript-sort-keys`, `no-console` (allowing `warn`/`error`), `import/*`.
+3. Drop `sourceType: 'commonjs'` — NestJS 11 on Node 22 works with ESM;
+   `commonjs` is simply inherited from the template.
+4. Fix the violations that surface module by module, not in one PR.
 
-### 0.3 Pre-commit hooks (husky) ✅ ЗРОБЛЕНО
+### 0.3 Pre-commit hooks (husky) ✅ DONE
 
-> **Виконано 2026-08-16.** Додано `husky` і `lint-staged` у root
-> `devDependencies`. Pre-commit: lint-staged (eslint --fix + prettier --write
-> на staged файлах) + автогенерація MAP.md. Pre-push: typecheck.
+> **Completed 2026-08-16.** Added `husky` and `lint-staged` to the root
+> `devDependencies`. Pre-commit: lint-staged (`eslint --fix` + `prettier
+--write` on staged files) plus MAP.md regeneration. Pre-push: typecheck.
 
-**Що дає husky конкретно тут.** Це не «ще один інструмент» — він закриває
-три реальні діри:
+**What husky specifically buys here.** It is not "one more tool" — it closes
+three real gaps:
 
-1. **Зворотний зв'язок за 3 секунди замість 4 хвилин.** Зараз єдине місце, де
-   ловиться порушення лінту, — CI. Цикл «пуш → чекати збірку → червоно →
-   фікс → пуш» коштує хвилини на кожну дрібницю, яку `eslint --fix` виправив
-   би миттєво.
-2. **Автофікс замість зауваження.** `lint-staged` запускає `eslint --fix` і
-   `prettier --write` на застейджених файлах. Порядок імпортів, сортування
-   ключів інтерфейсу, лапки, крапки з комою — усе це правиться саме, без
-   жодного рядка в рев'ю. Рев'ю звільняється для логіки.
-3. **Історія без «fix lint» комітів.** Гілка з п'ятьма косметичними комітами
-   нечитабельна через рік. Хук прибирає їх у зародку.
+1. **Feedback in 3 seconds instead of 4 minutes.** Today the only place a lint
+   violation is caught is CI. The cycle "push → wait for the build → red → fix
+   → push" costs minutes for every triviality `eslint --fix` would have fixed
+   instantly.
+2. **Auto-fix instead of a review comment.** `lint-staged` runs `eslint --fix`
+   and `prettier --write` on staged files. Import order, interface key sorting,
+   quotes, semicolons — all corrected silently, without a line of review.
+   Review is freed for logic.
+3. **History without "fix lint" commits.** A branch with five cosmetic commits
+   is unreadable a year later. The hook removes them at the source.
 
-Окремо для цього проекту: після увімкнення `requiredFirst` (див. нижче) саме
-хук робитиме перевпорядкування ключів автоматично, і правило не
-перетвориться на постійне джерело зауважень.
+Specific to this project: once `requiredFirst` is enabled (see below), the hook
+is what will reorder keys automatically, so the rule does not turn into a
+permanent source of review comments.
 
 ```sh
 pnpm add -Dw husky lint-staged
@@ -325,8 +325,8 @@ pnpm exec lint-staged
 }
 ```
 
-Останній рядок тримає `docs/ai/MAP.md` синхронною автоматично — мапа не може
-застаріти, бо оновлюється тим самим комітом, що змінює структуру.
+That last line keeps `docs/ai/MAP.md` in sync automatically — the map cannot go
+stale, because it is updated by the same commit that changes the structure.
 
 `.husky/pre-push`:
 
@@ -334,105 +334,108 @@ pnpm exec lint-staged
 pnpm typecheck
 ```
 
-**Чого в хуки класти не варто.** Повний `pnpm test` на pre-commit — найпоширеніша
-помилка: хук починає займати хвилину, розробник звикає до `--no-verify`, і
-захисту немає взагалі. Тримай pre-commit під 5 секунд. Тести — робота CI.
+**What not to put in hooks.** A full `pnpm test` on pre-commit is the most
+common mistake: the hook starts taking a minute, the developer gets used to
+`--no-verify`, and there is no protection at all. Keep pre-commit under 5
+seconds. Tests are CI's job.
 
-### 0.3.1 Дисципліна `--no-verify`
+### 0.3.1 `--no-verify` discipline
 
-Хуки обходяться однією прапорцем, тому вони не заміна CI, а прискорювач.
-Правило: CI перевіряє те саме, що й хуки, плюс тести. Тоді обхід хука не
-пропускає нічого — лише відкладає біль.
+Hooks are bypassed with a single flag, so they are an accelerator, not a
+replacement for CI. The rule: CI checks everything the hooks check, plus tests.
+Then bypassing a hook skips nothing — it only postpones the pain.
 
-### 0.3.2 Git: commitlint і налаштування репозиторію ✅ ЗРОБЛЕНО (частково)
+### 0.3.2 Git: commitlint and repository settings ✅ DONE (partially)
 
-> **Виконано 2026-08-16.** Додано `@commitlint/cli` +
-> `@commitlint/config-conventional`, створено `commitlint.config.js`
-> (`scope-empty: never`, `subject-min-length: 15`). Створено `.gitattributes`
-> (`-diff` на lockfile, generated Prisma, MAP.md). Хук `commit-msg` потребує
-> локального створення (див. нижче). Захист гілок і squash merge — ручне
-> налаштування на GitHub.
+> **Completed 2026-08-16.** Added `@commitlint/cli` and
+> `@commitlint/config-conventional`, created `commitlint.config.js`
+> (`scope-empty: never`, `subject-min-length: 15`). Created `.gitattributes`
+> (`-diff` on the lockfile, generated Prisma output and MAP.md). The
+> `commit-msg` hook still needs creating locally (see below). Branch protection
+> and squash-merge settings are manual work on GitHub.
 
-Повні конвенції — у [`docs/ai/GIT.md`](./ai/GIT.md). Тут — що саме треба
-увімкнути, і чому це не косметика.
+The full conventions live in [`docs/ai/GIT.md`](./ai/GIT.md). Here is what to
+switch on, and why it is not cosmetic.
 
-**Що показав аудит останніх 120 комітів:**
+**What the audit of the last 120 commits showed:**
 
-| Метрика                                                         | Значення                  |
-| --------------------------------------------------------------- | ------------------------- |
-| Зі скоупом                                                      | 78                        |
-| Без скоупа                                                      | 29                        |
-| Взагалі не за Conventional Commits                              | 13                        |
-| Порожніх за змістом (`fix: test`, `fix: according to comments`) | 14                        |
-| Розмір: медіана                                                 | 3 файли / 57 рядків ✅    |
-| Розмір: p90                                                     | 15 файлів / 671 рядок     |
-| Комітів > 20 файлів                                             | 9 (максимум — 119 файлів) |
+| Metric                                                       | Value                  |
+| ------------------------------------------------------------ | ---------------------- |
+| With a scope                                                 | 78                     |
+| Without a scope                                              | 29                     |
+| Not Conventional Commits at all                              | 13                     |
+| Empty of meaning (`fix: test`, `fix: according to comments`) | 14                     |
+| Size: median                                                 | 3 files / 57 lines ✅  |
+| Size: p90                                                    | 15 files / 671 lines   |
+| Commits over 20 files                                        | 9 (largest: 119 files) |
 
-Медіана здорова. Проблема у хвості й у повідомленнях.
+The median is healthy. The problem is the tail and the messages.
 
-**Merge-коміти від `git pull`.** В історії є записи виду
+**Merge commits from `git pull`.** The history contains entries like
 `Merge branch 'feature/CLEF-168-…' of github.com:… into feature/CLEF-168-…` —
-це `git pull` без rebase зливає гілку саму з собою. І
-`Merge branch 'develop' into feature/…` — злиття замість rebase. Обидва
-описують механіку синхронізації, а не зміну.
+that is `git pull` without rebase merging a branch with itself. And
+`Merge branch 'develop' into feature/…` — merging instead of rebasing. Both
+describe the mechanics of syncing rather than any change.
 
-**Дії:**
+**Actions:**
 
-1. **commitlint на хук `commit-msg`** — `subject-min-length: 15` сам по собі
-   відхилив би `fix: test`, `fix: ci issues` і `fix: broken path`;
-   `scope-empty: never` закриває 42 коміти без скоупа.
-2. **Squash merge для PR у `develop`.** Гілка тут несе 5–15 комітів, з яких
-   кілька — `fix: according to comments`. Squash перетворює це на один
-   осмислений коміт; чернетки лишаються в PR. Побічний ефект — `git bisect`
-   починає працювати: один коміт на фічу, кожен збирається.
-3. **`git config --global pull.rebase true`** — merge-коміти від pull зникають
-   назавжди одним рядком конфігу.
-4. **Захист гілок** у налаштуваннях GitHub: `main` і `develop` — тільки через
-   PR, з обов'язковим проходженням `ci`; дозволити лише squash merge.
-5. **Автовидалення гілок після мержу** — зараз у репозиторії 40 гілок
-   `feature/`, більшість змержені.
-6. **Додати `.gitattributes`** — його немає. `-diff` на `pnpm-lock.yaml`,
-   `packages/db/generated/**` і `docs/ai/MAP.md` прибирає їх із дифу PR, щоб
-   згенероване не ховало п'ять рядків, які насправді треба переглянути.
+1. **commitlint on the `commit-msg` hook** — `subject-min-length: 15` alone
+   would reject `fix: test`, `fix: ci issues` and `fix: broken path`;
+   `scope-empty: never` closes the 42 commits with no scope.
+2. **Squash merge for PRs into `develop`.** A branch here carries 5–15 commits,
+   several of them `fix: according to comments`. Squashing turns that into one
+   meaningful commit; the drafts stay in the PR. Side effect: `git bisect`
+   starts working — one commit per feature, each of which builds.
+3. **`git config --global pull.rebase true`** — merge commits from pull
+   disappear permanently, in one line of config.
+4. **Branch protection** in the GitHub settings: `main` and `develop` via PR
+   only, with `ci` required; allow squash merge only.
+5. **Auto-delete branches after merge** — there are currently 40 `feature/`
+   branches, most of them merged.
+6. **Add `.gitattributes`** — there is none. `-diff` on `pnpm-lock.yaml`,
+   `packages/db/generated/**` and `docs/ai/MAP.md` removes them from the PR
+   diff, so generated output stops hiding the five lines that actually need
+   reading.
 
-**Ліміт розміру коміта** — попередження, не блокування, бо легітимні винятки
-існують (згенероване, масові перейменування). Поріг: 20 файлів після
-виключення lockfile, міграцій і згенерованого.
+**The commit size limit** is a warning, not a block, because legitimate
+exceptions exist (generated output, bulk renames). Threshold: 20 files after
+excluding the lockfile, migrations and generated files.
 
-### 0.4 Полагодити CI ✅ ЗРОБЛЕНО
+### 0.4 Fix CI ✅ DONE
 
-> **Виконано 2026-08-16.** Видалено дублюючий `api.yml` (Node 20, pnpm v2,
-> без тестів). `ci.yml` вже покриває API повністю: `pnpm test` через turbo
-> запускає тести по всіх packages, `pnpm lint` лінтить все, e2e job піднімає
-> Postgres і API.
+> **Completed 2026-08-16.** Deleted the duplicate `api.yml` (Node 20, pnpm v2,
+> no tests). `ci.yml` already covers the API fully: `pnpm test` through turbo
+> runs tests across every package, `pnpm lint` lints everything, and the e2e job
+> brings up Postgres and the API.
 
-`.github/workflows/api.yml` зараз запускає тільки `build` і `lint` для API —
-**жодного тесту**. CLAUDE.md стверджує, що «CI runs lint, stylelint, typecheck,
-unit tests, e2e and build; all six gate the final `ci` check». Для API це
-неправда.
+`.github/workflows/api.yml` ran only `build` and `lint` for the API — **no
+tests at all**. CLAUDE.md claimed "CI runs lint, stylelint, typecheck, unit
+tests, e2e and build; all six gate the final `ci` check". For the API that was
+false.
 
-Дії:
+Actions:
 
-1. Додати в `api.yml` кроки `pnpm --filter api test` і `pnpm --filter api test:e2e`.
-2. Підняти `services: postgres` у job для e2e-тестів API.
-3. Додати job `coverage` з порогами (див. 1.4).
-4. Або — краще — прибрати `api.yml` зовсім і додати API-кроки в `ci.yml`,
-   щоб гейт був один і його не можна було обійти пушем у `main`.
+1. Add `pnpm --filter api test` and `pnpm --filter api test:e2e` to `api.yml`.
+2. Bring up `services: postgres` in the job for API e2e tests.
+3. Add a `coverage` job with thresholds (see 1.4).
+4. Or — better — remove `api.yml` entirely and add the API steps to `ci.yml`,
+   so there is a single gate that cannot be bypassed by pushing to `main`.
 
-### 0.5 Prettier конфіг ✅ ЗРОБЛЕНО
+### 0.5 Prettier config ✅ DONE
 
-> **Виконано 2026-08-16.** Створено `.prettierrc.json` у корені. Плагіни
-> `@trivago/prettier-plugin-sort-imports` і `prettier-plugin-tailwindcss`
-> піднято в root `devDependencies`. Прибрано дублікат `prettier` з API.
-> Прибрано `eslint-plugin-prettier` з API (застарілий підхід — Prettier через
-> ESLint), замінено на прямий імпорт `eslint-config-prettier`.
+> **Completed 2026-08-16.** Created `.prettierrc.json` at the root. The
+> `@trivago/prettier-plugin-sort-imports` and `prettier-plugin-tailwindcss`
+> plugins were hoisted to the root `devDependencies`. Removed the duplicate
+> `prettier` from the API, and dropped `eslint-plugin-prettier` there (running
+> Prettier through ESLint is the outdated approach) in favour of importing
+> `eslint-config-prettier` directly.
 
-`@trivago/prettier-plugin-sort-imports` встановлений у `apps/web`, але
-конфігураційного файлу prettier у корені немає — порядок імпортів залежить від
-того, чи хтось випадково запустив prettier із правильної директорії.
+`@trivago/prettier-plugin-sort-imports` was installed in `apps/web`, but there
+was no prettier config file at the root — so import order depended on whether
+someone happened to run prettier from the right directory.
 
-Створити `.prettierrc.json` у корені з явним `importOrder`, який відповідає
-секції «Import Order» у skill:
+Create `.prettierrc.json` at the root with an explicit `importOrder` matching
+the "Import Order" section of the skill:
 
 ```json
 {
@@ -453,57 +456,60 @@ unit tests, e2e and build; all six gate the final `ci` check». Для API це
 }
 ```
 
-Перенести плагін із `apps/web` у root `devDependencies`, щоб він працював і для
-API.
+Move the plugin from `apps/web` into the root `devDependencies` so it applies
+to the API too.
 
 ---
 
-## Фаза 1 — Тестова стратегія
+## Phase 1 — Testing strategy
 
-Ти питала, чи є сенс у інтеграційних тестах. **Так, і це найбільша дірка в
-поточній піраміді.**
+You asked whether integration tests are worth it. **Yes, and they are the
+biggest hole in the current pyramid.**
 
-### 1.1 Чому саме інтеграційні
+### 1.1 Why integration specifically
 
-Зараз є два рівні: юніти з замоканою Prisma і e2e через браузер. Між ними —
-порожнеча, і саме там живуть найдорожчі баги цього проекту:
+There are two levels today: unit tests with mocked Prisma, and e2e through the
+browser. Between them is nothing, and that is exactly where this project's most
+expensive bugs live:
 
-- SQL-запит компілюється, але `orderBy: [{ bandId: 'asc' }, { order: 'asc' }]`
-  повертає не той порядок → юніт із моком цього не побачить (мок повертає
-  те, що йому сказали), e2e побачить, але скаже «щось не так на сторінці».
-- `@@unique([bandId, order])` з `bandId = null` — Postgres трактує NULL як
-  унікальний, тому обмеження **не діє** для соло-треків. Юніт із моком це
-  пропустить назавжди.
-- `MusicalKey` enum із `@map("C#")` — маппінг туди-назад між Prisma-енумом і
-  API-нотацією. Мок нічого не мапить.
-- Каскадні видалення (`onDelete: Cascade` у чотирьох місцях).
+- The SQL compiles, but `orderBy: [{ bandId: 'asc' }, { order: 'asc' }]` returns
+  the wrong order → a mocked unit test cannot see it (the mock returns whatever
+  it was told), and e2e sees it but only says "something is wrong on the page".
+- `@@unique([bandId, order])` with `bandId = null` — Postgres treats NULL as
+  distinct, so the constraint **does not apply** to solo tracks. A mocked unit
+  test will miss this forever.
+- The `MusicalKey` enum with `@map("C#")` — round-trip mapping between the
+  Prisma enum and the API notation. A mock maps nothing.
+- Cascading deletes (`onDelete: Cascade` in four places).
 
-Це класичний випадок, коли мок тестує «чи правильно я викликав Prisma», а не
-«чи правильна відповідь». Інтеграційний тест з реальною БД відповідає на друге.
+This is the classic case where a mock tests "did I call Prisma correctly"
+rather than "is the answer correct". An integration test against a real
+database answers the second.
 
-### 1.2 Як влаштувати інтеграційні тести API ✅ ЗРОБЛЕНО (інфраструктура + proof of concept)
+### 1.2 How to set up API integration tests ✅ DONE (infrastructure + proof of concept)
 
-> **Виконано 2026-08-16.** Створено `vitest.int.config.ts`, test helper
-> `setup-integration.ts` (testcontainers + PrismaPg adapter + Prisma migrate),
-> детерміновані фікстури `seed-fixtures.ts` (2 юзери, 2 бенди, 6 треків),
-> і 15 інтеграційних тестів для RepertoireService (сортування, пагінація
-> на межах, фільтр active, solo vs band, MusicalKey round-trip).
-> Потребує `pnpm install` для @testcontainers/postgresql і Docker для запуску.
+> **Completed 2026-08-16.** Created `vitest.int.config.ts`, the
+> `setup-integration.ts` test helper (testcontainers + PrismaPg adapter +
+> Prisma migrate), deterministic fixtures in `seed-fixtures.ts` (2 users,
+> 2 bands, 6 tracks), and 15 integration tests for RepertoireService (sorting,
+> pagination boundaries, the `active` filter, solo vs band, MusicalKey
+> round-trip). Requires `pnpm install` for @testcontainers/postgresql, and
+> Docker to run.
 
-**Інструмент:** Vitest + `@testcontainers/postgresql` (або `docker-compose`
-сервіс у CI + локально). Testcontainers дорожчий на старті, але не вимагає від
-розробника нічого налаштовувати.
+**Tooling:** Vitest + `@testcontainers/postgresql` (or a `docker-compose`
+service in CI and locally). Testcontainers costs more at startup but requires
+the developer to configure nothing.
 
-**Розташування і найменування** — новий, третій тип поруч з наявними:
+**Location and naming** — a new, third kind alongside the existing ones:
 
 ```
 apps/api/src/repertoire/
   repertoire.service.ts
-  repertoire.service.spec.ts        ← юніт, Prisma замокана
-  repertoire.service.int-spec.ts    ← НОВЕ: реальна БД у контейнері
+  repertoire.service.spec.ts        ← unit, Prisma mocked
+  repertoire.service.int-spec.ts    ← NEW: real database in a container
 ```
 
-**Скрипти:**
+**Scripts:**
 
 ```json
 "test": "vitest run --exclude '**/*.int-spec.ts'",
@@ -511,68 +517,72 @@ apps/api/src/repertoire/
 "test:e2e": "vitest run --config vitest.e2e.config.ts"
 ```
 
-**Що покриває інтеграційний тест (а юніт — ні):**
+**What an integration test covers that a unit test cannot:**
 
-1. Реальний порядок сортування для кожного `sort`/`order`.
-2. Пагінація на межах: сторінка 1, остання, за межами діапазону, `pageSize=0`.
-3. Фільтр `active` = `ready|learning|new` — саме три статуси, не чотири.
-4. `onlyMine` для треку, де юзер performer, але не lead — і навпаки.
-5. `getSoloByUser` не повертає бендових треків і навпаки.
-6. Каскади: видалення бенду → треки зникли; видалення юзера → performer-рядки
-   зникли, але треки, де він lead, — `onDelete` не заданий, тобто **впаде з
-   помилкою FK**. Це треба перевірити тестом і свідомо вирішити.
-7. Маппінг `MusicalKey` в обидва боки для всіх 24 значень.
+1. The real sort order for every `sort`/`order` combination.
+2. Pagination boundaries: page 1, the last page, out of range, `pageSize=0`.
+3. The `active` filter = `ready|learning|new` — exactly three statuses, not four.
+4. `onlyMine` for a track where the user is a performer but not the lead, and
+   the reverse.
+5. `getSoloByUser` returning no band tracks, and vice versa.
+6. Cascades: deleting a band removes its tracks; deleting a user removes the
+   performer rows, but for tracks where they are lead there is no `onDelete`,
+   so it **fails with a foreign key error**. That needs a test and a deliberate
+   decision.
+7. `MusicalKey` mapping in both directions for all 24 values.
 
-**Фікстури.** Один `seedFixtures()` хелпер у `apps/api/src/test/fixtures/`,
-що будує детермінований набір: 2 юзери, 2 бенди, 10 треків із передбачуваними
-статусами й тривалостями. Кожен тест у транзакції з rollback — швидше, ніж
-truncate.
+**Fixtures.** A single `seedFixtures()` helper in `apps/api/src/test/fixtures/`
+building a deterministic set: 2 users, 2 bands, 10 tracks with predictable
+statuses and durations. Each test in a transaction with rollback — faster than
+truncating.
 
-### 1.3 Посилити правила юніт-тестів
+### 1.3 Tighten the unit test rules
 
-CLAUDE.md зараз каже «cover the happy path, the empty/zero case, and each error
-branch» — це добре, але не перевіряється. Зробити конкретніше і механічно:
+CLAUDE.md currently says "cover the happy path, the empty/zero case, and each
+error branch" — good, but unverified. Make it concrete and mechanical:
 
-**Додати в CLAUDE.md чек-лист обов'язкових кейсів для компонента:**
+**Add a checklist of mandatory cases for a component to CLAUDE.md:**
 
-| Кейс                                  | Обов'язково коли           |
-| ------------------------------------- | -------------------------- |
-| Рендер з дефолтними пропсами          | завжди                     |
-| Кожен варіант CVA (`variant`, `size`) | компонент має variants     |
-| Кожен boolean-проп у `true` і `false` | є boolean-пропси           |
-| Порожній масив / `undefined` дані     | компонент приймає колекцію |
-| Клік / зміна значення                 | є `onClick`/`onChange`     |
-| `aria-*` атрибути і `role`            | завжди                     |
-| Стан loading і error                  | компонент фетчить дані     |
+| Case                                     | Required when                    |
+| ---------------------------------------- | -------------------------------- |
+| Render with default props                | always                           |
+| Every CVA variant (`variant`, `size`)    | the component has variants       |
+| Every boolean prop in `true` and `false` | there are boolean props          |
+| Empty array / `undefined` data           | the component takes a collection |
+| Click / value change                     | there is an `onClick`/`onChange` |
+| `aria-*` attributes and `role`           | always                           |
+| Loading and error states                 | the component fetches data       |
 
-**Заборонити `it.skip` і `describe.skip` у CI:**
+**Forbid `it.skip` and `describe.skip` in CI:**
 
 ```js
 // eslint.config.js
 'no-restricted-properties': [
   'error',
-  { object: 'it', property: 'skip', message: 'Skipped test = зламаний тест. Полагодь або видали.' },
-  { object: 'describe', property: 'skip', message: 'Skipped suite = зламаний тест.' },
-  { object: 'it', property: 'only', message: '.only не має потрапляти в коміт.' },
+  { object: 'it', property: 'skip', message: 'Skipped test = broken test. Fix or remove.' },
+  { object: 'describe', property: 'skip', message: 'Skipped suite = broken test.' },
+  { object: 'it', property: 'only', message: '.only must not reach a commit.' },
 ],
 ```
 
-### 1.4 Coverage: 90% на новий код + ratchet на старий ✅ ЗРОБЛЕНО
+### 1.4 Coverage: 90% on new code + a ratchet on the old ✅ DONE
 
-> **Виконано 2026-08-16.** Додано coverage конфіг з ratchet (autoUpdate) до
-> web і api vitest configs. CI test job тепер запускає coverage і diff-coverage
-> через barecheck (90% поріг для нових рядків). Додано `no-restricted-properties`
-> для заборони `it.skip`/`it.only` в коміти.
+> **Completed 2026-08-16.** Added a coverage config with a ratchet
+> (`autoUpdate`) to both the web and api vitest configs. The CI test job now
+> runs coverage plus diff coverage through barecheck (90% threshold on new
+> lines). Added `no-restricted-properties` to keep `it.skip`/`it.only` out of
+> commits.
 
-**Обрана стратегія.** Жорсткий глобальний поріг 90% на кодовій базі з ~10%
-(135 компонентів, 13 із тестами) означає червоний CI на два-три місяці. Практика
-показує, що з таким CI не борються — його вчаться ігнорувати, і разом із ним
-ігнорують справжні падіння. Тому поріг розділяється на два незалежні механізми.
+**The chosen strategy.** A hard global 90% threshold on a codebase at ~10%
+(135 components, 13 with tests) means a red CI for two or three months. In
+practice nobody fights that CI — they learn to ignore it, and to ignore the
+real failures alongside it. So the threshold splits into two independent
+mechanisms.
 
-**Механізм 1 — diff coverage 90%, блокує PR.** Кожен рядок, який ти додав або
-змінив, має бути покритий на 90%. Старий код не рахується. Це дає рівно те, чого
-ти хочеш («нічого не має ламатися»), але біль пропорційний розміру зміни, а не
-розміру боргу.
+**Mechanism 1 — diff coverage at 90%, blocking the PR.** Every line you added
+or changed must be 90% covered. Old code does not count. This gives exactly
+what you want ("nothing should break"), with pain proportional to the size of
+the change rather than the size of the debt.
 
 ```yaml
 # .github/workflows/ci.yml
@@ -580,14 +590,14 @@ branch» — це добре, але не перевіряється. Зроби
 - uses: barecheck/code-coverage-action@v1
   with:
     lcov-file: ./apps/web/coverage/lcov.info
-    minimum-ratio: 90 # ← поріг для змінених рядків
+    minimum-ratio: 90 # ← threshold for changed lines
     send-summary-comment: true
-    show-annotations: warning # непокриті рядки підсвічуються прямо в дифі
+    show-annotations: warning # uncovered lines highlighted in the diff
 ```
 
-**Механізм 2 — глобальний ratchet, ніколи не знижується.** Поріг стартує з
-поточного факту й підіймається автоматично щоразу, коли реальне покриття
-перевищило його з запасом. Так борг закривається без окремого «спринту тестів».
+**Mechanism 2 — a global ratchet that never goes down.** The threshold starts
+at the current fact and rises automatically whenever real coverage exceeds it
+with margin. The debt closes without a dedicated "testing sprint".
 
 ```ts
 // apps/web/vitest.config.ts
@@ -596,28 +606,29 @@ coverage: {
   reporter: ['text', 'json-summary', 'lcov'],
   exclude: [
     '**/*.stories.tsx', '**/index.ts', '**/*.d.ts',
-    'src/data/**',          // моки
-    'src/icons/**',         // згенеровані SVG-обгортки
-    'src/illustrations/**', // декоративне, тестується візуально в Storybook
+    'src/data/**',          // mocks
+    'src/icons/**',         // generated SVG wrappers
+    'src/illustrations/**', // decorative, covered visually in Storybook
   ],
   thresholds: {
-    autoUpdate: true,   // ← vitest сам підіймає числа нижче після зеленого прогону
+    autoUpdate: true,   // ← vitest raises the numbers below after a green run
     lines: 10, branches: 10, functions: 10, statements: 10,
 
-    // Чиста логіка — 90% одразу, тут борг маленький і біль разова
+    // Pure logic — 90% straight away; the debt is small and the pain one-off
     'src/utils/**':      { lines: 90, branches: 90, functions: 90 },
     'src/lib/hooks/**':  { lines: 90, branches: 85, functions: 90 },
     'src/lib/variants/**': { lines: 90, branches: 85, functions: 90 },
-    // Компоненти — нижче, підіймається ratchet-ом
+    // Components — lower, raised by the ratchet
     'src/components/ui/**': { lines: 70, branches: 60 },
   },
 },
 ```
 
-`autoUpdate: true` — ключова опція: Vitest перезаписує числа в конфігу після
-успішного прогону. Ratchet працює сам, без скриптів.
+`autoUpdate: true` is the key option: Vitest rewrites the numbers in the config
+after a successful run. The ratchet runs itself, with no scripts.
 
-Для API поріг вищий одразу — бізнес-логіка мала за обсягом і критична:
+For the API the threshold is higher immediately — the business logic is small
+and critical:
 
 ```ts
 // apps/api/vitest.config.ts
@@ -627,206 +638,211 @@ thresholds: {
 }
 ```
 
-**Що покриття не ловить.** 90% рядків — це метрика виконання, не коректності.
-Тест, який рендерить компонент і нічого не перевіряє, дає ті самі 90%. Тому
-поріг працює лише в парі з правилами розділу 1.3 (обов'язкові кейси) і 1.2
-(інтеграційні тести). Покриття відповідає на «чи цей код хоч раз виконався»;
-на «чи він правильний» відповідають інтеграційні тести.
+**What coverage does not catch.** 90% of lines is a measure of execution, not
+correctness. A test that renders a component and asserts nothing produces the
+same 90%. So the threshold only works paired with the rules in 1.3 (mandatory
+cases) and 1.2 (integration tests). Coverage answers "did this code ever run";
+integration tests answer "is it right".
 
-**Мутаційне тестування — за потреби пізніше.** Коли покриття перевалить за 70%
-і виникне питання «а чи наші тести справді щось перевіряють», відповідь дає
-Stryker: він ламає код навмисно і дивиться, чи впаде хоч один тест. Дорого
-запускати на кожен PR — раз на тиждень за розкладом.
+**Mutation testing — later, if needed.** Once coverage passes 70% and the
+question "do our tests actually check anything" comes up, Stryker answers it:
+it breaks the code deliberately and sees whether any test fails. Too expensive
+per PR — run it weekly on a schedule.
 
-### 1.5 Storybook — добудувати покриття
+### 1.5 Storybook — fill in the coverage
 
-**Виправлення попередньої версії цього плану.** Я спершу написав, що сторіз
-нуль — це була помилка пошуку: сторі не лежать поруч із компонентами, вони
-зібрані централізовано в `apps/web/stories/<category>/`, саме там, куди
-дивиться `.storybook/main.ts`. Насправді їх **25 файлів на 24 компоненти**.
-Генератор мапи виправлено, тепер він шукає в правильному місці.
+**A correction to the earlier version of this plan.** I first wrote that there
+were zero stories. That was a search error: stories do not sit next to
+components, they are collected centrally in `apps/web/stories/<category>/`,
+exactly where `.storybook/main.ts` looks. There are in fact **25 files covering
+24 components**. The map generator has been fixed to look in the right place.
 
-Реальна картина: 24 зі 135 компонентів (18%) мають сторі. Покриті всі 14 DS-
-примітивів, `form/`, `typography/`, ілюстрації. Не покриті — компоненти фіч
-(`repertoire/`, `profile/`, `metronome/`).
+The real picture: 24 of 135 components (18%) have a story. All 14 DS
+primitives are covered, plus `form/`, `typography/` and the illustrations. Not
+covered: feature components (`repertoire/`, `profile/`, `metronome/`).
 
-Це нормальний розподіл: сторі найцінніші саме для DS. Що варто зробити:
+That is a reasonable distribution — stories are most valuable for the DS. What
+is worth doing:
 
-1. **Дописати сторі для `Tabs`, `Pagination`, `LocaleSwitcher`** — вони є не в
-   усіх гілках, перевірити після мержу.
-2. **Правило в DoD:** компонент у `components/ui/` не вважається готовим без
-   сторі. Для компонентів фіч — за бажанням, коли є візуальні стани, варті
-   окремого перегляду.
-3. **`Icons.stories.tsx` не має однойменного компонента** — це каталог усіх
-   іконок в одній сторі. Нормально, але генератор мапи виносить його в окрему
-   секцію «Stories without a matching component», щоб не виглядало як
-   помилка.
-4. **Увімкнути `addon-a11y` у CI.** Він уже встановлений; перевірка контрасту
-   в обох темах ловила б саме той клас багів, що описаний у скілі
-   («невидимий текст у темі, яку тестували менше»).
+1. **Add stories for `Tabs`, `Pagination` and `LocaleSwitcher`** — they are
+   missing on some branches; verify after merging.
+2. **A DoD rule:** a component in `components/ui/` is not done without a story.
+   For feature components it stays optional, warranted when there are visual
+   states worth reviewing in isolation.
+3. **`Icons.stories.tsx` has no matching component** — it is a catalogue of
+   every icon in one story. That is fine, but the map generator lists it under
+   "Stories without a matching component" so it does not look like a mismatch.
+4. **Enable `addon-a11y` in CI.** It is already installed; a contrast check in
+   both themes would catch precisely the class of bug the skill describes
+   ("invisible text in whichever theme was tested less").
 
-Chromatic налаштований — варто підключити його до PR, щоб візуальна регресія
-ловилася автоматично.
+Chromatic is configured — worth wiring it to PRs so visual regressions are
+caught automatically.
 
-### 1.6 Розширити E2E
+### 1.6 Extend E2E
 
-Зараз є два спеки: `repertoire-filtering`, `repertoire-pagination`. За критеріями
-самого CLAUDE.md («involves auth, permissions or ownership») бракує:
+There are two specs today: `repertoire-filtering` and `repertoire-pagination`.
+By CLAUDE.md's own criteria ("involves auth, permissions or ownership") these
+are missing:
 
-- `auth.spec.ts` — OAuth-логін, редірект, вихід, доступ до захищеної сторінки
-  без сесії.
-- `i18n.spec.ts` — перемикання локалі зберігає стан сторінки й URL-параметри.
-- `profile.spec.ts` — профіль рендериться, вкладки перемикаються.
-- `theme.spec.ts` — перемикання теми не ламає жоден токен (перевірка на
-  «невидимий текст» із skill).
+- `auth.spec.ts` — OAuth login, redirect, logout, reaching a protected page
+  without a session.
+- `i18n.spec.ts` — switching locale preserves page state and URL params.
+- `profile.spec.ts` — the profile renders, tabs switch.
+- `theme.spec.ts` — switching theme breaks no token (the "invisible text" check
+  from the skill).
 
-`apps/api/test/` містить лише `app.e2e-spec.ts` (boilerplate від Nest) і
-`jest-e2e.json` — **конфіг Jest у проекті, який тестує через Vitest**. Це
-залишок шаблону: видалити `jest-e2e.json`, переписати e2e на supertest+Vitest,
-покрити контракт кожного ендпоінта (коди, форма відповіді, guard-и).
+`apps/api/test/` contains only `app.e2e-spec.ts` (Nest boilerplate) and
+`jest-e2e.json` — **a Jest config in a project that tests with Vitest**. That
+is template residue: delete `jest-e2e.json`, rewrite e2e on supertest + Vitest,
+and cover each endpoint's contract (status codes, response shape, guards).
 
 ---
 
-## Фаза 2 — Чистота коду: фронтенд
+## Phase 2 — Code quality: frontend
 
-### 2.1 Дублювання типів
+### 2.1 Duplicated types
 
 ```
 apps/web/src/lib/types/profile.types.ts        ← 312 B
 apps/web/src/lib/types/profile/profile.types.ts ← 1552 B
 ```
 
-Два файли з однією назвою на різних рівнях. Хтось імпортує один, хтось інший.
-Дія: злити в `lib/types/profile/profile.types.ts`, видалити плоский, оновити
-імпорти.
+Two files with the same name at different levels. Some code imports one, some
+the other. Action: merge into `lib/types/profile/profile.types.ts`, delete the
+flat one, update the imports.
 
-Той самий патерн треба перевірити для решти `lib/types/` — там змішані плоскі
-(`common.types.ts`, `profile.types.ts`) і згруповані (`ui/`, `illustrations/`,
-`typography/`, `profile/`) файли. Обрати одне: **все групується за доменом**.
+The same pattern should be checked across the rest of `lib/types/`, which mixes
+flat files (`common.types.ts`, `profile.types.ts`) with grouped folders (`ui/`,
+`illustrations/`, `typography/`, `profile/`). Pick one: **everything grouped by
+domain**.
 
-### 2.2 Константи, що живуть у файлах хуків
+### 2.2 Constants living in hook files
 
 ```ts
 // TrackListRow.tsx
 import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
 ```
 
-`SOLO_BAND_ID` — константа домену, а не частина хука. Компонент, якому потрібна
-одна константа, зараз тягне за собою весь модуль хука з React Query.
+`SOLO_BAND_ID` is a domain constant, not part of the hook. A component that
+needs one constant currently pulls in the entire hook module along with React
+Query.
 
-Дія: перенести в `lib/constants/repertoire.const.ts` (файл уже існує).
-Прогрепати проект на інші такі випадки:
+Action: move it to `lib/constants/repertoire.const.ts` (the file already
+exists). Grep the project for other cases:
 
 ```sh
 grep -rn "^export const [A-Z_]* =" apps/web/src/lib/hooks apps/web/src/hooks
 ```
 
-### 2.3 Мок-дані поруч із реальним API
+### 2.3 Mock data sitting next to a real API
 
-`src/data/` містить 6 мок-файлів (`auth.mock.ts`, `profile.mock.ts`,
-`sidebar.mock.tsx`, `wishlist.mock.ts`, `bands.mock.ts`, `tracks.mock.ts`) — і
-одночасно існує `lib/api/` з реальними викликами. Ризик: компонент випадково
-рендерить мок у продакшені, і ніхто не помічає, бо дані виглядають правдоподібно.
+`src/data/` holds 6 mock files (`auth.mock.ts`, `profile.mock.ts`,
+`sidebar.mock.tsx`, `wishlist.mock.ts`, `bands.mock.ts`, `tracks.mock.ts`)
+while `lib/api/` holds real calls. The risk: a component accidentally renders a
+mock in production and nobody notices, because the data looks plausible.
 
-Дії:
+Actions:
 
-1. Прогрепати, які моки ще імпортуються з `src/components/**`.
-2. Для кожного — або замінити на реальний виклик, або перенести в
-   `src/test/fixtures/` (тоді він не потрапить у бандл).
-3. `sidebar.mock.tsx` — `.tsx` у моках означає JSX усередині даних. Це майже
-   напевно означає, що конфігурація UI змішана з даними; розділити.
-4. ESLint-правило, що забороняє імпорт `src/data/**` із `src/components/**`:
+1. Grep for mocks still imported from `src/components/**`.
+2. For each, either replace it with a real call or move it to
+   `src/test/fixtures/` (where it will not reach the bundle).
+3. `sidebar.mock.tsx` — a `.tsx` mock means JSX inside data. That almost
+   certainly means UI configuration is mixed into the data; separate them.
+4. An ESLint rule forbidding imports of `src/data/**` from `src/components/**`:
 
 ```js
 'no-restricted-imports': ['error', {
   patterns: [{
     group: ['**/data/**/*.mock*'],
-    message: 'Моки не імпортуються в компоненти. Використай lib/api або test/fixtures.',
+    message: 'Mocks are not imported into components. Use lib/api or test/fixtures.',
   }],
 }],
 ```
 
-### 2.4 Винести дизайн-систему в `packages/ui` ⭐
+### 2.4 Move the design system into `packages/ui` ⭐
 
-Зараз ситуація суперечлива: `packages/ui/src/` містить `button.tsx`, `card.tsx`,
-`code.tsx` — boilerplate із шаблону Turborepo, а справжня дизайн-система живе в
-`apps/web/src/components/ui/`. Два `Button` в одному репозиторії — гарантія, що
-рано чи пізно хтось імпортує не той.
+The current situation is contradictory: `packages/ui/src/` holds `button.tsx`,
+`card.tsx` and `code.tsx` — Turborepo template boilerplate — while the real
+design system lives in `apps/web/src/components/ui/`. Two `Button`s in one
+repository guarantees that sooner or later someone imports the wrong one.
 
-**Мета:** `packages/ui` стає єдиним домом дизайн-системи, придатним для реюзу
-майбутніми застосунками (admin-панель, лендинг, окремий тренажер).
+**Goal:** `packages/ui` becomes the single home of the design system, reusable
+by future applications (an admin panel, a landing page, a standalone practice
+tool).
 
-**Що переїжджає:**
+**What moves:**
 
 ```
 packages/ui/
-  package.json          → name: "@nonsololarco/ui", exports по підшляхах
+  package.json          → name: "@nonsololarco/ui", subpath exports
   src/
-    components/         ← з apps/web/src/components/ui/ (14 примітивів)
+    components/         ← from apps/web/src/components/ui/ (14 primitives)
       Avatar/ Badge/ Button/ Card/ Chip/ Divider/ Dropdown/
       Logo/ NavLink/ Pagination/ Skeleton/ Spinner/ Tabs/ AvatarButton/
-    variants/           ← з apps/web/src/lib/variants/ (тільки DS-варіанти)
-    types/              ← з apps/web/src/lib/types/ui/
-    utils/cn.ts         ← з apps/web/src/utils/cn.ts
-    styles/tokens.css   ← з apps/web/src/styles/tokens.css
-  stories/              ← з apps/web/stories/{ui,typography,form}/
+    variants/           ← from apps/web/src/lib/variants/ (DS variants only)
+    types/              ← from apps/web/src/lib/types/ui/
+    utils/cn.ts         ← from apps/web/src/utils/cn.ts
+    styles/tokens.css   ← from apps/web/src/styles/tokens.css
+  stories/              ← from apps/web/stories/{ui,typography,form}/
 ```
 
-**Що залишається у `apps/web`:** усе доменне — `repertoire/`, `profile/`,
-`metronome/`, `layout/`, `shared/`, а також `app/globals.css` із блоком
-`@theme` (мапінг токенів у утиліти — відповідальність застосунку).
+**What stays in `apps/web`:** everything domain-specific — `repertoire/`,
+`profile/`, `metronome/`, `layout/`, `shared/` — plus `app/globals.css` with
+its `@theme` block (mapping tokens into utilities is the application's job).
 
-**Порядок міграції** (кожен крок окремим комітом, щоб діф читався):
+**Migration order** (each step its own commit, so the diff reads):
 
-1. **Видалити boilerplate.** `packages/ui/src/{button,card,code}.tsx` — вони не
-   використовуються ніде, крім шаблонного прикладу. Прогрепати `@repo/ui`.
-2. **Перейменувати пакет** `@repo/ui` → `@nonsololarco/ui`, узгоджено з
-   `@nonsololarco/types` і `@nonsololarco/db`.
-3. **Перенести `cn.ts` і `tokens.css`** — це фундамент, від якого залежить усе
-   інше. Пакет має бути самодостатнім щодо стилів.
-4. **Перенести примітиви пачками по 3–4** — Divider, Skeleton, Spinner (без
-   залежностей), далі Badge, Chip, Card, далі Button, Avatar, Logo, далі
-   складені: Dropdown, Tabs, Pagination, NavLink, AvatarButton.
-5. **Перенести сторі** разом із компонентами; `.storybook/main.ts` у web
-   доповнити глобом на `../../packages/ui/stories/**`.
-6. **Тести переїжджають разом із компонентами** — у `packages/ui` свій
-   `vitest.config.ts` із jsdom.
+1. **Delete the boilerplate.** `packages/ui/src/{button,card,code}.tsx` are used
+   nowhere except the template example. Grep for `@repo/ui`.
+2. **Rename the package** `@repo/ui` → `@nonsololarco/ui`, consistent with
+   `@nonsololarco/types` and `@nonsololarco/db`.
+3. **Move `cn.ts` and `tokens.css`** — the foundation everything else depends
+   on. The package must be self-sufficient with respect to styling.
+4. **Move the primitives in batches of 3–4** — Divider, Skeleton, Spinner (no
+   dependencies), then Badge, Chip, Card, then Button, Avatar, Logo, then the
+   composed ones: Dropdown, Tabs, Pagination, NavLink, AvatarButton.
+5. **Move the stories** with their components; extend `.storybook/main.ts` in
+   web with a glob for `../../packages/ui/stories/**`.
+6. **Tests travel with their components** — `packages/ui` gets its own
+   `vitest.config.ts` with jsdom.
 
-**Технічні рішення, які треба ухвалити (кожне варте рядка в ADR):**
+**Technical decisions to make (each worth a line in an ADR):**
 
-| Питання                    | Рекомендація                                                                                                                              |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- |
-| Збірка чи сирі TS-джерела? | **Сирі джерела** + `exports` на `./src/*`. Next.js транспілює через `transpilePackages`. Немає кроку збірки — немає розсинхрону dist/src. |
-| Один barrel чи підшляхи?   | **Підшляхи**: `@nonsololarco/ui/Button`. Один barrel ламає tree-shaking і тягне Radix у кожен чанк.                                       |
-| Де `@theme`?               | **У застосунку.** Пакет декларує токени в `tokens.css`, застосунок мапить їх в утиліти. Так інший застосунок зможе задати власну тему.    |
-| Peer-залежності            | `react`, `react-dom` — у `peerDependencies`, не в `dependencies`. Інакше дві копії React.                                                 |
-| `next/link` у `NavLink`    | Винести в проп `as` / `linkComponent`, інакше пакет прив'язаний до Next.js і не переживе жодного іншого хоста.                            |
+| Question                      | Recommendation                                                                                                                                   |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Build step or raw TS sources? | **Raw sources** plus `exports` on `./src/*`. Next.js transpiles via `transpilePackages`. No build step means no dist/src drift.                  |
+| One barrel or subpaths?       | **Subpaths**: `@nonsololarco/ui/Button`. A single barrel breaks tree-shaking and drags Radix into every chunk.                                   |
+| Where does `@theme` live?     | **In the application.** The package declares tokens in `tokens.css`; the app maps them to utilities. That lets another app supply its own theme. |
+| Peer dependencies             | `react` and `react-dom` go in `peerDependencies`, not `dependencies`. Otherwise you get two copies of React.                                     |
+| `next/link` in `NavLink`      | Extract into an `as` / `linkComponent` prop, or the package is tied to Next.js and survives no other host.                                       |
 
-**Ризики.** Це найбільша механічна зміна в плані після `features/`-структури.
-Робити **після** PR #7 (пороги покриття) — тоді переїзд компонента без тесту
-буде видно одразу. `NavLink` і `Logo` майже напевно тягнуть за собою
-next-специфічні імпорти — їх переносити останніми, коли патерн уже відпрацьовано
-на простих.
+**Risks.** This is the largest mechanical change in the plan after the
+`features/` restructure. Do it **after** PR #7 (coverage thresholds) — then
+moving a component without a test is visible immediately. `NavLink` and `Logo`
+almost certainly carry Next-specific imports; move them last, once the pattern
+is proven on the simple ones.
 
-**Що це дає одразу**, ще до появи другого застосунку: фізична межа між
-дизайн-системою і доменом. Зараз ніщо не заважає `Button` імпортувати
-`useActiveBand`; після винесення це стане неможливим — і саме тому DS
-залишиться перевикористовною.
+**What it buys immediately**, before any second application exists: a physical
+boundary between the design system and the domain. Today nothing stops `Button`
+importing `useActiveBand`; after the move it becomes impossible — which is
+exactly why the DS stays reusable.
 
-### 2.5 Мертві правила про Zustand
+### 2.5 Dead rules about Zustand
 
-Skill описує `stores/metronome.store.ts` і каже «Zustand для client UI state».
-Папки `src/stores/` не існує, хоча компонентів метронома — 11 штук. Отже,
-стан метронома зараз тримається десь у `useState`/context.
+The skill describes `stores/metronome.store.ts` and says "Zustand for client UI
+state". There is no `src/stores/` folder, despite 11 metronome components. So
+metronome state is currently held somewhere in `useState`/context.
 
-Дія: подивитись, як реально влаштований метроном; або створити стор і привести
-код до документованого патерну, або прибрати Zustand з документації й
-залежностей. Не залишати правило, яке описує неіснуючий код.
+Action: look at how the metronome is actually built; then either create the
+store and bring the code to the documented pattern, or remove Zustand from the
+documentation and the dependencies. Do not leave a rule describing code that
+does not exist.
 
-### 2.6 Явні типи повернення
+### 2.6 Explicit return types
 
-Skill вимагає «Explicit return types on exported functions and hooks», але це не
-enforced. Додати:
+The skill requires "Explicit return types on exported functions and hooks", but
+it is not enforced. Add:
 
 ```js
 '@typescript-eslint/explicit-module-boundary-types': ['error', {
@@ -835,20 +851,25 @@ enforced. Додати:
 }],
 ```
 
-Для React-компонентів це шумно — виключити `**/*.tsx` компоненти або
-використати `allowedNames`.
+For React components this is noisy — exclude `**/*.tsx` components or use
+`allowedNames`.
 
 ---
 
-## Фаза 3 — Чистота коду: бекенд
+## Phase 3 — Code quality: backend
 
-### 3.1 Дублювання в `RepertoireService` (найбільший борг API)
+### 3.1 Duplication in `RepertoireService` (the largest API debt) ✅ DONE
 
-Три методи — `getByUser`, `getSoloByUser`, `getByBand` — мають ідентичні тіла на
-~25 рядків кожне. Відрізняються лише `where`, `include` і дефолтним `orderBy`:
+> **Completed 2026-08-16.** Extracted `findTracks` as the single
+> implementation; each public method is now 5–8 lines describing only its own
+> `where`. The three `let` declarations disappeared with it.
+
+Three methods — `getByUser`, `getSoloByUser`, `getByBand` — had identical
+bodies of ~25 lines each, differing only in `where`, `include` and the default
+`orderBy`:
 
 ```ts
-// повторюється тричі, слово в слово:
+// repeated three times, word for word:
 const total = await this.prisma.track.count({ where });
 const needsPostSort = isPostQuerySortField(sort);
 const tracks = await this.prisma.track.findMany({ where, include, orderBy: ..., ...(pa.isPaginated && !needsPostSort ? { skip, take } : {}) });
@@ -858,10 +879,10 @@ if (needsPostSort) mapped = applyPageSlice(mapped, pa);
 return { data: mapped, ...buildMeta(total, pa) };
 ```
 
-Плюс три `let` там, де підійшов би `const` — прямо проти правила «Prefer `const`
-(CRITICAL)» у власному skill.
+Plus three `let` declarations where `const` would do — directly against the
+"Prefer `const` (CRITICAL)" rule in the project's own skill.
 
-Рефакторинг:
+The refactor:
 
 ```ts
 interface FindTracksArgs {
@@ -873,62 +894,66 @@ interface FindTracksArgs {
 }
 
 /**
- * Виконує запит треків із сортуванням, фільтром і пагінацією.
+ * Runs the track query with sorting, filtering and pagination.
  *
- * Поля `status` і `time` не сортуються на рівні БД, тому для них
- * завантажується весь набір і сортування/зріз робиться в пам'яті —
- * див. `isPostQuerySortField`.
+ * The `status` field cannot be sorted at the database level, so for it the
+ * whole set is loaded and sorted in memory — see `isPostQuerySortField`.
  */
 private async findTracks(args: FindTracksArgs): Promise<PaginatedResult<Track>> {
-  // єдина реалізація
+  // the single implementation
 }
 ```
 
-Після цього кожен публічний метод — 5–8 рядків, які описують тільки свій
-`where`. Три `let` зникають природно.
+### 3.2 Post-query sorting is a real scaling problem ✅ PARTIALLY DONE
 
-### 3.2 Пост-запитне сортування — це реальна проблема масштабування
+> **Completed 2026-08-16.** `time` now sorts in the database — see §4.1 and
+> [ADR 0005](./adr/0005-duration-as-seconds.md). `status` remains the last
+> in-memory sort; §4.2 covers it.
 
-У коді є чесний TODO, і він правий: сортування за `status` і `time`
-завантажує **всю таблицю треків** на кожен запит сторінки. Причини:
+There was an honest TODO in the code, and it was right: sorting by `status` and
+`time` loaded **the entire tracks table** on every page request. The causes:
 
-- `duration` зберігається як рядок `"m:ss"` — Postgres не може його сортувати;
-- `TrackStatus` — enum, порядок сортування якого в БД алфавітний
-  (`archived, learning, new, ready`), а треба логічний
-  (`new, learning, ready, archived`).
+- `duration` was stored as the string `"m:ss"` — Postgres cannot sort it;
+- `TrackStatus` is an enum whose database sort order is alphabetical
+  (`archived, learning, new, ready`) where the meaningful order is
+  `new, learning, ready, archived`.
 
-Це не косметика: при 500 треках у бенді кожен клік по заголовку колонки тягне
-500 рядків із трьома JOIN-ами. Виправляється схемою — див. [Фаза 4](#фаза-4--база-даних).
+This is not cosmetic: with 500 tracks in a band, every click on a column header
+pulled 500 rows across three joins. The fix is in the schema — see
+[Phase 4](#phase-4--database).
 
-### 3.3 Контракт помилок
+### 3.3 Error contract
 
-Зараз єдиний явний виняток — `NotFoundException` у `getByBand`. Немає:
+The only explicit exception today is `NotFoundException` in `getByBand`. There
+is no:
 
-- глобального exception filter із єдиною формою тіла помилки;
-- перевірки прав: `getByBand` пускає будь-якого автентифікованого юзера в
-  репертуар будь-якого бенду — членство не перевіряється.
+- global exception filter producing a single error body shape;
+- permission check: `getByBand` lets any authenticated user into any band's
+  repertoire, with membership never verified.
 
-Дії:
+Actions:
 
-1. `AllExceptionsFilter` → `{ statusCode, message, error, timestamp, path }`.
-2. `BandMembershipGuard` — перевіряє `BandMember` перед доступом до
-   `/bands/:id/repertoire`. Це саме той випадок, який CLAUDE.md вимагає
-   покрити e2e («involves auth, permissions or ownership»).
-3. Задокументувати обидва в `docs/architecture/`.
+1. `AllExceptionsFilter` → `{ code, message, details }`, matching the contract
+   documented in CLAUDE.md.
+2. `BandMembershipGuard` — checks `BandMember` before granting access to
+   `/bands/:id/repertoire`. This is precisely the case CLAUDE.md requires e2e
+   coverage for ("involves auth, permissions or ownership").
+3. Document both in `docs/architecture/`.
 
-### 3.4 Валідація і типізація конфігу
+### 3.4 Config validation and typing
 
-`apps/api/src/config/` існує, але варто перевірити, чи env-змінні валідуються на
-старті. Правильний патерн для Nest — `ConfigModule.forRoot({ validationSchema })`
-з zod або joi, щоб додаток падав одразу при відсутньому `DATABASE_URL`, а не
-через 20 хвилин на першому запиті.
+`apps/api/src/config/` exists; verify that env variables are validated at
+startup. The right Nest pattern is `ConfigModule.forRoot({ validationSchema })`
+with zod or joi, so the app fails immediately on a missing `DATABASE_URL`
+rather than twenty minutes later on the first request.
 
-### 3.5 Структура модулів API
+### 3.5 API module structure
 
-`repertoire/` уже має `controllers/` і `dto/`, `bands/` — плоский із `dto/`,
-`auth/` — `decorators/`, `guards/`, `strategies/`. Три різні форми.
+`repertoire/` already has `controllers/` and `dto/`; `bands/` is flat with a
+`dto/`; `auth/` has `decorators/`, `guards/` and `strategies/`. Three different
+shapes.
 
-Канонічна форма для кожного модуля:
+The canonical shape for every module:
 
 ```
 apps/api/src/<module>/
@@ -942,67 +967,79 @@ apps/api/src/<module>/
   dto/
     index.ts
     <name>.dto.ts
-  guards/          (за потреби)
-  decorators/      (за потреби)
+  guards/          (as needed)
+  decorators/      (as needed)
 ```
 
-Привести `bands/` до неї; задокументувати в skill.
+Bring `bands/` in line with it; document it in the skill.
 
 ---
 
-## Фаза 4 — База даних
+## Phase 4 — Database
 
-Схема загалом хороша: коментарі пояснюють _чому_ (рідкість), індекси продумані,
-`@map` послідовний. Три конкретні покращення:
+The schema is good overall: comments explain _why_ (rare), the indexes are
+considered, `@map` is consistent. Three concrete improvements.
 
-### 4.1 `duration` → `durationSeconds Int`
+### 4.1 `duration` → `durationSeconds Int` ✅ DONE
+
+> **Completed 2026-08-16.** Migration `20260816200000_duration_to_seconds`,
+> `TrackSortField.TIME` now maps to `orderBy: { durationSeconds }`, and the
+> client formats via `formatTrackDuration`. Recorded in
+> [ADR 0005](./adr/0005-duration-as-seconds.md).
 
 ```prisma
 model Track {
-  // Тривалість у секундах. Форматування в "m:ss" — на клієнті
-  // (formatDuration). Ціле число, щоб сортування працювало в БД.
+  // Track length in whole seconds. Formatting to "m:ss" happens on the client.
+  // An integer so the database can sort by it.
   durationSeconds Int @map("duration_seconds")
 }
 ```
 
-Міграція: додати колонку → бекфіл із `duration` через SQL → зробити
-`NOT NULL` → видалити `duration`. Три окремі міграції, щоб деплой не мав
-downtime.
+Migration: add the column → backfill from `duration` in SQL → make it
+`NOT NULL` → drop `duration`.
 
-Прибирає `parseDuration()` з сервісу і половину пост-запитного сортування.
+> **What was actually done differs from the original plan here.** This says
+> three separate migrations for a zero-downtime deploy; it shipped as one
+> transactional migration instead, because there is a single API instance that
+> a deploy replaces, so no window exists in which old code reads a dropped
+> column. ADR 0005 records that, and says not to copy the pattern if rolling
+> deploys arrive.
 
-### 4.2 Сортовний порядок статусів
+It removes `parseDuration()` from the service and half of the post-query
+sorting.
 
-Два варіанти:
+### 4.2 A sortable status order
 
-**A.** Перейменувати значення enum так, щоб алфавітний порядок збігався з
-логічним — крихко і потворно.
+Three options:
 
-**B.** Додати `statusWeight Int` з тригером/дефолтом — дублює дані.
+**A.** Rename the enum values so alphabetical order matches the logical order —
+brittle and ugly.
 
-**C (рекомендовано).** Сортувати через `ORDER BY CASE` у raw-фрагменті Prisma:
+**B.** Add a `statusWeight Int` with a trigger or default — duplicates data.
+
+**C (recommended).** Sort with `ORDER BY CASE` in a Prisma raw fragment:
 
 ```ts
 orderBy: {
   status: dir;
-} // ← не працює як треба
+} // ← does not do what is wanted
 // →
 $queryRaw`... ORDER BY CASE status WHEN 'new' THEN 0 WHEN 'learning' THEN 1 ... END ${dir}`;
 ```
 
-Або — найчистіше — окрема таблиця-довідник `track_statuses(code, weight, label)`
-із FK. Дає бонусом локалізовані назви статусів у БД замість хардкоду в JSON.
-Рішення варте окремого ADR.
+Or — cleanest — a reference table `track_statuses(code, weight, label)` with a
+foreign key. That also gives localised status names in the database instead of
+hardcoding them in JSON. The decision is worth its own ADR.
 
-### 4.3 Пастка з `@@unique([bandId, order])`
+### 4.3 The `@@unique([bandId, order])` trap
 
-Коментар у схемі чесно зазначає: «Null bandId is excluded from the constraint».
-Наслідок: **соло-треки одного юзера можуть мати однаковий `order`**, і
-`orderBy: order` для них недетермінований.
+The schema comment states it honestly: "Null bandId is excluded from the
+constraint". The consequence: **two solo tracks of the same user can share an
+`order`**, and `orderBy: order` is non-deterministic for them.
 
-Дії:
+Actions:
 
-1. Додати partial unique index для соло-треків:
+1. Add a partial unique index for solo tracks:
 
 ```sql
 CREATE UNIQUE INDEX tracks_solo_order_key
@@ -1010,66 +1047,67 @@ CREATE UNIQUE INDEX tracks_solo_order_key
   WHERE band_id IS NULL;
 ```
 
-2. Написати інтеграційний тест, який доводить, що вставка дубліката падає.
-3. Задокументувати в `data-model.md`.
+2. Write an integration test proving a duplicate insert fails.
+3. Document it in `data-model.md`.
 
-### 4.4 `onDelete` для `leadMember`
+### 4.4 `onDelete` for `leadMember`
 
-`Track.leadMember` не має `onDelete` — тобто дефолтний `Restrict`. Видалення
-юзера, який є lead хоча б одного треку, впаде з FK-помилкою. Це може бути
-навмисно (захист від втрати даних), але зараз ніде не задокументовано і не
-покрито тестом.
+`Track.leadMember` has no `onDelete`, so the default `Restrict` applies.
+Deleting a user who leads at least one track fails with a foreign key error.
+That may well be intentional (protection against data loss), but it is
+currently neither documented nor covered by a test.
 
-Дія: вирішити свідомо (`Restrict` + зрозуміла помилка API, чи `SetNull` +
-`leadMemberId String?`), задокументувати в ADR, покрити інтеграційним тестом.
+Action: decide deliberately (`Restrict` plus a clear API error, or `SetNull`
+plus `leadMemberId String?`), record it in an ADR, cover it with an integration
+test.
 
-### 4.5 Тестова БД і сідінг
+### 4.5 The test database and seeding
 
-`db:seed` зараз один на всі випадки. Для інтеграційних тестів потрібен окремий,
-детермінований набір (фіксовані id, без `faker`), інакше тести «пливуть».
+`db:seed` currently serves every purpose. Integration tests need a separate,
+deterministic set (fixed ids, no `faker`), or the tests drift.
 
-Додати `packages/db/src/seed/test-fixtures.ts` окремо від dev-сіду.
+Add `packages/db/src/seed/test-fixtures.ts` separately from the dev seed.
 
 ---
 
-## Фаза 5 — Структура папок
+## Phase 5 — Folder structure
 
-Загальна структура вже добра. Точкові покращення:
+The overall structure is already good. Targeted improvements:
 
-### 5.1 Web — `lib/` перевантажений
+### 5.1 Web — `lib/` is overloaded
 
-Зараз `lib/` містить `api/`, `constants/`, `hooks/`, `types/`, `variants/` —
-п'ять різних відповідальностей. Плюс окремо існує `src/hooks/` (глобальні хуки),
-що дає дві папки з хуками.
+`lib/` currently holds `api/`, `constants/`, `hooks/`, `types/` and
+`variants/` — five different responsibilities. Separately there is
+`src/hooks/` for global hooks, giving two hook folders.
 
 ```
-src/hooks/global/useAuth        ← глобальні
+src/hooks/global/useAuth        ← global
 src/lib/hooks/useRepertoire     ← React Query
 ```
 
-Різниця реальна (одні — UI-стан, інші — server state), але з назв її не видно.
-Запропонована схема:
+The distinction is real (one is UI state, the other server state) but invisible
+from the names. Proposed layout:
 
 ```
 src/
-  api/              ← було lib/api  (fetch-функції)
-  queries/          ← було lib/hooks (React Query хуки, назва каже, що це)
-  hooks/            ← ВСІ інші хуки, без вкладеного global/
-  constants/        ← було lib/constants
-  types/            ← було lib/types
-  variants/         ← було lib/variants
+  api/              ← was lib/api  (fetch functions)
+  queries/          ← was lib/hooks (React Query hooks; the name says so)
+  hooks/            ← ALL other hooks, no nested global/
+  constants/        ← was lib/constants
+  types/            ← was lib/types
+  variants/         ← was lib/variants
   utils/
   components/
 ```
 
-`lib/` зникає як «папка для всього, що не компонент» — антипатерн, який завжди
-розростається. Зміна механічна (перейменування + tsconfig paths), робиться одним
-PR, ризик низький.
+`lib/` disappears as "the folder for everything that is not a component" — an
+antipattern that always sprawls. The change is mechanical (renames plus tsconfig
+paths), fits in one PR, and carries low risk.
 
-### 5.2 Групування за фічею для великих доменів
+### 5.2 Feature grouping for the large domains
 
-`components/repertoire/` і `components/profile/` уже фактично є фіча-модулями.
-Для великих фіч має сенс co-locate усе:
+`components/repertoire/` and `components/profile/` are already feature modules
+in practice. For large features it makes sense to co-locate everything:
 
 ```
 src/features/repertoire/
@@ -1078,162 +1116,166 @@ src/features/repertoire/
   utils/
   types/
   constants/
-  index.ts        ← публічний API фічі
+  index.ts        ← the feature's public API
 src/features/metronome/
 src/features/profile/
 ```
 
-`src/components/` тоді містить тільки те, що справді спільне: `ui/`,
+`src/components/` would then hold only what is genuinely shared: `ui/`,
 `typography/`, `layout/`, `form/`, `shared/`.
 
-Перевага: щоб видалити фічу, видаляєш одну папку. Правило «фіча не імпортує з
-іншої фічі напряму, тільки через `index.ts`» enforced через
-`import/no-restricted-paths`.
+The benefit: deleting a feature means deleting one folder. The rule "a feature
+does not import from another feature directly, only through its `index.ts`" is
+enforceable with `import/no-restricted-paths`.
 
-Це найдорожча зміна в плані — робити **після** Фаз 0–1, коли тести вже
-захищають від регресу.
+This is the most expensive change in the plan — do it **after** Phases 0–1,
+once tests protect against regression.
 
-### 5.3 Дрібне
+### 5.3 Small things
 
-- `src/illustrations/vinyl/VinylRecord/` і `src/illustrations/vinyl-crate/` —
-  непослідовно: одне вкладене в `vinyl/`, друге на верхньому рівні. Вирівняти.
-- `src/icons/` має 5 підпапок (`achievements`, `base`, `brand`, `colorful`,
-  `status`) — `colorful` описує _вигляд_, решта — _домен_. Перейменувати за
-  доменом.
-- `components/repertoire/buttons/` і `components/shared/buttons/` — папка
-  `buttons/` групує за типом елемента, а не за призначенням. Або підняти
-  компоненти на рівень вище, або задокументувати правило.
+- `src/illustrations/vinyl/VinylRecord/` and `src/illustrations/vinyl-crate/`
+  are inconsistent: one nested under `vinyl/`, the other at the top level.
+  Align them.
+- `src/icons/` has 5 subfolders (`achievements`, `base`, `brand`, `colorful`,
+  `status`) — `colorful` describes _appearance_, the rest describe _domain_.
+  Rename it by domain.
+- `components/repertoire/buttons/` and `components/shared/buttons/` — a
+  `buttons/` folder groups by element type rather than purpose. Either lift the
+  components a level, or document the rule.
 
 ---
 
-## Фаза 6 — Документація і CLAUDE.md
+## Phase 6 — Documentation and the AI environment
 
-### 6.1 Розбіжності, які треба виправити негайно
+### 6.1 Discrepancies to fix immediately
 
-| Твердження в доках                            | Реальність                               |
-| --------------------------------------------- | ---------------------------------------- |
-| `packages/types/src/band/band.types.ts`       | насправді `repertoire/band.types.ts`     |
-| типи: тільки `repertoire/`, `band/`           | ще є `common/`, `user/`                  |
-| API: плоскі `bands.controller.ts` тощо        | `repertoire/` має `controllers/`, `dto/` |
-| `stores/metronome.store.ts`                   | папки `stores/` не існує                 |
-| «CI runs … all six gate»                      | `api.yml` не запускає тестів             |
-| «no `any`»                                    | в API `no-explicit-any: off`             |
-| skill не згадує `src/data/`                   | існує з 6 файлами                        |
-| skill не згадує `auth/`, `prisma/`, `config/` | існують                                  |
+| Claim in the docs                                        | Reality                                  |
+| -------------------------------------------------------- | ---------------------------------------- |
+| `packages/types/src/band/band.types.ts`                  | actually `repertoire/band.types.ts`      |
+| types: only `repertoire/`, `band/`                       | there are also `common/`, `user/`        |
+| API: flat `bands.controller.ts` etc.                     | `repertoire/` has `controllers/`, `dto/` |
+| `stores/metronome.store.ts`                              | there is no `stores/` folder             |
+| "CI runs … all six gate"                                 | `api.yml` ran no tests                   |
+| "no `any`"                                               | the API had `no-explicit-any: off`       |
+| the skill does not mention `src/data/`                   | it exists, with 6 files                  |
+| the skill does not mention `auth/`, `prisma/`, `config/` | they exist                               |
 
-### 6.2 Чого бракує в документації для AI
+### 6.2 What the AI documentation is missing
 
-Це найбільший розрив. Модулі, про які AI не знає **нічого**:
+This is the biggest gap. Modules the AI knows **nothing** about:
 
-1. **Auth** — OAuth-флоу, `oauth-state.store.ts`, guards, strategies, decorators,
-   як отримати поточного юзера в контролері. Найкритичніше.
-2. **Prisma layer** — `PrismaService`, як мокати, транзакції.
-3. **API client** — `lib/api/client.ts`: базовий URL, обробка помилок, credentials.
-4. **React Query conventions** — структура query keys, `staleTime`,
-   інвалідація після мутації, обробка помилок.
-5. **Theme system** — як працює `useTheme`, `data-theme`, де живуть токени.
-6. **Env vars** — повний перелік в одній таблиці.
+1. **Auth** — the OAuth flow, `oauth-state.store.ts`, guards, strategies,
+   decorators, how to get the current user in a controller. The most critical.
+2. **Prisma layer** — `PrismaService`, how to mock it, transactions.
+3. **API client** — `lib/api/client.ts`: base URL, error handling, credentials.
+4. **React Query conventions** — query key structure, `staleTime`, invalidation
+   after a mutation, error handling.
+5. **Theme system** — how `useTheme` works, `data-theme`, where tokens live.
+6. **Env vars** — a complete list in one table.
 
-### 6.3 Реструктуризація CLAUDE.md
+### 6.3 Restructuring CLAUDE.md
 
-CLAUDE.md і skill зараз дублюють ~40% контенту (i18n секція повністю, code
-quality rules, JSDoc). Це подвоює контекст без нової інформації.
+CLAUDE.md and the skill duplicated roughly 40% of their content (the whole i18n
+section, the code quality rules, JSDoc). That doubles the context for no new
+information.
 
-Пропозиція — чіткий розподіл:
+The split:
 
-- **CLAUDE.md** — _процес_: definition of done, команди, тестова політика,
-  документаційна політика, CI-гейти. Один розділ «Conventions» із посиланням
-  на skill.
-- **skill** — _код_: усе про те, як виглядає правильний файл (стилі, токени,
-  структура компонента, найменування, патерни).
-- i18n — цілком у skill, у CLAUDE.md лише посилання.
+- **CLAUDE.md** — _process_: definition of done, commands, testing policy,
+  documentation policy, CI gates. One "Conventions" section pointing at the
+  skill.
+- **the skill** — _code_: everything about what a correct file looks like
+  (styles, tokens, component structure, naming, patterns).
+- i18n lives entirely in the skill; CLAUDE.md only links to it.
 
-### 6.4 Середовище для AI ✅ ЗРОБЛЕНО
+### 6.4 The AI environment ✅ DONE
 
-Проблема була подвійна: **обсяг** і **дрейф**.
+The problem was twofold: **volume** and **drift**.
 
-_Обсяг._ CLAUDE.md (~3.5k токенів) плюс скіл (~8.5k) вантажилися в кожну
-сесію — ~12k токенів ще до того, як прочитано хоч рядок коду.
+_Volume._ CLAUDE.md (~3.5k tokens) plus the skill (~8.5k) loaded into every
+session — ~12k tokens before a single line of code was read.
 
-_Дрейф._ Обидва файли описували структуру проекту руками. Рукописний опис
-дерева файлів застаріває за тиждень і після цього активно шкодить: AI
-впевнено генерує код за неправильною картою.
+_Drift._ Both files described the project structure by hand. A hand-written
+description of a file tree goes stale within a week and then does active harm:
+the AI confidently generates code from a wrong map.
 
-**Рішення — три рівні, що читаються за потреби:**
+**The solution — three levels, read on demand:**
 
 ```
-CLAUDE.md              ~2.5k  процес + маршрутизатор. Вантажиться завжди.
-docs/ai/ORIENTATION.md ~2.0k  холодний старт: правила, пастки, куди йти далі.
-docs/ai/RECIPES.md     ~3.6k  покрокові сценарії: які файли, в якому порядку.
-docs/ai/MAP.md         ~4.1k  ГЕНЕРУЄТЬСЯ. Інвентар усього, що є в проекті.
-скіл conventions       ~8.6k  як виглядає правильний код. Тільки коли пишеш код.
+CLAUDE.md              ~1.9k  process + router. Always loaded.
+docs/ai/ORIENTATION.md ~2.4k  cold start: rules, traps, where to go next.
+docs/ai/RECIPES.md     ~3.4k  step-by-step: which files, in which order.
+docs/ai/GIT.md         ~3.0k  branches, commits, rebase vs merge.
+docs/ai/MAP.md         ~4.1k  GENERATED. Inventory of everything in the project.
+the conventions skill  ~8.6k  what correct code looks like. Only when writing code.
 ```
 
-Сесія, яка править баг в API, читає CLAUDE.md + ORIENTATION + один рецепт —
-~5k замість 12k, і жоден із цих токенів не витрачається на опис файлів, які
-до задачі не стосуються.
+A session fixing an API bug reads CLAUDE.md + ORIENTATION + one recipe — ~5k
+instead of 12k, and none of those tokens describe files irrelevant to the task.
 
-**Ключова ідея — `scripts/generate-ai-map.mjs`.** Усе, що виводиться з коду,
-не пишеться руками:
+**The key idea — `scripts/generate-ai-map.mjs`.** Anything derivable from the
+code is not written by hand:
 
-- компоненти з позначками «є тест» / «є сторі»;
-- утиліти, хуки, React Query запити з позначкою покриття;
-- HTTP-маршрути, витягнуті з декораторів Nest;
-- сервіси з позначками unit / integration тесту;
-- моделі й енуми Prisma;
-- експорти `@nonsololarco/types`;
-- namespace-и перекладів із кількістю ключів по локалях і позначкою
-  розбіжності з `en`.
+- components flagged with "has a test" / "has a story";
+- utils, hooks and React Query hooks flagged by coverage;
+- HTTP routes extracted from the Nest decorators;
+- services flagged by unit / integration test;
+- Prisma models and enums;
+- the exports of `@nonsololarco/types`;
+- translation namespaces with key counts per locale and a mismatch flag
+  against `en`.
 
-Мапа не може розійтися з кодом — вона з нього виводиться. Плюс безкоштовно
-з'явився дашборд покриття: одразу видно, які компоненти без тестів.
+The map cannot drift from the code, because it is derived from it. It also gave
+a coverage dashboard for free: which components have no tests is immediately
+visible.
 
-`pnpm ai:map` — вручну; у lint-staged (розділ 0.3) — автоматично на кожен
-коміт, що змінює `apps/**/src/**`.
+`pnpm ai:map` runs it manually; lint-staged (section 0.3) runs it automatically
+on every commit touching `apps/**/src/**`.
 
-**Що ця мапа одразу виявила:**
+**What the map revealed straight away:**
 
-- OAuth підтримує **GitHub і Google** — GitHub не згадувався в жодній доці;
-- `apps/web/src/components/profile/Profile.tsx` лежить без власної папки —
-  порушення правила «один файл — одна папка»;
-- 0 сторіз при повністю налаштованому Storybook;
-- кількість ключів перекладів по локалях зараз збігається (14/25/80) — тобто
-  i18n у порядку, що раніше ніде не перевірялося.
+- OAuth supports **GitHub as well as Google** — GitHub appeared in no document;
+- `apps/web/src/components/profile/Profile.tsx` sits without its own folder,
+  breaking the "one file, one folder" rule;
+- 24 components have stories, not zero as first assumed — the stories live
+  centrally in `apps/web/stories/`, and the generator was looking in the wrong
+  place;
+- translation key counts match across locales (14/25/80), so i18n is in order —
+  something nothing had previously verified.
 
-**Мова доків для AI.** `ORIENTATION.md`, `RECIPES.md` і `CLAUDE.md` написані
-українською. Кирилиця коштує приблизно вдвічі більше токенів на символ, ніж
-латиниця, тож переклад цих трьох файлів англійською скоротив би постійний
-контекст ще на ~40% (з ~2.5k до ~1.5k для CLAUDE.md). Проект уже вимагає
-англійської для коду, коментарів і тестів — переклад був би послідовним.
-Рішення за власником: читабельність для людини проти вартості контексту.
+**Language of the AI docs.** `CLAUDE.md`, `ORIENTATION.md`, `RECIPES.md` and
+`GIT.md` are written in English, and this plan was translated to match. Cyrillic
+costs roughly twice the tokens per character, and these files load on every
+session; the project already requires English for code, comments and tests, so
+English documentation is consistent rather than a special case.
 
-### 6.5 Генерувати діаграми, а не малювати
+### 6.5 Generate diagrams, do not draw them
 
-**Що вже зроблено:** `docs/architecture/overview.md` — п'ять Mermaid-діаграм
-для людини (система, ERD, шлях запиту, git-flow, шарування фронтенду).
-Mermaid рендериться на GitHub і диффиться як текст, тож на відміну від PNG
-його видно в рев'ю.
+**Already done:** `docs/architecture/overview.md` — five Mermaid diagrams for
+human readers (system, ERD, request path, git flow, frontend layering). Mermaid
+renders on GitHub and diffs as text, so unlike a PNG it is visible in review.
 
-**Проблема, яка лишається:** дві з цих діаграм застаріють. ERD — на першій же
-зміні схеми; граф шарів — на першому новому імпорті. Рукописна діаграма, що
-розійшлася з кодом, гірша за її відсутність: вона впевнено бреше.
+**The remaining problem:** two of those diagrams will go stale. The ERD on the
+first schema change; the layering graph on the first new import. A hand-drawn
+diagram that has drifted from the code is worse than none — it lies
+confidently.
 
-Чотири інструменти, які варто додати. Перші два — саме тому, що замінюють
-ручну працю на генерацію; третій уже стоїть і просто недовикористаний;
-четвертий — разова діагностика.
+Four tools worth adding. The first two precisely because they replace manual
+work with generation; the third is already installed and merely underused; the
+fourth is one-off diagnostics.
 
-| Інструмент                | Що дає                                               | Пріоритет   |
-| ------------------------- | ---------------------------------------------------- | ----------- |
-| `dependency-cruiser`      | Граф залежностей **+ правила, що падають у CI**      | **високий** |
-| `prisma-erd-generator`    | ERD із `schema.prisma` на кожен `db:generate`        | середній    |
-| Storybook (уже є)         | Візуальний каталог 24 компонентів + a11y + Chromatic | середній    |
-| `turbo run build --graph` | Граф залежностей пакетів монорепо                    | низький     |
+| Tool                        | What it gives                                        | Priority |
+| --------------------------- | ---------------------------------------------------- | -------- |
+| `dependency-cruiser`        | Dependency graph **plus rules that fail CI**         | **high** |
+| `prisma-erd-generator`      | ERD from `schema.prisma` on every `db:generate`      | medium   |
+| Storybook (already present) | Visual catalogue of 24 components + a11y + Chromatic | medium   |
+| `turbo run build --graph`   | Monorepo package dependency graph                    | low      |
 
-#### dependency-cruiser — найцінніший, бо це не тільки картинка
+#### dependency-cruiser — the most valuable, because it is not just a picture
 
-Малює граф, але головне — **перевіряє архітектурні правила** і падає в CI.
-Це те, чого зараз немає взагалі: межа між дизайн-системою і доменом існує
-тільки як домовленість.
+It draws the graph, but more importantly it **checks architectural rules** and
+fails CI. That does not exist at all today: the boundary between the design
+system and the domain is a convention only.
 
 ```sh
 pnpm add -Dw dependency-cruiser
@@ -1246,8 +1288,8 @@ module.exports = {
     {
       name: 'ds-must-not-import-features',
       comment:
-        'Компонент дизайн-системи, що тягне фічу, сесію чи React Query, ' +
-        'перестає бути перевикористовним. Це блокер для винесення в packages/ui.',
+        'A design-system component that pulls in a feature, the session or React Query ' +
+        'stops being reusable. This is a blocker for the move into packages/ui.',
       severity: 'error',
       from: { path: '^apps/web/src/components/ui' },
       to: {
@@ -1256,7 +1298,7 @@ module.exports = {
     },
     {
       name: 'features-must-not-cross-import',
-      comment: 'Фіча імпортує іншу фічу лише через її публічний index.ts.',
+      comment: 'A feature imports another feature only through its public index.ts.',
       severity: 'warn',
       from: { path: '^apps/web/src/components/(repertoire|profile|metronome)/' },
       to: {
@@ -1266,7 +1308,7 @@ module.exports = {
     },
     {
       name: 'no-mocks-in-production',
-      comment: 'src/data/ — моки. У компонентах їм не місце.',
+      comment: 'src/data/ holds mocks. They do not belong in components.',
       severity: 'error',
       from: { path: '^apps/web/src/components' },
       to: { path: '^apps/web/src/data' },
@@ -1279,7 +1321,7 @@ module.exports = {
     },
     {
       name: 'no-orphans',
-      comment: 'Файл, який ніхто не імпортує, — мертвий код.',
+      comment: 'A file nobody imports is dead code.',
       severity: 'warn',
       from: { orphan: true, pathNot: '\\.(test|stories|d)\\.tsx?$|^apps/web/app/' },
       to: {},
@@ -1302,13 +1344,13 @@ module.exports = {
 }
 ```
 
-`graph:check` іде в CI поруч із lint. `no-circular` і `no-orphans` майже
-напевно щось знайдуть одразу — циклічні імпорти між барелями типова хвороба
-структури «папка + index.ts».
+`graph:check` goes into CI alongside lint. `no-circular` and `no-orphans` will
+almost certainly find something immediately — circular imports between barrels
+are the characteristic disease of a "folder + index.ts" structure.
 
-Правило `ds-must-not-import-features` — це фактично **репетиція винесення в
-`packages/ui`** (PR #17–19). Якщо воно зелене, переїзд буде механічним; якщо
-червоне, воно точно покаже, що саме доведеться розплутати спершу.
+The `ds-must-not-import-features` rule is effectively a **rehearsal for the move
+into `packages/ui`** (PRs #17–19). If it is green, the migration will be
+mechanical; if it is red, it shows exactly what has to be untangled first.
 
 #### prisma-erd-generator
 
@@ -1324,25 +1366,25 @@ generator erd {
 }
 ```
 
-Далі ERD оновлюється сам на кожен `db:generate` — а він і так обов'язковий
-після будь-якої зміни схеми. Рукописний ERD із `overview.md` тоді замінюється
-посиланням на згенерований.
+The ERD then updates itself on every `db:generate`, which is mandatory after
+any schema change anyway. The hand-drawn ERD in `overview.md` is then replaced
+by a link to the generated one.
 
-Один нюанс: генератор запускається при кожному `db:generate`, що трохи
-сповільнює цикл. Якщо заважатиме — винести в окремий `db:erd` і викликати з
-pre-commit разом із `ai:map`.
+One caveat: the generator runs on every `db:generate`, which slows the loop a
+little. If that becomes annoying, split it into a separate `db:erd` and call it
+from pre-commit alongside `ai:map`.
 
-#### Storybook — недовикористаний
+#### Storybook — underused
 
-Уже стоїть, 24 сторі, налаштовані `addon-a11y`, `addon-vitest` і Chromatic.
-Не використовується головне:
+Already installed: 24 stories, with `addon-a11y`, `addon-vitest` and Chromatic
+configured. The main things going unused:
 
-- **`addon-a11y` у CI** — автоматична перевірка контрасту в обох темах. Ловила б
-  саме той клас багів, що описаний у скілі («невидимий текст у темі, яку
-  тестували менше»).
-- **Chromatic на PR** — візуальна регресія. Для ретро-дизайн-системи з
-  offset-тінями й двома темами це найдешевший спосіб побачити, що рефакторинг
-  щось зсунув на 2px.
+- **`addon-a11y` in CI** — automatic contrast checking in both themes. It would
+  catch exactly the class of bug the skill describes ("invisible text in
+  whichever theme was tested less").
+- **Chromatic on PRs** — visual regression. For a retro design system with
+  offset shadows and two themes, it is the cheapest way to see that a refactor
+  shifted something by 2px.
 
 #### turbo graph
 
@@ -1350,41 +1392,39 @@ pre-commit разом із `ai:map`.
 pnpm turbo run build --graph=docs/architecture/turbo-graph.svg
 ```
 
-Разова діагностика, не для CI. Корисна рівно двічі: зараз, щоб побачити
-поточні залежності пакетів, і після винесення `packages/ui`, щоб перевірити,
-що новий пакет не створив зайвих зв'язків.
+One-off diagnostics, not for CI. Useful exactly twice: now, to see the current
+package dependencies, and after the `packages/ui` extraction, to check the new
+package created no extra edges.
 
-### 6.6 Нові документи
+### 6.6 New documents
 
 ```
-docs/architecture/auth.md          ← OAuth flow, guards, session (Mermaid-діаграма)
-docs/architecture/api-client.md    ← фронтендний шар доступу до API
-docs/architecture/testing.md       ← піраміда: unit / integration / e2e, коли що
-docs/adr/0004-integration-tests.md
-docs/adr/0005-duration-as-seconds.md
+docs/architecture/auth.md          ← OAuth flow, guards, session (Mermaid diagram)
+docs/architecture/api-client.md    ← the frontend API access layer
+docs/architecture/testing.md       ← the pyramid: unit / integration / e2e, when to use which
 docs/adr/0006-track-status-ordering.md
 docs/adr/0007-feature-folder-structure.md
-docs/CONTRIBUTING.md               ← локальний старт, гілки, PR-чеклист
+docs/CONTRIBUTING.md               ← local setup, branches, PR checklist
 ```
 
-Кожен — у `docs/README.md`.
+Each linked from `docs/README.md`.
 
 ---
 
-## Нове правило: сортування пропсів
+## New rule: prop sorting
 
-**Ціль:** алфавітно, але обов'язкові пропси завжди перед опціональними.
+**Goal:** alphabetical, but required props always before optional ones.
 
-### Гарна новина — це вже вміє наявний плагін
+### The good news — the installed plugin already does this
 
-`eslint-plugin-typescript-sort-keys` підтримує опцію `requiredFirst`. Змінити в
-`apps/web/eslint.config.js`:
+`eslint-plugin-typescript-sort-keys` supports a `requiredFirst` option. Change
+in `apps/web/eslint.config.js`:
 
 ```js
-// було
+// before
 'typescript-sort-keys/interface': 'error',
 
-// стало
+// after
 'typescript-sort-keys/interface': [
   'error',
   'asc',
@@ -1392,21 +1432,21 @@ docs/CONTRIBUTING.md               ← локальний старт, гілки
 ],
 ```
 
-`natural: true` додатково виправляє сортування типу `item2` перед `item10`.
+`natural: true` additionally fixes sorting so `item2` comes before `item10`.
 
-Те саме додати в новий `packages/eslint-config/nest.js` для API DTO.
+Add the same to the new `packages/eslint-config/nest.js` for API DTOs.
 
-### Що це змінює на практиці
+### What it changes in practice
 
 ```ts
-// ❌ поточний стан (просто алфавітний)
+// ❌ before (plain alphabetical)
 export interface TrackListRowProps {
   index?: number;
   isMyTrack?: boolean;
   track: Track;
 }
 
-// ✅ після зміни — required спершу
+// ✅ after — required first
 export interface TrackListRowProps {
   track: Track;
   index?: number;
@@ -1415,7 +1455,7 @@ export interface TrackListRowProps {
 ```
 
 ```ts
-// ✅ Button — required, потім optional, у кожній групі алфавітно
+// ✅ Button — required, then optional, alphabetical within each group
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>, VariantProps<typeof buttonVariants> {
   children: ReactNode;
@@ -1428,44 +1468,45 @@ export interface ButtonProps
 }
 ```
 
-**Чому це правильно.** Читаючи інтерфейс згори, одразу бачиш мінімальний
-контракт компонента — що _треба_ передати. Опціональні — це вже налаштування.
-Той самий порядок природно застосовується до сигнатур функцій, тож правило
-узгоджене з рештою коду.
+**Why this is right.** Reading an interface from the top, you see the
+component's minimal contract immediately — what you _must_ pass. Optional props
+are configuration. The same order applies naturally to function signatures, so
+the rule is consistent with the rest of the code.
 
-### Плата за міграцію
+### The cost of migrating
 
-Правило має `fixable: 'code'` — `eslint --fix` перепорядкує ключі автоматично
-(перевірено у встановленій версії плагіна). Тобто міграція коштує один прогін:
+The rule is `fixable: 'code'` — `eslint --fix` reorders the keys automatically
+(verified against the installed version of the plugin). So the migration costs
+one run:
 
 ```sh
 pnpm --filter web lint --fix
 ```
 
-Робити окремим PR «chore(web): sort interface keys required-first», без інших
-змін — тоді дифф читається як чистий reorder і рев'ю тривіальне.
+Do it as its own PR, "chore(web): sort interface keys required-first", with no
+other changes — then the diff reads as a pure reorder and review is trivial.
 
-Одне застереження: `caseSensitive: false` змінить порядок і там, де
-`requiredFirst` ні до чого (наприклад `Zebra` vs `apple`). Якщо не хочеш зайвого
-шуму в тому самому PR — залиш `caseSensitive: true` (дефолт) і міняй тільки
-`requiredFirst`.
+One caveat: `caseSensitive: false` also changes order where `requiredFirst` is
+irrelevant (`Zebra` vs `apple`, for instance). To avoid extra noise in the same
+PR, leave `caseSensitive: true` (the default) and change only `requiredFirst`.
 
-### Текст правила для CLAUDE.md і skill
+### The rule text for CLAUDE.md and the skill
 
-> **Сортування ключів інтерфейсу.** Обов'язкові поля йдуть першими, опціональні
-> — після них; усередині кожної групи — алфавітно, без урахування регістру.
-> Читач бачить мінімальний контракт згори, налаштування — знизу. Enforced через
-> `typescript-sort-keys/interface` з `requiredFirst: true`.
+> **Interface key sorting.** Required fields come first, optional ones after;
+> within each group, alphabetically and case-insensitively. The reader sees the
+> minimal contract at the top and the configuration below. Enforced by
+> `typescript-sort-keys/interface` with `requiredFirst: true`.
 
 ---
 
-## Фаза 7 — Спостережуваність і релізні нотатки
+## Phase 7 — Observability and release notes
 
-Два різні питання, які легко сплутати. Одне термінове, друге приємне.
+Two different questions that are easy to conflate. One is urgent, the other is
+nice to have.
 
-### 7.1 Поточний стан: продакшен наосліп
+### 7.1 Current state: production is invisible
 
-**У всьому API рівно один рядок логування:**
+**The entire API contains exactly one line of logging:**
 
 ```ts
 // apps/api/src/main.ts:52
@@ -1475,37 +1516,36 @@ bootstrap().catch((err) => {
 });
 ```
 
-Це все. Немає структурованих логів, немає кореляції запитів, немає
-відстеження помилок. Nest має вбудований `Logger` — він не використовується
-ніде.
+That is all. No structured logs, no request correlation, no error tracking.
+Nest has a built-in `Logger`; it is used nowhere.
 
-Практичний наслідок: якщо зараз у користувача впаде запит до
-`/api/bands/:id/repertoire`, ти дізнаєшся про це, тільки якщо він напише.
-Ні сповіщення, ні стектрейсу, ні розуміння, скількох людей це зачепило.
-`console.error` осяде в консолі контейнера без ретенції й пошуку.
+The practical consequence: if a request to `/api/bands/:id/repertoire` fails for
+a user right now, you find out only if they tell you. No alert, no stack trace,
+no sense of how many people it affected. `console.error` settles in the
+container console with no retention and no search.
 
-**Це найбільша дірка з усіх, знайдених в аудиті** — більша за покриття
-тестами. Тест ловить те, що ти передбачила; спостережуваність ловить те,
-чого не передбачила. А ламається в проді саме друге.
+**This is the biggest gap the audit found** — bigger than test coverage. A test
+catches what you anticipated; observability catches what you did not. And what
+breaks in production is the second kind.
 
-### 7.2 Sentry — перший пріоритет
+### 7.2 Sentry — first priority
 
-Одна інтеграція закриває більшу частину проблеми: помилка приходить зі
-стектрейсом, врахованою кількістю постраждалих і breadcrumb-ами того, що
-користувач робив до збою.
+One integration closes most of the problem: an error arrives with a stack
+trace, a count of affected users, and breadcrumbs of what the user was doing
+before it broke.
 
 ```sh
 pnpm --filter web add @sentry/nextjs
 pnpm --filter api add @sentry/nestjs
 ```
 
-Налаштування, які найчастіше пропускають:
+The settings people most often skip:
 
 ```ts
 Sentry.init({
   dsn: process.env.SENTRY_DSN,
   environment: process.env.NODE_ENV,
-  // Прив'язує помилку до релізу — видно, який деплой її приніс
+  // Ties the error to a release — shows which deploy introduced it
   release: process.env.VERCEL_GIT_COMMIT_SHA,
   tracesSampleRate: 0.1,
   sendDefaultPii: false,
@@ -1517,33 +1557,36 @@ Sentry.init({
 });
 ```
 
-`release` варто прив'язати до тегів із §«Releasing» у `docs/ai/GIT.md` — тоді
-на кожен реліз видно, які помилки він приніс і які полагодив. Це саме те, чого
-зараз немає взагалі, бо тегів немає.
+`release` is worth tying to the tags from the "Releasing" section of
+`docs/ai/GIT.md` — then every release shows which errors it introduced and
+which it fixed. That is exactly what is missing today, because there are no
+tags.
 
-Безкоштовного тарифу вистачить надовго для проекту цього розміру. Якщо Sentry
-небажаний — GlitchTip (self-hosted, сумісний із тим самим SDK).
+The free tier will last a long time for a project this size. If Sentry is
+unwanted, GlitchTip is self-hosted and compatible with the same SDK.
 
-### 7.3 Структуроване логування API
+### 7.3 Structured API logging
 
-Логи потрібні там, де помилки немає, але поведінка дивна: повільний запит,
-несподіваний порядок, порожня відповідь.
+Logs are needed where there is no error but the behaviour is odd: a slow
+request, an unexpected order, an empty response.
 
 ```sh
 pnpm --filter api add nestjs-pino pino-http pino-pretty
 ```
 
-Що це дає понад `console.log`:
+What this gives over `console.log`:
 
-- **JSON у проді, читабельний вивід у деві** — той самий код, різний транспорт.
-- **`requestId` у кожному рядку** — усі логи одного запиту знаходяться однією
-  фільтрацією. Без цього паралельні запити перемішані й нечитабельні.
-- **Автоматичне логування запиту й відповіді з тривалістю** — повільні
-  ендпоінти видно без окремої роботи. Для §3.2 (сортування, що вантажить усю
-  таблицю) це дасть цифри замість припущень.
+- **JSON in production, readable output in dev** — same code, different
+  transport.
+- **A `requestId` on every line** — all logs for one request are found with a
+  single filter. Without it, concurrent requests interleave and become
+  unreadable.
+- **Automatic request/response logging with duration** — slow endpoints become
+  visible with no extra work. For §3.2 (the sort that loaded the whole table)
+  this produces numbers instead of assumptions.
 
-**Що не логувати ніколи:** паролі, токени, cookie, заголовок `authorization`,
-повні тіла запитів, email у відкритому вигляді. Редакція має бути явна:
+**What never to log:** passwords, tokens, cookies, the `authorization` header,
+full request bodies, plaintext email. Redaction must be explicit:
 
 ```ts
 LoggerModule.forRoot({
@@ -1554,29 +1597,29 @@ LoggerModule.forRoot({
 });
 ```
 
-**Рівні.** `error` — зламано, треба дивитися. `warn` — деградація, працює далі
-(спрацював фолбек). `info` — бізнес-події (юзер створив трек). `debug` — тільки
-локально. Якщо все логувати на `info`, сигнал тоне в шумі й логи перестають
-читати.
+**Levels.** `error` — broken, needs looking at. `warn` — degraded but still
+working (a fallback fired). `info` — business events (a user created a track).
+`debug` — local only. Log everything at `info` and the signal drowns in noise,
+at which point people stop reading logs at all.
 
-Пов'язано з §3.3: глобальний exception filter — природне місце, де
-неперехоплені помилки і логуються, і відправляються в Sentry.
+Related to §3.3: the global exception filter is the natural place where
+uncaught errors are both logged and reported to Sentry.
 
 ### 7.4 CHANGELOG — release-please
 
-Зараз `CHANGELOG.md` немає і **тегів немає жодного**. Тобто на питання «що
-змінилося між тим, що працювало вчора, і тим, що зламалося сьогодні» відповіді
-не існує в принципі.
+There is no `CHANGELOG.md` and **no tags at all**. So the question "what
+changed between the version that worked yesterday and the one that broke today"
+has no answer in principle.
 
-**release-please** лягає на вже обрану модель точно:
+**release-please** fits the model already chosen exactly:
 
-| Що вже є                   | Що з цим робить release-please             |
-| -------------------------- | ------------------------------------------ |
-| Conventional Commits       | читає їх, групує за типом                  |
-| Squash merge у `develop`   | один чистий коміт на фічу — ідеальний вхід |
-| Назва PR = тема коміту     | заголовок у changelog береться звідти      |
-| `develop` → `main` = реліз | відкриває Release PR при мержі в `main`    |
-| Тегів немає (§GIT вимагає) | ставить їх сам                             |
+| What already exists            | What release-please does with it               |
+| ------------------------------ | ---------------------------------------------- |
+| Conventional Commits           | reads them, groups by type                     |
+| Squash merge into `develop`    | one clean commit per feature — the ideal input |
+| PR title = commit subject      | the changelog heading comes from there         |
+| `develop` → `main` = release   | opens a Release PR on merge into `main`        |
+| No tags (GIT.md requires them) | creates them itself                            |
 
 ```yaml
 # .github/workflows/release.yml
@@ -1597,98 +1640,101 @@ jobs:
           package-name: nonsololarco
 ```
 
-Як працює: після мержу `develop` → `main` бот відкриває PR «chore: release
-v0.5.0» зі згенерованим CHANGELOG і піднятою версією. Ти переглядаєш, правиш
-формулювання за потреби, мержиш — тег і GitHub Release створюються самі.
+How it works: after `develop` merges into `main`, the bot opens a
+"chore: release v0.5.0" PR with a generated CHANGELOG and a bumped version. You
+review it, adjust the wording if needed, merge — and the tag and GitHub Release
+are created automatically.
 
-**Чому не альтернативи:**
+**Why not the alternatives:**
 
-- **`changesets`** — сильний, коли публікуєш кілька пакетів у npm із
-  незалежними версіями. Ви не публікуєте; це була б ціна без вигоди.
-- **`semantic-release`** — релізить на кожен мерж автоматично. Суперечить
-  ADR 0004, де реліз — свідома дія.
-- **Писати руками** — переживе рівно три релізи.
+- **`changesets`** — strong when publishing several npm packages with
+  independent versions. You publish nothing; it would be cost without benefit.
+- **`semantic-release`** — releases automatically on every merge. That
+  contradicts ADR 0004, where a release is a deliberate act.
+- **Writing it by hand** — survives exactly three releases.
 
-**Передумова.** Changelog якісний рівно настільки, наскільки якісні
-повідомлення комітів. `fix: according to comments` у нотатках релізу читається
-саме так, як звучить. Тому §0.1 (commitlint) і воркфлоу назв PR мають
-з'явитися раніше — інакше інструмент акуратно згенерує сміття.
+**Precondition.** A changelog is only as good as the commit messages.
+`fix: according to comments` reads in release notes exactly as it sounds. So
+§0.1 (commitlint) and the PR title workflow have to come first, or the tool
+will neatly generate rubbish.
 
-### 7.5 Чого поки не варто
+### 7.5 What not to add yet
 
-- **Метрики (Prometheus/Grafana)** — рішення без проблеми при поточному
-  трафіку. Sentry покриває помилки, хостинг дає базові графіки.
-- **OpenTelemetry-трасування** — має сенс від трьох сервісів. У вас два.
-- **Окремий сервіс логів (Datadog, Logtail)** — коли ретенції хостингу почне
-  бракувати. Не раніше.
+- **Metrics (Prometheus/Grafana)** — a solution without a problem at the current
+  traffic. Sentry covers errors; the hosting provides basic graphs.
+- **OpenTelemetry tracing** — makes sense from three services up. You have two.
+- **A dedicated log service (Datadog, Logtail)** — when the hosting retention
+  starts to hurt. Not before.
 
-Усі три легко додати пізніше, і жоден не вирішує проблеми, яка є сьогодні.
+All three are easy to add later, and none solves the problem that exists today.
 
-### 7.6 Порядок усередині фази
+### 7.6 Order within the phase
 
-| #   | Що                      | Чому саме так                                        |
-| --- | ----------------------- | ---------------------------------------------------- |
-| 1   | Sentry на web і api     | єдине, що робить продакшен видимим сьогодні          |
-| 2   | Exception filter + pino | структура для того, що не є падінням                 |
-| 3   | Теги на `main`          | передумова і для changelog, і для `release` у Sentry |
-| 4   | release-please          | після того, як коміти стали чистими                  |
+| #   | What                    | Why in this order                                            |
+| --- | ----------------------- | ------------------------------------------------------------ |
+| 1   | Sentry on web and api   | the only thing that makes production visible today           |
+| 2   | Exception filter + pino | structure for what is not a crash                            |
+| 3   | Tags on `main`          | a precondition for both the changelog and Sentry's `release` |
+| 4   | release-please          | once the commits are clean                                   |
 
 ---
 
-## Порядок виконання
+## Execution order
 
-Кожен рядок — окремий PR. Порядок продуманий так, щоб дешеве і безризикове
-йшло першим, а найдорожча структурна зміна — після того, як тести вже ловлять
-регрес.
+Each row is one PR. The order is arranged so the cheap, low-risk work lands
+first, and the most expensive structural change comes only once tests catch
+regressions.
 
-| #   | PR                                                                           | Фаза     | Ризик       | Ефект                   |
-| --- | ---------------------------------------------------------------------------- | -------- | ----------- | ----------------------- |
-| 0   | ✅ `docs: середовище для AI (ORIENTATION, RECIPES, MAP, slim CLAUDE.md)`     | 6.4      | нульовий    | **дуже високий**        |
-| 1   | ✅ `chore: prettier config + hoist sort-imports`                             | 0.5      | нульовий    | високий                 |
-| 2   | ✅ `chore: husky + lint-staged`                                              | 0.3      | нульовий    | високий                 |
-| 2a  | ✅ `chore: commitlint + .gitattributes + захист гілок`                       | 0.3.2    | нульовий    | високий                 |
-| 3   | ✅ `chore(web): enforce no-nested-ternary, prefer-const` + фікс 3 порушень   | 0.1      | низький     | високий                 |
-| 3a  | ✅ `fix(web): mis-0.25/mie-0.25 у Button не генерують CSS` + lint-гард       | 0.1.1    | низький     | високий                 |
-| 3b  | ✅ `chore(web): ліміти розміру файлу, функції та складності`                 | 0.1.2    | нульовий    | середній                |
-| 4   | ✅ `chore: eslint-config/nest + вирівняти суворість api`                     | 0.2      | середній    | високий                 |
-| 5   | ✅ `ci: прибрати дублюючий api.yml, ci.yml вже покриває API`                 | 0.4      | низький     | високий                 |
-| 6   | ✅ `chore(web): sort interface keys required-first`                          | правило  | низький     | середній                |
-| 7   | ✅ `test: diff-coverage 90% + ratchet thresholds`                            | 1.4      | нульовий    | високий                 |
-| 8   | ✅ `refactor(api): злити три методи RepertoireService у findTracks`          | 3.1      | середній    | високий                 |
-| 9   | ✅ `test(api): інтеграційні тести з testcontainers`                          | 1.2      | низький     | **дуже високий**        |
-| 10  | `feat(db): durationSeconds + міграція бекфілу`                               | 4.1      | високий     | високий                 |
-| 11  | `fix(db): partial unique index для соло-треків`                              | 4.3      | середній    | високий                 |
-| 11a | `feat: Sentry на web і api`                                                  | 7.2      | низький     | **дуже високий**        |
-| 12  | `feat(api): BandMembershipGuard + exception filter + pino`                   | 3.3, 7.3 | середній    | високий                 |
-| 13  | `refactor(web): прибрати дублікат profile.types`                             | 2.1      | низький     | середній                |
-| 14  | `refactor(web): src/data → test/fixtures або реальний API`                   | 2.3      | середній    | середній                |
-| 15  | `docs: auth.md, api-client.md, testing.md + 4 ADR`                           | 6.5      | нульовий    | високий                 |
-| 16  | `docs: синхронізувати skill з реальністю`                                    | 6.1–6.3  | нульовий    | **дуже високий для AI** |
-| 16a | `chore(config): dependency-cruiser + правила меж у CI`                       | 6.5      | низький     | **високий**             |
-| 16b | `chore(db): prisma-erd-generator`                                            | 6.5      | нульовий    | середній                |
-| 17  | `chore(ui): видалити boilerplate, перейменувати @repo/ui → @nonsololarco/ui` | 2.4      | низький     | середній                |
-| 18  | `refactor(ui): перенести cn + tokens.css у packages/ui`                      | 2.4      | середній    | високий                 |
-| 19  | `refactor(ui): перенести 14 DS-примітивів пачками`                           | 2.4      | **високий** | **дуже високий**        |
-| 19a | `chore(ci): теги на main + release-please`                                   | 7.4      | нульовий    | високий                 |
-| 20  | `test(web): e2e auth, i18n, theme`                                           | 1.6      | низький     | високий                 |
-| 21  | `refactor(web): lib/ → api/, queries/, constants/, types/`                   | 5.1      | середній    | середній                |
-| 22  | `refactor(web): features/ структура`                                         | 5.2      | **високий** | середній                |
+| #   | PR                                                                        | Phase    | Risk     | Impact               |
+| --- | ------------------------------------------------------------------------- | -------- | -------- | -------------------- |
+| 0   | ✅ `docs: AI environment (ORIENTATION, RECIPES, MAP, slim CLAUDE.md)`     | 6.4      | none     | **very high**        |
+| 1   | ✅ `chore: prettier config + hoist sort-imports`                          | 0.5      | none     | high                 |
+| 2   | ✅ `chore: husky + lint-staged`                                           | 0.3      | none     | high                 |
+| 2a  | ✅ `chore: commitlint + .gitattributes + branch protection`               | 0.3.2    | none     | high                 |
+| 3   | ✅ `chore(web): enforce no-nested-ternary, prefer-const` + 3 fixes        | 0.1      | low      | high                 |
+| 3a  | ✅ `fix(web): mis-0.25/mie-0.25 in Button generate no CSS` + lint guard   | 0.1.1    | low      | high                 |
+| 3b  | ✅ `chore(web): file, function and complexity size limits`                | 0.1.2    | none     | medium               |
+| 4   | ✅ `chore: eslint-config/nest + align api strictness`                     | 0.2      | medium   | high                 |
+| 5   | ✅ `ci: drop the duplicate api.yml, ci.yml already covers the API`        | 0.4      | low      | high                 |
+| 6   | ✅ `chore(web): sort interface keys required-first`                       | rule     | low      | medium               |
+| 7   | ✅ `test: diff-coverage 90% + ratchet thresholds`                         | 1.4      | none     | high                 |
+| 8   | ✅ `refactor(api): merge three RepertoireService methods into findTracks` | 3.1      | medium   | high                 |
+| 9   | ✅ `test(api): integration tests with testcontainers`                     | 1.2      | low      | **very high**        |
+| 10  | ✅ `feat(db): durationSeconds + backfill migration`                       | 4.1      | high     | high                 |
+| 11  | `fix(db): partial unique index for solo tracks`                           | 4.3      | medium   | high                 |
+| 11a | `feat: Sentry on web and api`                                             | 7.2      | low      | **very high**        |
+| 12  | `feat(api): BandMembershipGuard + exception filter + pino`                | 3.3, 7.3 | medium   | high                 |
+| 13  | `refactor(web): remove the duplicate profile.types`                       | 2.1      | low      | medium               |
+| 14  | `refactor(web): src/data → test/fixtures or the real API`                 | 2.3      | medium   | medium               |
+| 15  | `docs: auth.md, api-client.md, testing.md + ADRs`                         | 6.6      | none     | high                 |
+| 16  | `docs: sync the skill with reality`                                       | 6.1–6.3  | none     | **very high for AI** |
+| 16a | `chore(config): dependency-cruiser + boundary rules in CI`                | 6.5      | low      | **high**             |
+| 16b | `chore(db): prisma-erd-generator`                                         | 6.5      | none     | medium               |
+| 17  | `chore(ui): delete boilerplate, rename @repo/ui → @nonsololarco/ui`       | 2.4      | low      | medium               |
+| 18  | `refactor(ui): move cn + tokens.css into packages/ui`                     | 2.4      | medium   | high                 |
+| 19  | `refactor(ui): move the 14 DS primitives in batches`                      | 2.4      | **high** | **very high**        |
+| 19a | `chore(ci): tags on main + release-please`                                | 7.4      | none     | high                 |
+| 20  | `test(web): e2e auth, i18n, theme`                                        | 1.6      | low      | high                 |
+| 21  | `refactor(web): lib/ → api/, queries/, constants/, types/`                | 5.1      | medium   | medium               |
+| 22  | `refactor(web): features/ structure`                                      | 5.2      | **high** | medium               |
 
-**Перші 7 PR можна зробити за тиждень** — вони майже не чіпають продуктовий код,
-але після них будь-яке нове порушення конвенцій ловиться автоматично.
+**The first 7 PRs can be done in a week** — they barely touch product code, but
+after them every new convention violation is caught automatically.
 
-PR #9 (інтеграційні тести) — найбільша віддача на вкладений час у всьому плані.
-Він же розблоковує #10–#12: зміни схеми без інтеграційних тестів робити страшно.
+PR #9 (integration tests) is the largest return on time invested in the whole
+plan. It also unblocks #10–#12: schema changes without integration tests are
+frightening to make.
 
-PR #16 варто зробити раніше, ніж здається за нумерацією: поки доки розходяться
-з кодом, кожна AI-сесія починається з неправильної картини світу і генерує код,
-який доводиться переробляти.
+PR #16 is worth doing earlier than its number suggests: while the docs disagree
+with the code, every AI session starts from a wrong picture of the world and
+generates code that has to be redone.
 
-PR #17–#19 (винесення дизайн-системи) свідомо стоять після порогів покриття
-(#7): переїзд компонента без тесту тоді видно одразу, а не через місяць. Перші
-два з них дешеві й безризикові — можна зробити раніше, якщо хочеться зняти
-плутанину з двома `Button` негайно.
+PRs #17–#19 (extracting the design system) deliberately sit after the coverage
+thresholds (#7): moving a component without a test is then visible immediately
+rather than a month later. The first two are cheap and low-risk — they can be
+pulled forward if the confusion of having two `Button`s should end sooner.
 
-PR #22 (`features/`-структура) — єдиний, від якого можна свідомо відмовитися.
-Він дає найменший приріст на одиницю ризику, і після #19 частина його користі
-вже досягнута: межа між дизайн-системою і доменом проведена фізично.
+PR #22 (the `features/` structure) is the one that can be deliberately dropped.
+It gives the smallest gain per unit of risk, and after #19 part of its benefit
+is already achieved: the boundary between design system and domain is drawn
+physically.
