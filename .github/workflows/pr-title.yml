@@ -8,7 +8,7 @@ name: PR title
 # So the PR title IS the commit message that lands on `develop` forever — it
 # has to satisfy the same rules commitlint applies to every other commit.
 #
-#   branch:  feature/CLEF-187-create-metronome-page
+#   branch:  feature/LARK-70-api-error-contract
 #   title:   feat(web): create metronome page
 #   squash:  feat(web): create metronome page (#66)
 #
@@ -39,8 +39,8 @@ jobs:
             const pr = context.payload.pull_request;
             const branch = pr.head.ref;
 
-            // feature/CLEF-187-create-metronome-page
-            //   → type "feature", ticket "CLEF-187", slug "create-metronome-page"
+            // feature/LARK-70-api-error-contract
+            //   → type "feature", issue "LARK-70", slug "api-error-contract"
             const m = branch.match(/^(?<type>[a-z]+)\/(?<ticket>[A-Z]+-\d+)-(?<slug>.+)$/);
             if (!m) {
               core.notice(`Branch "${branch}" does not match <type>/<TICKET>-<slug>; leaving the title alone.`);

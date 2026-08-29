@@ -22,21 +22,32 @@ update via **rebase**, never merge → open a PR → **squash merge**.
 ```
 main                  production. Protected. Only release merges from develop.
 develop               integration. Protected. All feature branches start here.
-<type>/<TICKET>-<slug>
+<type>/LARK-<issue>-<slug>
 ```
 
 Types in use: `feature/`, `fix/`, `chore/`, `refactor/`, `docs/`, `redesign/`.
-Ticket prefixes: `CLEF-` and `SCRUM-`.
+
+**Work is tracked in GitHub Issues, not Jira.** Every branch starts from an
+issue, and the number in the branch name is that issue's number. The prefix is
+**`LARK`** — the lark, a songbird, hiding inside the project's own name:
+nonsolo**lar**co. It replaces the Jira-era `CLEF-` and `SCRUM-`.
+
+GitHub shares one counter between issues and pull requests, so `LARK-70` is
+simply issue #70. The prefix is decorative; the number is real and links back.
 
 ```
-✅ feature/CLEF-177-reusable-tabs-component
-✅ chore/SCRUM-68-split-ci-into-parallel-jobs
-✅ fix/CLEF-201-pagination-off-by-one
+✅ feature/LARK-70-api-error-contract
+✅ chore/LARK-80-dependency-cruiser
+✅ fix/LARK-75-pagination-off-by-one
 
-❌ fix-stuff                    no type, no ticket
-❌ feature/new-component        no ticket
-❌ CLEF-177                     no type, no description
+❌ fix-stuff                    no type, no issue
+❌ feature/new-component        no issue, so nothing links back
+❌ LARK-70                      no type, no description
+❌ feature/CLEF-177-…           Jira-era prefix, not for new work
 ```
+
+Open the issue first, then branch from it. Branches already in flight under
+`CLEF-` or `SCRUM-` keep their names; only new work uses `LARK`.
 
 Slug is lowercase, hyphenated, and describes the outcome — not the file
 touched. `reusable-tabs-component`, not `edit-tabs-tsx`.
@@ -115,11 +126,12 @@ Without a tiebreaker, Postgres may return rows in a different order
 between two requests for the same page, so a track could appear on both
 page 1 and page 2, or on neither.
 
-Refs CLEF-201
+Refs #75
 ```
 
-Wrap the body at 72 characters. Reference the ticket in a footer, not the
-subject — the branch name already carries it.
+Wrap the body at 72 characters. Reference the issue in a footer, not the
+subject — the branch name already carries it. `Refs #75` links without closing;
+`Closes #75` links and closes on merge.
 
 ---
 
@@ -291,7 +303,7 @@ permanent commit on `develop` and must satisfy the same rules commitlint applies
 to everything else.
 
 ```
-branch:  feature/CLEF-187-create-metronome-page
+branch:  feature/LARK-66-create-metronome-page
 title:   feat(web): create metronome page
 lands:   feat(web): create metronome page (#66)
 ```
@@ -307,12 +319,12 @@ Conventional Commits — the slug is a fallback, and a human description is
 usually better. It fails the check if the final title is not a valid commit
 subject.
 
-**Why the ticket is not in the title.** A title like
-`feat: create metronome page, CLEF-187- #66` would squash into
-`… CLEF-187- #66 (#66)` — the PR number twice — and would fail commitlint on
-length and format. The ticket goes in the body instead, as `Closes CLEF-187`,
-which the workflow appends if missing. GitHub renders the PR number next to the
-title anyway, so putting it there adds nothing.
+**Why the issue number is not in the title.** A title like
+`feat: create metronome page, LARK-66 #66` would squash into
+`… LARK-66 #66 (#66)` — the number three times — and would fail commitlint on
+length and format. It goes in the body instead, as `Closes #66`, which the
+workflow appends if missing. GitHub renders the PR number beside the title
+anyway, so repeating it adds nothing.
 
 ### Filling in the body
 
@@ -358,7 +370,7 @@ feat(web): add repertoire filtering and sorting
 Status filters, "only mine" toggle, column sorting, and counts. Filter
 state lives in the URL so it survives reload and can be shared.
 
-Closes CLEF-163
+Closes #63
 ```
 
 **Exception — `develop` → `main`.** Release merges use a **merge commit**, not
@@ -415,8 +427,8 @@ commit in this repo already. Once that starts, neither branch is a reliable
 base for the other.
 
 ```
-✅ feature/CLEF-123-x → develop → main
-❌ feature/CLEF-123-x → main
+✅ feature/LARK-123-x → develop → main
+❌ feature/LARK-123-x → main
 ```
 
 The only exception is a hotfix — see below.
@@ -457,7 +469,7 @@ fixes. `v1.0.0` when the product is publicly launched.
 A production bug does not wait for `develop` to be releasable.
 
 ```sh
-git checkout -b fix/CLEF-xxx-slug main    # branch off MAIN, not develop
+git checkout -b fix/LARK-<issue>-slug main   # branch off MAIN, not develop
 # fix + test
 # PR into main, squash merge, tag v0.4.1
 git checkout develop && git merge main    # merge back immediately
@@ -473,9 +485,9 @@ without exception.** `main` receives commits from `develop` and from nowhere
 else. Recorded in [ADR 0004](../adr/0004-two-branch-model.md).
 
 ```
-feature/CLEF-123-x ─┐
-fix/CLEF-124-y     ─┼─→ develop ─→ main ─→ Vercel (production)
-chore/CLEF-125-z   ─┘   (squash)   (merge commit + tag)
+feature/LARK-70-x ─┐
+fix/LARK-75-y     ─┼─→ develop ─→ main ─→ Vercel (production)
+chore/LARK-80-z   ─┘   (squash)   (merge commit + tag)
 ```
 
 Enforce it in GitHub settings rather than relying on memory:
@@ -571,8 +583,10 @@ export default {
 
 ```sh
 branch=$(git rev-parse --abbrev-ref HEAD)
-echo "$branch" | grep -qE '^(feature|fix|chore|refactor|docs|redesign)/(CLEF|SCRUM)-[0-9]+-[a-z0-9-]+$' || {
-  echo "Branch name must be <type>/<TICKET>-<slug>, got: $branch"
+# CLEF and SCRUM stay accepted so branches predating the move to GitHub
+# Issues can still be pushed; new work uses LARK.
+echo "$branch" | grep -qE '^(feature|fix|chore|refactor|docs|redesign)/(LARK|CLEF|SCRUM)-[0-9]+-[a-z0-9-]+$' || {
+  echo "Branch name must be <type>/LARK-<issue>-<slug>, got: $branch"
   exit 1
 }
 ```

@@ -169,15 +169,15 @@ gitGraph
     commit id: "main"
     branch develop
     commit id: "develop"
-    branch feature/CLEF-187
+    branch feature/LARK-66
     commit id: "feat: …"
     commit id: "test: …"
     checkout develop
-    merge feature/CLEF-187 tag: "squash"
-    branch fix/CLEF-190
+    merge feature/LARK-66 tag: "squash"
+    branch fix/LARK-75
     commit id: "fix: …"
     checkout develop
-    merge fix/CLEF-190 tag: "squash"
+    merge fix/LARK-75 tag: "squash"
     checkout main
     merge develop tag: "v0.4.0"
 ```
