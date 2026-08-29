@@ -35,7 +35,7 @@ nonsolo**lar**co. It replaces the Jira-era `CLEF-` and `SCRUM-`.
 GitHub shares one counter between issues and pull requests, so `LARK-70` is
 simply issue #70. The prefix is decorative; the number is real and links back.
 
-```
+```text
 ✅ feature/LARK-70-api-error-contract
 ✅ chore/LARK-80-dependency-cruiser
 ✅ fix/LARK-75-pagination-off-by-one
@@ -586,7 +586,7 @@ branch=$(git rev-parse --abbrev-ref HEAD)
 # CLEF and SCRUM stay accepted so branches predating the move to GitHub
 # Issues can still be pushed; new work uses LARK.
 echo "$branch" | grep -qE '^(feature|fix|chore|refactor|docs|redesign)/(LARK|CLEF|SCRUM)-[0-9]+-[a-z0-9-]+$' || {
-  echo "Branch name must be <type>/LARK-<issue>-<slug>, got: $branch"
+  echo "Branch name must be <type>/(LARK|CLEF|SCRUM)-<issue>-<slug>, got: $branch"
   exit 1
 }
 ```

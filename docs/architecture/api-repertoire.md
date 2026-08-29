@@ -142,13 +142,21 @@ in `main.ts`.
 
 | Code                   | Status | Raised by                                                 |
 | ---------------------- | ------ | --------------------------------------------------------- |
-| `VALIDATION_FAILED`    | 400    | DTO validation, or a foreign key pointing at nothing      |
+| `VALIDATION_FAILED`    | 400    | DTO validation                                            |
 | `UNAUTHORIZED`         | 401    | Missing or invalid JWT                                    |
 | `FORBIDDEN`            | 403    | Authenticated but not permitted on this resource          |
 | `NOT_FOUND`            | 404    | Unknown id, or an update matching no rows                 |
-| `CONFLICT`             | 409    | Unique constraint violation                               |
+| `CONFLICT`             | 409    | Unique constraint, or a foreign key constraint            |
 | `DATABASE_UNAVAILABLE` | 503    | Postgres unreachable, refusing credentials, or timing out |
 | `INTERNAL_ERROR`       | 500    | Anything else. The stack trace is logged, never returned  |
+
+A foreign key failure (`P2003`) is reported as a conflict with a deliberately
+neutral message. Prisma does not say which direction failed — an insert naming
+a parent that is absent, or a delete blocked by a child that still exists.
+`Track.leadMember` is a required relation defaulting to `Restrict`, so deleting
+a user who leads a track raises the same code; claiming "referenced record does
+not exist" would send the caller looking for a missing row that is in fact
+still there.
 
 `DATABASE_UNAVAILABLE` exists as its own code deliberately. It is the one
 server-side failure a user can sometimes wait out and an operator can fix

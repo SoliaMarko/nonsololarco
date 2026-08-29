@@ -96,6 +96,32 @@ describe('AllExceptionsFilter', () => {
       expect(captured.body).toMatchObject({ code });
     });
 
+    it('does not leak the message of a 5xx HttpException', () => {
+      const { captured, host } = makeHost();
+
+      filter.catch(new HttpException('db password rejected', 500), host);
+
+      expect(captured.status).toBe(HttpStatus.INTERNAL_SERVER_ERROR);
+      expect(captured.body).toEqual({
+        code: ErrorCode.INTERNAL_ERROR,
+        message: 'Internal server error',
+        details: {},
+      });
+      expect(JSON.stringify(captured.body)).not.toContain('password');
+    });
+
+    it('does not leak details of a 503 raised as an HttpException', () => {
+      const { captured, host } = makeHost();
+
+      filter.catch(
+        new HttpException({ message: 'upstream at 10.0.0.7 refused' }, 503),
+        host,
+      );
+
+      expect(captured.status).toBe(HttpStatus.SERVICE_UNAVAILABLE);
+      expect(JSON.stringify(captured.body)).not.toContain('10.0.0.7');
+    });
+
     it('preserves the status of an exception it has no code for', () => {
       const { captured, host } = makeHost();
 
@@ -149,15 +175,31 @@ describe('AllExceptionsFilter', () => {
       });
     });
 
-    it('maps a foreign key violation to 400', () => {
+    it('maps a foreign key violation to 409 CONFLICT', () => {
       const { captured, host } = makeHost();
 
       filter.catch(prismaKnown('P2003'), host);
 
-      expect(captured.status).toBe(HttpStatus.BAD_REQUEST);
-      expect(captured.body).toMatchObject({
-        code: ErrorCode.VALIDATION_FAILED,
-      });
+      expect(captured.status).toBe(HttpStatus.CONFLICT);
+      expect(captured.body).toMatchObject({ code: ErrorCode.CONFLICT });
+    });
+
+    // P2003 covers both directions, so the message must not claim either.
+    // Track.leadMember is a required relation defaulting to Restrict: deleting
+    // a user who leads a track raises P2003 because the child still exists,
+    // which is the opposite of a missing reference.
+    it('does not claim a cause P2003 cannot distinguish', () => {
+      const { captured, host } = makeHost('DELETE', '/api/users/u1');
+
+      filter.catch(
+        prismaKnown('P2003', { field_name: 'tracks_lead_member_id_fkey' }),
+        host,
+      );
+
+      const message = (captured.body as { message: string }).message;
+
+      expect(message).not.toMatch(/does not exist/i);
+      expect(message).not.toMatch(/not found/i);
     });
 
     // This is the case that motivated the whole filter: a P1000 used to reach

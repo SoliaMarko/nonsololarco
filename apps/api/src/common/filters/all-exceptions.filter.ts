@@ -51,11 +51,17 @@ const PRISMA_KNOWN: Record<
     message: 'A record with these values already exists',
     status: HttpStatus.CONFLICT,
   },
-  // Foreign key constraint — the caller referenced something that is not there.
+  // Foreign key constraint failure. Deliberately neutral, because P2003 does
+  // not say which direction failed: an insert naming a parent that is absent,
+  // or a delete blocked by a child that still exists. Track.leadMember is a
+  // required relation defaulting to Restrict, so deleting a user who leads a
+  // track raises this too — and "referenced record does not exist" would then
+  // be exactly backwards, sending the caller looking for a missing row that is
+  // in fact still present.
   P2003: {
-    code: ErrorCode.VALIDATION_FAILED,
-    message: 'Referenced record does not exist',
-    status: HttpStatus.BAD_REQUEST,
+    code: ErrorCode.CONFLICT,
+    message: 'Operation violates a relational constraint',
+    status: HttpStatus.CONFLICT,
   },
   // An update or delete matched no rows.
   P2025: {
@@ -172,6 +178,20 @@ export class AllExceptionsFilter implements ExceptionFilter {
   /** Nest's own exceptions already carry the status; derive the code from it. */
   private fromHttpException(exception: HttpException): Mapped {
     const status = exception.getStatus();
+
+    // A 5xx HttpException is still a server fault, and its message was written
+    // by whoever threw it — `new HttpException('db password rejected', 500)`
+    // would otherwise be serialised straight to the client. The disclosure
+    // rule follows the status, not the class that produced it.
+    if (status >= SERVER_ERROR_THRESHOLD) {
+      return {
+        code: ErrorCode.INTERNAL_ERROR,
+        message: 'Internal server error',
+        details: {},
+        status,
+      };
+    }
+
     const response = exception.getResponse();
 
     const message =
