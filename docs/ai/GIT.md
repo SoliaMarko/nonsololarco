@@ -374,6 +374,28 @@ preserve; squashing a release would collapse a month of work into one line.
 Turn off "Allow merge commits" and "Allow rebase merging" for PRs into
 `develop` in the repo settings, so the rule is enforced rather than remembered.
 
+### The one branch that was merged, not squashed
+
+`chore/CLEF-188-ai-docs-and-git-conventions` (PR #68) is a deliberate
+exception, recorded here so nobody treats it as precedent.
+
+It grew to **36 commits, 176 files, +7385 / −1547** — eight times the size
+limit stated above — because the tooling it introduced kept revealing the next
+thing to fix. It carries the AI documentation, these git conventions, husky and
+commitlint, the ESLint rule set, the coverage ratchet, an integration-test
+harness, a schema change, and the local-dev fixes that fell out of testing all
+of it.
+
+Squashing it would have collapsed 36 individually atomic, individually
+described commits into a single 7000-line entry, destroying exactly the
+history this document exists to protect. It was merged with a merge commit
+instead.
+
+**This is not a template.** The branch is the bootstrap that introduced the
+rules; every branch after it is expected to hold to them. When a branch starts
+sprawling like this one did, the answer is to open the PR early and start a new
+branch — not to keep appending until the diff is unreviewable.
+
 ---
 
 ## Releasing: `develop` → `main`
