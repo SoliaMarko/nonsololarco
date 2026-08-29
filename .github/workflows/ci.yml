@@ -62,6 +62,13 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
+    # The workflow default is contents:read only. The coverage step below posts
+    # a comment on the PR, which needs pull-requests:write — without it the API
+    # returns 403 "Resource not accessible by integration". Granted per-job
+    # rather than workflow-wide so the other jobs keep the read-only token.
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -77,7 +84,15 @@ jobs:
       - run: pnpm --filter api test -- --coverage
 
       - name: Coverage report (web)
-        if: github.event_name == 'pull_request'
+        # Skipped for PRs from forks: GITHUB_TOKEN is read-only there whatever
+        # the permissions block says, so the step could only ever fail.
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        # A comment that fails to post must not fail the build — the coverage
+        # numbers were already produced by the steps above, and the gate on
+        # coverage is the threshold check, not the comment.
+        continue-on-error: true
         uses: romeovs/lcov-reporter-action@v0.4.0
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
