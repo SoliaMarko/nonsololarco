@@ -1,6 +1,8 @@
 # Repertoire API
 
 All routes are prefixed `/api` and require a valid JWT (`JwtAuthGuard`).
+Routes under `/bands/:id/` additionally require membership of that band
+(`BandMembershipGuard`) — see [Authorisation](#authorisation).
 Interactive Swagger UI: `http://localhost:3001/api/docs`.
 
 Code: `apps/api/src/repertoire/`.
@@ -11,11 +13,38 @@ Code: `apps/api/src/repertoire/`.
 | ------ | ------------------------------- | ----------------------------------------------------------------------------------------- |
 | GET    | `/api/users/me/repertoire`      | Every track the current user participates in, across all bands and solo. Includes `band`. |
 | GET    | `/api/users/me/repertoire/solo` | Solo tracks only (`bandId = null`) where the user is lead. No `band` field.               |
-| GET    | `/api/bands/:id/repertoire`     | All tracks for one band. No `band` field — it's implied. 404 if the band doesn't exist.   |
+| GET    | `/api/bands/:id/repertoire`     | All tracks for one band. No `band` field — it's implied. Members only; 403 otherwise.     |
 | GET    | `/api/users/me/bands`           | The user's bands with aggregate stats (`totalTracks`, `readyTracks`, `totalDuration`).    |
 
 "Participates in" means **lead member OR listed performer** — see
 [data model](./data-model.md#trackperformer).
+
+## Authorisation
+
+Two guards, in this order:
+
+| Guard                 | Answers                          | Failure            |
+| --------------------- | -------------------------------- | ------------------ |
+| `JwtAuthGuard`        | Is this a real, signed-in user?  | `401 UNAUTHORIZED` |
+| `BandMembershipGuard` | May this user see **this band**? | `403 FORBIDDEN`    |
+
+`/api/users/me/*` routes are scoped to the caller by construction and need only
+the first. Anything under `/api/bands/:id/` needs both.
+
+**A non-member and an unknown band both get `403`, deliberately.** Answering
+`404` for a band that does not exist would let any authenticated caller probe
+which ids are real, one request at a time. A non-member is entitled to learn
+nothing about a band — including whether it exists — so both cases return the
+same response.
+
+That is a change from the earlier behaviour, where `GET /api/bands/:id/repertoire`
+returned `404` for an unknown band and `200` for every band that existed,
+member or not.
+
+The guard reads the band id from either `:bandId` or `:id`, so a future route
+cannot skip the check by naming its param differently. Authorisation lives on
+the controller rather than in the service: put it in the service and every new
+caller has to remember it.
 
 ## Query parameters
 
