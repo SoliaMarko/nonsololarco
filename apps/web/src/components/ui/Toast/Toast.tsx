@@ -23,8 +23,7 @@ const ICON_COLOR: Record<string, string> = {
 type ToastVariantProps = VariantProps<typeof toastVariants>;
 
 export interface ToastProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>,
-    ToastVariantProps {
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'children'>, ToastVariantProps {
   message: string;
   className?: string;
   icon?: ElementType | null;

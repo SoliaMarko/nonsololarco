@@ -49,7 +49,7 @@ erDiagram
         enum musicalKey
         int bpm
         enum status "ready|learning|new|archived"
-        string duration "m:ss"
+        int durationSeconds "seconds, e.g. 190 = 3:10"
         string leadMemberId FK
         string bandId FK "nullable — null = solo"
     }
@@ -66,7 +66,7 @@ erDiagram
 ### User
 
 One person, one row. OAuth identities hang off `Account`, so the same user can
-link Google *and* GitHub without duplicate rows. `passwordHash` is nullable —
+link Google _and_ GitHub without duplicate rows. `passwordHash` is nullable —
 it stays null until email+password auth is added.
 
 ### Band / BandMember
@@ -81,7 +81,7 @@ index.
 
 ### Track
 
-`bandId` is **nullable**. A track with `bandId = null` is a *solo* track — part
+`bandId` is **nullable**. A track with `bandId = null` is a _solo_ track — part
 of the user's personal repertoire, not any band's. This is why "Solo" is a
 pseudo-band in the UI rather than a real `Band` row.
 
@@ -90,9 +90,11 @@ within a band, but does not guarantee gap-free numbering. Postgres excludes NULL
 unique constraints, so solo tracks order independently of each other — an
 accepted quirk, since solo ordering is per-user and never collides in practice.
 
-`duration` is a `"m:ss"` string rather than an integer of seconds. Kept as-is
-for display fidelity; sorting parses it in
-`apps/api/src/repertoire/repertoire.service.ts`.
+`durationSeconds` is an integer count of seconds, not the `"m:ss"` text it is
+displayed as. Storing the string meant the database could not order by it, so
+sorting by time loaded every matching row and sorted in memory. The API returns
+raw seconds and the client formats them with `formatTrackDuration` — see
+[ADR 0005](../adr/0005-duration-as-seconds.md).
 
 `musicalKey` is a Postgres enum. Prisma enum members must be valid identifiers,
 so sharps are spelled out (`CSharp`) and `@map` keeps the DB label as `C#`.
@@ -107,7 +109,9 @@ the lead.
 Any "does this user participate?" query must therefore check both:
 
 ```ts
-{ OR: [{ leadMemberId: userId }, { performers: { some: { userId } } }] }
+{
+  OR: [{ leadMemberId: userId }, { performers: { some: { userId } } }];
+}
 ```
 
 That predicate is the `participatesIn()` helper in `repertoire.service.ts` —
@@ -118,8 +122,8 @@ separately.
 ## Migrations
 
 ```sh
-pnpm --filter @nonsololarco/db db:migrate     # create + apply
-pnpm --filter @nonsololarco/db db:generate    # regenerate the TS client
+pnpm db:migrate     # create + apply
+pnpm db:generate    # regenerate the TS client
 ```
 
 Both are needed after a schema edit. `db:migrate` changes the database;
@@ -132,7 +136,7 @@ doesn't have yet.
 ## Seeding
 
 ```sh
-pnpm --filter @nonsololarco/db db:seed
+pnpm db:seed
 ```
 
 Everything is upserted by a fixed id or a natural unique key, so the seed is
@@ -143,5 +147,5 @@ again to recreate it, then seed with `SEED_USER_EMAIL` so the seed data attaches
 to your real account instead of the placeholder:
 
 ```sh
-SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+SEED_USER_EMAIL=you@example.com pnpm db:seed
 ```

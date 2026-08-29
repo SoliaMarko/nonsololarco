@@ -1,44 +1,30 @@
 /**
- * Parse a "m:ss" duration string into total seconds.
- * Returns 0 for invalid input.
- */
-export function parseDuration(duration: string): number {
-  const parts = duration.split(':');
-
-  if (parts.length !== 2) return 0;
-
-  const minutes = parseInt(parts[0], 10);
-  const seconds = parseInt(parts[1], 10);
-
-  if (isNaN(minutes) || isNaN(seconds)) return 0;
-
-  return minutes * 60 + seconds;
-}
-
-/**
- * Format total seconds into a human-readable duration.
+ * Formats a second count as human-readable text — `"3 hr 20 min"`, or
+ * `"45 min"` under an hour, or `"0 min"` for zero.
  *
- * Examples:
- *  - 180  → "3 min"
- *  - 3720 → "1 hr 2 min"
- *  - 7380 → "2 hr 3 min"
- *  - 0    → "0 min"
+ * Rounds to the nearest minute, carrying 60 up to the next hour so callers
+ * never see `"2 hr 60 min"`.
+ *
+ * Used for aggregate totals the server computes (a band's total repertoire
+ * length). Individual track lengths are returned as raw `durationSeconds` and
+ * formatted by the client.
+ *
+ * @example
+ * formatDuration(180)  // "3 min"
+ * formatDuration(3720) // "1 hr 2 min"
+ * formatDuration(7199) // "2 hr"  — 119.98 min rounds to 120, carried
  */
 export function formatDuration(totalSeconds: number): string {
-  const hours = Math.floor(totalSeconds / 3600);
-  const minutes = Math.round((totalSeconds % 3600) / 60);
+  let hours = Math.floor(totalSeconds / 3600);
+  let minutes = Math.round((totalSeconds % 3600) / 60);
+
+  // Carry rounding overflow, e.g. 7199 s → 1 hr 60 min → 2 hr
+  if (minutes === 60) {
+    hours += 1;
+    minutes = 0;
+  }
 
   if (hours === 0) return `${minutes} min`;
 
   return minutes > 0 ? `${hours} hr ${minutes} min` : `${hours} hr`;
-}
-
-/**
- * Sum an array of "m:ss" duration strings into a formatted total.
- */
-export function sumDurations(durations: string[]): string {
-  const totalSeconds =
-    durations?.reduce((sum, d) => sum + parseDuration(d), 0) ?? 0;
-
-  return formatDuration(totalSeconds);
 }

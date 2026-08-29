@@ -80,10 +80,7 @@ const TEXT_WEIGHT: Record<AiButtonSize, 'bold' | 'medium'> = {
  */
 export default function AiButton({ className, size = 'md', textClassName }: AiButtonProps) {
   return (
-    <Button
-      className={cn(aiButtonVariants({ size }), className)}
-      variant="retro-primary"
-    >
+    <Button className={cn(aiButtonVariants({ size }), className)} variant="retro-primary">
       <div className={cn('text-primary-light flex flex-row items-center gap-2', textClassName)}>
         <NotesIcon size={ICON_SIZE[size]} strokeWidth={ICON_STROKE[size]} />
         <Text className={cn('text-inherit uppercase', TEXT_CLASS[size])} weight={TEXT_WEIGHT[size]}>

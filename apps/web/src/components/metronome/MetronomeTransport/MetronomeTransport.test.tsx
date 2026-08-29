@@ -17,14 +17,24 @@ const MOCK_SONG = { bpm: 120, key: 'Am', number: 1, ready: 'ready' as const, tit
 describe('MetronomeTransport', () => {
   it('shows play button when not playing', () => {
     render(
-      <MetronomeTransport onSave={() => {}} onTogglePlay={() => {}} playing={false} tracked={null} />,
+      <MetronomeTransport
+        onSave={() => {}}
+        onTogglePlay={() => {}}
+        playing={false}
+        tracked={null}
+      />,
     );
     expect(screen.getByRole('button', { name: 'pages.metronome.ariaPlay' })).toBeDefined();
   });
 
   it('shows pause button when playing', () => {
     render(
-      <MetronomeTransport onSave={() => {}} onTogglePlay={() => {}} playing={true} tracked={null} />,
+      <MetronomeTransport
+        onSave={() => {}}
+        onTogglePlay={() => {}}
+        playing={true}
+        tracked={null}
+      />,
     );
     expect(screen.getByRole('button', { name: 'pages.metronome.ariaPause' })).toBeDefined();
   });

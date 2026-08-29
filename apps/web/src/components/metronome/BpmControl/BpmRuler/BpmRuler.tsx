@@ -67,7 +67,7 @@ export default function BpmRuler({ bpm, onBpmChange }: BpmRulerProps) {
 
   return (
     <div
-      className="mli-6 mbs-2 relative h-14 cursor-grab touch-none overflow-hidden select-none active:cursor-grabbing"
+      className="mli-6 relative mbs-2 h-14 cursor-grab touch-none overflow-hidden select-none active:cursor-grabbing"
       onPointerDown={onPointerDown}
       style={{ maskImage: EDGE_FADE, WebkitMaskImage: EDGE_FADE }}
     >
@@ -85,11 +85,9 @@ export default function BpmRuler({ bpm, onBpmChange }: BpmRulerProps) {
                   isMajor ? 'bg-primary-light/70 h-5' : 'bg-primary-light/40 h-2.5',
                 )}
               />
-              {v % 20 === 0 && (
-                <span className="font-label text-primary-light/50 mbs-1 text-[0.5625rem]">
-                  {v}
-                </span>
-              )}
+              {v % 20 === 0 ? (
+                <span className="font-label text-primary-light/50 mbs-1 text-[0.5625rem]">{v}</span>
+              ) : null}
             </div>
           );
         })}

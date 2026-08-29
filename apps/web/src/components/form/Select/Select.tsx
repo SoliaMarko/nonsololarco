@@ -10,9 +10,9 @@ import { cn } from '@/src/utils/cn';
 import SelectItem from './SelectItem';
 
 export type SelectOption = {
-  disabled?: boolean;
   label: string;
   value: string;
+  disabled?: boolean;
 };
 
 export type SelectGroup = {
@@ -21,19 +21,19 @@ export type SelectGroup = {
 };
 
 interface SelectBaseProps {
+  onChange: (value: string | null) => void;
+  value: string | null;
   className?: string;
   disabled?: boolean;
   error?: string;
   hint?: string;
   isClearable?: boolean;
   label?: string;
-  onChange: (value: string | null) => void;
   placeholder?: string;
-  value: string | null;
 }
 
 type SelectProps = SelectBaseProps &
-  ({ groups?: never; options: SelectOption[] } | { groups: SelectGroup[]; options?: never });
+  ({ options: SelectOption[]; groups?: never } | { groups: SelectGroup[]; options?: never });
 
 /**
  * Accessible select component built on Radix UI.
@@ -65,7 +65,12 @@ function Select({
 }: SelectProps) {
   const flatOptions: SelectOption[] = options ?? groups.flatMap((group) => group.options);
   const selectedLabel = flatOptions.find((option) => option.value === value)?.label;
-  const triggerState = disabled ? 'disabled' : error ? 'error' : 'default';
+  const getTriggerState = () => {
+    if (disabled) return 'disabled';
+    if (error) return 'error';
+    return 'default';
+  };
+  const triggerState = getTriggerState();
 
   return (
     <div className={cn('flex flex-col gap-1', className)}>
@@ -139,11 +144,8 @@ function Select({
         ) : null}
       </div>
 
-      {error ? (
-        <span className="text-label text-danger">{error}</span>
-      ) : hint ? (
-        <span className="text-label text-fg-disabled">{hint}</span>
-      ) : null}
+      {error ? <span className="text-label text-danger">{error}</span> : null}
+      {!error && hint ? <span className="text-label text-fg-disabled">{hint}</span> : null}
     </div>
   );
 }

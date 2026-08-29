@@ -27,12 +27,12 @@ export function getAudioContext(): AudioContext | null {
 }
 
 interface BlipOptions {
-  /** Fade-out length in seconds. */
-  duration?: number;
   /** Oscillator frequency in Hz. */
   frequency: number;
   /** Peak gain, 0–1. Anything above ~0.5 clips against the metronome click. */
   gain: number;
+  /** Fade-out length in seconds. */
+  duration?: number;
   /**
    * Absolute time on the `AudioContext` clock to sound at. Omit to play
    * immediately; pass a future value for sample-accurate scheduling.

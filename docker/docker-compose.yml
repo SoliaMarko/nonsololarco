@@ -1,19 +1,52 @@
+# Local Postgres for development.
+#
+# Credentials here must match DATABASE_URL in .env.example, or the documented
+# "use docker instead of a local Postgres" path produces a running database the
+# app cannot connect to.
+#
+#   postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public
+#
+# Start:  pnpm db:up
+# Stop:   pnpm db:down
+# Wipe:   pnpm db:nuke     — drops the volume, so all local data is lost
+#
+# ---------------------------------------------------------------------------
+# CHANGING THE CREDENTIALS BELOW DOES NOTHING ON ITS OWN.
+#
+# The postgres image runs initdb — and applies POSTGRES_USER, POSTGRES_PASSWORD
+# and POSTGRES_DB — only when the data directory is empty. Once the named
+# volume exists, every value here is ignored and the server keeps whatever
+# roles it was first initialised with.
+#
+# The symptom is `P1000: Authentication failed`: the server answers, so it is
+# clearly running, but it has never heard of the user you are connecting as.
+#
+# After editing any of them, recreate the volume:
+#
+#   pnpm db:nuke && pnpm db:setup
+# ---------------------------------------------------------------------------
+
 services:
   postgres:
     image: postgres:16
+    container_name: nonsololarco-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: arco
-      POSTGRES_PASSWORD: arco
-      POSTGRES_DB: arco_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nonsololarco
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    # Without this, `pnpm dev` can start the API before Postgres finishes
+    # initialising and the first query fails with a connection error that looks
+    # like a code bug.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d nonsololarco']
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
   postgres_data:

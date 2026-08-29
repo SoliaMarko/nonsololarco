@@ -138,7 +138,11 @@ model Track {
   musicalKey MusicalKey  @map("musical_key")
   bpm        Int
   status     TrackStatus @default(new)
-  duration   String
+  // Track length in whole seconds. Stored as an integer, not the "m:ss" text
+  // it is displayed as, so the database can ORDER BY it — the string form made
+  // sorting by time load every matching row into memory first. Formatting
+  // belongs to the client.
+  durationSeconds Int @map("duration_seconds")
 
   leadMemberId String @map("lead_member_id")
   leadMember   User   @relation("LeadMember", fields: [leadMemberId], references: [id])

@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import { Track } from '@nonsololarco/types';
+import { describe, expect, it } from 'vitest';
 
 import { getTrackPerformers, shouldHighlightLead } from './track-performers.utils';
 

@@ -51,14 +51,7 @@ function Button(
   const renderIcon = (position: IconPositionType) => {
     if (!icon || iconPosition !== position) return null;
 
-    const marginClass =
-      size === 'xs'
-        ? position === 'start'
-          ? 'mie-0.25'
-          : 'mis-0.25'
-        : position === 'start'
-          ? 'mie-0.5'
-          : 'mis-0.5';
+    const marginClass = position === 'end' ? 'mis-0.5' : 'mie-0.5';
 
     return createElement(icon, {
       className: cn(marginClass, 'shrink-0'),

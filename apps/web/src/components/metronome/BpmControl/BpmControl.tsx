@@ -43,7 +43,9 @@ export default function BpmControl({ bpm, onBpmChange, onTap }: BpmControlProps)
         BPM
       </div>
 
-      <div className="font-prose text-primary-light/55 mbs-1 text-sm italic">{t(TEMPO_KEY[tempoName(bpm)])}</div>
+      <div className="font-prose text-primary-light/55 mbs-1 text-sm italic">
+        {t(TEMPO_KEY[tempoName(bpm)])}
+      </div>
 
       <BpmRuler bpm={bpm} onBpmChange={onBpmChange} />
 

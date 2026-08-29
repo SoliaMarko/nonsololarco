@@ -73,7 +73,7 @@ export default function SigDropdown({
           align="start"
           sideOffset={4}
           className={cn(
-            'z-dropdown min-w-11.5 border border-edge bg-card',
+            'z-dropdown border-edge bg-card min-w-11.5 border',
             'shadow-[0_4px_12px_rgba(0,0,0,0.25)]',
             'data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95',
             'data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95',
@@ -83,7 +83,7 @@ export default function SigDropdown({
             <RadixDropdown.Item
               key={opt}
               className={cn(
-                'font-label flex cursor-pointer items-center justify-between gap-2 pli-2.5 plb-1.5 text-sm outline-none select-none',
+                'font-label pli-2.5 plb-1.5 flex cursor-pointer items-center justify-between gap-2 text-sm outline-none select-none',
                 'transition-colors duration-75',
                 'text-fg-secondary data-highlighted:text-fg-primary data-highlighted:bg-elevated',
                 opt === value && 'font-semibold',
@@ -91,13 +91,13 @@ export default function SigDropdown({
               onSelect={() => onSelect(opt)}
             >
               {opt}
-              {opt === value && (
+              {opt === value ? (
                 <CheckSolidIcon
                   size={13}
                   className="text-emerald-main shrink-0"
                   aria-hidden="true"
                 />
-              )}
+              ) : null}
             </RadixDropdown.Item>
           ))}
         </RadixDropdown.Content>

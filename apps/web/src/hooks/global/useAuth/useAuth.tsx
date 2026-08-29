@@ -2,11 +2,10 @@
 
 import { ReactNode, createContext, useCallback, useContext, useMemo } from 'react';
 
-import { useRouter } from '@/i18n/navigation';
-
 import { User } from '@nonsololarco/types';
 import { useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { useRouter } from '@/i18n/navigation';
 import { fetchCurrentUser, logout as logoutApi } from '@/src/lib/api/auth.api';
 
 interface AuthContextValue {

@@ -7,8 +7,7 @@ import { RefObject, useEffect, useLayoutEffect, useRef, useState } from 'react';
  * Avoids React's SSR warning without losing the synchronous-before-paint
  * timing on the client.
  */
-const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
 export interface UseLockedHeightResult<T extends HTMLElement> {
   /** Apply as `style={{ minHeight }}` — `undefined` while unlocked */

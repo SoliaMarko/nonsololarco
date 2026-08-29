@@ -12,7 +12,7 @@ import Spinner from '@/src/components/ui/Spinner';
 import { ActiveBandProvider, useActiveBand } from '@/src/hooks/global/useActiveBand';
 import { useMyBands } from '@/src/lib/hooks/useBands';
 import { ALL_BANDS_ID, SOLO_BAND_ID, useRepertoireTracks } from '@/src/lib/hooks/useRepertoire';
-import { sumRawDurations } from '@/src/utils/duration.utils';
+import { sumTrackDurations } from '@/src/utils/duration.utils';
 
 function deriveStats(tracks: Track[]): RepertoireStats {
   const safeTracks = tracks ?? [];
@@ -20,7 +20,7 @@ function deriveStats(tracks: Track[]): RepertoireStats {
   return {
     totalTracks: safeTracks.length,
     readyTracks: safeTracks.filter((t) => t.status === 'ready').length,
-    totalDuration: sumRawDurations(safeTracks.map((t) => t.duration)),
+    totalDuration: sumTrackDurations(safeTracks.map((t) => t.durationSeconds)),
   };
 }
 

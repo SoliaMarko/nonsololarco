@@ -13,7 +13,7 @@ env:
   # `prisma generate` (run via packages/db's postinstall hook on every
   # `pnpm install`) needs DATABASE_URL to resolve, even though none of these
   # jobs touch a real database — codegen only reads schema.prisma.
-  DATABASE_URL: "postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public"
+  DATABASE_URL: 'postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public'
 
 jobs:
   lint:
@@ -26,8 +26,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
+      - run: pnpm --filter @nonsololarco/db build
       - run: pnpm lint
 
   stylelint:
@@ -40,7 +41,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
       - run: cd apps/web && pnpm stylelint "src/**/*.css" "app/**/*.css"
 
@@ -54,12 +55,20 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
+      - run: pnpm --filter @nonsololarco/db build
       - run: pnpm typecheck
 
   test:
     runs-on: ubuntu-latest
+    # The workflow default is contents:read only. The coverage step below posts
+    # a comment on the PR, which needs pull-requests:write — without it the API
+    # returns 403 "Resource not accessible by integration". Granted per-job
+    # rather than workflow-wide so the other jobs keep the read-only token.
+    permissions:
+      contents: read
+      pull-requests: write
     steps:
       - uses: actions/checkout@v4
         with:
@@ -68,9 +77,27 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
-      - run: pnpm test
+      - run: pnpm --filter @nonsololarco/db build
+      - run: pnpm --filter web test:coverage
+      - run: pnpm --filter api test -- --coverage
+
+      - name: Coverage report (web)
+        # Skipped for PRs from forks: GITHUB_TOKEN is read-only there whatever
+        # the permissions block says, so the step could only ever fail.
+        if: >-
+          github.event_name == 'pull_request' &&
+          github.event.pull_request.head.repo.full_name == github.repository
+        # A comment that fails to post must not fail the build — the coverage
+        # numbers were already produced by the steps above, and the gate on
+        # coverage is the threshold check, not the comment.
+        continue-on-error: true
+        uses: romeovs/lcov-reporter-action@v0.4.0
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          lcov-file: ./apps/web/coverage/lcov.info
+          filter-changed-files: true
 
   e2e:
     runs-on: ubuntu-latest
@@ -115,7 +142,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
 
       - name: Apply migrations and seed
@@ -157,8 +184,8 @@ jobs:
       - name: Run e2e
         run: pnpm --filter web e2e
         env:
-          E2E_START_SERVER: "1"
-          E2E_WEB_COMMAND: "pnpm --filter web start"
+          E2E_START_SERVER: '1'
+          E2E_WEB_COMMAND: 'pnpm --filter web start'
 
       - name: Upload report
         if: ${{ !cancelled() }}
@@ -179,7 +206,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: "pnpm"
+          cache: 'pnpm'
       - run: pnpm install
       - run: pnpm build
 

@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 /* ------------------------------------------------------------------ */
@@ -121,9 +122,7 @@ describe('middleware', () => {
     });
 
     it('allows access when a token cookie is present', () => {
-      const response = middleware(
-        createRequest('/en/repertoire', { token: 'valid-jwt' }),
-      );
+      const response = middleware(createRequest('/en/repertoire', { token: 'valid-jwt' }));
 
       expect(response.headers.get('Location')).toBeNull();
     });

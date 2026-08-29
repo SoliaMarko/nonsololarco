@@ -29,12 +29,7 @@ function CloseCircleIcon(
     >
       {title ? <title id={resolvedTitleId}>{title}</title> : null}
       <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="1.5" />
-      <path
-        d="M9 9l6 6M15 9l-6 6"
-        stroke="currentColor"
-        strokeWidth="1.5"
-        strokeLinecap="round"
-      />
+      <path d="M9 9l6 6M15 9l-6 6" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   );
 }

@@ -20,17 +20,14 @@ export const onlyMineToggleVariants = cva(
 );
 
 /** CVA variants for the count badge inside the "Only mine" toggle. */
-export const onlyMineCountVariants = cva(
-  'pli-1.5 plb-0.5 border text-[10px] tabular-nums',
-  {
-    variants: {
-      active: {
-        true: 'border-primary-dark',
-        false: 'border-border-primary',
-      },
-    },
-    defaultVariants: {
-      active: false,
+export const onlyMineCountVariants = cva('pli-1.5 plb-0.5 border text-[10px] tabular-nums', {
+  variants: {
+    active: {
+      true: 'border-primary-dark',
+      false: 'border-border-primary',
     },
   },
-);
+  defaultVariants: {
+    active: false,
+  },
+});

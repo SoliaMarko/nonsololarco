@@ -79,10 +79,10 @@ describe('LocaleSwitcher', () => {
     await user.click(screen.getByLabelText('common.locale.switchLanguage'));
     await user.click(screen.getByText('Italiano'));
 
-    expect(mockIntl.replace).toHaveBeenCalledWith(
-      '/repertoire?status=ready&onlyMine=true',
-      { locale: 'it', scroll: false },
-    );
+    expect(mockIntl.replace).toHaveBeenCalledWith('/repertoire?status=ready&onlyMine=true', {
+      locale: 'it',
+      scroll: false,
+    });
   });
 
   it('shows a checkmark on the active locale', async () => {

@@ -210,7 +210,7 @@ export const AnimatedVsStatic: Story = {
     return (
       <div className="flex flex-col gap-8">
         <div>
-          <p className="text-fg-secondary mbe-2 text-xs font-bold uppercase tracking-widest">
+          <p className="text-fg-secondary mbe-2 text-xs font-bold tracking-widest uppercase">
             Animated
           </p>
           <Tabs animated variant="panel" label="Animated demo">
@@ -223,7 +223,7 @@ export const AnimatedVsStatic: Story = {
         </div>
 
         <div>
-          <p className="text-fg-secondary mbe-2 text-xs font-bold uppercase tracking-widest">
+          <p className="text-fg-secondary mbe-2 text-xs font-bold tracking-widest uppercase">
             Static
           </p>
           <Tabs variant="panel" label="Static demo">

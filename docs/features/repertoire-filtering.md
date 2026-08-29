@@ -70,12 +70,12 @@ looking across every repertoire at once.
 
 ### Empty states
 
-| Situation | Shown |
-| --- | --- |
-| Repertoire has no tracks at all | "Repertoire is empty" + New Track button |
-| Filters match nothing, `onlyMine` on | "You are not involved yet" + Reset |
-| Filters match nothing, `onlyMine` off | "No tracks match" + Reset |
-| Band has no tracks, no filters applied | "Nothing here yet", no Reset |
+| Situation                              | Shown                                    |
+| -------------------------------------- | ---------------------------------------- |
+| Repertoire has no tracks at all        | "Repertoire is empty" + New Track button |
+| Filters match nothing, `onlyMine` on   | "You are not involved yet" + Reset       |
+| Filters match nothing, `onlyMine` off  | "No tracks match" + Reset                |
+| Band has no tracks, no filters applied | "Nothing here yet", no Reset             |
 
 Reset clears `status` and `onlyMine`, leaving sort and band selection intact.
 
@@ -84,9 +84,9 @@ not a loading state.
 
 ### Loading
 
-| Situation | Shown |
-| --- | --- |
-| First load, nothing cached | Skeleton rows matching the column grid |
+| Situation                                     | Shown                                                       |
+| --------------------------------------------- | ----------------------------------------------------------- |
+| First load, nothing cached                    | Skeleton rows matching the column grid                      |
 | Filter or sort change, rows already on screen | Previous rows at 40%, spinner over them, height held steady |
 
 The column header stays put throughout, so the sort controls never move under
@@ -94,13 +94,13 @@ the pointer.
 
 ## URL state
 
-| Param | Values | Default | Meaning |
-| --- | --- | --- | --- |
-| `band` | band id \| `solo` \| absent | absent = All Repertoires | Selected tab |
-| `status` | `all` \| `ready` \| `learning` \| `new` \| `active` \| `archived` | `all` | Status filter |
-| `onlyMine` | `true` | absent | Restrict to your tracks |
-| `sort` | `trackOrder` \| `title` \| `bpm` \| `status` \| `time` | `trackOrder` | Sort field |
-| `order` | `asc` \| `desc` | `asc` | Sort direction |
+| Param      | Values                                                            | Default                  | Meaning                 |
+| ---------- | ----------------------------------------------------------------- | ------------------------ | ----------------------- |
+| `band`     | band id \| `solo` \| absent                                       | absent = All Repertoires | Selected tab            |
+| `status`   | `all` \| `ready` \| `learning` \| `new` \| `active` \| `archived` | `all`                    | Status filter           |
+| `onlyMine` | `true`                                                            | absent                   | Restrict to your tracks |
+| `sort`     | `trackOrder` \| `title` \| `bpm` \| `status` \| `time`            | `trackOrder`             | Sort field              |
+| `order`    | `asc` \| `desc`                                                   | `asc`                    | Sort direction          |
 
 Defaults are omitted from the URL rather than written explicitly, so a clean
 view has a clean address.
@@ -114,11 +114,11 @@ view has a clean address.
 All params pass straight through to the backend. See
 [Repertoire API](../architecture/api-repertoire.md).
 
-| Method | Endpoint | Used for |
-| --- | --- | --- |
-| GET | `/api/users/me/repertoire` | All Repertoires tab |
-| GET | `/api/users/me/repertoire/solo` | Solo tab |
-| GET | `/api/bands/:id/repertoire` | A specific band tab |
+| Method | Endpoint                        | Used for            |
+| ------ | ------------------------------- | ------------------- |
+| GET    | `/api/users/me/repertoire`      | All Repertoires tab |
+| GET    | `/api/users/me/repertoire/solo` | Solo tab            |
+| GET    | `/api/bands/:id/repertoire`     | A specific band tab |
 
 ## Implementation notes
 
@@ -162,7 +162,7 @@ renders when there's nothing cached — once rows exist, replacing them with
 skeletons would read as "starting over" rather than "updating".
 
 **Participation means lead OR performer.** Both the backend `participatesIn()`
-predicate and the frontend's `isMyTrack` check `leadMember.id` *and*
+predicate and the frontend's `isMyTrack` check `leadMember.id` _and_
 `members[]`. Checking only one is the bug this feature shipped with initially —
 the "Only mine" count showed the total because `t.leadMember` is always truthy.
 

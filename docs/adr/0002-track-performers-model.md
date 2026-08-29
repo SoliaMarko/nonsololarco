@@ -60,7 +60,7 @@ alternative is additive: existing behaviour is untouched and the new capability
 sits alongside it.
 
 Worth revisiting if "leaderless track" becomes a real product concept rather
-than an edge case, and if a `role` column (who plays *what* on this track) is
+than an edge case, and if a `role` column (who plays _what_ on this track) is
 added — at that point the flag lives naturally on the join row and the split
 model starts to hurt.
 

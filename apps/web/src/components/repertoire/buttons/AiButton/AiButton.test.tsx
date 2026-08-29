@@ -35,9 +35,7 @@ describe('AiButton', () => {
     const mdIcon = mdContainer.querySelector('svg') as SVGElement;
 
     // sm: 14px, md: 16px
-    expect(Number(smIcon.getAttribute('width'))).toBeLessThan(
-      Number(mdIcon.getAttribute('width')),
-    );
+    expect(Number(smIcon.getAttribute('width'))).toBeLessThan(Number(mdIcon.getAttribute('width')));
   });
 
   it('uses bold text weight at sm size', () => {

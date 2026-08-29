@@ -5,8 +5,8 @@ import { ProfileType } from '@/src/lib/types/profile.types';
 import { cn } from '@/src/utils/cn';
 
 export interface ProfileStatsProps {
-  className?: string;
   profile: ProfileType;
+  className?: string;
 }
 
 export default function ProfileStats({ className, profile }: ProfileStatsProps) {

@@ -1,11 +1,10 @@
 import { useTranslations } from 'next-intl';
 
+import { Link } from '@/i18n/navigation';
 import Text from '@/src/components/typography/Text';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord/VinylRecord';
 import { Band } from '@/src/lib/types/profile/profile.types';
 import { cn } from '@/src/utils/cn';
-
-import { Link } from '@/i18n/navigation';
 
 interface BandRowProps {
   band: Band;

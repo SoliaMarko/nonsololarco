@@ -20,13 +20,18 @@ export interface AuthPageLayoutProps {
   children: ReactNode;
   /** Divider label above the OAuth buttons */
   heading: string;
-  /** Show a spinner overlay on top of the card content while loading. */
-  loading?: boolean;
   /** Divider label between buttons and bottom section */
   switchLabel: string;
+  /** Show a spinner overlay on top of the card content while loading. */
+  loading?: boolean;
 }
 
-export default function AuthPageLayout({ children, heading, loading, switchLabel }: AuthPageLayoutProps) {
+export default function AuthPageLayout({
+  children,
+  heading,
+  loading,
+  switchLabel,
+}: AuthPageLayoutProps) {
   const t = useTranslations('auth');
   const tCommon = useTranslations('common');
 
@@ -43,45 +48,45 @@ export default function AuthPageLayout({ children, heading, loading, switchLabel
 
           <LoginHero />
 
-          <div className="relative">
-            {loading && (
+          {/* `relative` anchors the loading overlay; the overlay is absolute so
+              it stays out of the flex flow and covers this padded area only. */}
+          <div className="pli-8 plb-8 relative flex flex-col gap-5">
+            {loading ? (
               <div className="bg-card/80 absolute inset-0 z-10 flex items-center justify-center backdrop-blur-[2px]">
                 <Spinner size="lg" label={tCommon('status.loading')} />
               </div>
-            )}
+            ) : null}
 
-            <div className="pli-8 plb-8 flex flex-col gap-5">
-              <Divider
-                orientation={ORIENTATION.horizontal}
-                label={heading}
-                color="tertiary"
-                thickness={1}
-                labelClassName="font-mono text-[10px] font-bold tracking-widest uppercase"
+            <Divider
+              orientation={ORIENTATION.horizontal}
+              label={heading}
+              color="tertiary"
+              thickness={1}
+              labelClassName="font-mono text-[10px] font-bold tracking-widest uppercase"
+            />
+
+            <div className="flex gap-3 sm:flex-col">
+              <OAuthButton
+                href={`${API_URL}/auth/google`}
+                icon={<GoogleIcon />}
+                label={t('login.continueWithGoogle')}
               />
-
-              <div className="flex gap-3 sm:flex-col">
-                <OAuthButton
-                  href={`${API_URL}/auth/google`}
-                  icon={<GoogleIcon />}
-                  label={t('login.continueWithGoogle')}
-                />
-                <OAuthButton
-                  href={`${API_URL}/auth/github`}
-                  icon={<GithubIcon />}
-                  label={t('login.continueWithGithub')}
-                />
-              </div>
-
-              <Divider
-                orientation={ORIENTATION.horizontal}
-                label={switchLabel}
-                color="tertiary"
-                thickness={1}
-                labelClassName="font-mono text-[10px] font-bold tracking-widest uppercase"
+              <OAuthButton
+                href={`${API_URL}/auth/github`}
+                icon={<GithubIcon />}
+                label={t('login.continueWithGithub')}
               />
-
-              {children}
             </div>
+
+            <Divider
+              orientation={ORIENTATION.horizontal}
+              label={switchLabel}
+              color="tertiary"
+              thickness={1}
+              labelClassName="font-mono text-[10px] font-bold tracking-widest uppercase"
+            />
+
+            {children}
           </div>
 
           <LoginFooter />

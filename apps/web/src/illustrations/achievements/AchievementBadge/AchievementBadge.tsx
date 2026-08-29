@@ -8,14 +8,14 @@ import { AchievementBadgeColor } from '@/src/lib/types/illustrations/achievement
 import { cn } from '@/src/utils/cn';
 
 export interface AchievementBadgeProps {
+  /** Icon as JSX element — size is auto-injected based on badge size */
+  icon: ReactNode;
+  label: string | [string, string?];
   className?: string;
   color?: AchievementBadgeColor;
   count?: string;
-  /** Icon as JSX element — size is auto-injected based on badge size */
-  icon: ReactNode;
   /** Override auto-calculated icon size (default: size × 0.42) */
   iconSize?: number;
-  label: string | [string, string?];
   levitate?: boolean;
   levitateDelay?: number;
   locked?: boolean;

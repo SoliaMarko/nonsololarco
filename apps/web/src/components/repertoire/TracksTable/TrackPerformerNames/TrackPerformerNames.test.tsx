@@ -17,9 +17,7 @@ describe('TrackPerformerNames', () => {
   });
 
   it('joins multiple performers with commas, in the order given', () => {
-    const { container } = render(
-      <TrackPerformerNames performers={[OTHER, LEAD, MEMBER]} />,
-    );
+    const { container } = render(<TrackPerformerNames performers={[OTHER, LEAD, MEMBER]} />);
 
     expect(container.textContent).toBe('Solomiia, Anna, Jared');
   });

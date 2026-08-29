@@ -53,17 +53,17 @@ describe('Pagination', () => {
     expect(
       (screen.getByRole('button', { name: 'Previous page' }) as HTMLButtonElement).disabled,
     ).toBe(true);
-    expect(
-      (screen.getByRole('button', { name: 'Next page' }) as HTMLButtonElement).disabled,
-    ).toBe(false);
+    expect((screen.getByRole('button', { name: 'Next page' }) as HTMLButtonElement).disabled).toBe(
+      false,
+    );
   });
 
   it('disables next arrow on last page', () => {
     render(<Pagination currentPage={5} totalPages={5} onPageChange={() => {}} />);
 
-    expect(
-      (screen.getByRole('button', { name: 'Next page' }) as HTMLButtonElement).disabled,
-    ).toBe(true);
+    expect((screen.getByRole('button', { name: 'Next page' }) as HTMLButtonElement).disabled).toBe(
+      true,
+    );
     expect(
       (screen.getByRole('button', { name: 'Previous page' }) as HTMLButtonElement).disabled,
     ).toBe(false);

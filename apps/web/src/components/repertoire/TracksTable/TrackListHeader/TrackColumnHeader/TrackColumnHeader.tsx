@@ -5,8 +5,8 @@ import { cn } from '@/src/utils/cn';
 import { SortField, SortOrder } from '@/src/utils/tracks-sort.utils';
 
 type BaseProps = {
-  className?: string;
   title: string;
+  className?: string;
 };
 
 type TrackColumnHeaderProps =
@@ -31,7 +31,7 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
   const sortField = searchParams.get('sort') as SortField | null;
   const sortOrder = (searchParams.get('order') as SortOrder | null) ?? 'asc';
 
-  function handleSort(field: SortField) {
+  const handleSort = (field: SortField) => {
     const params = new URLSearchParams(searchParams.toString());
 
     if (sortField === field) {
@@ -43,9 +43,9 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
     params.delete('page');
 
     router.push(`?${params.toString()}`, { scroll: false });
-  }
+  };
 
-  function getSortIcon(field: SortField) {
+  const getSortIcon = (field: SortField) => {
     const classNames = field === sortField ? 'text-danger-deep' : '';
 
     return sortOrder === 'asc' && field === sortField ? (
@@ -53,19 +53,26 @@ export default function TrackColumnHeader(props: TrackColumnHeaderProps) {
     ) : (
       <ChevronIcon className={classNames} direction="down" size={10} />
     );
-  }
+  };
+
+  const getAriaSortValue = (isActive: boolean) => {
+    if (!isActive) return 'none';
+    return sortOrder === 'asc' ? 'ascending' : 'descending';
+  };
 
   if (isSortable) {
     const isActive = sortField === props.field;
-    const ariaSortValue = isActive ? (sortOrder === 'asc' ? 'ascending' : 'descending') : 'none';
 
     return (
       <div
         role="columnheader"
-        aria-sort={ariaSortValue}
+        aria-sort={getAriaSortValue(isActive)}
         // `min-w-0` is required for `truncate` to take effect: a grid item
         // defaults to `min-width: auto` and would overflow instead of clipping.
-        className={cn('min-w-0 truncate text-[10px] font-bold tracking-widest uppercase', className)}
+        className={cn(
+          'min-w-0 truncate text-[10px] font-bold tracking-widest uppercase',
+          className,
+        )}
         title={title}
       >
         <button

@@ -38,14 +38,14 @@ app.
 
 Read from the root `.env`, so a normal dev setup already works.
 
-| Variable | Purpose |
-| --- | --- |
-| `JWT_SECRET` | Required. `auth.setup.ts` signs its own token with it |
-| `DATABASE_URL` | Required. Used to look up the seeded user's id |
-| `E2E_USER_EMAIL` | Which user to sign in as. Defaults to `solomiia@example.com` |
-| `E2E_WEB_URL` | Defaults to `http://localhost:3000` |
-| `E2E_START_SERVER` | Set to `1` to have Playwright boot the web app itself |
-| `E2E_WEB_COMMAND` | What `E2E_START_SERVER` runs. Defaults to `pnpm --filter web dev`; CI overrides it with `pnpm --filter web start` |
+| Variable           | Purpose                                                                                                           |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| `JWT_SECRET`       | Required. `auth.setup.ts` signs its own token with it                                                             |
+| `DATABASE_URL`     | Required. Used to look up the seeded user's id                                                                    |
+| `E2E_USER_EMAIL`   | Which user to sign in as. Defaults to `solomiia@example.com`                                                      |
+| `E2E_WEB_URL`      | Defaults to `http://localhost:3000`                                                                               |
+| `E2E_START_SERVER` | Set to `1` to have Playwright boot the web app itself                                                             |
+| `E2E_WEB_COMMAND`  | What `E2E_START_SERVER` runs. Defaults to `pnpm --filter web dev`; CI overrides it with `pnpm --filter web start` |
 
 If you seeded against your real OAuth account, point the tests at it:
 

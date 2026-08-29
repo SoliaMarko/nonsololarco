@@ -12,16 +12,12 @@ function armAngle(container: HTMLElement): number | null {
 
 describe('Pendulum', () => {
   it('renders the body, arm and pivot', () => {
-    const { container } = render(
-      <Pendulum getBeatPosition={() => null} playing={false} />,
-    );
+    const { container } = render(<Pendulum getBeatPosition={() => null} playing={false} />);
     expect(container.firstElementChild?.childElementCount).toBeGreaterThanOrEqual(3);
   });
 
   it('holds the arm upright while stopped', () => {
-    const { container } = render(
-      <Pendulum getBeatPosition={() => 0.5} playing={false} />,
-    );
+    const { container } = render(<Pendulum getBeatPosition={() => 0.5} playing={false} />);
     expect(armAngle(container)).toBe(0);
   });
 

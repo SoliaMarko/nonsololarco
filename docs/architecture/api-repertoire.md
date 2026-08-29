@@ -7,12 +7,12 @@ Code: `apps/api/src/repertoire/`.
 
 ## Endpoints
 
-| Method | Endpoint | Returns |
-| --- | --- | --- |
-| GET | `/api/users/me/repertoire` | Every track the current user participates in, across all bands and solo. Includes `band`. |
-| GET | `/api/users/me/repertoire/solo` | Solo tracks only (`bandId = null`) where the user is lead. No `band` field. |
-| GET | `/api/bands/:id/repertoire` | All tracks for one band. No `band` field — it's implied. 404 if the band doesn't exist. |
-| GET | `/api/users/me/bands` | The user's bands with aggregate stats (`totalTracks`, `readyTracks`, `totalDuration`). |
+| Method | Endpoint                        | Returns                                                                                   |
+| ------ | ------------------------------- | ----------------------------------------------------------------------------------------- |
+| GET    | `/api/users/me/repertoire`      | Every track the current user participates in, across all bands and solo. Includes `band`. |
+| GET    | `/api/users/me/repertoire/solo` | Solo tracks only (`bandId = null`) where the user is lead. No `band` field.               |
+| GET    | `/api/bands/:id/repertoire`     | All tracks for one band. No `band` field — it's implied. 404 if the band doesn't exist.   |
+| GET    | `/api/users/me/bands`           | The user's bands with aggregate stats (`totalTracks`, `readyTracks`, `totalDuration`).    |
 
 "Participates in" means **lead member OR listed performer** — see
 [data model](./data-model.md#trackperformer).
@@ -22,14 +22,14 @@ Code: `apps/api/src/repertoire/`.
 Accepted by all three repertoire endpoints. Validated by `RepertoireQueryDto`
 (`apps/api/src/repertoire/dto/sort-tracks.dto.ts`).
 
-| Param | Values | Default | Effect |
-| --- | --- | --- | --- |
-| `sort` | `trackOrder` \| `title` \| `bpm` \| `status` \| `time` | `trackOrder` | Field to sort by |
-| `order` | `asc` \| `desc` | `asc` | Sort direction |
-| `status` | `all` \| `ready` \| `learning` \| `new` \| `active` \| `archived` | `all` | Status filter. `active` = everything except `archived` |
-| `onlyMine` | `true` \| `false` | `false` | Restrict to tracks the user participates in. Only meaningful on the band endpoint |
-| `page` | integer ≥ 1 | absent | 1-based page number. Omit for unpaginated (full) results |
-| `pageSize` | integer ≥ 1 | `10` | Items per page. Only meaningful when `page` is set |
+| Param      | Values                                                            | Default      | Effect                                                                            |
+| ---------- | ----------------------------------------------------------------- | ------------ | --------------------------------------------------------------------------------- |
+| `sort`     | `trackOrder` \| `title` \| `bpm` \| `status` \| `time`            | `trackOrder` | Field to sort by                                                                  |
+| `order`    | `asc` \| `desc`                                                   | `asc`        | Sort direction                                                                    |
+| `status`   | `all` \| `ready` \| `learning` \| `new` \| `active` \| `archived` | `all`        | Status filter. `active` = everything except `archived`                            |
+| `onlyMine` | `true` \| `false`                                                 | `false`      | Restrict to tracks the user participates in. Only meaningful on the band endpoint |
+| `page`     | integer ≥ 1                                                       | absent       | 1-based page number. Omit for unpaginated (full) results                          |
+| `pageSize` | integer ≥ 1                                                       | `10`         | Items per page. Only meaningful when `page` is set                                |
 
 Example:
 
@@ -45,11 +45,11 @@ are spelled out.
 
 Two paths, chosen by field:
 
-- **`trackOrder`, `title`, `bpm`** — Prisma `orderBy`, done in Postgres.
-- **`status`, `time`** — sorted in memory after the query, because neither
-  sorts correctly in the database. `status` needs a custom weight
-  (`new < learning < ready < archived`, not alphabetical) and `duration` is a
-  `"m:ss"` string that string-sorts wrong (`"10:00" < "9:00"`).
+- **`trackOrder`, `title`, `bpm`, `time`** — Prisma `orderBy`, done in
+  Postgres. `time` orders by the integer `durationSeconds` column.
+- **`status`** — sorted in memory after the query, because the Postgres enum
+  orders alphabetically (`archived, learning, new, ready`) while the meaningful
+  order is `new < learning < ready < archived`.
 
 The in-memory pass is `postQuerySort()`. For paginated requests with a
 post-query sort, the service loads the entire set, sorts it, and then slices
@@ -83,13 +83,13 @@ shape inside `data`:
 
 ```ts
 interface Track {
-  band?: { id: string; name: string };  // only on /users/me/repertoire
+  band?: { id: string; name: string }; // only on /users/me/repertoire
   bpm: number;
-  duration: string;                     // "m:ss"
+  durationSeconds: number; // 190 renders as "3:10"
   id: string;
   leadMember: { id: string; name: string };
-  members: { id: string; name: string }[];  // performers, excluding the lead
-  musicalKey: MusicalKey;               // display form: "C#", "Am"
+  members: { id: string; name: string }[]; // performers, excluding the lead
+  musicalKey: MusicalKey; // display form: "C#", "Am"
   order: number;
   side: 'a' | 'b';
   status: 'ready' | 'learning' | 'new' | 'archived';

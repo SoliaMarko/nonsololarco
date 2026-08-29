@@ -6,8 +6,8 @@ import PageButton from './PageButton';
 export interface PaginationProps {
   currentPage: number;
   onPageChange: (page: number) => void;
-  siblingCount?: number;
   totalPages: number;
+  siblingCount?: number;
 }
 
 /**

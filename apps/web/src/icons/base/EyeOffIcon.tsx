@@ -44,7 +44,15 @@ function EyeOffIcon(
         strokeLinecap="round"
         strokeLinejoin="round"
       />
-      <line x1="1" y1="1" x2="23" y2="23" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
+      <line
+        x1="1"
+        y1="1"
+        x2="23"
+        y2="23"
+        stroke="currentColor"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }

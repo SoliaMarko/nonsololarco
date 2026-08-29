@@ -1,10 +1,9 @@
+import { PrismaClient } from '@nonsololarco/db';
+import { test as setup } from '@playwright/test';
+import { PrismaPg } from '@prisma/adapter-pg';
 import { createHmac } from 'node:crypto';
 import fs from 'node:fs';
 import path from 'node:path';
-
-import { PrismaPg } from '@prisma/adapter-pg';
-import { PrismaClient } from '@nonsololarco/db';
-import { test as setup } from '@playwright/test';
 
 import { STORAGE_STATE } from './constants';
 
@@ -26,12 +25,8 @@ function base64url(input: Buffer | string): string {
 function signToken(userId: string, secret: string): string {
   const header = base64url(JSON.stringify({ alg: 'HS256', typ: 'JWT' }));
   const now = Math.floor(Date.now() / 1000);
-  const payload = base64url(
-    JSON.stringify({ sub: userId, iat: now, exp: now + 60 * 60 }),
-  );
-  const signature = base64url(
-    createHmac('sha256', secret).update(`${header}.${payload}`).digest(),
-  );
+  const payload = base64url(JSON.stringify({ sub: userId, iat: now, exp: now + 60 * 60 }));
+  const signature = base64url(createHmac('sha256', secret).update(`${header}.${payload}`).digest());
 
   return `${header}.${payload}.${signature}`;
 }
@@ -55,9 +50,7 @@ setup('authenticate as the seeded user', async ({ context, page }) => {
   await prisma.$disconnect();
 
   if (!user) {
-    throw new Error(
-      `No user with email ${SEED_EMAIL}. Run the seed first, or set E2E_USER_EMAIL.`,
-    );
+    throw new Error(`No user with email ${SEED_EMAIL}. Run the seed first, or set E2E_USER_EMAIL.`);
   }
 
   const webUrl = process.env.E2E_WEB_URL ?? 'http://localhost:3000';

@@ -11,10 +11,7 @@ export default function LoginFooter({ className }: LoginFooterProps) {
 
   return (
     <div
-      className={cn(
-        'bg-dots-subtle flex items-center justify-center plb-3 pli-6',
-        className,
-      )}
+      className={cn('bg-dots-subtle plb-3 pli-6 flex items-center justify-center', className)}
       style={{ backgroundColor: 'var(--color-yellow-main)' }}
     >
       <p className="text-primary-dark font-mono text-xs font-bold tracking-widest uppercase">

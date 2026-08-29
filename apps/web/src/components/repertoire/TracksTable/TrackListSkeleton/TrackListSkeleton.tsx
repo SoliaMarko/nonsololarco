@@ -30,7 +30,7 @@ export default function TrackListSkeleton({
         <div
           key={index}
           className={cn(
-            'border-border-primary dark:border-fg-primary/30 border-1.5 border-b border-s-3 border-s-transparent',
+            'border-border-primary dark:border-fg-primary/30 border-1.5 border-s-3 border-b border-s-transparent',
             'pli-4 plb-3',
             isSpecificBandSelected ? SPECIFIC_BAND_ROW_GRID : ALL_BANDS_ROW_GRID,
           )}

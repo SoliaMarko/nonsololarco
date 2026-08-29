@@ -54,7 +54,10 @@ describe('MetronomeScreen', () => {
   it('adding a new song shows a confirmation toast', async () => {
     render(<MetronomeScreen />);
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'New Track');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'New Track',
+    );
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(screen.getByText(/pages\.metronome\.toastAdded/)).toBeDefined();
   });

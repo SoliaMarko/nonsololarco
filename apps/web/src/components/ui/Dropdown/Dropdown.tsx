@@ -12,9 +12,9 @@ import { cn } from '@/src/utils/cn';
 type DropdownVariantProps = VariantProps<typeof dropdownItemVariants>;
 
 type DropdownItemBase = DropdownVariantProps & {
+  label: string;
   disabled?: boolean;
   icon?: ElementType;
-  label: string;
   /**
    * Arbitrary ReactNode rendered before the label — use when the leading
    * visual is a parameterised element (e.g. a locale stamp) rather than a
@@ -27,8 +27,8 @@ type DropdownItemBase = DropdownVariantProps & {
 };
 
 type DropdownItemWithClick = DropdownItemBase & {
-  href?: never;
   onClick: () => void;
+  href?: never;
 };
 
 type DropdownItemWithHref = DropdownItemBase & {
@@ -53,14 +53,14 @@ export type DropdownGroup = {
 export type DropdownVariant = 'default' | 'stamp';
 
 export interface DropdownProps {
-  align?: OptionsPositionType;
-  className?: string;
   /** Groups of items — groups are separated by a dotted divider */
   groups: DropdownGroup[];
-  /** Which side of the trigger the menu opens on. Defaults to `"bottom"`. */
-  side?: 'bottom' | 'top';
   /** Trigger element — button, avatar, icon, anything */
   trigger: ReactNode;
+  align?: OptionsPositionType;
+  className?: string;
+  /** Which side of the trigger the menu opens on. Defaults to `"bottom"`. */
+  side?: 'bottom' | 'top';
   /**
    * Visual variant.
    * - `"default"` — rounded card with subtle shadow (profile menus, context actions)
@@ -135,7 +135,9 @@ function Checkmark({ variant }: { variant: DropdownVariant }) {
       </span>
     );
   }
-  return <CheckSolidIcon size={16} className="text-emerald-main mis-auto shrink-0" aria-hidden="true" />;
+  return (
+    <CheckSolidIcon size={16} className="text-emerald-main mis-auto shrink-0" aria-hidden="true" />
+  );
 }
 
 /**
@@ -188,14 +190,13 @@ function Dropdown({
           {groups.map((group, groupIndex) => {
             const hasLabel = !!group.label;
             const isRadio = group.selectionMode === 'single';
-            const selectedValue = isRadio
-              ? group.items.find((i) => i.selected)?.label ?? ''
-              : '';
+            const selectedValue = isRadio ? (group.items.find((i) => i.selected)?.label ?? '') : '';
 
             const renderedItems = group.items.map((item, itemIndex) => {
               const Icon = item.icon;
               const cls = itemClass(variant, item, hasLabel);
-              const leading = item.leadingContent ?? (Icon ? <Icon size={15} aria-hidden="true" /> : null);
+              const leading =
+                item.leadingContent ?? (Icon ? <Icon size={15} aria-hidden="true" /> : null);
 
               if (item.href) {
                 return (
@@ -226,7 +227,12 @@ function Dropdown({
               }
 
               return (
-                <RadixDropdown.Item key={itemIndex} className={cls} disabled={item.disabled} onSelect={item.onClick}>
+                <RadixDropdown.Item
+                  key={itemIndex}
+                  className={cls}
+                  disabled={item.disabled}
+                  onSelect={item.onClick}
+                >
                   {leading}
                   {item.label}
                   {item.selected ? <Checkmark variant={variant} /> : null}
@@ -236,10 +242,14 @@ function Dropdown({
 
             return (
               <Fragment key={groupIndex}>
-                {groupIndex > 0 ? <RadixDropdown.Separator className={SEPARATOR_CLASS[variant]} /> : null}
+                {groupIndex > 0 ? (
+                  <RadixDropdown.Separator className={SEPARATOR_CLASS[variant]} />
+                ) : null}
 
                 {group.label ? (
-                  <RadixDropdown.Label className={LABEL_CLASS[variant]}>{group.label}</RadixDropdown.Label>
+                  <RadixDropdown.Label className={LABEL_CLASS[variant]}>
+                    {group.label}
+                  </RadixDropdown.Label>
                 ) : null}
 
                 {isRadio ? (

@@ -1,21 +1,42 @@
 # CLAUDE.md
 
-Guidance for Claude Code when working in this repository.
+**nonsololarco** — a shared repertoire and gig-preparation tool for bands, retro
+aesthetic. Turborepo + pnpm: `apps/web` (Next.js 15, React 19, Tailwind v4),
+`apps/api` (NestJS 11), `packages/db` (Prisma 7 + PostgreSQL),
+`packages/types` (shared types — the source of truth), `packages/ui`.
 
-> Styling, design tokens, component patterns and naming conventions live in the
-> **`nonsololarco-conventions` skill**. This file covers repo layout, commands,
-> code quality rules, testing policy and documentation policy.
+This file is **process**. It is deliberately short because it loads into every
+session. Detail lives elsewhere and is read on demand.
 
----
+## Where to look
+
+| You need                                                           | File                                                                  |
+| ------------------------------------------------------------------ | --------------------------------------------------------------------- |
+| Cold start: core rules, repo traps, routing                        | **[`docs/ai/ORIENTATION.md`](./docs/ai/ORIENTATION.md)** ← start here |
+| Step by step: add a component / endpoint / migration / translation | [`docs/ai/RECIPES.md`](./docs/ai/RECIPES.md)                          |
+| Add a write endpoint, end to end, nine commits                     | [`docs/RECIPE-endpoint.md`](./docs/RECIPE-endpoint.md)                |
+| Branches, commit messages, commit size, rebase vs merge            | [`docs/ai/GIT.md`](./docs/ai/GIT.md)                                  |
+| Does this component / util / route / type already exist?           | [`docs/ai/MAP.md`](./docs/ai/MAP.md) — generated, `pnpm ai:map`       |
+| How code should look: styles, tokens, CVA, naming                  | `nonsololarco-conventions` skill                                      |
+| **Why a feature exists, or why it was cut**                        | [`docs/product/PRINCIPLES.md`](./docs/product/PRINCIPLES.md)          |
+| What is being built now, and in what order                         | [`docs/ROADMAP.md`](./docs/ROADMAP.md)                                |
+| Features, API, DB schema, decisions                                | `docs/features/`, `docs/architecture/`, `docs/adr/`                   |
+| What is planned to change and why                                  | [`docs/REFACTORING-PLAN.md`](./docs/REFACTORING-PLAN.md)              |
+
+**Before writing anything, check `MAP.md` for an existing implementation.**
+A duplicate drifts from the original and doubles the maintenance.
+
+**Before adding a feature, check `PRINCIPLES.md`.** Several obvious-looking
+features were deliberately cut, each with a condition that would bring it back.
+Re-adding one by accident wastes a sprint.
 
 ## Definition of done
 
-**Run this checklist before reporting any task complete.** A task is not
-finished when the code works — it's finished when the next person can find,
-trust and change it.
+A task is not finished when the code works. It is finished when the next
+person can find it, understand it and change it.
 
-1. **Tests written.** Unit tests for every new module, in the same commit. E2E
-   if the feature meets the criteria in [Testing policy](#testing-policy).
+1. **Tests written.** Per the [Testing policy](#testing-policy), in the same
+   commit. E2E if the feature meets the criteria there.
 2. **JSDoc written.** Every utility, hook and service method — see
    [JSDoc](#jsdoc--required-on-every-utility).
 3. **Docs updated.** Check the table in
@@ -37,9 +58,9 @@ that now describes behaviour the code no longer has.
 
 ## Project
 
-**nonsololarco** ("non solo arco" — not only the bow) is a musician social
-platform and practice tool with a retro/vintage aesthetic. Turborepo monorepo,
-pnpm workspaces.
+**nonsololarco** ("non solo arco" — not only the bow) is a shared repertoire
+and gig-preparation tool for bands, with a retro/vintage aesthetic. Turborepo
+monorepo, pnpm workspaces.
 
 ```text
 apps/
@@ -49,7 +70,7 @@ packages/
   types/          @nonsololarco/types — shared TS types (source of truth)
   db/             @nonsololarco/db — Prisma schema, migrations, seed
   ui/             @repo/ui — shared React components
-docs/             Feature docs, architecture, ADRs
+docs/             Feature docs, architecture, ADRs, product principles
 ```
 
 ## Commands
@@ -73,19 +94,26 @@ pnpm --filter web test:watch
 pnpm --filter web storybook
 pnpm --filter web e2e             # Playwright e2e
 pnpm --filter api test            # api unit tests (vitest)
+pnpm --filter api test:int        # api integration tests (testcontainers)
 pnpm --filter api test:e2e        # api e2e (supertest)
 pnpm --filter api start:dev
 ```
 
-Database (`packages/db`):
+Database — **all from the repo root**, not from `packages/db`:
 
 ```sh
-pnpm --filter @nonsololarco/db db:migrate    # create + apply migration
-pnpm --filter @nonsololarco/db db:generate   # regenerate Prisma client
-pnpm --filter @nonsololarco/db db:seed       # seed dev data
-pnpm --filter @nonsololarco/db db:studio     # Prisma Studio
-pnpm --filter @nonsololarco/db db:reset      # drop, re-migrate, regenerate
+pnpm db:up          # start Postgres in Docker, wait for its healthcheck
+pnpm db:down        # stop it (-v also drops the volume)
+pnpm db:setup       # db:up + db:migrate + db:generate + db:seed
+pnpm db:migrate     # create + apply migration
+pnpm db:generate    # regenerate Prisma client
+pnpm db:seed        # seed dev data
+pnpm db:studio      # Prisma Studio
+pnpm db:reset       # drop, re-migrate, regenerate
 ```
+
+`P1001: Can't reach database server` means Postgres is not running — it is not
+a code problem. See the table in `README.md` for the other connection errors.
 
 **After any `schema.prisma` change:** `db:migrate` (applies to DB) **and**
 `db:generate` (regenerates the TS client). Running only one of them produces
@@ -95,7 +123,7 @@ undefined`.
 Seeding preserves your OAuth account when `SEED_USER_EMAIL` is set:
 
 ```sh
-SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+SEED_USER_EMAIL=you@example.com pnpm db:seed
 ```
 
 ---
@@ -109,17 +137,21 @@ a lookup map, or an early return instead.
 
 ```tsx
 // ❌
-const color = isSelected ? 'red' : isArchived ? 'grey' : 'green';
+const color = isSelected ? "red" : isArchived ? "grey" : "green";
 
 // ✅ lookup map
-const STATUS_COLOR = { selected: 'red', archived: 'grey', default: 'green' } as const;
+const STATUS_COLOR = {
+  selected: "red",
+  archived: "grey",
+  default: "green",
+} as const;
 const color = STATUS_COLOR[resolveState(track)];
 
 // ✅ or a small named helper
 function borderColor(track: Track, isSelected: boolean): string {
-  if (isSelected) return 'red';
-  if (track.status === 'archived') return 'grey';
-  return 'green';
+  if (isSelected) return "red";
+  if (track.status === "archived") return "grey";
+  return "green";
 }
 ```
 
@@ -145,6 +177,112 @@ doThing();
 
 Applies to the JSX equivalent too — don't nest conditional blocks. If a
 component needs three or more branches of markup, split it into components.
+
+### Arrow functions for local helpers
+
+Inside React components, local helper functions use arrow function expressions
+(`const fn = () => {}`), not function declarations. This prevents hoisting
+surprises and keeps a consistent style. Component declarations themselves
+remain function declarations (`export default function Component`).
+
+```tsx
+// ❌
+function handleSort(field: SortField) { ... }
+
+// ✅
+const handleSort = (field: SortField) => { ... };
+```
+
+### JSX conditional rendering — ternary only
+
+Always use the ternary pattern for conditional rendering in JSX, never `&&`.
+Enforced by `react/jsx-no-leaked-render` in ESLint.
+
+```tsx
+// ❌
+{
+  isVisible && <Panel />;
+}
+
+// ✅
+{
+  isVisible ? <Panel /> : null;
+}
+```
+
+### Discriminated unions for variant shapes
+
+When a type has variants, model them as a union with a literal tag, not one
+interface with optional fields. Optional fields make impossible states
+representable; the union makes them a compile error.
+
+```ts
+// ❌ compiles, and is nonsense
+interface SetlistItem {
+  kind: 'track' | 'break';
+  trackId?: string;
+  label?: string;
+}
+const bad: SetlistItem = { kind: 'track', label: 'Interval' };
+
+// ✅
+type SetlistItem =
+  | { kind: 'track'; id: string; position: string; trackId: string }
+  | { kind: 'break'; id: string; position: string; label: string; durationSeconds: number };
+```
+
+Close every `switch` over a union with an exhaustiveness check, so adding a
+variant fails the build in every place that needs updating rather than
+silently falling through:
+
+```ts
+const assertNever = (value: never): never => {
+  throw new Error(`Unhandled variant: ${JSON.stringify(value)}`);
+};
+
+switch (item.kind) {
+  case 'track':
+    return renderTrack(item);
+  case 'break':
+    return renderBreak(item);
+  default:
+    return assertNever(item);
+}
+```
+
+Applies to `SetlistItem`, attachment kinds, event types, and any request state
+modelled as `loading | error | success`.
+
+### Size and complexity limits
+
+Enforced as **warnings** — they guide, they don't block a commit.
+
+| Scope   | Rule                     | Limit |
+| ------- | ------------------------ | ----- |
+| `*.ts`  | `max-lines-per-function` | 60    |
+| `*.tsx` | `max-lines-per-function` | 150   |
+| `*.tsx` | `react/jsx-max-depth`    | 5     |
+| any     | `max-lines` (file)       | 250   |
+| any     | `complexity`             | 12    |
+| any     | `max-depth` (statements) | 3     |
+
+**Why components get a bigger budget.** Line count is a proxy for cognitive
+load, and the proxy holds for imperative code. JSX is declarative: a form with
+eight fields runs past 120 lines at a cyclomatic complexity of 1 — long, not
+complex. Forcing it under 60 means extracting sub-components that exist only to
+satisfy a counter, and under our one-component-per-folder convention every
+extraction costs a directory, a barrel and new prop threading.
+
+Exempt from these limits: tests, stories, `icons/`, `svg/`, `illustrations/`.
+`jsx-max-depth` is also off in `components/ui/` and `components/form/`, where
+Radix dictates the tree (`Root > Portal > Content > Viewport > Item` is four
+levels before any of our markup) and depth measures the library, not a decision
+we made.
+
+**Calibrating a rule.** If a newly added rule flags more than ~10% of files,
+the rule is wrong, not the code. Adjust the threshold or scope it, and note the
+reason here. A rule that is routinely violated devalues every other rule in
+this file.
 
 ### JSDoc — required on every utility
 
@@ -194,183 +332,106 @@ Applies to: `*.utils.ts`, hooks, Nest service and controller methods, exported
 constants whose meaning isn't self-evident, and any shared type where a field
 has a constraint the type can't express.
 
-### Prefer `const`
-
-Use `const` by default. Reach for `let` only when the variable truly needs
-reassignment — loop counters, accumulators inside `reduce` callbacks, or
-values that change across branches where restructuring would hurt readability.
-If a `let` can be replaced by destructuring, a ternary, or a helper that
-returns the value, prefer that.
-
-### No JSX in variables
-
-Don't store JSX fragments in local variables (`const header = <div>…</div>`).
-Extract them into their own component file instead — this keeps render trees
-scannable and makes each piece testable and reusable.
-
-**Exception:** a tiny, single-use fragment (2–3 lines) that won't be reused
-may stay in the parent file as a plain variable when extracting a full
-component folder would be overkill.
-
-```tsx
-// ❌ JSX stashed in a variable
-const checkmark = item.selected ? (
-  <CheckIcon size={16} className="text-emerald-main" />
-) : null;
-return <MenuItem>{label}{checkmark}</MenuItem>;
-
-// ✅ inline when trivial
-return (
-  <MenuItem>
-    {label}
-    {item.selected && <CheckIcon size={16} className="text-emerald-main" />}
-  </MenuItem>
-);
-
-// ✅ extract when non-trivial
-import SelectionMark from './SelectionMark';
-return <MenuItem>{label}<SelectionMark selected={item.selected} /></MenuItem>;
-```
-
-### Self-descriptive variable names
-
-Use full, meaningful names — not single-letter abbreviations. A callback
-parameter should read as what it represents, not as a cryptic shorthand.
-
-```tsx
-// ❌
-groups.map((g) => <HistoryGroup key={g.songNumber} group={g} />)
-
-// ✅
-groups.map((group) => <HistoryGroup key={group.songNumber} group={group} />)
-```
-
-Short names are acceptable only for universally understood idioms: `i`/`j` in
-numeric loops, `_` for intentionally unused parameters, and `a`/`b` in sort
-comparators.
-
 ### General
 
 - TypeScript strict mode; no `any`, no non-null `!` unless provably safe.
 - Shared types go in `packages/types` and are imported by both apps. Never
   duplicate a shape that already exists there.
-- Sort interface keys alphabetically (enforced by
-  `eslint-plugin-typescript-sort-keys`).
+- Sort interface keys with required properties first, then alphabetically within each group (enforced by
+  `typescript-sort-keys/interface` with `requiredFirst: true`).
 - Prefer named exports; default export only for React components and
   Nest modules.
-- Comments explain *why*, not *what*. Delete commented-out code.
-
-### Localized accessible names
-
-User-facing `aria-label`, `aria-description`, and `aria-placeholder` values
-must be **translated** via `useTranslations()`, just like visible UI text.
-A hardcoded English aria-label on an Italian or Ukrainian page is announced
-using the document's language, which can mispronounce the label or make the
-control unclear. Add new keys to all three locale files (`en`, `it`, `uk`).
-
-`role` names (e.g. `"row"`, `"cell"`) are **spec-defined English tokens** —
-never translate those.
-
-### English-only in tests
-
-In test files, everything is English: `describe()` and `it()` descriptions,
-variable names, comments, and mock data labels. The only place non-English
-text may appear is in assertions or queries that match **rendered UI
-content** (e.g. `getByText('Без трекінгу')`) — that must match whatever the
-component actually renders.
+- Comments explain _why_, not _what_. Delete commented-out code.
 
 ---
 
 ## Testing policy
 
-### Unit tests — required for everything
+Tests are mandatory where behaviour can regress silently, optional where the
+only failure mode is a visible layout change. The rule below is narrower than
+"test everything" on purpose: a policy that is routinely ignored is worse than
+no policy, because it teaches that the rules in this file are decorative.
 
-Every new module ships with unit tests in the same commit. No exceptions for
-"simple" code.
+**Mandatory, in the same commit as the code:**
 
-| What | Where | Tool |
-| --- | --- | --- |
-| React components | `Component.test.tsx` next to the component | Vitest + Testing Library |
-| Hooks | `useThing.test.ts` next to the hook | Vitest + `renderHook` |
-| Utils | `thing.utils.test.ts` next to the util | Vitest |
-| Nest services | `thing.service.spec.ts` next to the service | Vitest + `@nestjs/testing` |
-| Nest controllers | `thing.controller.spec.ts` | Vitest, service mocked |
+| What                                                   | Where                             | Tool                       |
+| ------------------------------------------------------ | --------------------------------- | -------------------------- |
+| Hooks                                                  | `useThing.test.ts` alongside      | Vitest + `renderHook`      |
+| Utils                                                  | `thing.utils.test.ts` alongside   | Vitest                     |
+| Nest services                                          | `thing.service.spec.ts` alongside | Vitest + `@nestjs/testing` |
+| Nest controllers                                       | `thing.controller.spec.ts`        | Vitest, service mocked     |
+| Components with behaviour — state, handlers, branching | `Component.test.tsx` alongside    | Vitest + Testing Library   |
+
+**Optional:** purely presentational components — no state, no handlers, props
+straight to markup. A Storybook story covers those better than a test that
+asserts a `<div>` rendered.
 
 Cover the happy path, the empty/zero case, and each error branch. When fixing a
 bug, add the test that would have caught it — in the same commit as the fix.
 
+**Coverage must not go down.** The CI ratchet enforces this; it is the honest
+version of a percentage target.
+
 Tests render with the `en` locale so that `getByText` assertions match English
-translation strings. Since `aria-label` values are now translated via
-`useTranslations()`, test assertions use the `en` locale's translated keys.
+translation strings. `aria-label` values stay in English and are not translated.
 
-Prisma is mocked via `src/test/mocks/prisma.mock.ts`; never hit a real database
-in a unit test.
+Prisma is mocked in unit tests via `src/test/mocks/prisma.mock.ts` — never
+touch a real database there.
 
-### E2E tests — required for complex features
+**An integration test** is needed wherever a mock proves nothing: real sort
+order, pagination boundaries, unique constraints, cascading deletes, Prisma ↔
+API enum mapping, and **tenant isolation** — that user A cannot read or write
+user B's data. A mocked unit test verifies "did I call Prisma correctly"; an
+integration test verifies "is the answer correct".
 
-A feature needs e2e coverage when **any** of these is true:
+**E2E** is needed if any of these hold: the feature round-trips from frontend
+to backend; auth, permissions or ownership are involved; the UI is multi-step
+or stateful (filters, sorting, wizards, drag-and-drop); URL state is read or
+written; a regression would be silent — wrong data shown rather than a crash.
 
-- it spans frontend and backend (a user action that round-trips to the API),
-- it involves auth, permissions or ownership,
-- it has multi-step or stateful UI (filters, sorting, wizards, drag-and-drop),
-- it reads or writes URL state,
-- a regression would be silent — wrong data shown rather than a crash.
-
-CRUD on a single field, a presentational component, or a pure formatting helper
-do **not** need e2e.
-
-- **Web:** Playwright, in `apps/web/e2e/`. Test user-visible behaviour through
-  the UI, not implementation details. See `apps/web/e2e/README.md`.
-- **API:** supertest, in `apps/api/test/`. Test the HTTP contract — status
-  codes, response shape, query-param handling, auth guards.
+Single-field CRUD, a presentational component and a pure formatting helper do
+**not** need e2e.
 
 Before opening a PR:
 
 ```sh
-pnpm lint && pnpm stylelint && pnpm typecheck && pnpm test && pnpm --filter web e2e && pnpm build
+pnpm check        # lint + stylelint + typecheck + test + build
+pnpm check:full   # the above plus e2e
 ```
 
-CI runs lint, stylelint, typecheck, unit tests, **e2e** and build; all six gate
-the final `ci` check, so none of them can be skipped on the way to merge.
-
----
+`pnpm pr` runs `check` for you before opening the PR.
 
 ## Documentation policy
 
-Docs live in `docs/`. See `docs/README.md` for the index.
-
 ```text
 docs/
-  features/       One file per user-facing feature — what it does, how to use it
-  architecture/   Data model, API reference, diagrams (Mermaid)
-  adr/            Architecture Decision Records — why we chose X over Y
+  ai/             ORIENTATION, RECIPES, MAP — context for AI
+  features/       one file per user-facing feature
+  architecture/   data model, API, diagrams (Mermaid)
+  adr/            why X over Y (immutable once accepted)
+  product/        PRINCIPLES — what we decided not to build, and why
 ```
 
-**When to write what:**
+| Change                                       | Doc required                      |
+| -------------------------------------------- | --------------------------------- |
+| New user-facing feature                      | `docs/features/<feature>.md`      |
+| New or changed endpoint / query param        | `docs/architecture/api-*.md`      |
+| `schema.prisma` change                       | `docs/architecture/data-model.md` |
+| Non-trivial decision with a real alternative | new `docs/adr/NNNN-<slug>.md`     |
+| A feature considered and rejected            | `docs/product/PRINCIPLES.md`      |
+| Bug fix, refactor, styling tweak             | none                              |
 
-| Change | Doc required |
-| --- | --- |
-| New user-facing feature | `docs/features/<feature>.md` |
-| New/changed API endpoint or query param | Update `docs/architecture/api-repertoire.md` (or the relevant file) |
-| Prisma schema change | Update `docs/architecture/data-model.md` |
-| Non-obvious technical decision with alternatives | New `docs/adr/NNNN-<slug>.md` |
-| Bug fix, refactor, styling tweak | None |
+Templates: `docs/features/_template.md`, `docs/adr/_template.md`.
 
-Use the templates: `docs/features/_template.md`, `docs/adr/_template.md`.
-
-**Run this check at the end of every task, not the start.** By then you know
-what actually changed, including the things that weren't in the original plan.
-Walk the table above against the real diff:
-
-- Touched a query param, endpoint or response shape? → `architecture/`
-- Changed what a user sees or can do? → `features/`
-- Changed `schema.prisma`? → `architecture/data-model.md`
-- Picked one approach over a real alternative? → new `adr/`
-- Created any doc file? → link it from `docs/README.md`
+**Walk this table at the end of a task, not the start.** By then you know what
+actually changed, including the things that were not in the plan.
 
 Keep docs short and current. A stale doc is worse than no doc — it actively
-misleads. If you change behaviour, update the doc in the same PR; if you
-rename something, grep the docs for the old name.
+misleads. If you rename something, grep the docs for the old name.
+
+**`docs/journal.md`** — three lines at the end of each working session: what
+was done, what is next, where you got stuck. Read it at the start of the next
+session. Most of the cost of solo work is reloading context, and this removes it.
 
 ---
 
@@ -394,6 +455,9 @@ When a group inside `pages.json` grows past ~200 keys and becomes unwieldy,
 extract it into its own namespace file (e.g. `repertoire.json`). Until then,
 keep it together.
 
+Legal copy — terms, privacy, cookies — does **not** live in message files. It is
+too long and versioned separately; keep it as MDX under `apps/web/content/legal/`.
+
 ### Key structure and sorting
 
 Keys use **camelCase** and are sorted **alphabetically at every level**. Within
@@ -405,16 +469,16 @@ the feature. Groups themselves are also sorted alphabetically.
 {
   "band": {
     "memberCount": "...",
-    "name": "..."
+    "name": "...",
   },
   "calendar": {
     "noEvents": "...",
-    "title": "..."
+    "title": "...",
   },
   "repertoire": {
     "addTrack": "...",
-    "title": "..."
-  }
+    "title": "...",
+  },
 }
 ```
 
@@ -426,10 +490,8 @@ the feature. Groups themselves are also sorted alphabetically.
 - **English is the source of truth.** `it.json` and `uk.json` must contain an
   identical set of keys. A missing key is a bug, not a fallback.
 - **Placeholders** use ICU syntax: `"greeting": "Hello, {userName}"`.
-- **`aria-label` values are translated** — add keys to the message files and
-  use `useTranslations()`. Screen readers announce them in the document
-  language, so a mismatch between the label's language and the page language
-  causes mispronunciation.
+- **`aria-label` stays in English** — not translated, not in message files.
+  Screen readers get consistent identifiers regardless of locale.
 - Dates, numbers and relative time are formatted via `useFormatter()` from
   next-intl, not hand-rolled.
 
@@ -447,17 +509,6 @@ missed:
   (`import PageButton from './PageButton'`).
 - **Logical CSS properties only**: `pli-`/`plb-`/`mli-`/`mbs-`/`mbe-`, never
   `pl-`/`pr-`/`pt-`/`pb-`/`px-`/`py-`/`ml-`/`mt-`.
-- **No `px` sizing.** Reach for the Tailwind scale first (`p-3`, `gap-2`,
-  `size-8`, `text-sm`), then arbitrary `rem` for in-between values
-  (`text-[0.6875rem]`). `px` is only for things that must *not* scale with the
-  reader's font size: border widths, hairline dividers, `box-shadow` offsets and
-  1px optical nudges. Prefer classes over inline `style` — that's where `px`
-  creeps back in, and inline styles bypass `tailwind-merge`.
-- **Design tokens go through `@theme`.** A new custom property in
-  `src/styles/tokens.css` is only half the job: map it in the `@theme` block of
-  `app/globals.css` (`--color-banner-label: var(--banner-label)`) and consume the
-  generated utility (`text-banner-label`). Never reach into the raw variable from
-  a component with `text-(--banner-label)` or `text-[var(--banner-label)]`.
 - **`cn()`** for all className merging; the external `className` prop goes last.
 - **CVA** for component variants, not ad-hoc conditional strings.
 - **Radix primitives** directly — this project does not use shadcn.
@@ -465,7 +516,10 @@ missed:
 - Never animate with bare `transition-all` — it animates `cursor` as a discrete
   property and causes flicker. Name the properties:
   `transition-[background-color,border-color]`.
-- The band route is `/band/[id]` (singular).
+- The band route is `/band/[id]` (singular). Event and setlist routes follow the
+  same singular form: `/event/[id]`, `/setlist/[id]`.
+
+---
 
 ## API conventions
 
@@ -478,3 +532,126 @@ missed:
 - Filtering and sorting are **server-side** — the frontend passes params
   through and never sorts a fetched list, so pagination can be added without
   reworking the UI.
+
+### Error contract
+
+Every error response has the same shape, produced by the global exception
+filter:
+
+```jsonc
+{ "code": "VALIDATION_FAILED", "message": "Track title is required", "details": {} }
+```
+
+`code` is machine-readable and is what the client maps to a translated string.
+`message` is English, for logs and for the developer. Never render `message`
+to the user.
+
+### Method semantics
+
+| Method   | Use for                                                   | Must be idempotent |
+| -------- | --------------------------------------------------------- | ------------------ |
+| `GET`    | reads                                                     | yes                |
+| `POST`   | create, or an action that is not a write of a known state | no                 |
+| `PATCH`  | partial update of an entity                               | no                 |
+| `PUT`    | set a value to a known state                              | **yes**            |
+| `DELETE` | remove                                                    | yes                |
+
+`PUT /tracks/:id/my-status` and `PUT /events/:id/attendance` are `PUT` because
+setting the same value twice must not be an error. Repeating
+`POST /invites/:token/accept` returns `200`, not `409` — the caller's intent is
+already satisfied.
+
+**Where a repeated `POST` would duplicate data, make it idempotent explicitly.**
+A practice session is keyed on `(userId, startedAt)`, so a retry after a lost
+response cannot create a second thirty-minute session. For anything without a
+natural key, accept an `Idempotency-Key` header and store the result against it.
+
+### Resource shape
+
+Collections are nested under their owner, because the owner determines both
+access and the list: `POST /bands/:bandId/repertoire`. Individual items are flat,
+because the id is globally unique and nesting adds nothing:
+`PATCH /tracks/:id`. This hybrid is deliberate — record the reason here rather
+than "fixing" it into consistency.
+
+### Ordering
+
+Ordered lists use **fractional positions** (`position String`), never an integer
+`order` column. A move is one `UPDATE` and two concurrent moves cannot collide.
+
+The client sends **neighbours**, not a computed key:
+
+```jsonc
+PATCH /setlists/:id/items/:itemId/position
+{ "afterId": "clx…", "beforeId": "clx…" }
+```
+
+The server computes the key between them. Keeping the fractional-index algorithm
+out of the client means it lives in one place and can be changed.
+
+### Pagination
+
+Cursor-based wherever the underlying set can change between requests —
+repertoire, comments, activity. With `offset`, deleting two rows on page 1
+makes `page=2` skip two rows the user never saw.
+
+```
+GET /users/me/repertoire?cursor=<position>&limit=20
+```
+
+Offset is acceptable only for stable, short lists such as reference data.
+
+### Computation belongs to the server
+
+Setlist duration, readiness counts and practice statistics are computed in the
+service and returned as fields. The client formats, it does not calculate.
+Otherwise three places in the UI produce three different numbers, and someone
+walks on stage with the wrong one.
+
+---
+
+## Mutations and cache
+
+**Optimistic updates are the default** for any user-initiated write whose result
+is predictable — status chips, reordering, adding a track. A mutation round trip
+is 100–500 ms; waiting for it makes the app feel slow.
+
+```ts
+onMutate: async (input) => {
+  // Cancel in-flight queries first. A response already on the wire will
+  // otherwise land after the optimistic write and overwrite it with stale data.
+  await queryClient.cancelQueries({ queryKey: KEY });
+  const previous = queryClient.getQueryData(KEY);
+  queryClient.setQueryData(KEY, (old) => applyChange(old, input));
+  return { previous };
+},
+onError: (_err, _input, context) => queryClient.setQueryData(KEY, context.previous),
+onSettled: () => queryClient.invalidateQueries({ queryKey: KEY }),
+```
+
+Skip the optimism when the server decides the outcome — anything involving
+payment, invite acceptance, or a value the client cannot predict.
+
+Query keys are arrays, most general first: `['repertoire', bandId, filters]`.
+
+---
+
+## Working with AI in this repo
+
+`CLAUDE.md`, `docs/ai/*` and `MAP.md` are not documentation about the
+toolchain — for this repo they **are** part of the toolchain. An assistant reads
+them and generates code from them, so a stale line here produces wrong code
+rather than mild confusion. Fix discrepancies in the same PR that creates them.
+
+Two working rules:
+
+- **Do not merge what you cannot explain out loud.** Generated code that is a
+  black box is debt with no test coverage and no owner. If verifying it would
+  take ten minutes, write it by hand instead; if you can check it in thirty
+  seconds, generate it.
+- **First instance of a pattern by hand, tenth with AI.** The first endpoint,
+  the first mutation, the first migration. Everything that will be repeated
+  twenty times is worth owning once.
+
+Reviewing is a good use of assistance — "what did I miss in this service
+method?" — and it costs nothing in ownership.

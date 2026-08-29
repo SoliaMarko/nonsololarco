@@ -59,7 +59,6 @@ describe('clampBpm', () => {
   });
 });
 
-
 describe('byNewestFirst', () => {
   const older = { startedAt: '2026-05-02T19:10:00.000Z' };
   const newer = { startedAt: '2026-06-04T18:30:00.000Z' };

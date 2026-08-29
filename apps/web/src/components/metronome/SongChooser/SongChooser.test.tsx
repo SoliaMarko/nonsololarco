@@ -3,7 +3,6 @@ import userEvent from '@testing-library/user-event';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { ChooserSong } from '@/src/lib/types/metronome.types';
-
 import { mockIntl } from '@/src/test/intl-mock';
 
 import SongChooser from './SongChooser';
@@ -75,7 +74,10 @@ describe('SongChooser', () => {
   it('calls onAdd with title and BPM when form is submitted', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'New Track');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'New Track',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '140');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).toHaveBeenCalledWith('New Track', 140, { beats: 4, label: '4/4' });
@@ -84,7 +86,10 @@ describe('SongChooser', () => {
   it('calls onAdd with title and no BPM when BPM is empty', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'No BPM');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'No BPM',
+    );
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).toHaveBeenCalledWith('No BPM', undefined, { beats: 4, label: '4/4' });
   });
@@ -92,7 +97,10 @@ describe('SongChooser', () => {
   it('rejects a negative BPM and does not call onAdd', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Negative');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Negative',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '-5');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).not.toHaveBeenCalled();
@@ -102,7 +110,10 @@ describe('SongChooser', () => {
   it('rejects a zero BPM and does not call onAdd', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Zero');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Zero',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '0');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).not.toHaveBeenCalled();
@@ -112,7 +123,10 @@ describe('SongChooser', () => {
   it('rejects a BPM below the minimum (39) and does not call onAdd', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Too Slow');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Too Slow',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '39');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).not.toHaveBeenCalled();
@@ -122,7 +136,10 @@ describe('SongChooser', () => {
   it('rejects a BPM above the maximum (241) and does not call onAdd', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Too Fast');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Too Fast',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '241');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(onAdd).not.toHaveBeenCalled();
@@ -132,7 +149,10 @@ describe('SongChooser', () => {
   it('clears the BPM error once the field is edited again', async () => {
     const { onAdd } = setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Correction');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Correction',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '0');
     await userEvent.click(screen.getByText('pages.metronome.addAndPlay'));
     expect(screen.getByRole('alert')).toBeDefined();
@@ -224,22 +244,34 @@ describe('SongChooser', () => {
   it('discards the draft when the form is cancelled and reopened', async () => {
     setup();
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Draft');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Draft',
+    );
     await userEvent.type(screen.getByPlaceholderText('BPM'), '175');
     await userEvent.click(screen.getByText('pages.metronome.cancel'));
 
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    expect((screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder') as HTMLInputElement).value).toBe('');
+    expect(
+      (screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder') as HTMLInputElement)
+        .value,
+    ).toBe('');
     expect((screen.getByPlaceholderText('BPM') as HTMLInputElement).value).toBe('');
   });
 
   it('discards the draft when Escape cancels the form and it is reopened', async () => {
     setup({ onDismiss: vi.fn() });
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    await userEvent.type(screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'), 'Draft');
+    await userEvent.type(
+      screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder'),
+      'Draft',
+    );
     await userEvent.keyboard('{Escape}');
 
     await userEvent.click(screen.getByText('pages.metronome.newTrack'));
-    expect((screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder') as HTMLInputElement).value).toBe('');
+    expect(
+      (screen.getByPlaceholderText('pages.metronome.newTitlePlaceholder') as HTMLInputElement)
+        .value,
+    ).toBe('');
   });
 });

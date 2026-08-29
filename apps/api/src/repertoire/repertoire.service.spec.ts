@@ -14,7 +14,7 @@ const mockTracks = [
     musicalKey: 'Am',
     bpm: 68,
     status: 'ready',
-    duration: '3:10',
+    durationSeconds: 190,
     leadMemberId: 'user-1',
     bandId: 'band-1',
     leadMember: { id: 'user-1', name: 'Solomiia' },
@@ -29,7 +29,7 @@ const mockTracks = [
     musicalKey: 'Dm',
     bpm: 80,
     status: 'ready',
-    duration: '2:55',
+    durationSeconds: 175,
     leadMemberId: 'user-2',
     bandId: 'band-1',
     leadMember: { id: 'user-2', name: 'Anna' },
@@ -96,6 +96,60 @@ describe('RepertoireService', () => {
     });
   });
 
+  describe('getSoloByUser', () => {
+    const soloTrack = {
+      id: 't-solo-1',
+      order: 1,
+      title: 'Alone in the rain',
+      side: 'a',
+      musicalKey: 'Em',
+      bpm: 72,
+      status: 'learning',
+      durationSeconds: 260,
+      leadMemberId: 'user-1',
+      bandId: null,
+      leadMember: { id: 'user-1', name: 'Solomiia' },
+      performers: [],
+    };
+
+    it('returns solo tracks without band field', async () => {
+      mockPrisma.track.count.mockResolvedValue(1);
+      mockPrisma.track.findMany.mockResolvedValue([soloTrack]);
+
+      const result = await service.getSoloByUser('user-1');
+
+      expect(result.data).toHaveLength(1);
+      expect(result.data[0].title).toBe('Alone in the rain');
+      expect(result.data[0]).not.toHaveProperty('band');
+    });
+
+    it('queries with bandId null and correct include', async () => {
+      mockPrisma.track.count.mockResolvedValue(0);
+      mockPrisma.track.findMany.mockResolvedValue([]);
+
+      await service.getSoloByUser('user-1');
+
+      expect(mockPrisma.track.findMany).toHaveBeenCalledWith({
+        where: { leadMemberId: 'user-1', bandId: { equals: null } },
+        include: {
+          leadMember: true,
+          performers: { include: { user: true } },
+        },
+        orderBy: [{ order: 'asc' }, { id: 'asc' }],
+      });
+    });
+
+    it('returns empty array when user has no solo tracks', async () => {
+      mockPrisma.track.count.mockResolvedValue(0);
+      mockPrisma.track.findMany.mockResolvedValue([]);
+
+      const result = await service.getSoloByUser('user-1');
+
+      expect(result.data).toEqual([]);
+      expect(result.total).toBe(0);
+    });
+  });
+
   describe('getByBand', () => {
     it('returns tracks without band field', async () => {
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });
@@ -124,7 +178,7 @@ describe('RepertoireService', () => {
         musicalKey: 'Am',
         bpm: 68,
         status: 'ready',
-        duration: '3:10',
+        durationSeconds: 190,
         leadMember: { id: 'user-1', name: 'Solomiia' },
         members: [],
       });
@@ -206,7 +260,7 @@ describe('RepertoireService', () => {
         id: `t-${i}`,
         order: i + 1,
         status: i < 5 ? 'new' : 'ready',
-        duration: `${i}:00`,
+        durationSeconds: i * 60,
       }));
 
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });

@@ -1,10 +1,9 @@
 import { useTranslations } from 'next-intl';
 
+import { Link } from '@/i18n/navigation';
 import Text from '@/src/components/typography/Text';
 import Button from '@/src/components/ui/Button';
 import { ChevronIcon } from '@/src/icons/base';
-
-import { Link } from '@/i18n/navigation';
 
 export interface SeeMoreButtonProps {
   href: string;

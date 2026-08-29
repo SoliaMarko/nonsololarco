@@ -5,10 +5,10 @@ import { buttonVariants } from '@/src/lib/variants/button.variants';
 import { cn } from '@/src/utils/cn';
 
 export interface OAuthButtonProps {
-  className?: string;
   href: string;
   icon: ReactNode;
   label: string;
+  className?: string;
 }
 
 // Renders as a single <a> styled like Button's "retro-outline" variant,

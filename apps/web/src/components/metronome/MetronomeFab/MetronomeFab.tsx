@@ -22,22 +22,30 @@ export default function MetronomeFab() {
 
   return (
     <div className="relative size-16">
-      {animate && (
+      {animate ? (
         <>
           <span
-            className="absolute inset-0 rounded-full border-[2.5px] border-yellow-main"
+            className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
             style={{ animation: 'fab-pulse 1.6s ease-out infinite', zIndex: 1 }}
           />
           <span
-            className="absolute inset-0 rounded-full border-[2.5px] border-yellow-main"
-            style={{ animation: 'fab-pulse 1.6s ease-out infinite', animationDelay: '0.5s', zIndex: 1 }}
+            className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
+            style={{
+              animation: 'fab-pulse 1.6s ease-out infinite',
+              animationDelay: '0.5s',
+              zIndex: 1,
+            }}
           />
           <span
-            className="absolute inset-0 rounded-full border-[2.5px] border-yellow-main"
-            style={{ animation: 'fab-pulse 1.6s ease-out infinite', animationDelay: '1s', zIndex: 1 }}
+            className="border-yellow-main absolute inset-0 rounded-full border-[2.5px]"
+            style={{
+              animation: 'fab-pulse 1.6s ease-out infinite',
+              animationDelay: '1s',
+              zIndex: 1,
+            }}
           />
         </>
-      )}
+      ) : null}
       <button
         aria-label="Metronome"
         className="border-primary-dark bg-yellow-main absolute inset-0 z-3 flex items-center justify-center rounded-full border-[2.5px] shadow-[2px_2px_0_rgba(0,0,0,0.5)] transition-transform duration-100 hover:-translate-x-px hover:-translate-y-px"

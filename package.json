@@ -7,15 +7,59 @@
     "lint": "turbo run lint",
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "typecheck": "turbo run typecheck",
-    "test": "turbo run test"
+    "test": "turbo run test",
+    "stylelint": "turbo run stylelint",
+    "e2e": "turbo run e2e",
+    "check": "turbo run lint stylelint typecheck test build",
+    "check:full": "pnpm check && pnpm e2e",
+    "db:up": "docker compose -f docker/docker-compose.yml up -d --wait",
+    "db:down": "docker compose -f docker/docker-compose.yml down",
+    "db:nuke": "docker compose -f docker/docker-compose.yml down -v",
+    "db:migrate": "pnpm --filter @nonsololarco/db db:migrate",
+    "db:generate": "pnpm --filter @nonsololarco/db db:generate",
+    "db:seed": "pnpm --filter @nonsololarco/db db:seed",
+    "db:studio": "pnpm --filter @nonsololarco/db db:studio",
+    "db:reset": "pnpm --filter @nonsololarco/db db:reset",
+    "db:setup": "pnpm db:up && pnpm db:migrate && pnpm db:generate && pnpm db:seed",
+    "ai:map": "node scripts/generate-ai-map.mjs",
+    "pr": "bash scripts/open-pr.sh",
+    "prepare": "husky"
   },
   "devDependencies": {
+    "@commitlint/cli": "^19.8.1",
+    "@commitlint/config-conventional": "^19.8.1",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "husky": "^9.1.7",
+    "lint-staged": "^15.5.1",
     "prettier": "^3.7.4",
+    "prettier-plugin-tailwindcss": "^0.8.0",
     "turbo": "^2.9.14",
     "typescript": "5.9.2"
+  },
+  "lint-staged": {
+    "apps/web/**/*.{ts,tsx}": [
+      "eslint --fix --config apps/web/eslint.config.js",
+      "prettier --write"
+    ],
+    "apps/api/**/*.{ts,tsx}": [
+      "eslint --fix --config apps/api/eslint.config.mjs",
+      "prettier --write"
+    ],
+    "*.css": [
+      "stylelint --fix",
+      "prettier --write"
+    ],
+    "*.{json,md}": [
+      "prettier --write"
+    ]
   },
   "packageManager": "pnpm@9.0.0",
   "engines": {
     "node": ">=22"
+  },
+  "pnpm": {
+    "overrides": {
+      "@types/estree": "1.0.9"
+    }
   }
 }

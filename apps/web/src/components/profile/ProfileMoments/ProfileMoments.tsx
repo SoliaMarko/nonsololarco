@@ -8,9 +8,9 @@ import SectionHeader from '../shared/SectionHeader';
 import MomentCard from './MomentCard';
 
 export interface ProfileMomentsProps {
+  moments: MomentType[];
   className?: string;
   isOwnProfile?: boolean;
-  moments: MomentType[];
 }
 
 export default function ProfileMoments({ moments, isOwnProfile, className }: ProfileMomentsProps) {

@@ -4,11 +4,10 @@ import { useEffect } from 'react';
 
 import { useTranslations } from 'next-intl';
 
+import { Link, useRouter } from '@/i18n/navigation';
 import AuthPageLayout from '@/src/components/auth/AuthPageLayout';
 import Text from '@/src/components/typography/Text';
 import { useAuth } from '@/src/hooks/global/useAuth';
-
-import { Link, useRouter } from '@/i18n/navigation';
 
 /** Sign-up page — redirects to `/` if the user is already authenticated, otherwise renders the auth layout with registration form. */
 export default function SignupPage() {
@@ -24,7 +23,11 @@ export default function SignupPage() {
   }, [isAuthenticated, isLoading, router]);
 
   return (
-    <AuthPageLayout heading={t('signup.heading')} switchLabel={t('signup.switchLabel')} loading={isLoading}>
+    <AuthPageLayout
+      heading={t('signup.heading')}
+      switchLabel={t('signup.switchLabel')}
+      loading={isLoading}
+    >
       <div className="flex flex-col items-center gap-2">
         <Text size="sm" color="secondary" className="text-center">
           {t('login.alreadyHaveAccount')}{' '}
