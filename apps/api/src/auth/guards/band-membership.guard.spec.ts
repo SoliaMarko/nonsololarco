@@ -11,9 +11,14 @@ interface MockPrisma {
   bandMember: { findUnique: ReturnType<typeof vi.fn> };
 }
 
-/** Builds an ExecutionContext carrying the given params and user. */
+/**
+ * Builds an ExecutionContext carrying the given params and user.
+ *
+ * `params` is `unknown`-valued rather than `string`, because Express types a
+ * route param as `string | string[]` and the guard has to cope with both.
+ */
 function makeContext(
-  params: Record<string, string | undefined>,
+  params: Record<string, unknown>,
   user?: { id: string },
 ): ExecutionContext {
   return {
@@ -126,6 +131,20 @@ describe('BandMembershipGuard', () => {
       await expect(
         guard.canActivate(makeContext({ id: '' }, { id: 'user-1' })),
       ).rejects.toThrow(InternalServerErrorException);
+    });
+
+    // Express can hand back an array for a repeated param. Coercing it would
+    // produce a comma-joined id that matches no band, so the request would be
+    // refused as a 403 and look like a permission problem rather than the
+    // malformed route it is.
+    it('rejects a non-string band id rather than coercing it', async () => {
+      await expect(
+        guard.canActivate(
+          makeContext({ id: ['band-1', 'band-2'] }, { id: 'user-1' }),
+        ),
+      ).rejects.toThrow(InternalServerErrorException);
+
+      expect(prisma.bandMember.findUnique).not.toHaveBeenCalled();
     });
   });
 });

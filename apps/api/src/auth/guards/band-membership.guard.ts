@@ -10,8 +10,10 @@ import type { Request } from 'express';
 import { PrismaService } from '../../prisma';
 import type { SessionUser } from '../decorators/current-user.decorator';
 
+// `params` is deliberately not redeclared: Express types it as
+// ParamsDictionary, and narrowing an index signature in an extending interface
+// is a type error. Values are validated in readBandId instead.
 interface BandRequest extends Request {
-  params: Record<string, string | undefined>;
   user?: SessionUser;
 }
 
@@ -74,12 +76,18 @@ export class BandMembershipGuard implements CanActivate {
     return true;
   }
 
-  /** Reads the band id from whichever param name the route used. */
+  /**
+   * Reads the band id from whichever param name the route used.
+   *
+   * Express types a route param as `string | string[]`, so a non-string is
+   * rejected rather than coerced — an array would otherwise stringify into a
+   * comma-joined id that matches no band and reads as a puzzling 403.
+   */
   private readBandId(request: BandRequest): string {
     for (const name of BAND_ID_PARAMS) {
-      const value = request.params[name];
+      const value: unknown = request.params[name];
 
-      if (value) return value;
+      if (typeof value === 'string' && value.length > 0) return value;
     }
 
     // The guard was applied to a route with no band in its path. Silently
