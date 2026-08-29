@@ -122,8 +122,8 @@ separately.
 ## Migrations
 
 ```sh
-pnpm --filter @nonsololarco/db db:migrate     # create + apply
-pnpm --filter @nonsololarco/db db:generate    # regenerate the TS client
+pnpm db:migrate     # create + apply
+pnpm db:generate    # regenerate the TS client
 ```
 
 Both are needed after a schema edit. `db:migrate` changes the database;
@@ -136,7 +136,7 @@ doesn't have yet.
 ## Seeding
 
 ```sh
-pnpm --filter @nonsololarco/db db:seed
+pnpm db:seed
 ```
 
 Everything is upserted by a fixed id or a natural unique key, so the seed is
@@ -147,5 +147,5 @@ again to recreate it, then seed with `SEED_USER_EMAIL` so the seed data attaches
 to your real account instead of the placeholder:
 
 ```sh
-SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+SEED_USER_EMAIL=you@example.com pnpm db:seed
 ```

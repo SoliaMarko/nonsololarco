@@ -34,28 +34,38 @@ Requires Node 22+, pnpm 9, and a PostgreSQL instance.
 pnpm install
 cp .env.example .env          # then fill in JWT_SECRET and the OAuth keys
 
-pnpm db:up                    # Postgres in Docker, matching .env.example
-pnpm --filter @nonsololarco/db db:migrate
-pnpm --filter @nonsololarco/db db:generate
-pnpm --filter @nonsololarco/db db:seed
-
+pnpm db:setup                 # start Postgres, migrate, generate, seed
 pnpm dev
 ```
 
-`pnpm db:up` waits for Postgres to pass its healthcheck before returning, so
-the migration below cannot race the container starting. Running your own
-Postgres instead is fine — the default `DATABASE_URL` expects database
-`nonsololarco` owned by `postgres` on port 5432.
+`db:setup` is `db:up && db:migrate && db:generate && db:seed`; run the steps
+individually when you need to. **All `db:*` scripts run from the repo root** —
+they are not defined inside `packages/db`, so `cd packages/db && pnpm db:up`
+will not find them.
 
-**`P1001: Can't reach database server`** means Postgres is not running, not
-that anything is wrong with the code. `pnpm db:up`, or start your local
-instance.
+`db:up` starts Postgres in Docker with the credentials in `.env.example`, and
+waits for its healthcheck before returning so the migration cannot race the
+container. Running your own Postgres is equally fine — the default
+`DATABASE_URL` expects database `nonsololarco` owned by `postgres` on port
+5432, e.g. `brew services start postgresql@16` plus
+`createdb -h localhost -U postgres nonsololarco`.
+
+### When the database will not connect
+
+| Symptom                                         | Cause                                 | Fix                                              |
+| ----------------------------------------------- | ------------------------------------- | ------------------------------------------------ |
+| `P1001: Can't reach database server`            | Postgres is not running               | `pnpm db:up`, or start your local instance       |
+| `Cannot connect to the Docker daemon`           | Docker Desktop is not open            | Launch Docker Desktop, then `pnpm db:up`         |
+| Prisma Studio: `Could not load schema metadata` | same as `P1001` — no connection       | as above                                         |
+| `database "nonsololarco" does not exist`        | server is up, database is not created | `createdb -h localhost -U postgres nonsololarco` |
+
+None of these indicate a problem with the code.
 
 Sign in at `http://localhost:3000` via Google or GitHub. To attach the seed data
 to the account you just created rather than the placeholder user:
 
 ```sh
-SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+SEED_USER_EMAIL=you@example.com pnpm db:seed
 ```
 
 Stop the database with `pnpm db:down`; add `-v` to drop the volume and start
@@ -76,7 +86,7 @@ pnpm format
 pnpm --filter web storybook          # component workshop, :6006
 pnpm --filter web e2e                # Playwright — see apps/web/e2e/README.md
 pnpm --filter api test:e2e           # API e2e
-pnpm --filter @nonsololarco/db db:studio
+pnpm db:studio                       # Prisma Studio
 ```
 
 **After editing `schema.prisma`,** run both `db:migrate` _and_ `db:generate` —
@@ -97,7 +107,8 @@ New feature? Write the doc in the same PR — see
 Before opening a PR:
 
 ```sh
-pnpm lint && pnpm typecheck && pnpm test && pnpm --filter web e2e && pnpm build
+pnpm check        # lint + stylelint + typecheck + test + build
+pnpm check:full   # the above plus e2e
 ```
 
 Unit tests are required for all new code; e2e is required for features that

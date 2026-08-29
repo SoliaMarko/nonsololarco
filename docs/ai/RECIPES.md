@@ -218,8 +218,8 @@ response shape, guard behaviour.
 
 ```
 packages/db/prisma/schema.prisma       1. the model
-                                       2. pnpm --filter @nonsololarco/db db:migrate
-                                       3. pnpm --filter @nonsololarco/db db:generate
+                                       2. pnpm db:migrate
+                                       3. pnpm db:generate
 packages/db/prisma/seed.ts             4. seed for the new field
 packages/types/src/<domain>/           5. shared type
 apps/api/src/<module>/                 6. service + DTO

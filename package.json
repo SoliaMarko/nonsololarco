@@ -14,6 +14,12 @@
     "check:full": "pnpm check && pnpm e2e",
     "db:up": "docker compose -f docker/docker-compose.yml up -d --wait",
     "db:down": "docker compose -f docker/docker-compose.yml down",
+    "db:migrate": "pnpm --filter @nonsololarco/db db:migrate",
+    "db:generate": "pnpm --filter @nonsololarco/db db:generate",
+    "db:seed": "pnpm --filter @nonsololarco/db db:seed",
+    "db:studio": "pnpm --filter @nonsololarco/db db:studio",
+    "db:reset": "pnpm --filter @nonsololarco/db db:reset",
+    "db:setup": "pnpm db:up && pnpm db:migrate && pnpm db:generate && pnpm db:seed",
     "ai:map": "node scripts/generate-ai-map.mjs",
     "pr": "bash scripts/open-pr.sh",
     "prepare": "husky"

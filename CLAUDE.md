@@ -99,15 +99,21 @@ pnpm --filter api test:e2e        # api e2e (supertest)
 pnpm --filter api start:dev
 ```
 
-Database (`packages/db`):
+Database — **all from the repo root**, not from `packages/db`:
 
 ```sh
-pnpm --filter @nonsololarco/db db:migrate    # create + apply migration
-pnpm --filter @nonsololarco/db db:generate   # regenerate Prisma client
-pnpm --filter @nonsololarco/db db:seed       # seed dev data
-pnpm --filter @nonsololarco/db db:studio     # Prisma Studio
-pnpm --filter @nonsololarco/db db:reset      # drop, re-migrate, regenerate
+pnpm db:up          # start Postgres in Docker, wait for its healthcheck
+pnpm db:down        # stop it (-v also drops the volume)
+pnpm db:setup       # db:up + db:migrate + db:generate + db:seed
+pnpm db:migrate     # create + apply migration
+pnpm db:generate    # regenerate Prisma client
+pnpm db:seed        # seed dev data
+pnpm db:studio      # Prisma Studio
+pnpm db:reset       # drop, re-migrate, regenerate
 ```
+
+`P1001: Can't reach database server` means Postgres is not running — it is not
+a code problem. See the table in `README.md` for the other connection errors.
 
 **After any `schema.prisma` change:** `db:migrate` (applies to DB) **and**
 `db:generate` (regenerates the TS client). Running only one of them produces
@@ -117,7 +123,7 @@ undefined`.
 Seeding preserves your OAuth account when `SEED_USER_EMAIL` is set:
 
 ```sh
-SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
+SEED_USER_EMAIL=you@example.com pnpm db:seed
 ```
 
 ---

@@ -215,7 +215,8 @@ pnpm --filter web storybook
 pnpm --filter web e2e         # Playwright
 pnpm --filter api test        # api only
 
-pnpm --filter @nonsololarco/db db:migrate    # create + apply a migration
-pnpm --filter @nonsololarco/db db:generate   # regenerate the Prisma client
-pnpm --filter @nonsololarco/db db:seed
+pnpm db:up          # start Postgres in Docker
+pnpm db:migrate     # create + apply a migration
+pnpm db:generate    # regenerate the Prisma client
+pnpm db:seed
 ```
