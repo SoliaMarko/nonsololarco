@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-**nonsololarco** — a social platform and practice tool for musicians, retro
+**nonsololarco** — a shared repertoire and gig-preparation tool for bands, retro
 aesthetic. Turborepo + pnpm: `apps/web` (Next.js 15, React 19, Tailwind v4),
 `apps/api` (NestJS 11), `packages/db` (Prisma 7 + PostgreSQL),
 `packages/types` (shared types — the source of truth), `packages/ui`.
@@ -14,22 +14,29 @@ session. Detail lives elsewhere and is read on demand.
 | ------------------------------------------------------------------ | --------------------------------------------------------------------- |
 | Cold start: core rules, repo traps, routing                        | **[`docs/ai/ORIENTATION.md`](./docs/ai/ORIENTATION.md)** ← start here |
 | Step by step: add a component / endpoint / migration / translation | [`docs/ai/RECIPES.md`](./docs/ai/RECIPES.md)                          |
+| Add a write endpoint, end to end, nine commits                     | [`docs/RECIPE-endpoint.md`](./docs/RECIPE-endpoint.md)                |
 | Branches, commit messages, commit size, rebase vs merge            | [`docs/ai/GIT.md`](./docs/ai/GIT.md)                                  |
 | Does this component / util / route / type already exist?           | [`docs/ai/MAP.md`](./docs/ai/MAP.md) — generated, `pnpm ai:map`       |
 | How code should look: styles, tokens, CVA, naming                  | `nonsololarco-conventions` skill                                      |
+| **Why a feature exists, or why it was cut**                        | [`docs/product/PRINCIPLES.md`](./docs/product/PRINCIPLES.md)          |
+| What is being built now, and in what order                         | [`docs/ROADMAP.md`](./docs/ROADMAP.md)                                |
 | Features, API, DB schema, decisions                                | `docs/features/`, `docs/architecture/`, `docs/adr/`                   |
 | What is planned to change and why                                  | [`docs/REFACTORING-PLAN.md`](./docs/REFACTORING-PLAN.md)              |
 
 **Before writing anything, check `MAP.md` for an existing implementation.**
 A duplicate drifts from the original and doubles the maintenance.
 
+**Before adding a feature, check `PRINCIPLES.md`.** Several obvious-looking
+features were deliberately cut, each with a condition that would bring it back.
+Re-adding one by accident wastes a sprint.
+
 ## Definition of done
 
 A task is not finished when the code works. It is finished when the next
 person can find it, understand it and change it.
 
-1. **Tests written.** Unit tests for every new module, in the same commit. E2E
-   if the feature meets the criteria in [Testing policy](#testing-policy).
+1. **Tests written.** Per the [Testing policy](#testing-policy), in the same
+   commit. E2E if the feature meets the criteria there.
 2. **JSDoc written.** Every utility, hook and service method — see
    [JSDoc](#jsdoc--required-on-every-utility).
 3. **Docs updated.** Check the table in
@@ -51,9 +58,9 @@ that now describes behaviour the code no longer has.
 
 ## Project
 
-**nonsololarco** ("non solo arco" — not only the bow) is a musician social
-platform and practice tool with a retro/vintage aesthetic. Turborepo monorepo,
-pnpm workspaces.
+**nonsololarco** ("non solo arco" — not only the bow) is a shared repertoire
+and gig-preparation tool for bands, with a retro/vintage aesthetic. Turborepo
+monorepo, pnpm workspaces.
 
 ```text
 apps/
@@ -63,7 +70,7 @@ packages/
   types/          @nonsololarco/types — shared TS types (source of truth)
   db/             @nonsololarco/db — Prisma schema, migrations, seed
   ui/             @repo/ui — shared React components
-docs/             Feature docs, architecture, ADRs
+docs/             Feature docs, architecture, ADRs, product principles
 ```
 
 ## Commands
@@ -87,6 +94,7 @@ pnpm --filter web test:watch
 pnpm --filter web storybook
 pnpm --filter web e2e             # Playwright e2e
 pnpm --filter api test            # api unit tests (vitest)
+pnpm --filter api test:int        # api integration tests (testcontainers)
 pnpm --filter api test:e2e        # api e2e (supertest)
 pnpm --filter api start:dev
 ```
@@ -196,6 +204,80 @@ Enforced by `react/jsx-no-leaked-render` in ESLint.
 }
 ```
 
+### Discriminated unions for variant shapes
+
+When a type has variants, model them as a union with a literal tag, not one
+interface with optional fields. Optional fields make impossible states
+representable; the union makes them a compile error.
+
+```ts
+// ❌ compiles, and is nonsense
+interface SetlistItem {
+  kind: 'track' | 'break';
+  trackId?: string;
+  label?: string;
+}
+const bad: SetlistItem = { kind: 'track', label: 'Interval' };
+
+// ✅
+type SetlistItem =
+  | { kind: 'track'; id: string; position: string; trackId: string }
+  | { kind: 'break'; id: string; position: string; label: string; durationSeconds: number };
+```
+
+Close every `switch` over a union with an exhaustiveness check, so adding a
+variant fails the build in every place that needs updating rather than
+silently falling through:
+
+```ts
+const assertNever = (value: never): never => {
+  throw new Error(`Unhandled variant: ${JSON.stringify(value)}`);
+};
+
+switch (item.kind) {
+  case 'track':
+    return renderTrack(item);
+  case 'break':
+    return renderBreak(item);
+  default:
+    return assertNever(item);
+}
+```
+
+Applies to `SetlistItem`, attachment kinds, event types, and any request state
+modelled as `loading | error | success`.
+
+### Size and complexity limits
+
+Enforced as **warnings** — they guide, they don't block a commit.
+
+| Scope   | Rule                     | Limit |
+| ------- | ------------------------ | ----- |
+| `*.ts`  | `max-lines-per-function` | 60    |
+| `*.tsx` | `max-lines-per-function` | 150   |
+| `*.tsx` | `react/jsx-max-depth`    | 5     |
+| any     | `max-lines` (file)       | 250   |
+| any     | `complexity`             | 12    |
+| any     | `max-depth` (statements) | 3     |
+
+**Why components get a bigger budget.** Line count is a proxy for cognitive
+load, and the proxy holds for imperative code. JSX is declarative: a form with
+eight fields runs past 120 lines at a cyclomatic complexity of 1 — long, not
+complex. Forcing it under 60 means extracting sub-components that exist only to
+satisfy a counter, and under our one-component-per-folder convention every
+extraction costs a directory, a barrel and new prop threading.
+
+Exempt from these limits: tests, stories, `icons/`, `svg/`, `illustrations/`.
+`jsx-max-depth` is also off in `components/ui/` and `components/form/`, where
+Radix dictates the tree (`Root > Portal > Content > Viewport > Item` is four
+levels before any of our markup) and depth measures the library, not a decision
+we made.
+
+**Calibrating a rule.** If a newly added rule flags more than ~10% of files,
+the rule is wrong, not the code. Adjust the threshold or scope it, and note the
+reason here. A rule that is routinely violated devalues every other rule in
+this file.
+
 ### JSDoc — required on every utility
 
 Every exported utility, hook, service method and non-trivial helper carries a
@@ -259,21 +341,30 @@ has a constraint the type can't express.
 
 ## Testing policy
 
-**Unit tests for everything.** Every new module ships with tests in the same
-commit, with no exception for "simple" code. Cover the happy path, the
-empty/zero case, and every error branch. When fixing a bug, write the failing
-test first.
+Tests are mandatory where behaviour can regress silently, optional where the
+only failure mode is a visible layout change. The rule below is narrower than
+"test everything" on purpose: a policy that is routinely ignored is worse than
+no policy, because it teaches that the rules in this file are decorative.
 
-| What             | Where                             | Tool                       |
-| ---------------- | --------------------------------- | -------------------------- |
-| React components | `Component.test.tsx` alongside    | Vitest + Testing Library   |
-| Hooks            | `useThing.test.ts` alongside      | Vitest + `renderHook`      |
-| Utils            | `thing.utils.test.ts` alongside   | Vitest                     |
-| Nest services    | `thing.service.spec.ts` alongside | Vitest + `@nestjs/testing` |
-| Nest controllers | `thing.controller.spec.ts`        | Vitest, service mocked     |
+**Mandatory, in the same commit as the code:**
+
+| What                                                   | Where                             | Tool                       |
+| ------------------------------------------------------ | --------------------------------- | -------------------------- |
+| Hooks                                                  | `useThing.test.ts` alongside      | Vitest + `renderHook`      |
+| Utils                                                  | `thing.utils.test.ts` alongside   | Vitest                     |
+| Nest services                                          | `thing.service.spec.ts` alongside | Vitest + `@nestjs/testing` |
+| Nest controllers                                       | `thing.controller.spec.ts`        | Vitest, service mocked     |
+| Components with behaviour — state, handlers, branching | `Component.test.tsx` alongside    | Vitest + Testing Library   |
+
+**Optional:** purely presentational components — no state, no handlers, props
+straight to markup. A Storybook story covers those better than a test that
+asserts a `<div>` rendered.
 
 Cover the happy path, the empty/zero case, and each error branch. When fixing a
 bug, add the test that would have caught it — in the same commit as the fix.
+
+**Coverage must not go down.** The CI ratchet enforces this; it is the honest
+version of a percentage target.
 
 Tests render with the `en` locale so that `getByText` assertions match English
 translation strings. `aria-label` values stay in English and are not translated.
@@ -283,8 +374,9 @@ touch a real database there.
 
 **An integration test** is needed wherever a mock proves nothing: real sort
 order, pagination boundaries, unique constraints, cascading deletes, Prisma ↔
-API enum mapping. A mocked unit test verifies "did I call Prisma correctly";
-an integration test verifies "is the answer correct".
+API enum mapping, and **tenant isolation** — that user A cannot read or write
+user B's data. A mocked unit test verifies "did I call Prisma correctly"; an
+integration test verifies "is the answer correct".
 
 **E2E** is needed if any of these hold: the feature round-trips from frontend
 to backend; auth, permissions or ownership are involved; the UI is multi-step
@@ -311,6 +403,7 @@ docs/
   features/       one file per user-facing feature
   architecture/   data model, API, diagrams (Mermaid)
   adr/            why X over Y (immutable once accepted)
+  product/        PRINCIPLES — what we decided not to build, and why
 ```
 
 | Change                                       | Doc required                      |
@@ -319,6 +412,7 @@ docs/
 | New or changed endpoint / query param        | `docs/architecture/api-*.md`      |
 | `schema.prisma` change                       | `docs/architecture/data-model.md` |
 | Non-trivial decision with a real alternative | new `docs/adr/NNNN-<slug>.md`     |
+| A feature considered and rejected            | `docs/product/PRINCIPLES.md`      |
 | Bug fix, refactor, styling tweak             | none                              |
 
 Templates: `docs/features/_template.md`, `docs/adr/_template.md`.
@@ -328,6 +422,10 @@ actually changed, including the things that were not in the plan.
 
 Keep docs short and current. A stale doc is worse than no doc — it actively
 misleads. If you rename something, grep the docs for the old name.
+
+**`docs/journal.md`** — three lines at the end of each working session: what
+was done, what is next, where you got stuck. Read it at the start of the next
+session. Most of the cost of solo work is reloading context, and this removes it.
 
 ---
 
@@ -350,6 +448,9 @@ messages/
 When a group inside `pages.json` grows past ~200 keys and becomes unwieldy,
 extract it into its own namespace file (e.g. `repertoire.json`). Until then,
 keep it together.
+
+Legal copy — terms, privacy, cookies — does **not** live in message files. It is
+too long and versioned separately; keep it as MDX under `apps/web/content/legal/`.
 
 ### Key structure and sorting
 
@@ -409,7 +510,10 @@ missed:
 - Never animate with bare `transition-all` — it animates `cursor` as a discrete
   property and causes flicker. Name the properties:
   `transition-[background-color,border-color]`.
-- The band route is `/band/[id]` (singular).
+- The band route is `/band/[id]` (singular). Event and setlist routes follow the
+  same singular form: `/event/[id]`, `/setlist/[id]`.
+
+---
 
 ## API conventions
 
@@ -422,3 +526,126 @@ missed:
 - Filtering and sorting are **server-side** — the frontend passes params
   through and never sorts a fetched list, so pagination can be added without
   reworking the UI.
+
+### Error contract
+
+Every error response has the same shape, produced by the global exception
+filter:
+
+```jsonc
+{ "code": "VALIDATION_FAILED", "message": "Track title is required", "details": {} }
+```
+
+`code` is machine-readable and is what the client maps to a translated string.
+`message` is English, for logs and for the developer. Never render `message`
+to the user.
+
+### Method semantics
+
+| Method   | Use for                                                   | Must be idempotent |
+| -------- | --------------------------------------------------------- | ------------------ |
+| `GET`    | reads                                                     | yes                |
+| `POST`   | create, or an action that is not a write of a known state | no                 |
+| `PATCH`  | partial update of an entity                               | no                 |
+| `PUT`    | set a value to a known state                              | **yes**            |
+| `DELETE` | remove                                                    | yes                |
+
+`PUT /tracks/:id/my-status` and `PUT /events/:id/attendance` are `PUT` because
+setting the same value twice must not be an error. Repeating
+`POST /invites/:token/accept` returns `200`, not `409` — the caller's intent is
+already satisfied.
+
+**Where a repeated `POST` would duplicate data, make it idempotent explicitly.**
+A practice session is keyed on `(userId, startedAt)`, so a retry after a lost
+response cannot create a second thirty-minute session. For anything without a
+natural key, accept an `Idempotency-Key` header and store the result against it.
+
+### Resource shape
+
+Collections are nested under their owner, because the owner determines both
+access and the list: `POST /bands/:bandId/repertoire`. Individual items are flat,
+because the id is globally unique and nesting adds nothing:
+`PATCH /tracks/:id`. This hybrid is deliberate — record the reason here rather
+than "fixing" it into consistency.
+
+### Ordering
+
+Ordered lists use **fractional positions** (`position String`), never an integer
+`order` column. A move is one `UPDATE` and two concurrent moves cannot collide.
+
+The client sends **neighbours**, not a computed key:
+
+```jsonc
+PATCH /setlists/:id/items/:itemId/position
+{ "afterId": "clx…", "beforeId": "clx…" }
+```
+
+The server computes the key between them. Keeping the fractional-index algorithm
+out of the client means it lives in one place and can be changed.
+
+### Pagination
+
+Cursor-based wherever the underlying set can change between requests —
+repertoire, comments, activity. With `offset`, deleting two rows on page 1
+makes `page=2` skip two rows the user never saw.
+
+```
+GET /users/me/repertoire?cursor=<position>&limit=20
+```
+
+Offset is acceptable only for stable, short lists such as reference data.
+
+### Computation belongs to the server
+
+Setlist duration, readiness counts and practice statistics are computed in the
+service and returned as fields. The client formats, it does not calculate.
+Otherwise three places in the UI produce three different numbers, and someone
+walks on stage with the wrong one.
+
+---
+
+## Mutations and cache
+
+**Optimistic updates are the default** for any user-initiated write whose result
+is predictable — status chips, reordering, adding a track. A mutation round trip
+is 100–500 ms; waiting for it makes the app feel slow.
+
+```ts
+onMutate: async (input) => {
+  // Cancel in-flight queries first. A response already on the wire will
+  // otherwise land after the optimistic write and overwrite it with stale data.
+  await queryClient.cancelQueries({ queryKey: KEY });
+  const previous = queryClient.getQueryData(KEY);
+  queryClient.setQueryData(KEY, (old) => applyChange(old, input));
+  return { previous };
+},
+onError: (_err, _input, context) => queryClient.setQueryData(KEY, context.previous),
+onSettled: () => queryClient.invalidateQueries({ queryKey: KEY }),
+```
+
+Skip the optimism when the server decides the outcome — anything involving
+payment, invite acceptance, or a value the client cannot predict.
+
+Query keys are arrays, most general first: `['repertoire', bandId, filters]`.
+
+---
+
+## Working with AI in this repo
+
+`CLAUDE.md`, `docs/ai/*` and `MAP.md` are not documentation about the
+toolchain — for this repo they **are** part of the toolchain. An assistant reads
+them and generates code from them, so a stale line here produces wrong code
+rather than mild confusion. Fix discrepancies in the same PR that creates them.
+
+Two working rules:
+
+- **Do not merge what you cannot explain out loud.** Generated code that is a
+  black box is debt with no test coverage and no owner. If verifying it would
+  take ten minutes, write it by hand instead; if you can check it in thirty
+  seconds, generate it.
+- **First instance of a pattern by hand, tenth with AI.** The first endpoint,
+  the first mutation, the first migration. Everything that will be repeated
+  twenty times is worth owning once.
+
+Reviewing is a good use of assistance — "what did I miss in this service
+method?" — and it costs nothing in ownership.

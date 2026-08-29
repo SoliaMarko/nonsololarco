@@ -1,13 +1,26 @@
 # nonsololarco docs
 
-Project documentation. Four kinds, four folders.
+Project documentation. Five kinds, five folders.
 
-| Folder                            | Answers                                  | Audience                        |
-| --------------------------------- | ---------------------------------------- | ------------------------------- |
-| [`ai/`](./ai)                     | _Where is everything and how do I do X?_ | AI assistants, new contributors |
-| [`features/`](./features)         | _What does this do and how do I use it?_ | Anyone touching the feature     |
-| [`architecture/`](./architecture) | _How is the system shaped?_              | Anyone adding to it             |
-| [`adr/`](./adr)                   | _Why was it built this way?_             | Future you, in six months       |
+| Folder                            | Answers                                   | Audience                        |
+| --------------------------------- | ----------------------------------------- | ------------------------------- |
+| [`ai/`](./ai)                     | _Where is everything and how do I do X?_  | AI assistants, new contributors |
+| [`product/`](./product)           | _Why does this exist, or why was it cut?_ | Anyone proposing a feature      |
+| [`features/`](./features)         | _What does this do and how do I use it?_  | Anyone touching the feature     |
+| [`architecture/`](./architecture) | _How is the system shaped?_               | Anyone adding to it             |
+| [`adr/`](./adr)                   | _Why was it built this way?_              | Future you, in six months       |
+
+## Product and planning
+
+- [PRINCIPLES](./product/PRINCIPLES.md) — what the product is, what it
+  deliberately is not, and what would change our mind. **Read before adding a
+  feature.**
+- [ROADMAP](./ROADMAP.md) — what is shipped, what is designed but not built,
+  and in what order.
+- [RECIPE-endpoint](./RECIPE-endpoint.md) — a write endpoint end to end, in
+  nine commits that each build on their own.
+- [journal](./journal.md) — three lines per working session, so the next one
+  starts with context instead of archaeology.
 
 ## AI context
 
