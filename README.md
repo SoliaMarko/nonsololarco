@@ -52,14 +52,26 @@ container. Running your own Postgres is equally fine — the default
 
 ### When the database will not connect
 
-| Symptom                                         | Cause                                 | Fix                                              |
-| ----------------------------------------------- | ------------------------------------- | ------------------------------------------------ |
-| `P1001: Can't reach database server`            | Postgres is not running               | `pnpm db:up`, or start your local instance       |
-| `Cannot connect to the Docker daemon`           | Docker Desktop is not open            | Launch Docker Desktop, then `pnpm db:up`         |
-| Prisma Studio: `Could not load schema metadata` | same as `P1001` — no connection       | as above                                         |
-| `database "nonsololarco" does not exist`        | server is up, database is not created | `createdb -h localhost -U postgres nonsololarco` |
+| Symptom                                         | Cause                                                                                                         | Fix                                              |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ |
+| `P1001: Can't reach database server`            | Postgres is not running                                                                                       | `pnpm db:up`, or start your local instance       |
+| `Cannot connect to the Docker daemon`           | Docker Desktop is not open                                                                                    | Launch Docker Desktop, then `pnpm db:up`         |
+| Prisma Studio: `Could not load schema metadata` | same as `P1001` — no connection                                                                               | as above                                         |
+| `P1000: Authentication failed`                  | the Docker volume was initialised with different credentials, so the ones in `docker-compose.yml` are ignored | `pnpm db:nuke && pnpm db:setup`                  |
+| `database "nonsololarco" does not exist`        | server is up, database is not created                                                                         | `createdb -h localhost -U postgres nonsololarco` |
 
 None of these indicate a problem with the code.
+
+`P1000` is the confusing one, because the server clearly answers. The postgres
+image applies `POSTGRES_USER` and `POSTGRES_PASSWORD` **only when the data
+directory is empty** — once the volume exists, editing the compose file changes
+nothing and the server keeps the roles it was first created with. `pnpm db:nuke`
+drops the volume so the next `db:up` re-initialises it. It deletes all local
+data, which is why it is separate from `db:down`.
+
+If `P1000` persists afterwards, something else is already listening on 5432 —
+usually a local Postgres. Check with `lsof -i :5432`, then either stop it or
+point `DATABASE_URL` at it instead.
 
 Sign in at `http://localhost:3000` via Google or GitHub. To attach the seed data
 to the account you just created rather than the placeholder user:
@@ -68,8 +80,8 @@ to the account you just created rather than the placeholder user:
 SEED_USER_EMAIL=you@example.com pnpm db:seed
 ```
 
-Stop the database with `pnpm db:down`; add `-v` to drop the volume and start
-from an empty database.
+Stop the database with `pnpm db:down`, or `pnpm db:nuke` to drop the volume and start
+from an empty one.
 
 ## Commands
 

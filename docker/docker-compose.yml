@@ -6,9 +6,25 @@
 #
 #   postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public
 #
-# Start:  pnpm db:up      (docker compose -f docker/docker-compose.yml up -d)
+# Start:  pnpm db:up
 # Stop:   pnpm db:down
-# Wipe:   pnpm db:down -v  — drops the volume, so everything is lost
+# Wipe:   pnpm db:nuke     — drops the volume, so all local data is lost
+#
+# ---------------------------------------------------------------------------
+# CHANGING THE CREDENTIALS BELOW DOES NOTHING ON ITS OWN.
+#
+# The postgres image runs initdb — and applies POSTGRES_USER, POSTGRES_PASSWORD
+# and POSTGRES_DB — only when the data directory is empty. Once the named
+# volume exists, every value here is ignored and the server keeps whatever
+# roles it was first initialised with.
+#
+# The symptom is `P1000: Authentication failed`: the server answers, so it is
+# clearly running, but it has never heard of the user you are connecting as.
+#
+# After editing any of them, recreate the volume:
+#
+#   pnpm db:nuke && pnpm db:setup
+# ---------------------------------------------------------------------------
 
 services:
   postgres:
