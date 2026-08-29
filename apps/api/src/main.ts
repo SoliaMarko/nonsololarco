@@ -4,6 +4,7 @@ import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 import { AppModule } from './app.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 import type { EnvConfig } from './config/env.validation';
 import cookieParser from 'cookie-parser';
 
@@ -33,6 +34,11 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
+
+  // Every error leaves through here, in the shape documented in CLAUDE.md:
+  // { code, message, details }. Without it a dropped database connection and
+  // a malformed body both reach the client as a bare "Internal server error".
+  app.useGlobalFilters(new AllExceptionsFilter());
 
   const swaggerConfig = new DocumentBuilder()
     .setTitle('Nonsololarco API')

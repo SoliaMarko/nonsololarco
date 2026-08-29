@@ -37,10 +37,10 @@ case "$BRANCH" in
     ;;
 esac
 
-# feature/CLEF-187-create-metronome-page → type / ticket / slug
+# feature/LARK-70-api-error-contract → type / issue / slug
 if [[ ! "$BRANCH" =~ ^([a-z]+)/([A-Z]+-[0-9]+)-(.+)$ ]]; then
   echo "Branch '$BRANCH' does not match <type>/<TICKET>-<slug>." >&2
-  echo "Example: feature/CLEF-187-create-metronome-page" >&2
+  echo "Example: feature/LARK-70-api-error-contract" >&2
   exit 1
 fi
 TYPE="${BASH_REMATCH[1]}"

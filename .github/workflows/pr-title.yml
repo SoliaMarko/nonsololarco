@@ -8,7 +8,7 @@ name: PR title
 # So the PR title IS the commit message that lands on `develop` forever — it
 # has to satisfy the same rules commitlint applies to every other commit.
 #
-#   branch:  feature/CLEF-187-create-metronome-page
+#   branch:  feature/LARK-70-api-error-contract
 #   title:   feat(web): create metronome page
 #   squash:  feat(web): create metronome page (#66)
 #
@@ -39,8 +39,8 @@ jobs:
             const pr = context.payload.pull_request;
             const branch = pr.head.ref;
 
-            // feature/CLEF-187-create-metronome-page
-            //   → type "feature", ticket "CLEF-187", slug "create-metronome-page"
+            // feature/LARK-70-api-error-contract
+            //   → type "feature", issue "LARK-70", slug "api-error-contract"
             const m = branch.match(/^(?<type>[a-z]+)\/(?<ticket>[A-Z]+-\d+)-(?<slug>.+)$/);
             if (!m) {
               core.notice(`Branch "${branch}" does not match <type>/<TICKET>-<slug>; leaving the title alone.`);
@@ -105,16 +105,29 @@ jobs:
               core.notice(`Title set to: ${title}`);
             }
 
-            // Make sure the ticket is linked in the body exactly once.
+            // Link the issue so merging the PR closes it.
+            //
+            // GitHub only honours its closing keywords followed by #<number>
+            // or a full URL. "Closes LARK-70" is plain text and closes
+            // nothing, so the numeric suffix is what goes in the footer — the
+            // LARK prefix exists for branch names, not for GitHub.
+            const issueNumber = ticket.split('-')[1];
+            const reference = `#${issueNumber}`;
             const body = pr.body ?? '';
-            if (!body.includes(ticket)) {
-              const footer = `\n\n---\nCloses ${ticket}`;
+
+            // Match the reference as a whole token, so #7 does not count as
+            // already present when the issue is #70.
+            const alreadyLinked = new RegExp(`#${issueNumber}(?!\\d)`).test(body);
+
+            if (alreadyLinked) {
+              core.info(`Body already references ${reference}.`);
+            } else {
               await github.rest.pulls.update({
                 ...context.repo,
                 pull_number: pr.number,
-                body: body + footer,
+                body: `${body}\n\n---\nCloses ${reference}`,
               });
-              core.notice(`Added "Closes ${ticket}" to the body.`);
+              core.notice(`Added "Closes ${reference}" to the body.`);
             }
 
       - name: Validate final title
