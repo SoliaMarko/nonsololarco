@@ -1,19 +1,36 @@
+# Local Postgres for development.
+#
+# Credentials here must match DATABASE_URL in .env.example, or the documented
+# "use docker instead of a local Postgres" path produces a running database the
+# app cannot connect to.
+#
+#   postgresql://postgres:postgres@localhost:5432/nonsololarco?schema=public
+#
+# Start:  pnpm db:up      (docker compose -f docker/docker-compose.yml up -d)
+# Stop:   pnpm db:down
+# Wipe:   pnpm db:down -v  — drops the volume, so everything is lost
+
 services:
   postgres:
     image: postgres:16
+    container_name: nonsololarco-postgres
+    restart: unless-stopped
     environment:
-      POSTGRES_USER: arco
-      POSTGRES_PASSWORD: arco
-      POSTGRES_DB: arco_dev
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: nonsololarco
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
       - postgres_data:/var/lib/postgresql/data
-
-  redis:
-    image: redis:7-alpine
-    ports:
-      - "6379:6379"
+    # Without this, `pnpm dev` can start the API before Postgres finishes
+    # initialising and the first query fails with a connection error that looks
+    # like a code bug.
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U postgres -d nonsololarco']
+      interval: 5s
+      timeout: 3s
+      retries: 10
 
 volumes:
   postgres_data:

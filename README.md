@@ -32,14 +32,24 @@ Requires Node 22+, pnpm 9, and a PostgreSQL instance.
 
 ```sh
 pnpm install
-cp .env.example .env          # then fill in DATABASE_URL, JWT_SECRET, OAuth keys
+cp .env.example .env          # then fill in JWT_SECRET and the OAuth keys
 
+pnpm db:up                    # Postgres in Docker, matching .env.example
 pnpm --filter @nonsololarco/db db:migrate
 pnpm --filter @nonsololarco/db db:generate
 pnpm --filter @nonsololarco/db db:seed
 
 pnpm dev
 ```
+
+`pnpm db:up` waits for Postgres to pass its healthcheck before returning, so
+the migration below cannot race the container starting. Running your own
+Postgres instead is fine — the default `DATABASE_URL` expects database
+`nonsololarco` owned by `postgres` on port 5432.
+
+**`P1001: Can't reach database server`** means Postgres is not running, not
+that anything is wrong with the code. `pnpm db:up`, or start your local
+instance.
 
 Sign in at `http://localhost:3000` via Google or GitHub. To attach the seed data
 to the account you just created rather than the placeholder user:
@@ -48,7 +58,8 @@ to the account you just created rather than the placeholder user:
 SEED_USER_EMAIL=you@example.com pnpm --filter @nonsololarco/db db:seed
 ```
 
-There's a `docker/` directory if you'd rather not run Postgres locally.
+Stop the database with `pnpm db:down`; add `-v` to drop the volume and start
+from an empty database.
 
 ## Commands
 

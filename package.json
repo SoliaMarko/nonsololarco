@@ -12,6 +12,8 @@
     "e2e": "turbo run e2e",
     "check": "turbo run lint stylelint typecheck test build",
     "check:full": "pnpm check && pnpm e2e",
+    "db:up": "docker compose -f docker/docker-compose.yml up -d --wait",
+    "db:down": "docker compose -f docker/docker-compose.yml down",
     "ai:map": "node scripts/generate-ai-map.mjs",
     "pr": "bash scripts/open-pr.sh",
     "prepare": "husky"
