@@ -50,7 +50,9 @@ export default [
       'typescript-sort-keys/interface': ['error', 'asc', { requiredFirst: true }],
       'typescript-sort-keys/string-enum': 'error',
 
-      // Size & complexity limits — proxy metrics, warn to guide not block
+      // Size & complexity limits — proxy metrics, warn to guide not block.
+      // The 60-line budget is calibrated for imperative code: hooks, utils,
+      // event handlers. See the *.tsx block below for why components differ.
       'max-lines': ['warn', { max: 250, skipBlankLines: true, skipComments: true }],
       'max-lines-per-function': ['warn', { max: 60, skipBlankLines: true, skipComments: true }],
       complexity: ['warn', 12],
@@ -67,12 +69,50 @@ export default [
     },
   },
   {
+    // Components get a larger line budget than logic, on purpose.
+    //
+    // Line count is a proxy for cognitive load, and that proxy holds for
+    // imperative code — 60 lines of branching really is hard to follow. JSX is
+    // declarative: a form with eight fields, each with a label, control and
+    // error slot, runs past 120 lines at a cyclomatic complexity of 1. It is
+    // long, not complex.
+    //
+    // Forcing such a component under 60 lines means extracting sub-components
+    // that exist only to satisfy the counter — and under our one-component-per-
+    // folder convention every extraction costs a directory plus a barrel, and
+    // adds prop threading that was not there before. The rule would be
+    // optimising the metric against the goal.
+    //
+    // What actually hurts readability in JSX is nesting depth, so that is
+    // capped instead. `max-depth` above covers statement nesting; jsx-max-depth
+    // covers the markup tree. Five allows the usual page > card > row > content
+    // stack plus one conditional wrapper; past that a feature component is
+    // usually doing someone else's layout as well as its own.
+    files: ['**/*.tsx'],
+    rules: {
+      'max-lines-per-function': ['warn', { max: 150, skipBlankLines: true, skipComments: true }],
+      'react/jsx-max-depth': ['warn', { max: 5 }],
+    },
+  },
+  {
+    // Design-system primitives wrap Radix, and Radix dictates its own tree:
+    // Root > Portal > Content > Viewport > Group > Item is four levels before
+    // any of our markup begins. Depth here measures the library, not a decision
+    // we made, and it cannot be flattened without breaking the component. The
+    // rule stays on for feature components, where depth is a real signal.
+    files: ['src/components/ui/**/*.tsx', 'src/components/form/**/*.tsx'],
+    rules: {
+      'react/jsx-max-depth': 'off',
+    },
+  },
+  {
     // Tests and stories are long by nature — that's fine.
     files: ['**/*.{test,spec}.{ts,tsx}', 'stories/**', '**/*.stories.tsx'],
     rules: {
       'max-lines': 'off',
       'max-lines-per-function': 'off',
       'max-nested-callbacks': 'off',
+      'react/jsx-max-depth': 'off',
       'no-restricted-properties': [
         'error',
         { object: 'it', property: 'skip', message: 'Skipped test = broken test. Fix or remove.' },
@@ -84,9 +124,11 @@ export default [
   },
   {
     // SVG components are pure markup — size limits don't apply.
-    files: ['**/icons/**/*.tsx', '**/svg/**/*.tsx'],
+    files: ['**/icons/**/*.tsx', '**/svg/**/*.tsx', '**/illustrations/**/*.tsx'],
     rules: {
+      'max-lines': 'off',
       'max-lines-per-function': 'off',
+      'react/jsx-max-depth': 'off',
     },
   },
 ];
