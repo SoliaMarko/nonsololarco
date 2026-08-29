@@ -138,7 +138,7 @@ async function main() {
     musicalKey: MusicalKey;
     bpm: number;
     status: TrackStatus;
-    duration: string;
+    durationSeconds: number;
   };
 
   const tracks: TrackSeed[] = [
@@ -153,7 +153,7 @@ async function main() {
       musicalKey: 'Am',
       bpm: 68,
       status: 'ready',
-      duration: '3:10',
+      durationSeconds: 190,
     },
     {
       id: 'track-quiet-yard-2',
@@ -165,7 +165,7 @@ async function main() {
       musicalKey: 'Dm',
       bpm: 80,
       status: 'ready',
-      duration: '2:55',
+      durationSeconds: 175,
     },
     {
       id: 'track-quiet-yard-3',
@@ -177,7 +177,7 @@ async function main() {
       musicalKey: 'C',
       bpm: 96,
       status: 'ready',
-      duration: '3:05',
+      durationSeconds: 185,
     },
     {
       id: 'track-quiet-yard-4',
@@ -189,7 +189,7 @@ async function main() {
       musicalKey: 'Em',
       bpm: 74,
       status: 'ready',
-      duration: '3:40',
+      durationSeconds: 220,
     },
     {
       id: 'track-quiet-yard-5',
@@ -201,7 +201,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 72,
       status: 'ready',
-      duration: '3:15',
+      durationSeconds: 195,
     },
     {
       id: 'track-quiet-yard-6',
@@ -213,7 +213,7 @@ async function main() {
       musicalKey: 'F',
       bpm: 88,
       status: 'archived',
-      duration: '3:00',
+      durationSeconds: 180,
     },
 
     // Night Shift (8 tracks, 3 ready)
@@ -227,7 +227,7 @@ async function main() {
       musicalKey: 'F',
       bpm: 96,
       status: 'ready',
-      duration: '4:05',
+      durationSeconds: 245,
     },
     {
       id: 'track-night-shift-2',
@@ -239,7 +239,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 84,
       status: 'new',
-      duration: '4:30',
+      durationSeconds: 270,
     },
     {
       id: 'track-night-shift-3',
@@ -251,7 +251,7 @@ async function main() {
       musicalKey: 'Dm',
       bpm: 78,
       status: 'learning',
-      duration: '3:55',
+      durationSeconds: 235,
     },
     {
       id: 'track-night-shift-4',
@@ -263,7 +263,7 @@ async function main() {
       musicalKey: 'Am',
       bpm: 68,
       status: 'learning',
-      duration: '3:40',
+      durationSeconds: 220,
     },
     {
       id: 'track-night-shift-5',
@@ -275,7 +275,7 @@ async function main() {
       musicalKey: 'Em',
       bpm: 90,
       status: 'ready',
-      duration: '4:10',
+      durationSeconds: 250,
     },
     {
       id: 'track-night-shift-6',
@@ -287,7 +287,7 @@ async function main() {
       musicalKey: 'C',
       bpm: 76,
       status: 'learning',
-      duration: '3:25',
+      durationSeconds: 205,
     },
     {
       id: 'track-night-shift-7',
@@ -299,7 +299,7 @@ async function main() {
       musicalKey: 'F',
       bpm: 82,
       status: 'ready',
-      duration: '4:00',
+      durationSeconds: 240,
     },
     {
       id: 'track-night-shift-8',
@@ -311,7 +311,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 88,
       status: 'archived',
-      duration: '4:15',
+      durationSeconds: 255,
     },
 
     // Broken Glass (6 tracks, 5 ready)
@@ -325,7 +325,7 @@ async function main() {
       musicalKey: 'E',
       bpm: 112,
       status: 'ready',
-      duration: '2:58',
+      durationSeconds: 178,
     },
     {
       id: 'track-broken-glass-2',
@@ -337,7 +337,7 @@ async function main() {
       musicalKey: 'GSharp',
       bpm: 106,
       status: 'ready',
-      duration: '3:05',
+      durationSeconds: 185,
     },
     {
       id: 'track-broken-glass-3',
@@ -349,7 +349,7 @@ async function main() {
       musicalKey: 'Bm',
       bpm: 98,
       status: 'ready',
-      duration: '3:20',
+      durationSeconds: 200,
     },
     {
       id: 'track-broken-glass-4',
@@ -361,7 +361,7 @@ async function main() {
       musicalKey: 'A',
       bpm: 120,
       status: 'ready',
-      duration: '2:45',
+      durationSeconds: 165,
     },
     {
       id: 'track-broken-glass-5',
@@ -373,7 +373,7 @@ async function main() {
       musicalKey: 'Dm',
       bpm: 92,
       status: 'ready',
-      duration: '3:30',
+      durationSeconds: 210,
     },
     {
       id: 'track-broken-glass-6',
@@ -385,7 +385,7 @@ async function main() {
       musicalKey: 'FSharpm',
       bpm: 86,
       status: 'new',
-      duration: '3:15',
+      durationSeconds: 195,
     },
 
     // Dreamy Garden (14 tracks, 5 ready)
@@ -399,7 +399,7 @@ async function main() {
       musicalKey: 'A',
       bpm: 74,
       status: 'ready',
-      duration: '3:41',
+      durationSeconds: 221,
     },
     {
       id: 'track-dreamy-garden-2',
@@ -411,7 +411,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 64,
       status: 'ready',
-      duration: '4:20',
+      durationSeconds: 260,
     },
     {
       id: 'track-dreamy-garden-3',
@@ -423,7 +423,7 @@ async function main() {
       musicalKey: 'F',
       bpm: 68,
       status: 'new',
-      duration: '3:50',
+      durationSeconds: 230,
     },
     {
       id: 'track-dreamy-garden-4',
@@ -435,7 +435,7 @@ async function main() {
       musicalKey: 'C',
       bpm: 72,
       status: 'learning',
-      duration: '4:05',
+      durationSeconds: 245,
     },
     {
       id: 'track-dreamy-garden-5',
@@ -447,7 +447,7 @@ async function main() {
       musicalKey: 'Em',
       bpm: 80,
       status: 'learning',
-      duration: '3:55',
+      durationSeconds: 235,
     },
     {
       id: 'track-dreamy-garden-6',
@@ -459,7 +459,7 @@ async function main() {
       musicalKey: 'Dm',
       bpm: 58,
       status: 'ready',
-      duration: '4:30',
+      durationSeconds: 270,
     },
     {
       id: 'track-dreamy-garden-7',
@@ -471,7 +471,7 @@ async function main() {
       musicalKey: 'D',
       bpm: 76,
       status: 'learning',
-      duration: '3:35',
+      durationSeconds: 215,
     },
     {
       id: 'track-dreamy-garden-8',
@@ -483,7 +483,7 @@ async function main() {
       musicalKey: 'Am',
       bpm: 66,
       status: 'ready',
-      duration: '4:10',
+      durationSeconds: 250,
     },
     {
       id: 'track-dreamy-garden-9',
@@ -495,7 +495,7 @@ async function main() {
       musicalKey: 'Bm',
       bpm: 70,
       status: 'learning',
-      duration: '3:45',
+      durationSeconds: 225,
     },
     {
       id: 'track-dreamy-garden-10',
@@ -507,7 +507,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 84,
       status: 'new',
-      duration: '3:20',
+      durationSeconds: 200,
     },
     {
       id: 'track-dreamy-garden-11',
@@ -519,7 +519,7 @@ async function main() {
       musicalKey: 'F',
       bpm: 62,
       status: 'archived',
-      duration: '4:15',
+      durationSeconds: 255,
     },
     {
       id: 'track-dreamy-garden-12',
@@ -531,7 +531,7 @@ async function main() {
       musicalKey: 'C',
       bpm: 78,
       status: 'learning',
-      duration: '3:30',
+      durationSeconds: 210,
     },
     {
       id: 'track-dreamy-garden-13',
@@ -543,7 +543,7 @@ async function main() {
       musicalKey: 'E',
       bpm: 88,
       status: 'ready',
-      duration: '3:50',
+      durationSeconds: 230,
     },
     {
       id: 'track-dreamy-garden-14',
@@ -555,7 +555,7 @@ async function main() {
       musicalKey: 'A',
       bpm: 56,
       status: 'new',
-      duration: '5:20',
+      durationSeconds: 320,
     },
 
     // Pumpkin Square (9 tracks, 7 ready)
@@ -569,7 +569,7 @@ async function main() {
       musicalKey: 'CSharp',
       bpm: 100,
       status: 'ready',
-      duration: '3:19',
+      durationSeconds: 199,
     },
     {
       id: 'track-pumpkin-square-2',
@@ -581,7 +581,7 @@ async function main() {
       musicalKey: 'D',
       bpm: 96,
       status: 'ready',
-      duration: '3:25',
+      durationSeconds: 205,
     },
     {
       id: 'track-pumpkin-square-3',
@@ -593,7 +593,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 78,
       status: 'ready',
-      duration: '3:50',
+      durationSeconds: 230,
     },
     {
       id: 'track-pumpkin-square-4',
@@ -605,7 +605,7 @@ async function main() {
       musicalKey: 'Am',
       bpm: 66,
       status: 'ready',
-      duration: '4:00',
+      durationSeconds: 240,
     },
     {
       id: 'track-pumpkin-square-5',
@@ -617,7 +617,7 @@ async function main() {
       musicalKey: 'F',
       bpm: 84,
       status: 'ready',
-      duration: '3:10',
+      durationSeconds: 190,
     },
     {
       id: 'track-pumpkin-square-6',
@@ -629,7 +629,7 @@ async function main() {
       musicalKey: 'Em',
       bpm: 72,
       status: 'ready',
-      duration: '3:35',
+      durationSeconds: 215,
     },
     {
       id: 'track-pumpkin-square-7',
@@ -641,7 +641,7 @@ async function main() {
       musicalKey: 'Dm',
       bpm: 90,
       status: 'ready',
-      duration: '3:45',
+      durationSeconds: 225,
     },
     {
       id: 'track-pumpkin-square-8',
@@ -653,7 +653,7 @@ async function main() {
       musicalKey: 'C',
       bpm: 104,
       status: 'new',
-      duration: '2:55',
+      durationSeconds: 175,
     },
     {
       id: 'track-pumpkin-square-9',
@@ -665,7 +665,7 @@ async function main() {
       musicalKey: 'B',
       bpm: 68,
       status: 'archived',
-      duration: '4:20',
+      durationSeconds: 260,
     },
 
     // Jellyfish (2 tracks, 0 ready)
@@ -679,7 +679,7 @@ async function main() {
       musicalKey: 'Fm',
       bpm: 54,
       status: 'new',
-      duration: '5:10',
+      durationSeconds: 310,
     },
     {
       id: 'track-jellyfish-2',
@@ -691,7 +691,7 @@ async function main() {
       musicalKey: 'Cm',
       bpm: 48,
       status: 'learning',
-      duration: '4:50',
+      durationSeconds: 290,
     },
 
     // Solo tracks (no band) — Solomiia's personal repertoire
@@ -704,7 +704,7 @@ async function main() {
       musicalKey: 'Am',
       bpm: 72,
       status: 'ready',
-      duration: '3:45',
+      durationSeconds: 225,
     },
     {
       id: 'track-solo-2',
@@ -715,7 +715,7 @@ async function main() {
       musicalKey: 'G',
       bpm: 66,
       status: 'ready',
-      duration: '4:10',
+      durationSeconds: 250,
     },
     {
       id: 'track-solo-3',
@@ -726,7 +726,7 @@ async function main() {
       musicalKey: 'Dm',
       bpm: 80,
       status: 'learning',
-      duration: '3:30',
+      durationSeconds: 210,
     },
     {
       id: 'track-solo-4',
@@ -737,7 +737,7 @@ async function main() {
       musicalKey: 'C',
       bpm: 94,
       status: 'new',
-      duration: '2:55',
+      durationSeconds: 175,
     },
   ];
 

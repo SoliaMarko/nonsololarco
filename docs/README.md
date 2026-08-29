@@ -53,6 +53,7 @@ Read in this order on a cold start — each one routes to the next.
 - [0002 — Track performers model](./adr/0002-track-performers-model.md)
 - [0003 — i18n library: next-intl](./adr/0003-i18n-library-next-intl.md)
 - [0004 — Two-branch model: `develop` integrates, `main` ships](./adr/0004-two-branch-model.md)
+- [0005 — Track length stored as integer seconds](./adr/0005-duration-as-seconds.md)
 
 ---
 

@@ -79,6 +79,44 @@ describe('getByBand — sort order', () => {
     const bpms = result.data.map((t) => t.bpm);
     expect(bpms).toEqual([120, 80, 68]);
   });
+
+  // Time sorting used to happen in memory because duration was the string
+  // "m:ss". These two cases are the reason durationSeconds exists: they pass
+  // only if Postgres is doing the ordering.
+  it('sorts by time ascending in the database', async () => {
+    const result = await service.getByBand(BAND_QUIET_YARD, USER_SOLOMIIA, {
+      sort: TrackSortField.TIME,
+      order: SortOrder.ASC,
+    });
+
+    expect(result.data.map((t) => t.durationSeconds)).toEqual([175, 190, 240]);
+  });
+
+  it('sorts by time descending in the database', async () => {
+    const result = await service.getByBand(BAND_QUIET_YARD, USER_SOLOMIIA, {
+      sort: TrackSortField.TIME,
+      order: SortOrder.DESC,
+    });
+
+    expect(result.data.map((t) => t.durationSeconds)).toEqual([240, 190, 175]);
+  });
+
+  it('paginates a time-sorted list without loading the whole table', async () => {
+    // With the old string column this path loaded every matching row and
+    // sliced in memory. Now skip/take run in SQL, so page 2 of a 1-per-page
+    // sort must be the second shortest track and nothing else.
+    const result = await service.getByBand(BAND_QUIET_YARD, USER_SOLOMIIA, {
+      sort: TrackSortField.TIME,
+      order: SortOrder.ASC,
+      page: 2,
+      pageSize: 1,
+    });
+
+    expect(result.data).toHaveLength(1);
+    expect(result.data[0]?.durationSeconds).toBe(190);
+    expect(result.total).toBe(3);
+    expect(result.totalPages).toBe(3);
+  });
 });
 
 // ---------------------------------------------------------------------------

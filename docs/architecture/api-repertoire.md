@@ -45,11 +45,11 @@ are spelled out.
 
 Two paths, chosen by field:
 
-- **`trackOrder`, `title`, `bpm`** — Prisma `orderBy`, done in Postgres.
-- **`status`, `time`** — sorted in memory after the query, because neither
-  sorts correctly in the database. `status` needs a custom weight
-  (`new < learning < ready < archived`, not alphabetical) and `duration` is a
-  `"m:ss"` string that string-sorts wrong (`"10:00" < "9:00"`).
+- **`trackOrder`, `title`, `bpm`, `time`** — Prisma `orderBy`, done in
+  Postgres. `time` orders by the integer `durationSeconds` column.
+- **`status`** — sorted in memory after the query, because the Postgres enum
+  orders alphabetically (`archived, learning, new, ready`) while the meaningful
+  order is `new < learning < ready < archived`.
 
 The in-memory pass is `postQuerySort()`. For paginated requests with a
 post-query sort, the service loads the entire set, sorts it, and then slices
@@ -85,7 +85,7 @@ shape inside `data`:
 interface Track {
   band?: { id: string; name: string }; // only on /users/me/repertoire
   bpm: number;
-  duration: string; // "m:ss"
+  durationSeconds: number; // 190 renders as "3:10"
   id: string;
   leadMember: { id: string; name: string };
   members: { id: string; name: string }[]; // performers, excluding the lead

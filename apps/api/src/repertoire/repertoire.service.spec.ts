@@ -14,7 +14,7 @@ const mockTracks = [
     musicalKey: 'Am',
     bpm: 68,
     status: 'ready',
-    duration: '3:10',
+    durationSeconds: 190,
     leadMemberId: 'user-1',
     bandId: 'band-1',
     leadMember: { id: 'user-1', name: 'Solomiia' },
@@ -29,7 +29,7 @@ const mockTracks = [
     musicalKey: 'Dm',
     bpm: 80,
     status: 'ready',
-    duration: '2:55',
+    durationSeconds: 175,
     leadMemberId: 'user-2',
     bandId: 'band-1',
     leadMember: { id: 'user-2', name: 'Anna' },
@@ -105,7 +105,7 @@ describe('RepertoireService', () => {
       musicalKey: 'Em',
       bpm: 72,
       status: 'learning',
-      duration: '4:20',
+      durationSeconds: 260,
       leadMemberId: 'user-1',
       bandId: null,
       leadMember: { id: 'user-1', name: 'Solomiia' },
@@ -178,7 +178,7 @@ describe('RepertoireService', () => {
         musicalKey: 'Am',
         bpm: 68,
         status: 'ready',
-        duration: '3:10',
+        durationSeconds: 190,
         leadMember: { id: 'user-1', name: 'Solomiia' },
         members: [],
       });
@@ -260,7 +260,7 @@ describe('RepertoireService', () => {
         id: `t-${i}`,
         order: i + 1,
         status: i < 5 ? 'new' : 'ready',
-        duration: `${i}:00`,
+        durationSeconds: i * 60,
       }));
 
       mockPrisma.band.findUnique.mockResolvedValue({ id: 'band-1' });

@@ -38,6 +38,9 @@ export class TrackDto {
   })
   status!: string;
 
-  @ApiProperty({ example: '3:10' })
-  duration!: string;
+  @ApiProperty({
+    example: 190,
+    description: 'Track length in whole seconds. 190 renders as "3:10".',
+  })
+  durationSeconds!: number;
 }

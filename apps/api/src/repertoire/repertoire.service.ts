@@ -29,15 +29,6 @@ const STATUS_WEIGHT: Record<string, number> = {
   archived: 3,
 };
 
-/** Parse "m:ss" duration string to total seconds for comparison */
-function parseDuration(duration: string): number {
-  const parts = duration.split(':');
-  if (parts.length !== 2) return 0;
-  const minutes = parseInt(parts[0] ?? '0', 10);
-  const seconds = parseInt(parts[1] ?? '0', 10);
-  return (isNaN(minutes) ? 0 : minutes) * 60 + (isNaN(seconds) ? 0 : seconds);
-}
-
 function buildPrismaOrderBy(
   sort?: TrackSortField,
   order?: SortOrder,
@@ -51,8 +42,9 @@ function buildPrismaOrderBy(
       return [{ title: dir }, { id: 'asc' }];
     case TrackSortField.BPM:
       return [{ bpm: dir }, { id: 'asc' }];
-    case TrackSortField.STATUS:
     case TrackSortField.TIME:
+      return [{ durationSeconds: dir }, { id: 'asc' }];
+    case TrackSortField.STATUS:
       // Post-query sort — return empty so default ordering is used for Prisma
       return [];
     default:
@@ -91,12 +83,6 @@ function postQuerySort(
       (a, b) =>
         ((STATUS_WEIGHT[a.status] ?? 99) - (STATUS_WEIGHT[b.status] ?? 99)) *
         dir,
-    );
-  }
-
-  if (sort === TrackSortField.TIME) {
-    return [...tracks].sort(
-      (a, b) => (parseDuration(a.duration) - parseDuration(b.duration)) * dir,
     );
   }
 
@@ -147,8 +133,8 @@ function buildMeta(
 /**
  * Slices a fully-sorted in-memory array to the requested page.
  *
- * Used only for post-query sort fields (status, time) where the entire result
- * set must be loaded and sorted before pagination can be applied.
+ * Used only for post-query sort fields (currently `status` alone) where the
+ * entire result set must be loaded and sorted before pagination applies.
  */
 function applyPageSlice<T>(items: T[], pa: PaginationArgs): T[] {
   if (!pa.isPaginated) return items;
@@ -156,16 +142,21 @@ function applyPageSlice<T>(items: T[], pa: PaginationArgs): T[] {
 }
 
 /**
- * Returns true when the sort field requires in-memory sorting.
+ * Returns true when the sort field cannot be expressed in SQL and therefore
+ * needs the whole result set loaded and sorted in memory.
  *
- * TODO: eliminate the full-table load by making these fields sortable at the
- * DB level — store duration as an integer `durationSeconds` column and map
- * status to a sortable integer column. Until then the in-memory path loads
- * every matching track on each page request, so cost grows linearly with
- * repertoire size.
+ * Only `status` remains: the Postgres enum orders alphabetically
+ * (`archived, learning, new, ready`) while the meaningful order is
+ * `new, learning, ready, archived`. `time` used to be here too, until
+ * `duration` became the integer `durationSeconds`.
+ *
+ * TODO: give status a sortable representation so this path disappears
+ * entirely — see docs/REFACTORING-PLAN.md §4.2. Until then, sorting by status
+ * loads every matching track on each page request, so its cost grows linearly
+ * with repertoire size.
  */
 function isPostQuerySortField(sort?: TrackSortField): boolean {
-  return sort === TrackSortField.STATUS || sort === TrackSortField.TIME;
+  return sort === TrackSortField.STATUS;
 }
 
 /** Prisma include for loading lead member and performers */
@@ -206,7 +197,7 @@ function mapTrack(track: TrackRow, includeBand = false): Track {
     musicalKey: toDisplayMusicalKey(track.musicalKey) as Track['musicalKey'],
     bpm: track.bpm,
     status: track.status as TrackStatus,
-    duration: track.duration,
+    durationSeconds: track.durationSeconds,
     leadMember: { id: track.leadMember.id, name: track.leadMember.name },
     members: track.performers.map((p) => ({
       id: p.user.id,
@@ -321,7 +312,9 @@ export class RepertoireService {
    * the full matching set is loaded and sorted/sliced in memory — see
    * `isPostQuerySortField`.
    */
-  private async findTracks(args: FindTracksArgs): Promise<PaginatedResult<Track>> {
+  private async findTracks(
+    args: FindTracksArgs,
+  ): Promise<PaginatedResult<Track>> {
     const { defaultOrderBy, include, includeBand, options, where } = args;
     const { sort, order, page, pageSize } = options;
 

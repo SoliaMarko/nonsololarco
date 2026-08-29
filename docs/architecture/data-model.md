@@ -49,7 +49,7 @@ erDiagram
         enum musicalKey
         int bpm
         enum status "ready|learning|new|archived"
-        string duration "m:ss"
+        int durationSeconds "seconds, e.g. 190 = 3:10"
         string leadMemberId FK
         string bandId FK "nullable — null = solo"
     }
@@ -90,9 +90,11 @@ within a band, but does not guarantee gap-free numbering. Postgres excludes NULL
 unique constraints, so solo tracks order independently of each other — an
 accepted quirk, since solo ordering is per-user and never collides in practice.
 
-`duration` is a `"m:ss"` string rather than an integer of seconds. Kept as-is
-for display fidelity; sorting parses it in
-`apps/api/src/repertoire/repertoire.service.ts`.
+`durationSeconds` is an integer count of seconds, not the `"m:ss"` text it is
+displayed as. Storing the string meant the database could not order by it, so
+sorting by time loaded every matching row and sorted in memory. The API returns
+raw seconds and the client formats them with `formatTrackDuration` — see
+[ADR 0005](../adr/0005-duration-as-seconds.md).
 
 `musicalKey` is a Postgres enum. Prisma enum members must be valid identifiers,
 so sharps are spelled out (`CSharp`) and `@map` keeps the DB label as `C#`.

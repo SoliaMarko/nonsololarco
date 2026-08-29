@@ -15,6 +15,7 @@ import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
 import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
 import { cn } from '@/src/utils/cn';
+import { formatTrackDuration } from '@/src/utils/duration.utils';
 import { getTrackPerformers } from '@/src/utils/track-performers.utils';
 
 import TrackPerformerNames from '../TrackPerformerNames';
@@ -152,7 +153,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
                     {' · '}
                     {track.bpm}
                     {' · '}
-                    {track.duration}
+                    {formatTrackDuration(track.durationSeconds)}
                   </span>
                 </div>
                 <TrackPerformerNames
@@ -182,7 +183,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
                   {' · '}
                   {track.bpm}
                   {' · '}
-                  {track.duration}
+                  {formatTrackDuration(track.durationSeconds)}
                 </span>
               </>
             )}
@@ -238,7 +239,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             isArchived ? 'text-fg-tertiary' : 'text-fg-tertiary',
           )}
         >
-          {track.duration}
+          {formatTrackDuration(track.durationSeconds)}
         </span>
 
         {/* Navigate button — always visible */}

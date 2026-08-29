@@ -32,17 +32,25 @@ export function formatDuration(totalSeconds: number): string {
 }
 
 /**
- * Parse a raw "m:ss" track duration into total seconds.
+ * Format a track length in seconds as the `"m:ss"` label shown in the
+ * repertoire table.
+ *
+ * Seconds are always two digits, so 190 renders as `"3:10"` and 185 as
+ * `"3:05"`. Minutes are not padded and are not capped at 60 — a 75-minute
+ * recording shows as `"75:00"` rather than `"1:15:00"`, because the column is
+ * a track length and hour-long tracks are not a case worth a third segment.
+ *
+ * Negative or non-finite input renders as `"0:00"` rather than throwing;
+ * the value comes from the API and a broken row should not blank the table.
  */
-export function parseRawDuration(duration: string): number {
-  const parts = duration.split(':');
+export function formatTrackDuration(totalSeconds: number): string {
+  if (!Number.isFinite(totalSeconds) || totalSeconds < 0) return '0:00';
 
-  if (parts.length !== 2) return 0;
+  const whole = Math.round(totalSeconds);
+  const minutes = Math.floor(whole / 60);
+  const seconds = whole % 60;
 
-  const minutes = parseInt(parts[0] ?? '0', 10);
-  const seconds = parseInt(parts[1] ?? '0', 10);
-
-  return (isNaN(minutes) ? 0 : minutes) * 60 + (isNaN(seconds) ? 0 : seconds);
+  return `${minutes}:${String(seconds).padStart(2, '0')}`;
 }
 
 /**
@@ -55,10 +63,13 @@ export function sumFormattedDurations(durations: string[]): string {
 }
 
 /**
- * Sum an array of raw "m:ss" track durations into a formatted total.
+ * Sum track lengths in seconds into a human-readable total — `"1 hr 2 min"`.
+ *
+ * Used for the repertoire page header. Individual rows use
+ * `formatTrackDuration` instead, which produces the `"m:ss"` form.
  */
-export function sumRawDurations(durations: string[]): string {
-  const totalSeconds = durations?.reduce((sum, d) => sum + parseRawDuration(d), 0) ?? 0;
+export function sumTrackDurations(durationsInSeconds: number[]): string {
+  const totalSeconds = durationsInSeconds?.reduce((sum, s) => sum + s, 0) ?? 0;
 
   return formatDuration(totalSeconds);
 }

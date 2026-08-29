@@ -100,7 +100,7 @@ erDiagram
         enum musicalKey "C, Cm, C#, ..."
         int bpm
         enum status "ready|learning|new|archived"
-        string duration "m:ss — see note"
+        int durationSeconds "seconds — 190 renders as 3:10"
         string leadMemberId FK
         string bandId FK "null = solo track"
     }
@@ -113,9 +113,9 @@ erDiagram
 
 Two things the diagram cannot show:
 
-- **`Track.duration` is a string** (`"m:ss"`), so the database cannot sort by
-  it. Sorting by time loads the whole table into memory. Planned fix:
-  `durationSeconds Int` — see `docs/REFACTORING-PLAN.md` §4.1.
+- **`Track.durationSeconds` is an integer**, not the `"m:ss"` text it is shown
+  as, so Postgres can order by it. The client formats — see
+  [ADR 0005](../adr/0005-duration-as-seconds.md).
 - **`@@unique([bandId, order])` does not constrain solo tracks.** Postgres
   treats NULL as distinct, so two tracks with `bandId = null` may share an
   `order`. See §4.3.
@@ -156,9 +156,9 @@ sequenceDiagram
 ```
 
 **Filtering, sorting and pagination happen in the database**, never in the
-frontend. The one exception is sorting by `status` or `time`, which the current
-schema cannot express in SQL — that path loads every matching row, which is why
-fixing `duration` matters.
+frontend. The one remaining exception is sorting by `status`, whose Postgres
+enum orders alphabetically rather than meaningfully — that path still loads
+every matching row. See `docs/REFACTORING-PLAN.md` §4.2.
 
 ---
 
