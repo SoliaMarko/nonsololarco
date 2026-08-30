@@ -41,11 +41,11 @@ export function getTestPrisma(): PrismaClient {
   return prisma;
 }
 
+/** Root of the @nonsololarco/db package, where the Prisma CLI is installed. */
+const DB_PACKAGE_ROOT = resolve(__dirname, '../../../../packages/db');
+
 /** Path to the Prisma schema file (relative to monorepo root). */
-const SCHEMA_PATH = resolve(
-  __dirname,
-  '../../../../packages/db/prisma/schema.prisma',
-);
+const SCHEMA_PATH = resolve(DB_PACKAGE_ROOT, 'prisma/schema.prisma');
 
 /**
  * Truncates all application tables in the correct order (respecting FK
@@ -78,10 +78,30 @@ export function setupIntegration(): void {
     const databaseUrl = container.getConnectionUri();
 
     // Run Prisma migrations against the test container.
-    execSync(`npx prisma migrate deploy --schema="${SCHEMA_PATH}"`, {
-      env: { ...process.env, DATABASE_URL: databaseUrl },
-      stdio: 'pipe',
-    });
+    //
+    // `cwd` must be the db package: `prisma` is a dependency of
+    // @nonsololarco/db, not of this app, so running from apps/api gives
+    // "sh: prisma: command not found". pnpm does not hoist it, and adding a
+    // second copy here just to satisfy a path would let the two versions
+    // drift.
+    //
+    // stdio is inherited on failure so the Prisma error is readable; with
+    // 'pipe' the output is swallowed and every migration problem looks the
+    // same from the test runner.
+    try {
+      execSync(`npx prisma migrate deploy --schema="${SCHEMA_PATH}"`, {
+        cwd: DB_PACKAGE_ROOT,
+        env: { ...process.env, DATABASE_URL: databaseUrl },
+        stdio: 'pipe',
+      });
+    } catch (error) {
+      const details =
+        error instanceof Error && 'stderr' in error
+          ? String((error as { stderr?: Buffer }).stderr ?? '')
+          : String(error);
+
+      throw new Error(`Prisma migrate deploy failed:\n${details}`);
+    }
 
     // Connect a PrismaClient directly (not through NestJS DI — we're
     // testing the service layer, not the framework wiring).
