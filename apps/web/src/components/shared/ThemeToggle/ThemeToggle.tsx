@@ -27,7 +27,7 @@ export default function ThemeToggle({ className }: ThemeToggleProps) {
             : 'Switch to dark theme'
           : 'Toggle theme'
       }
-      className={cn('bg-base size-10 rounded-full border-2 p-0', className)}
+      className={cn('bg-control-surface size-10 rounded-full border-2 p-0', className)}
       onClick={toggleTheme}
       variant="press"
     >

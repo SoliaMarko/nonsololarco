@@ -1,0 +1,40 @@
+{
+  "actions": {
+    "edit": "Edit",
+    "reset": "Reset",
+    "seeAll": "See all",
+    "share": "Share"
+  },
+  "comingSoon": {
+    "defaultDescription": "This section is still in the studio. Check back soon.",
+    "defaultTitle": "Coming soon"
+  },
+  "locale": {
+    "interfaceLanguage": "Interface language",
+    "switchLanguage": "Switch language"
+  },
+  "legal": {
+    "agreementPrefix": "By continuing you agree to the",
+    "and": "and",
+    "privacyPolicy": "Privacy Policy",
+    "terms": "Terms"
+  },
+  "nav": {
+    "calendar": "Calendar",
+    "chats": "Chats",
+    "feed": "Feed",
+    "notifications": "Notifications",
+    "profile": "Profile",
+    "repertoire": "Repertoire",
+    "settings": "Settings",
+    "signOut": "Sign out",
+    "viewProfile": "View profile"
+  },
+  "status": {
+    "idle": "idle",
+    "loading": "Loading",
+    "updatingTracks": "Updating tracks"
+  },
+  "tagline": "Repertoire · Practice · Bands",
+  "unreadCount": "{count} unread"
+}

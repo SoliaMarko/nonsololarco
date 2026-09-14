@@ -1,7 +1,7 @@
 ---
 name: Chore / KTLO
 about: Technical maintenance, config, dependencies, tooling
-title: "chore: "
+title: 'chore: '
 labels: chore
 ---
 

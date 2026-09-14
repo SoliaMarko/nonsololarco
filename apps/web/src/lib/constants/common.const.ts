@@ -39,10 +39,18 @@ export const STATUS_ICON = {
   inactive: WholeRestIcon,
 } as const;
 
+/**
+ * Primary navigation entries rendered by both `AppBottomNav` (mobile) and
+ * `AppHeaderNav` (desktop).
+ *
+ * `labelKey` values belong to the `common` i18n namespace (e.g. `nav.feed`).
+ * `badge` is a numeric indicator shown on the nav icon — `undefined` means
+ * no badge is displayed.
+ */
 export const NAV_ITEMS = [
-  { href: '/', icon: HomeOutlineIcon, label: 'Feed' },
-  { href: '/repertoire', icon: RepertoireIcon, label: 'Repertoire' },
-  { href: '/calendar', icon: CalendarIcon, label: 'Calendar' },
-  { href: '/chat', icon: ChatOutlineIcon, label: 'Chats', badge: 3 },
-  { href: '/profile', icon: ProfileOutlineIcon, label: 'Profile' },
-];
+  { badge: undefined, href: '/', icon: HomeOutlineIcon, labelKey: 'nav.feed' },
+  { badge: undefined, href: '/repertoire', icon: RepertoireIcon, labelKey: 'nav.repertoire' },
+  { badge: undefined, href: '/calendar', icon: CalendarIcon, labelKey: 'nav.calendar' },
+  { badge: 3, href: '/chat', icon: ChatOutlineIcon, labelKey: 'nav.chats' },
+  { badge: undefined, href: '/profile', icon: ProfileOutlineIcon, labelKey: 'nav.profile' },
+] as const;

@@ -3,30 +3,38 @@ import MediatorBadge from '@/src/illustrations/picks/MediatorBadge';
 
 import { ProfileStatsConfig } from '../../types/profile/profile.types';
 
+/**
+ * Configuration for the four stat cards displayed on the user profile.
+ *
+ * Each entry maps a `valueKey` (property name on the profile data object)
+ * to a coloured icon, a translated label (`labelKey` from the `pages`
+ * namespace), and an optional `isPicks` flag that enables the special
+ * mediator-badge rendering.
+ */
 export const PROFILE_STATS: ProfileStatsConfig[] = [
   {
     color: 'text-icon-accent-yellow',
     icon: MediatorBadge,
-    label: 'Picks',
     isPicks: true,
+    labelKey: 'profile.stats.picks',
     valueKey: 'picks',
   },
   {
     color: 'text-icon-accent-green',
     icon: CalendarIcon,
-    label: 'Rehearsals',
+    labelKey: 'profile.stats.rehearsals',
     valueKey: 'rehearsalsCount',
   },
   {
     color: 'text-blue-subtle',
     icon: RepertoireIcon,
-    label: 'Tracks',
+    labelKey: 'profile.stats.tracks',
     valueKey: 'tracksCount',
   },
   {
     color: 'text-accent-red',
     icon: MicrophoneIcon,
-    label: 'Performances',
+    labelKey: 'profile.stats.performances',
     valueKey: 'performancesCount',
   },
 ];

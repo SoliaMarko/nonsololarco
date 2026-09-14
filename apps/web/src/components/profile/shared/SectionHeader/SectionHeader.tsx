@@ -5,9 +5,9 @@ import { ORIENTATION } from '@/src/lib/constants/common.const';
 import { cn } from '@/src/utils/cn';
 
 interface SectionHeaderProps {
+  title: string;
   className?: string;
   meta?: string;
-  title: string;
 }
 
 export default function SectionHeader({ className, meta, title }: SectionHeaderProps) {

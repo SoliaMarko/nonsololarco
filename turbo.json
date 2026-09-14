@@ -10,12 +10,27 @@
     "lint": {
       "dependsOn": ["^lint", "^build"]
     },
+    "stylelint": {},
     "typecheck": {
       "dependsOn": ["^typecheck", "^build"]
     },
     "test": {
       "dependsOn": ["^build"],
       "outputs": ["coverage/**"]
+    },
+    "e2e": {
+      "dependsOn": ["^build", "build"],
+      "cache": false,
+      "env": [
+        "CI",
+        "DATABASE_URL",
+        "E2E_START_SERVER",
+        "E2E_USER_EMAIL",
+        "E2E_WEB_COMMAND",
+        "E2E_WEB_URL",
+        "JWT_SECRET"
+      ],
+      "outputs": []
     },
     "dev": {
       "cache": false,

@@ -1,14 +1,24 @@
-import Link from 'next/link';
+'use client';
 
-import Text from '@/src/components/typography/Text';
+import { useState } from 'react';
+
+import { useTranslations } from 'next-intl';
+
+import { Track, TrackStatus } from '@nonsololarco/types';
+
+import { Link } from '@/i18n/navigation';
 import Badge from '@/src/components/ui/Badge';
 import { useActiveBand } from '@/src/hooks/global/useActiveBand';
+import { useAuth } from '@/src/hooks/global/useAuth';
 import { StarOutlineIcon } from '@/src/icons/achievements';
 import { ChevronIcon } from '@/src/icons/base';
 import VinylRecord from '@/src/illustrations/vinyl/VinylRecord';
-import { Track, TrackStatus } from '@/src/lib/types/repertoire/track.types';
+import { SOLO_BAND_ID } from '@/src/lib/hooks/useRepertoire';
 import { cn } from '@/src/utils/cn';
+import { formatTrackDuration } from '@/src/utils/duration.utils';
+import { getTrackPerformers } from '@/src/utils/track-performers.utils';
 
+import TrackPerformerNames from '../TrackPerformerNames';
 import { ALL_BANDS_ROW_GRID, SPECIFIC_BAND_ROW_GRID } from '../tracks-table.const';
 
 const STATUS_VARIANT: Record<
@@ -21,45 +31,66 @@ const STATUS_VARIANT: Record<
   archived: 'stamp-archived',
 };
 
-const STATUS_LABEL: Record<TrackStatus, string> = {
-  ready: 'Ready',
-  learning: 'Learning',
-  new: 'New',
-  archived: 'Archived',
+const STATUS_LABEL_KEY: Record<TrackStatus, string> = {
+  ready: 'repertoire.statusReady',
+  learning: 'repertoire.statusLearning',
+  new: 'repertoire.statusNew',
+  archived: 'repertoire.statusArchived',
 };
 
 export interface TrackListRowProps {
+  track: Track;
   index?: number;
   /** Whether this track belongs to current user — shows ★ and green highlight */
   isMyTrack?: boolean;
-  track: Track;
 }
 
 export default function TrackListRow({ index = 0, isMyTrack = false, track }: TrackListRowProps) {
-  const { isSpecificBandSelected } = useActiveBand();
+  const { activeBandId, getVinylColor, isSpecificBandSelected } = useActiveBand();
+  const { user } = useAuth();
+  const t = useTranslations('pages');
+  const [isSelected, setIsSelected] = useState(false);
 
   const isArchived = track.status === 'archived';
+  const isSoloView = activeBandId === SOLO_BAND_ID;
+
+  const performers = getTrackPerformers(track, user?.id);
+
+  /** Accent stripe is shown for my tracks in a band view, for every track in "all bands" and solo views */
+  const hasAccentBorder =
+    (isMyTrack && isSpecificBandSelected) || !isSpecificBandSelected || isSoloView;
+
+  /** Tracks without a band are solo — labelled as such instead of showing a blank cell */
+  const bandName = track.band?.name ?? t('repertoire.solo');
+
+  /** Border width is always reserved so selecting a row never shifts its content */
+  const borderColor = isSelected
+    ? 'border-l-accent-red dark:border-l-accent-red'
+    : !hasAccentBorder
+      ? 'border-l-transparent dark:border-l-transparent'
+      : isArchived
+        ? 'border-l-fg-tertiary dark:border-l-fg-tertiary'
+        : 'border-l-emerald-main dark:border-l-emerald-main';
 
   return (
     <div
       className={cn('bg-base', {
-        'bg-emerald-subtle-70': isSpecificBandSelected && isMyTrack && isArchived,
-        'bg-emerald-subtle': isSpecificBandSelected && isMyTrack && !isArchived,
+        'bg-emerald-subtle-70': isSpecificBandSelected && !isSoloView && isMyTrack && isArchived,
+        'bg-emerald-subtle': isSpecificBandSelected && !isSoloView && isMyTrack && !isArchived,
       })}
       role="row"
     >
-      <Link
+      <div
         className={cn(
-          'group border-border-primary hover:bg-elevated border-l-emerald-main border-b',
-          'pli-4 plb-3 transition-colors duration-100',
-          {
-            'hover:bg-emerald-subtle-hover border-l-3': isMyTrack && isSpecificBandSelected,
-            'border-l-3': !isSpecificBandSelected,
-            'bg-hatching border-l-fg-tertiary': isArchived,
-          },
+          'group border-border-primary dark:border-fg-primary/30 border-1.5 border-b',
+          'pli-4 plb-3 cursor-pointer transition-colors duration-100',
+          'border-l-3',
+          borderColor,
+          isSelected ? 'bg-elevated' : 'hover:bg-elevated',
+          { 'bg-hatching': isArchived && !isSelected },
           isSpecificBandSelected ? SPECIFIC_BAND_ROW_GRID : ALL_BANDS_ROW_GRID,
         )}
-        href={`/repertoire/${track.id}`}
+        onClick={() => setIsSelected((prev) => !prev)}
       >
         {/* ★ indicator — only for my tracks */}
         <div role="cell" className="hidden items-center justify-center sm:flex">
@@ -78,14 +109,14 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
           )}
         >
-          {isSpecificBandSelected ? track.order : index + 1}
+          {index + 1}
         </span>
 
-        {/* Title + meta */}
-        <div className="flex flex-col gap-1 sm:gap-0" role="cell">
+        {/* Title + meta — min-w-0 lets the children truncate inside the grid cell */}
+        <div className="flex min-w-0 flex-col gap-1 sm:gap-0" role="cell">
           <div
             className={cn(
-              'text-sm leading-snug font-semibold',
+              'truncate text-sm leading-snug font-semibold',
               isArchived ? 'text-fg-tertiary line-through' : 'text-fg-primary',
             )}
           >
@@ -93,45 +124,85 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
           </div>
 
           {/* from sm screens */}
-          <div className="text-fg-tertiary mbs-0.5 hidden text-xs sm:block">
-            {track.leadMember.name}
-          </div>
+          <TrackPerformerNames
+            className="text-fg-tertiary mbs-0.5 hidden text-xs sm:block"
+            isMuted={isArchived}
+            isTruncated
+            performers={performers}
+          />
 
           {/* up to sm screens */}
-          <div className="text-fg-tertiary xs:flex-row xs:items-center mbs-0.5 flex flex-col items-start gap-1 text-xs sm:hidden">
+          <div className="text-fg-tertiary mbs-0.5 flex min-w-0 flex-col items-start gap-0.5 text-xs sm:hidden">
             {!isSpecificBandSelected ? (
-              <div className="flex items-center gap-1" role="cell">
-                <VinylRecord size={16} />
-                <span className="text-fg-secondary text-sm tabular-nums">{track.band?.name}</span>
-                <span className="text-fg-tertiary xs:inline hidden">{' · '}</span>
-              </div>
-            ) : null}
-            <Text className="text-fg-tertiary">
-              {[
-                isSpecificBandSelected ? track.leadMember.name : null,
-                track.musicalKey,
-                track.bpm,
-                track.duration,
-              ]
-                .filter((item) => item)
-                .join(' · ')}
-            </Text>
+              <>
+                <div className="flex min-w-0 items-center gap-1">
+                  <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
+                  <span className="text-fg-secondary truncate text-sm tabular-nums">
+                    {bandName}
+                  </span>
+                  <span className="shrink-0 whitespace-nowrap">
+                    {' · '}
+                    <span
+                      className={cn(
+                        'font-black',
+                        isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
+                      )}
+                    >
+                      {track.musicalKey}
+                    </span>
+                    {' · '}
+                    {track.bpm}
+                    {' · '}
+                    {formatTrackDuration(track.durationSeconds)}
+                  </span>
+                </div>
+                <TrackPerformerNames
+                  className="max-w-full"
+                  isMuted={isArchived}
+                  isTruncated
+                  performers={performers}
+                />
+              </>
+            ) : (
+              <>
+                <TrackPerformerNames
+                  className="max-w-full"
+                  isMuted={isArchived}
+                  isTruncated
+                  performers={performers}
+                />
+                <span className="whitespace-nowrap">
+                  <span
+                    className={cn(
+                      'font-black',
+                      isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
+                    )}
+                  >
+                    {track.musicalKey}
+                  </span>
+                  {' · '}
+                  {track.bpm}
+                  {' · '}
+                  {formatTrackDuration(track.durationSeconds)}
+                </span>
+              </>
+            )}
           </div>
         </div>
 
         {/* Band  */}
         {!isSpecificBandSelected ? (
           <div className="hidden items-center gap-2 sm:flex" role="cell">
-            <VinylRecord size={16} />
-            <span className="text-fg-secondary text-sm tabular-nums">{track.band?.name}</span>
+            <VinylRecord color={getVinylColor(track.band?.id)} size={16} />
+            <span className="text-fg-secondary text-sm tabular-nums">{bandName}</span>
           </div>
         ) : null}
 
-        {/* Musical key */}
+        {/* Musical key — centred to match its column header */}
         <span
           role="cell"
           className={cn(
-            'hidden text-sm font-black tabular-nums sm:inline',
+            'hidden text-center text-sm font-black tabular-nums sm:inline',
             isArchived ? 'text-fg-tertiary' : 'text-emerald-main',
           )}
         >
@@ -156,7 +227,7 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             variant={STATUS_VARIANT[track.status]}
             size="sm"
           >
-            {STATUS_LABEL[track.status]}
+            {t(STATUS_LABEL_KEY[track.status])}
           </Badge>
         </div>
 
@@ -168,19 +239,21 @@ export default function TrackListRow({ index = 0, isMyTrack = false, track }: Tr
             isArchived ? 'text-fg-tertiary' : 'text-fg-tertiary',
           )}
         >
-          {track.duration}
+          {formatTrackDuration(track.durationSeconds)}
         </span>
 
-        <div
-          role="cell"
-          className={cn(
-            'text-fg-tertiary flex items-center justify-end gap-1 transition-opacity',
-            'group-hover:opacity-100 sm:opacity-0',
-          )}
-        >
-          <ChevronIcon direction="right" size={12} aria-hidden="true" />
+        {/* Navigate button — always visible */}
+        <div role="cell" className="mis-3 sm:mis-0 flex items-center justify-end">
+          <Link
+            aria-label={t('repertoire.openTrack', { title: track.title })}
+            className="text-fg-tertiary hover:text-fg-primary hover:bg-edge rounded-lg p-1.5 transition-colors"
+            href={`/repertoire/${track.id}`}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <ChevronIcon direction="right" size={16} strokeWidth="2" aria-hidden="true" />
+          </Link>
         </div>
-      </Link>
+      </div>
     </div>
   );
 }

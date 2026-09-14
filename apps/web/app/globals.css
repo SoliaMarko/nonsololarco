@@ -8,6 +8,48 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
+/**
+ * Tailwind v4's preflight no longer sets `cursor: pointer` on buttons.
+ * Restore it for all interactive elements so new components get the
+ * correct affordance without repeating `cursor-pointer` everywhere.
+ */
+@utility scrollbar-none {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+
+  /* stylelint-disable-next-line nesting-selector-no-missing-scoping-root */
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@layer base {
+  html {
+    scrollbar-gutter: stable;
+  }
+
+  button:not(:disabled),
+  [role='button']:not([aria-disabled='true']),
+  summary,
+  label[for] {
+    cursor: pointer;
+  }
+
+  button:disabled,
+  [role='button'][aria-disabled='true'] {
+    cursor: not-allowed;
+  }
+
+  ::selection {
+    background: color-mix(in srgb, var(--yellow-main) 38%, transparent);
+    color: #000;
+  }
+
+  [data-theme='dark'] ::selection {
+    color: #fff;
+  }
+}
+
 @theme {
   /* --- Border radius --- */
   --radius-xs: var(--radius-xs);
@@ -36,10 +78,27 @@
   --text-2xl: var(--text-size-2xl);
   --text-3xl: var(--text-size-3xl);
 
-  /* --- Typography: weights --- */
-  --font-weight-regular: var(--text-weight-regular);
+  /* --- Typography: weights ---
+   * Named to match Tailwind's stock weight utilities (`normal`, `medium`,
+   * `semibold`). A custom name such as `regular` would generate a
+   * `font-regular` class that `tailwind-merge` cannot classify as a
+   * font-weight, so it would never be dropped when a consumer passes
+   * `font-bold` — both would survive and CSS order would decide.
+   */
+  --font-weight-normal: var(--text-weight-regular);
   --font-weight-medium: var(--text-weight-medium);
   --font-weight-semibold: var(--text-weight-semibold);
+
+  /* --- Typography: families ---
+   * Named by role, not by typeface. The `--font-*-face` variables are
+   * emitted by next/font in app/[locale]/layout.tsx; next/font obfuscates
+   * the real family name, so a literal "Space Mono" would silently fall
+   * back to the system font. Always go through the variable.
+   */
+  --font-display: var(--font-alfa-slab), Georgia, serif;
+  --font-ui: var(--font-oswald), system-ui, sans-serif;
+  --font-label: var(--font-space-mono), ui-monospace, monospace;
+  --font-prose: var(--font-spectral), Georgia, serif;
 
   /* --- Typography: line heights --- */
   --leading-tight: var(--text-leading-tight);
@@ -117,6 +176,10 @@
 
   /* --- Colors: button fills --- */
   --color-btn-fill: var(--bg-btn-fill);
+
+  /* --- Colors: raised controls (dropdown triggers, menu panels) --- */
+  --color-control-surface: var(--control-surface);
+  --color-control-surface-hover: var(--control-surface-hover);
 
   --color-border-primary: var(--border-primary);
 

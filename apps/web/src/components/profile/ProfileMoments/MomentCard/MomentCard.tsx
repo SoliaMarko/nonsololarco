@@ -1,3 +1,4 @@
+import { useTranslations } from 'next-intl';
 import Image from 'next/image';
 
 import { ImageIcon, PlayIcon } from '@/src/icons/base';
@@ -5,15 +6,17 @@ import { MomentType } from '@/src/lib/types/profile/profile.types';
 import { cn } from '@/src/utils/cn';
 
 export interface MomentCardProps {
+  moment: MomentType;
   className?: string;
   /** Owner can add/replace media; visitors only view */
   isOwnProfile?: boolean;
-  moment: MomentType;
 }
 
 export default function MomentCard({ className, isOwnProfile, moment }: MomentCardProps) {
+  const t = useTranslations('pages');
   const isVideo = moment.kind === 'video';
   const isEmpty = moment.thumbnailUrl === null;
+  const mediaLabel = isVideo ? t('profile.momentsVideo') : t('profile.momentsPhoto');
 
   const handleClick = () => {
     if (isVideo && moment.videoUrl) {
@@ -57,9 +60,7 @@ export default function MomentCard({ className, isOwnProfile, moment }: MomentCa
         {isEmpty ? (
           <div className="text-fg-tertiary flex flex-col items-center gap-2">
             {!isVideo ? <ImageIcon size={36} aria-hidden="true" /> : null}
-            <span className="text-sm">
-              {isOwnProfile ? `↓ ${isVideo ? 'video' : 'photo'}` : ''}
-            </span>
+            <span className="text-sm">{isOwnProfile ? `↓ ${mediaLabel}` : ''}</span>
           </div>
         ) : (
           <Image

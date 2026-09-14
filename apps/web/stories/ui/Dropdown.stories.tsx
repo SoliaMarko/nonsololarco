@@ -110,6 +110,28 @@ export const WithDisabledItems: Story = {
   },
 };
 
+export const StampVariant: Story = {
+  args: {
+    variant: 'stamp',
+    trigger: (
+      <Button variant="outline" size="sm">
+        Options ▼
+      </Button>
+    ),
+    align: OPTIONS_POSITION.end,
+    groups: [
+      {
+        label: 'Sort by',
+        items: [
+          { label: 'Title', onClick: () => {}, selected: true },
+          { label: 'Date added', onClick: () => {} },
+          { label: 'BPM', onClick: () => {} },
+        ],
+      },
+    ],
+  },
+};
+
 export const Alignment: Story = {
   args: {
     trigger: (

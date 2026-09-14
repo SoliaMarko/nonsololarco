@@ -8,12 +8,12 @@ export interface InputProps extends Omit<
   InputHTMLAttributes<HTMLInputElement>,
   'value' | 'onChange' | 'defaultValue'
 > {
-  error?: string;
-  hint?: string;
-  label?: string;
   name: string;
   onChange: ChangeEventHandler<HTMLInputElement>;
   value: string;
+  error?: string;
+  hint?: string;
+  label?: string;
   wrapperClassName?: string;
 }
 

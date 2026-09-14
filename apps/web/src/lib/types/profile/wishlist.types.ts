@@ -4,8 +4,8 @@ export type WishlistVisibility = 'public' | 'private';
 export interface WishlistMedia {
   id: string;
   kind: WishlistMediaKind;
-  label?: string;
   url: string;
+  label?: string;
 }
 
 export interface WishlistTrack {

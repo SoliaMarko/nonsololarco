@@ -5,8 +5,8 @@ import { cn } from '@/src/utils/cn';
 import MediaChip from '../../shared/MediaChip';
 
 interface WishlistRowProps {
-  hasMoreWishes?: boolean;
   track: WishlistTrack;
+  hasMoreWishes?: boolean;
 }
 
 export default function WishlistRow({ hasMoreWishes, track }: WishlistRowProps) {

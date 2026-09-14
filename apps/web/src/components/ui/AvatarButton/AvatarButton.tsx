@@ -27,7 +27,7 @@ function AvatarButton(
       ref={ref}
       type={type}
       className={cn(
-        'focus-visible:ring-emerald-main focus-visible:ring-offset-base w-fit cursor-pointer rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
+        'focus-visible:ring-emerald-main focus-visible:ring-offset-base w-fit rounded-full focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
         className,
       )}
     >

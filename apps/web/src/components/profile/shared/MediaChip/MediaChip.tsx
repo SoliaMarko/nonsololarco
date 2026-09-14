@@ -12,8 +12,8 @@ const MEDIA_ICON: Record<WishlistMediaKind, typeof PlayIcon> = {
 
 interface MediaChipProps {
   kind: WishlistMediaKind;
-  label?: string;
   url: string;
+  label?: string;
 }
 
 export default function MediaChip({ kind, label, url }: MediaChipProps) {

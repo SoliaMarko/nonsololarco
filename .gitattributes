@@ -1,0 +1,11 @@
+# Auto-detect text files and normalise line endings
+* text=auto
+
+# Lock files — binary diff is noise in PRs
+pnpm-lock.yaml -diff linguist-generated
+
+# Generated Prisma client — never review manually
+packages/db/generated/** -diff linguist-generated
+
+# Generated AI map — auto-updated by pre-commit hook
+docs/ai/MAP.md -diff linguist-generated

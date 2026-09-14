@@ -1,13 +1,16 @@
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { useTranslations } from 'next-intl';
 
 import Logo from '@/components/ui/Logo';
+import { Link, usePathname, useRouter } from '@/i18n/navigation';
 import AiButton from '@/src/components/repertoire/buttons/AiButton';
+import LocaleSwitcher from '@/src/components/shared/LocaleSwitcher';
+import MetronomeButton from '@/src/components/shared/MetronomeButton';
 import ThemeToggle from '@/src/components/shared/ThemeToggle';
 import Heading from '@/src/components/typography/Heading';
 import AvatarButton from '@/src/components/ui/AvatarButton';
 import Dropdown from '@/src/components/ui/Dropdown';
 import NavLink from '@/src/components/ui/NavLink';
+import Tabs from '@/src/components/ui/Tabs';
 import { useAuth } from '@/src/hooks/global/useAuth';
 import { BellIcon, LogOutIcon, ProfileOutlineIcon, SettingsOutlineIcon } from '@/src/icons/base';
 import { NAV_ITEMS, OPTIONS_POSITION } from '@/src/lib/constants/common.const';
@@ -19,8 +22,16 @@ export interface AppHeaderNavProps {
   className?: string;
 }
 
+/**
+ * Sticky desktop header with logo, main nav tabs, metronome/locale/theme
+ * controls, and a user avatar dropdown. On mobile the nav tabs are hidden;
+ * the active-page title appears inline and the repertoire AI button surfaces
+ * in the header instead of the bottom bar.
+ */
 export default function AppHeader({ activePath, activeTitle, className }: AppHeaderNavProps) {
   const { user, logout } = useAuth();
+  const router = useRouter();
+  const t = useTranslations('common');
 
   const initials = user?.name
     ? user.name
@@ -54,18 +65,35 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
           </div>
         </Link>
 
-        <nav className="hidden flex-1 items-end gap-1 self-end md:flex" aria-label="Main Nav">
-          {NAV_ITEMS.map((item) => (
-            <NavLink
-              key={item.href}
-              href={item.href}
-              icon={item.icon}
-              label={item.label}
-              badge={item.badge}
-              variant="desktop"
-              isActive={activePath === item.href}
-            />
-          ))}
+        <nav className="hidden flex-1 self-end md:flex" aria-label="Main Nav">
+          {/*
+            Tabs are equal to each other, but only as wide as the longest
+            label — not stretched across the nav. A grid whose width is
+            `fit-content` with equal `1fr` tracks resolves every track to the
+            widest item's max-content, so the row shrink-wraps instead of
+            filling. Sizing each tab to its own label instead would put the
+            tabs in different positions in every language, since the labels
+            are translated ("Feed" → "Bacheca", "Calendar" → "Calendario").
+          */}
+          <Tabs
+            animated
+            variant="nav"
+            scrollable={false}
+            className="grid w-fit auto-cols-fr grid-flow-col"
+          >
+            {NAV_ITEMS.map((item) => (
+              <NavLink
+                key={item.href}
+                href={item.href}
+                icon={item.icon}
+                label={t(item.labelKey)}
+                badge={item.badge}
+                variant="desktop"
+                isActive={activePath === item.href}
+                className="min-w-0 justify-center"
+              />
+            ))}
+          </Tabs>
         </nav>
 
         <div
@@ -82,23 +110,49 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
 
           <div className="flex gap-3 md:gap-4">
             {isRepertoirePageActive ? (
-              <AiButton className="bg-yellow-main md:hidden" textClassName="text-primary-dark" />
+              <AiButton
+                className="bg-yellow-main md:hidden"
+                size="sm"
+                textClassName="text-primary-dark"
+              />
             ) : null}
 
+            {/* Below md the metronome moves to the floating button in
+                AppShell, where it sits in the thumb zone. */}
+            <MetronomeButton className="hidden md:inline-flex" />
+
+            <LocaleSwitcher />
             <ThemeToggle />
             <Dropdown
               align={OPTIONS_POSITION.end}
               groups={[
                 {
                   items: [
-                    { label: 'View profile', icon: ProfileOutlineIcon, href: '/profile' },
-                    { label: 'Settings', icon: SettingsOutlineIcon, href: '/settings' },
-                    { label: 'Notifications', icon: BellIcon, href: '/notifications' },
+                    {
+                      label: t('nav.viewProfile'),
+                      icon: ProfileOutlineIcon,
+                      onClick: () => router.push('/profile'),
+                    },
+                    {
+                      label: t('nav.settings'),
+                      icon: SettingsOutlineIcon,
+                      onClick: () => router.push('/settings'),
+                    },
+                    {
+                      label: t('nav.notifications'),
+                      icon: BellIcon,
+                      onClick: () => router.push('/notifications'),
+                    },
                   ],
                 },
                 {
                   items: [
-                    { label: 'Sign out', icon: LogOutIcon, onClick: logout, variant: 'danger' },
+                    {
+                      label: t('nav.signOut'),
+                      icon: LogOutIcon,
+                      onClick: logout,
+                      variant: 'danger',
+                    },
                   ],
                 },
               ]}

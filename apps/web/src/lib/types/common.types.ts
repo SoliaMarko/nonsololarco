@@ -18,10 +18,10 @@ export type OrientationType = ValuesType<typeof ORIENTATION>;
 export type ThemeType = ValuesType<typeof THEME>;
 
 export type NavItem = {
-  badge?: number;
   href: string;
   icon: ElementType;
   label: string;
+  badge?: number;
 };
 
 export type MusicalKey =

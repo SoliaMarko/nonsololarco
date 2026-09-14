@@ -1,0 +1,40 @@
+{
+  "actions": {
+    "edit": "Редагувати",
+    "reset": "Скинути",
+    "seeAll": "Дивитись усі",
+    "share": "Поділитись"
+  },
+  "comingSoon": {
+    "defaultDescription": "Цей розділ ще в студії. Повертайся скоро.",
+    "defaultTitle": "Скоро буде"
+  },
+  "locale": {
+    "interfaceLanguage": "Мова інтерфейсу",
+    "switchLanguage": "Змінити мову"
+  },
+  "legal": {
+    "agreementPrefix": "Продовжуючи, ви погоджуєтесь з",
+    "and": "та",
+    "privacyPolicy": "Політикою конфіденційності",
+    "terms": "Умовами"
+  },
+  "nav": {
+    "calendar": "Календар",
+    "chats": "Чати",
+    "feed": "Стрічка",
+    "notifications": "Сповіщення",
+    "profile": "Профіль",
+    "repertoire": "Репертуар",
+    "settings": "Налаштування",
+    "signOut": "Вийти",
+    "viewProfile": "Переглянути профіль"
+  },
+  "status": {
+    "idle": "от-от",
+    "loading": "Завантаження",
+    "updatingTracks": "Оновлення треків"
+  },
+  "tagline": "Репертуар · Практика · Гурти",
+  "unreadCount": "{count} непрочитаних"
+}

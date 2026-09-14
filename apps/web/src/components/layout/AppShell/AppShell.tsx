@@ -1,5 +1,6 @@
 import { ReactNode } from 'react';
 
+import MetronomeButton from '@/src/components/shared/MetronomeButton';
 import { cn } from '@/src/utils/cn';
 
 import AppBottomNav from './AppBottomNav';
@@ -7,8 +8,8 @@ import AppHeaderNav from './AppHeaderNav';
 
 export interface AppShellProps {
   activePath: string;
-  activeTitle?: string;
   children: ReactNode;
+  activeTitle?: string;
   className?: string;
   mainClassName?: string;
 }
@@ -43,6 +44,12 @@ export default function AppShell({
     >
       <AppHeaderNav activePath={activePath} activeTitle={activeTitle} />
       <main className={cn('mli-auto relative w-full flex-1', mainClassName)}>{children}</main>
+
+      {/* Mobile-only metronome shortcut. Fixed to the bottom-end corner —
+          the natural thumb reach — and lifted clear of AppBottomNav plus the
+          iPhone home indicator. Above md it lives in the header instead. */}
+      <MetronomeButton className="block-end-20 fixed inset-e-4 z-45 md:hidden" variant="fab" />
+
       <AppBottomNav activePath={activePath} />
     </div>
   );

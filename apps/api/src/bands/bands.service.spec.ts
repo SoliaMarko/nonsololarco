@@ -11,12 +11,12 @@ const mockMemberships = [
       id: 'band-1',
       name: 'Quiet Yard',
       tracks: [
-        { status: 'ready', duration: '3:10' },
-        { status: 'ready', duration: '2:55' },
-        { status: 'ready', duration: '3:05' },
-        { status: 'ready', duration: '3:40' },
-        { status: 'ready', duration: '3:15' },
-        { status: 'learning', duration: '3:00' },
+        { status: 'ready', durationSeconds: 190 },
+        { status: 'ready', durationSeconds: 175 },
+        { status: 'ready', durationSeconds: 185 },
+        { status: 'ready', durationSeconds: 220 },
+        { status: 'ready', durationSeconds: 195 },
+        { status: 'learning', durationSeconds: 180 },
       ],
     },
   },
@@ -26,8 +26,8 @@ const mockMemberships = [
       id: 'band-6',
       name: 'Jellyfish',
       tracks: [
-        { status: 'new', duration: '5:10' },
-        { status: 'learning', duration: '4:50' },
+        { status: 'new', durationSeconds: 310 },
+        { status: 'learning', durationSeconds: 290 },
       ],
     },
   },
@@ -104,7 +104,7 @@ describe('BandsService', () => {
         include: {
           band: {
             include: {
-              tracks: { select: { status: true, duration: true } },
+              tracks: { select: { status: true, durationSeconds: true } },
             },
           },
         },

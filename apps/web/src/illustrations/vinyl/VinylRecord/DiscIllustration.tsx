@@ -1,6 +1,11 @@
 import { useId } from 'react';
 
-import { GROOVES, LABEL_COLOR } from '@/src/lib/constants/illustrations/vinyl-record.const';
+import {
+  GROOVES,
+  LABEL_COLOR,
+  LABEL_RADIUS,
+  SOLO_LABEL_RADIUS,
+} from '@/src/lib/constants/illustrations/vinyl-record.const';
 import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
 
 interface DiscIllustrationProps {
@@ -12,6 +17,7 @@ export default function DiscIllustration({ color = 'rust', size = 36 }: DiscIllu
   const gradientId = useId().replace(/:/g, 'g');
 
   const labelColor = LABEL_COLOR[color];
+  const labelRadius = color === 'solo' ? SOLO_LABEL_RADIUS : LABEL_RADIUS;
 
   return (
     <svg
@@ -45,8 +51,15 @@ export default function DiscIllustration({ color = 'rust', size = 36 }: DiscIllu
         />
       ))}
 
-      <circle cx="28" cy="28" r="12.4" fill={labelColor} />
-      <circle cx="28" cy="28" r="12.4" fill="none" stroke="rgba(0,0,0,0.16)" strokeWidth="0.8" />
+      <circle cx="28" cy="28" r={labelRadius} fill={labelColor} />
+      <circle
+        cx="28"
+        cy="28"
+        r={labelRadius}
+        fill="none"
+        stroke="rgba(0,0,0,0.16)"
+        strokeWidth="0.8"
+      />
       <circle cx="28" cy="28" r="6.6" fill="none" stroke="rgba(0,0,0,0.12)" strokeWidth="0.6" />
       <circle cx="28" cy="28" r="2.8" fill="#161614" />
       <circle cx="28" cy="28" r="2.8" fill="none" stroke="rgba(0,0,0,0.32)" strokeWidth="0.5" />

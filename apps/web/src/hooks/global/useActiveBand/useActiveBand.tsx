@@ -1,16 +1,22 @@
 'use client';
 
-import { createContext, ReactNode, useContext, useMemo } from 'react';
+import { ReactNode, createContext, useContext, useMemo } from 'react';
 
 import { useRouter, useSearchParams } from 'next/navigation';
 
 import { Band } from '@nonsololarco/types';
+
+import { VinylColor } from '@/src/lib/types/illustrations/vinyl-record.types';
+
+import { useBandColors } from '../useBandColors';
 
 interface ActiveBandContextValue {
   /** Full band object for the active tab */
   activeBand: Band | undefined;
   /** Band ID from URL, or fallback to first band's ID */
   activeBandId: string;
+  /** Stable vinyl color for a band — `solo` when there is no band */
+  getVinylColor: (bandId: string | null | undefined) => VinylColor;
   /** Whether a specific band (not "All Repertoires") is selected */
   isSpecificBandSelected: boolean;
   /** Navigate to a different band tab */
@@ -27,6 +33,8 @@ interface ActiveBandProviderProps {
 export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const bandIds = useMemo(() => bands.map((b) => b.id), [bands]);
+  const getVinylColor = useBandColors(bandIds);
 
   const value = useMemo(() => {
     const rawId = searchParams.get('band');
@@ -37,11 +45,18 @@ export function ActiveBandProvider({ bands, children }: ActiveBandProviderProps)
     function onBandChange(bandId: string) {
       const params = new URLSearchParams(searchParams.toString());
       params.set('band', bandId);
+      params.delete('page');
       router.push(`?${params.toString()}`);
     }
 
-    return { activeBand, activeBandId, isSpecificBandSelected, onBandChange };
-  }, [bands, searchParams, router]);
+    return {
+      activeBand,
+      activeBandId,
+      getVinylColor,
+      isSpecificBandSelected,
+      onBandChange,
+    };
+  }, [bands, searchParams, router, getVinylColor]);
 
   return <ActiveBandContext.Provider value={value}>{children}</ActiveBandContext.Provider>;
 }

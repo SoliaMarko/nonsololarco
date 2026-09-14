@@ -1,3 +1,5 @@
+import { useTranslations } from 'next-intl';
+
 import { MOCK_WISHLIST } from '@/src/data/profile/wishlist.mock';
 import { MOCK_LEAD_TRACKS } from '@/src/data/repertoire/tracks.mock';
 import { cn } from '@/src/utils/cn';
@@ -8,12 +10,12 @@ import LeadRow from './LeadRow';
 import WishlistRow from './WishlistRow';
 
 export interface ProfileRepertoireProps {
+  profileId: string;
   className?: string;
   /** Max leads shown before "see all" */
   maxLeads?: number;
   /** Max items in wishlist shown before "see all" */
   maxWishes?: number;
-  profileId: string;
   /** Redirects to repertoire page */
   repertoireHref?: string;
   /** Redirects to wishlist section on repertoire page */
@@ -29,6 +31,8 @@ export default function ProfileRepertoire({
   repertoireHref = '/repertoire',
   wishlistHref = '/repertoire#wishlist',
 }: ProfileRepertoireProps) {
+  const t = useTranslations('pages');
+
   const leads = MOCK_LEAD_TRACKS;
   const wishlist = MOCK_WISHLIST;
 
@@ -46,8 +50,8 @@ export default function ProfileRepertoire({
       <section>
         <SectionHeader
           className="sm:mbe-3"
-          title="Leads in repertoire"
-          meta={`${leads.length} ${leads.length === 1 ? 'track' : 'tracks'}`}
+          title={t('profile.leadsInRepertoire')}
+          meta={t('profile.trackCount', { count: leads.length })}
         />
         <div>
           {visibleLeads.map((track) => (
@@ -64,7 +68,7 @@ export default function ProfileRepertoire({
       {/* Wishlist (only if there are public items) */}
       {showWishlist ? (
         <section>
-          <SectionHeader className="sm:mbe-3" title="Want to learn" />
+          <SectionHeader className="sm:mbe-3" title={t('profile.wantToLearn')} />
           <div>
             {visibleWishlist.map((track) => (
               <WishlistRow key={track.id} hasMoreWishes={hasMoreWishes} track={track} />
