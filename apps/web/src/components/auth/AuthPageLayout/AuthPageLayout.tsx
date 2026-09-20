@@ -44,7 +44,9 @@ export default function AuthPageLayout({
     >
       <div className="flex w-full max-w-lg flex-col">
         <div className="border-primary-dark bg-card relative flex flex-col overflow-hidden border-[3px] shadow-[4px_4px_0px_0px_var(--color-primary-dark)]">
-          <ThemeToggle className="absolute top-4 right-4 hidden sm:inline-flex" />
+          {/* Hung from the card's own ceiling. The card clips its overflow,
+              so the flex above the lamp reads as disappearing into it. */}
+          <ThemeToggle className="block-start-0 absolute inset-e-6 hidden sm:block" />
 
           <LoginHero />
 
