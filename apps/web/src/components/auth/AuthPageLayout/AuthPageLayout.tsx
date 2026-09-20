@@ -38,7 +38,7 @@ export default function AuthPageLayout({
   return (
     <div
       className={cn(
-        'pli-4 plb-8 bg-btn-fill relative flex min-h-dvh w-full flex-col items-center justify-center',
+        'pli-4 plb-8 bg-backdrop relative flex min-h-dvh w-full flex-col items-center justify-center',
         'border-border-primary shadow-[4px_4px_0px_0px_var(--border-primary)] xl:border-t-[2.5px] xl:border-l-[2.5px]',
       )}
     >

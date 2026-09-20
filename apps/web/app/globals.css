@@ -247,6 +247,23 @@
   background-size: 200% 100%;
 }
 
+/* The page backdrop: sheet music on a desk, per theme via --page-backdrop.
+   The artwork is a frame — props in the corners, an empty middle — so it is
+   pinned to the viewport and scaled to cover it, keeping the corners in the
+   corners while the content scrolls over the empty middle. A flat veil of
+   the backdrop's own base colour sits on top of it to keep it quiet — see
+   --page-backdrop-veil. `bg-edge` under it is the colour that shows while the
+   image loads. iOS Safari ignores `fixed` and scrolls the image with the
+   page, which is an acceptable fallback. */
+@utility bg-backdrop {
+  background-attachment: fixed;
+  background-image:
+    linear-gradient(var(--page-backdrop-veil), var(--page-backdrop-veil)), var(--page-backdrop);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @utility z-header {
   z-index: 100;
 }

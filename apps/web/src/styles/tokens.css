@@ -119,6 +119,18 @@
 
   /* --- DARK: Gradient --- */
   --gradient-card-overlay: rgb(10 8 6 / 92%);
+
+  /* --- DARK: Page backdrop ---
+   * A desk of sheet music by lamplight, framing whatever sits in the middle.
+   * Absolute path on purpose: a relative url() inside a custom property
+   * resolves against whichever stylesheet substitutes it, not this one.
+   *
+   * The veil is the backdrop's own base colour laid over it. It is the
+   * volume knob: raise the alpha to quiet the artwork further. The files
+   * already carry a light blur, so the props read as shapes rather than as
+   * text competing with the page. */
+  --page-backdrop: url('/illustrations/backdrop/paper-dark.webp');
+  --page-backdrop-veil: rgb(26 22 14 / 65%);
 }
 
 /* --- LIGHT THEME --- */
@@ -190,6 +202,10 @@
 
   /* --- LIGHT: Gradient --- */
   --gradient-card-overlay: rgb(22 20 14 / 45%);
+
+  /* --- LIGHT: Page backdrop --- */
+  --page-backdrop: url('/illustrations/backdrop/paper-light.webp');
+  --page-backdrop-veil: rgb(238 229 213 / 70%);
 }
 
 /* --- Dotted divider --- */
