@@ -7,9 +7,10 @@ import { beforeEach, describe, expect, it, vi } from 'vitest';
 /* ------------------------------------------------------------------ */
 
 const intlMiddlewareResponse = NextResponse.next();
+const intlMiddleware = vi.fn(() => intlMiddlewareResponse);
 
 vi.mock('next-intl/middleware', () => ({
-  default: () => () => intlMiddlewareResponse,
+  default: () => intlMiddleware,
 }));
 
 vi.mock('@/i18n/routing', () => ({
@@ -79,6 +80,20 @@ describe('middleware', () => {
       expect(response.headers.get('Location')).toBeNull();
     });
 
+    it('serves an asset from a nested /public folder', () => {
+      const response = middleware(createRequest('/illustrations/lamp/lamp-on.png'));
+
+      expect(response.headers.get('Location')).toBeNull();
+    });
+
+    it('keeps next-intl away from static assets', () => {
+      middleware(createRequest('/illustrations/lamp/lamp-on.png'));
+
+      // next-intl would prefix the path with a locale, and
+      // /en/illustrations/lamp/lamp-on.png is not a file.
+      expect(intlMiddleware).not.toHaveBeenCalled();
+    });
+
     it('allows /_next/ paths without a token', () => {
       const response = middleware(createRequest('/_next/static/chunk.js'));
 
@@ -132,9 +147,9 @@ describe('middleware', () => {
     it('does not treat /en/profile/j.doe as a static asset', () => {
       const response = middleware(createRequest('/en/profile/j.doe'));
 
-      // Without a token this should redirect — the .doe extension looks
-      // like a file but the regex is anchored so it shouldn't match paths
-      // with a real segment before the dot.
+      // Without a token this should redirect. `.doe` looks like a file
+      // extension, which is why the asset check matches a list of real
+      // extensions rather than any trailing dot segment.
       expect(response.status).toBe(307);
     });
 
