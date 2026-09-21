@@ -7,6 +7,7 @@
 @source '../**/*.{ts,tsx}';
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+@custom-variant light (&:where([data-theme="light"], [data-theme="light"] *));
 
 /**
  * Tailwind v4's preflight no longer sets `cursor: pointer` on buttons.
@@ -184,6 +185,8 @@
   --color-border-primary: var(--border-primary);
 
   --animate-text-glow: text-glow 0.6s ease-out both;
+  --animate-lamp-pull: lamp-pull 0.6s ease-out both;
+  --animate-lamp-sway: lamp-sway 0.6s ease-out both;
 }
 
 @layer utilities {
@@ -244,8 +247,56 @@
   background-size: 200% 100%;
 }
 
+/* The page backdrop: sheet music on a desk, per theme via --page-backdrop.
+   The artwork is a frame — props in the corners, an empty middle — so it is
+   pinned to the viewport and scaled to cover it, keeping the corners in the
+   corners while the content scrolls over the empty middle. A flat veil of
+   the backdrop's own base colour sits on top of it to keep it quiet — see
+   --page-backdrop-veil. `bg-edge` under it is the colour that shows while the
+   image loads. iOS Safari ignores `fixed` and scrolls the image with the
+   page, which is an acceptable fallback. */
+@utility bg-backdrop {
+  background-attachment: fixed;
+  background-image:
+    linear-gradient(var(--page-backdrop-veil), var(--page-backdrop-veil)), var(--page-backdrop);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+}
+
 @utility z-header {
   z-index: 100;
+}
+
+/* Lamplight, built from three overlapping falloffs rather than one.
+   A single radial with two stops reads as a painted oval: alpha interpolates
+   linearly while the eye does not, so the outer stop shows up as a rim. A
+   tight bloom at the bulb, a wide halo around the shade and a longer spill
+   below it add up to something that fades where light fades. Radii are
+   percentages of this element's own box, which is a fixed multiple of the
+   lamp, so the shape holds at every size. */
+@utility bg-lamp-glow {
+  background:
+    radial-gradient(
+      26% 16% at 50% 64%,
+      rgb(255 224 166 / 52%),
+      rgb(255 219 155 / 34%) 32%,
+      rgb(255 214 145 / 14%) 60%,
+      rgb(255 210 138 / 0%) 100%
+    ),
+    radial-gradient(
+      52% 32% at 50% 62%,
+      rgb(255 208 132 / 22%),
+      rgb(255 206 128 / 12%) 36%,
+      rgb(255 204 125 / 4%) 66%,
+      rgb(255 202 122 / 0%) 100%
+    ),
+    radial-gradient(
+      34% 42% at 50% 80%,
+      rgb(255 205 130 / 11%),
+      rgb(255 204 127 / 4%) 45%,
+      rgb(255 203 126 / 0%) 100%
+    );
 }
 
 @utility z-dropdown {
@@ -360,5 +411,60 @@
   100% {
     opacity: 1;
     transform: translateY(0);
+  }
+}
+
+/* Yanking the lamp's pull cord. The knob drops, overshoots on the way back
+   and settles — the overshoot is what reads as rope rather than rod. The
+   distances are percentages of the knob's own height, so one keyframe suits
+   the lamp at header size and at illustration size alike. */
+@keyframes lamp-pull {
+  0% {
+    transform: translateY(0);
+  }
+
+  30% {
+    transform: translateY(26%);
+  }
+
+  55% {
+    transform: translateY(-8%);
+  }
+
+  78% {
+    transform: translateY(3%);
+  }
+
+  100% {
+    transform: translateY(0);
+  }
+}
+
+/* The lamp's answer to the tug. Same duration as `lamp-pull` on purpose:
+   the two end together, so whichever `animationend` the host hears first is
+   safe to reset the pull state on. */
+@keyframes lamp-sway {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+
+  30% {
+    transform: rotate(1.8deg);
+  }
+
+  60% {
+    transform: rotate(-1.2deg);
+  }
+
+  85% {
+    transform: rotate(0.5deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-lamp-pull,
+  .animate-lamp-sway {
+    animation: none;
   }
 }

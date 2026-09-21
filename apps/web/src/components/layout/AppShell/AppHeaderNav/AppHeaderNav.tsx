@@ -56,14 +56,23 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
       style={{ backgroundColor: 'var(--bg-surface)' }}
     >
       <div className="mli-auto pli-4 flex h-14 items-center justify-between gap-6 sm:gap-10">
-        <Link href="/">
-          <div className="hidden shrink-0 items-center lg:flex">
-            <Logo variant="wordmark" size="md" />
-          </div>
-          <div className="flex shrink-0 items-center lg:hidden">
-            <Logo variant="mark" size="sm" />
-          </div>
-        </Link>
+        {/* The lamp hangs from the top of the header rather than sitting in
+            the control row: it is the room's light switch, not another
+            control, and its cord is meant to dangle past the header border.
+            Everything after it keeps the old justify-between rhythm because
+            lamp and logo count as one flex child. */}
+        <div className="flex shrink-0 items-center gap-1">
+          <ThemeToggle />
+
+          <Link href="/">
+            <div className="hidden shrink-0 items-center lg:flex">
+              <Logo variant="wordmark" size="md" />
+            </div>
+            <div className="flex shrink-0 items-center lg:hidden">
+              <Logo variant="mark" size="sm" />
+            </div>
+          </Link>
+        </div>
 
         <nav className="hidden flex-1 self-end md:flex" aria-label="Main Nav">
           {/*
@@ -122,7 +131,6 @@ export default function AppHeader({ activePath, activeTitle, className }: AppHea
             <MetronomeButton className="hidden md:inline-flex" />
 
             <LocaleSwitcher />
-            <ThemeToggle />
             <Dropdown
               align={OPTIONS_POSITION.end}
               groups={[

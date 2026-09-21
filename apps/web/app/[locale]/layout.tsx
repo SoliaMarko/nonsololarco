@@ -111,7 +111,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
           }}
         />
       </head>
-      <body className={`bg-edge bg-dots-subtle box-border ${FONT_VARIABLES}`}>
+      <body className={`bg-edge bg-backdrop box-border ${FONT_VARIABLES}`}>
         <NextIntlClientProvider locale={locale} messages={messages}>
           <Providers>
             <div className="mli-auto flex min-h-dvh max-w-7xl flex-col">{children}</div>

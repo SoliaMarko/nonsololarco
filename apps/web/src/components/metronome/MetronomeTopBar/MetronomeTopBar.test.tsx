@@ -50,6 +50,11 @@ describe('MetronomeTopBar', () => {
     expect(onSignatureChange).toHaveBeenCalledWith({ beats: 3, label: '3/8' });
   });
 
+  it('renders the theme lamp', () => {
+    render(<MetronomeTopBar {...defaultProps} />);
+    expect(screen.getByRole('button', { name: /theme/ })).toBeDefined();
+  });
+
   it('calls onMenuOpen when burger button is clicked', async () => {
     const onMenuOpen = vi.fn();
     render(<MetronomeTopBar {...defaultProps} onMenuOpen={onMenuOpen} />);

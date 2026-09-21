@@ -7,17 +7,17 @@
 > `nonsololarco-conventions` skill; step-by-step task guides in
 > [`RECIPES.md`](./RECIPES.md).
 
-Updated: 2026-08-16
+Updated: 2026-09-20
 
 ## Coverage at a glance
 
 | Category | Total | Tested | With story |
 | --- | --- | --- | --- |
-| Web components | 164 | 31 (19%) | 27 (16%) |
-| Utils + hooks | 19 | 9 (47%) | — |
+| Web components | 166 | 33 (20%) | 29 (17%) |
+| Utils + hooks | 19 | 10 (53%) | — |
 | API services | 4 | 2 unit / 1 integration | — |
 
-Stories live centrally in `apps/web/stories/` (28 files), not next to components.
+Stories live centrally in `apps/web/stories/` (30 files), not next to components.
 
 ## API routes
 
@@ -29,7 +29,6 @@ Stories live centrally in `apps/web/stories/` (28 files), not next to components
 | GET | `/api/auth/google/callback` | googleCallback | `apps/api/src/auth/auth.controller.ts` |
 | POST | `/api/auth/logout` | logout | `apps/api/src/auth/auth.controller.ts` |
 | GET | `/api/auth/me` | getMe | `apps/api/src/auth/auth.controller.ts` |
-| GET | `/api/bands/:id/repertoire` | getBandRepertoire | `apps/api/src/repertoire/controllers/band-repertoire.controller.ts` |
 | GET | `/api/users/me/bands` | getMyBands | `apps/api/src/bands/bands.controller.ts` |
 | GET | `/api/users/me/repertoire` | getMyRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
 | GET | `/api/users/me/repertoire/solo` | getMySoloRepertoire | `apps/api/src/repertoire/controllers/user-repertoire.controller.ts` |
@@ -146,7 +145,7 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 - `✓✓` **MetronomeButton** — `apps/web/src/components/shared/MetronomeButton/MetronomeButton.tsx`
 - `··` **NoDataCard** — `apps/web/src/components/shared/NoDataCard/NoDataCard.tsx`
 - `✓·` **PageLoader** — `apps/web/src/components/shared/PageLoader/PageLoader.tsx`
-- `··` **ThemeToggle** — `apps/web/src/components/shared/ThemeToggle/ThemeToggle.tsx`
+- `✓✓` **ThemeToggle** — `apps/web/src/components/shared/ThemeToggle/ThemeToggle.tsx`
 
 ### `src/components/typography/`
 
@@ -265,6 +264,11 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 
 - `·✓` **AchievementBadge** — `apps/web/src/illustrations/achievements/AchievementBadge/AchievementBadge.tsx`
 
+### `src/illustrations/lamp/`
+
+- `✓✓` **CeilingLamp** — `apps/web/src/illustrations/lamp/CeilingLamp/CeilingLamp.tsx`
+- `··` **LampPullKnob** — `apps/web/src/illustrations/lamp/CeilingLamp/LampPullKnob/LampPullKnob.tsx`
+
 ### `src/illustrations/metronome/`
 
 - `··` **MetronomeArm** — `apps/web/src/illustrations/metronome/VintageMetronome/MetronomeArm/MetronomeArm.tsx`
@@ -300,7 +304,7 @@ Flags: first `✓` = has a unit test, second = has a Storybook story.
 | · | query | useRepertoire | `apps/web/src/lib/hooks/useRepertoire.ts` |
 | ✓ | util | audio.utils | `apps/web/src/utils/audio.utils.ts` |
 | · | util | cn | `apps/web/src/utils/cn.ts` |
-| · | util | duration.utils | `apps/web/src/utils/duration.utils.ts` |
+| ✓ | util | duration.utils | `apps/web/src/utils/duration.utils.ts` |
 | ✓ | util | metronome.utils | `apps/web/src/utils/metronome.utils.ts` |
 | ✓ | util | pagination.utils | `apps/web/src/utils/pagination.utils.ts` |
 | · | util | svg.utils | `apps/web/src/utils/svg.utils.ts` |
