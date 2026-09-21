@@ -2,7 +2,7 @@
 
 _"non solo arco"_ — not only the bow.
 
-A social platform and practice tool for musicians: shared band repertoires,
+A practice tool for musicians: shared band repertoires,
 track status tracking, and practice tooling, in a retro/vintage interface built
 around vinyl records, stamps and monospace labels.
 
